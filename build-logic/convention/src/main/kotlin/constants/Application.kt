@@ -1,7 +1,7 @@
 package constants
 
 object Application {
-    const val id = "cz.batektomas.trackee.android"
+    const val id = "app.trackee.android"
     const val appName = "Trackee"
 
     object Version {
