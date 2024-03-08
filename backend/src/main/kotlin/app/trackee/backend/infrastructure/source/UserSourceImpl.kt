@@ -1,17 +1,17 @@
 package app.trackee.backend.infrastructure.source
 
+import app.trackee.backend.config.exceptions.UserException
+import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.UserSource
-import app.trackee.backend.domain.model.user.User
-import com.google.cloud.firestore.Firestore
+import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import com.google.firebase.cloud.FirestoreClient
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firestore.*
 
-class UserSourceImpl : UserSource {
-    override suspend fun readUserByUid(uid: String): User {
-        TODO("not yet implemented")
-//        val db = FirestoreClient.getFirestore()
-//
-//        db.collection("users").ge
+internal class UserSourceImpl : UserSource {
+    override suspend fun readUserByUid(uid: String): FirestoreUser {
+        val db = FirestoreClient.getFirestore()
+        val documentSnapshot = db.collection(SourceConstants.Firestore.Collection.users).document(uid).get().await()
+
+        return documentSnapshot.toObject<FirestoreUser>(FirestoreUser::class.java)
+            ?: throw UserException.UserNotFound(uid = uid)
     }
 }

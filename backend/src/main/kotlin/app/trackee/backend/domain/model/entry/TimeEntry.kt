@@ -1,11 +1,11 @@
 package app.trackee.backend.domain.model.entry
 
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.Instant
 
 data class TimeEntry(
     val id: String,
-    val projectId: String?,
+    val projectId: String,
     val description: String?,
-    val startedAt: LocalDate?,
-    val endedAt: LocalDate?
+    val startedAt: Instant,
+    val endedAt: Instant
 )

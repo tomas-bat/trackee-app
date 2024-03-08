@@ -1,7 +1,7 @@
 package app.trackee.backend.data.source
 
-import app.trackee.backend.domain.model.user.User
+import app.trackee.backend.infrastructure.model.user.FirestoreUser
 
-interface UserSource {
-    suspend fun readUserByUid(uid: String): User
+internal interface UserSource {
+    suspend fun readUserByUid(uid: String): FirestoreUser
 }
