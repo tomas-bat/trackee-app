@@ -7,5 +7,5 @@ import Foundation
 import KMPSharedDomain
 import SharedDomain
 
-public final class GetBooksUseCaseMock: UseCaseFlowNoParamsMock<[Book]>, GetBooksUseCase {}
-public final class RefreshBooksUseCaseMock: UseCaseResultMock, RefreshBooksUseCase {}
+//public final class GetBooksUseCaseMock: UseCaseFlowNoParamsMock<[Book]>, GetBooksUseCase {}
+//public final class RefreshBooksUseCaseMock: UseCaseResultMock, RefreshBooksUseCase {}

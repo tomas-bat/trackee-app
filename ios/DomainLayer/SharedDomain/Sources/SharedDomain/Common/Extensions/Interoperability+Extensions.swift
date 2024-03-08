@@ -1,4 +1,5 @@
 import KMPSharedDomain
+import Foundation
 
  public extension Optional where Wrapped == KotlinLong {
     var int: Int {

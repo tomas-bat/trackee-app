@@ -4,9 +4,7 @@
 //
 
 import AnalyticsProvider
-import DatabaseProvider
 import Factory
-import GraphQLProvider
 import KeychainProvider
 import LocationProvider
 import NetworkProvider
@@ -15,13 +13,14 @@ import RemoteConfigProvider
 import UIKit
 import UserDefaultsProvider
 import Utilities
+import AppleSignInProvider
+import AuthProvider
 
 public extension Container {
+    var appleSignInProvider: Factory<AppleSignInProvider> { self { DefaultAppleSignInProvider(presentationAnchor: UIApplication.shared.delegate?.window) } }
+    var authProvider: Factory<AuthProvider> { self { FirebaseAuthProvider() } }
+    
     var analyticsProvider: Factory<AnalyticsProvider> { self { FirebaseAnalyticsProvider() } }
-    var databaseProvider: Factory<DatabaseProvider> { self { RealmDatabaseProvider() } }
-    var graphQLProvider: Factory<GraphQLProvider> { self { ApolloGraphQLProvider(
-        baseURL: NetworkingConstants.rocketsURL
-    )}}
     var keychainProvider: Factory<KeychainProvider> { self { SystemKeychainProvider() } }
     var locationProvider: Factory<LocationProvider> { self { SystemLocationProvider() } }
     var networkProvider: Factory<NetworkProvider> { self { SystemNetworkProvider(

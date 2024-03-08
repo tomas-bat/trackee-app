@@ -11,7 +11,5 @@ public extension Container {
     // Koin
     private var kmp: Factory<KMPDependency> { self { KMPKoinDependency() }.singleton }
     
-    // Books
-    var getBooksUseCase: Factory<GetBooksUseCase> { self { self.kmp().get(GetBooksUseCase.self) } }
-    var refreshBooksUseCase: Factory<RefreshBooksUseCase> { self { self.kmp().get(RefreshBooksUseCase.self) } }
+    
 }

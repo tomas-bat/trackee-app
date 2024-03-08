@@ -1,23 +1,9 @@
 package kmp.shared
 
 import kmp.shared.base.Result
-import kmp.shared.base.usecase.UseCaseFlow
-import kmp.shared.base.usecase.UseCaseFlowNoParams
-import kmp.shared.base.usecase.UseCaseFlowResult
-import kmp.shared.base.usecase.UseCaseFlowResultNoParams
-import kmp.shared.base.usecase.UseCaseResult
-import kmp.shared.base.usecase.UseCaseResultNoParams
-import kmp.shared.domain.usecase.book.RefreshBooksUseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
+import kmp.shared.base.usecase.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
 
 val iosDefaultScope: CoroutineScope = object : CoroutineScope {
@@ -25,23 +11,6 @@ val iosDefaultScope: CoroutineScope = object : CoroutineScope {
         get() = SupervisorJob() + Dispatchers.Default
 }
 
-interface KMMViewModel {
-
-    fun l(uc: RefreshBooksUseCase) {
-        val a = execute(1, uc, onSuccess = {
-        }, {
-        },)
-    }
-
-    fun <Params : Any, Out : Any> execute(
-        params: Params,
-        uc: UseCaseResult<Params, Out>,
-        onSuccess: (item: Result<Out>) -> Unit,
-        onThrow: (error: Throwable) -> Unit,
-    ) {
-        uc.subscribe(params = params, onSuccess, onThrow)
-    }
-}
 
 sealed class SuspendWrapperParent<Params, Out>(
     private val suspender: suspend (Params?) -> Out,

@@ -1,7 +1,8 @@
 package kmp.shared.di
 
-import io.ktor.client.engine.darwin.Darwin
-import kmp.shared.infrastructure.local.DriverFactory
+import io.ktor.client.engine.darwin.*
+import kmp.shared.common.provider.AppleSignInProvider
+import kmp.shared.common.provider.AuthProvider
 import kmp.shared.system.Config
 import kmp.shared.system.ConfigImpl
 import kmp.shared.system.Log
@@ -14,17 +15,22 @@ import org.koin.core.parameter.parametersOf
 import org.koin.core.qualifier.Qualifier
 import org.koin.dsl.module
 
-fun initKoinIos(doOnStartup: () -> Unit) = initKoin {
+fun initKoinIos(
+    doOnStartup: () -> Unit,
+    appleSignInProvider: AppleSignInProvider,
+    authProvider: AuthProvider
+) = initKoin {
     modules(
         module {
             single { doOnStartup }
+            single { appleSignInProvider }
+            single { authProvider }
         },
     )
 }
 
 actual val platformModule = module {
     single<Config> { ConfigImpl() }
-    single { DriverFactory() }
     single<Logger> { Log }
     single { Darwin.create() }
 }

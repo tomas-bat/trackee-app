@@ -40,7 +40,7 @@ public extension UseCaseFlowResult {
                 continuation.yield(result as! Out)
             } onComplete: {
                 continuation.finish()
-            } onThrow_: { _ in
+            } onThrow: { _ in
                 continuation.finish()
             }
             continuation.onTermination = { _ in
