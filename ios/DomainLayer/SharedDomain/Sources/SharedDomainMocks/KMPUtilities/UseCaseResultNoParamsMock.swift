@@ -25,7 +25,7 @@ open class UseCaseResultNoParamsMock: UseCaseResultNoParams {
     
     // MARK: - execute
     
-    public func invoke() async throws -> Result<AnyObject> {
+    public func __invoke() async throws -> Result<AnyObject> {
         executeCallsCount += 1
         
         if let error = executeThrowableError {

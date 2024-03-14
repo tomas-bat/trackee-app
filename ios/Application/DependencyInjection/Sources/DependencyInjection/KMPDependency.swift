@@ -8,7 +8,8 @@ import Foundation
 import OSLog
 import Utilities
 import Factory
-import AppleSignInProvider
+import protocol AuthProvider.AuthProvider
+import protocol AppleSignInProvider.AppleSignInProvider
 
 protocol KMPDependency {
     func get<T: AnyObject>(_ proto: Protocol) -> T
@@ -23,8 +24,8 @@ final class KMPKoinDependency: KMPDependency {
     }
     
     private func startKoin(
-        appleSignInProvider: AppleSignInProvider = Container.shared.appleSignInProvider,
-        authProvider: AuthProvider = Container.shared.authProvider
+        appleSignInProvider: AppleSignInProvider = Container.shared.appleSignInProvider.resolve(),
+        authProvider: AuthProvider = Container.shared.authProvider.resolve()
     ) {
         let onStartup = {
             Logger.app.info("Koin Started")
@@ -33,7 +34,8 @@ final class KMPKoinDependency: KMPDependency {
         guard let appleSignInProvider = appleSignInProvider as? KMPSharedDomain.AppleSignInProvider,
               let authProvider = authProvider as? KMPSharedDomain.AuthProvider
         else {
-            Logger.app.error("Failed to cast Swift provider interface to Kotlin provider interface")
+            fatalError("Failed to cast Swift provider interface to Kotlin provider interface")
+            return
         }
         
         let koinApplication = KoinIOSKt.doInitKoinIos(

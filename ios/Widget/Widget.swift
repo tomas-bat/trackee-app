@@ -13,19 +13,18 @@ import WidgetKit
 struct Provider: TimelineProvider {
     
     #warning("TODO: Temporary use case access, should be obtained via ViewModel instead")
-    @Injected(\.isUserLoggedUseCase) private var isUserLoggedUseCase
     
     func placeholder(in context: Context) -> SimpleEntry {
-        return SimpleEntry(date: Date(), isLogged: isUserLoggedUseCase.execute())
+        return SimpleEntry(date: Date(), isLogged: false)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> Void) {
-        let entry = SimpleEntry(date: Date(), isLogged: isUserLoggedUseCase.execute())
+        let entry = SimpleEntry(date: Date(), isLogged: false)
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> Void) {
-        let entry = SimpleEntry(date: Date(), isLogged: isUserLoggedUseCase.execute())
+        let entry = SimpleEntry(date: Date(), isLogged: false)
         let timeline = Timeline(entries: [entry], policy: .atEnd)
         completion(timeline)
     }

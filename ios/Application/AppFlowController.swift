@@ -11,14 +11,10 @@ import UIToolkit
 
 final class AppFlowController: FlowController, MainFlowControllerDelegate, OnboardingFlowControllerDelegate {
     
-    @Injected(\.isUserLoggedUseCase) private var isUserLoggedUseCase
-    @Injected(\.handlePushNotificationUseCase) private var handlePushNotificationUseCase
-    @Injected(\.logoutUseCase) private var logoutUseCase
-    
     func start() {
         setupAppearance()
         
-        if isUserLoggedUseCase.execute() {
+        if false {//isUserLoggedUseCase.execute() {
             setupMain()
         } else {
             presentOnboarding(animated: false, completion: nil)
@@ -46,8 +42,8 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
     public func handlePushNotification(_ notification: [AnyHashable: Any]) {
         guard let main = childControllers.first(where: { $0 is MainFlowController }) as? MainFlowController else { return }
         do {
-            let notification = try handlePushNotificationUseCase.execute(notification)
-            main.handleDeeplink(for: notification)
+//            let notification = try handlePushNotificationUseCase.execute(notification)
+//            main.handleDeeplink(for: notification)
         } catch {}
     }
     
@@ -57,8 +53,8 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
         let action = AlertData.Action(title: L10n.dialog_interceptor_button_title, style: .default, handler: {
             do {
                 // Perform logout and present login screen
-                try self.logoutUseCase.execute()
-                self.presentOnboarding(animated: true, completion: nil)
+//                try self.logoutUseCase.execute()
+//                self.presentOnboarding(animated: true, completion: nil)
             } catch {}
         })
 

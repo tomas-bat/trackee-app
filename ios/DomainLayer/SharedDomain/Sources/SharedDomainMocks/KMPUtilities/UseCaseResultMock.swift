@@ -26,7 +26,7 @@ open class UseCaseResultMock: UseCaseResult {
     }
     
     // MARK: - execute
-    public func invoke(params: Any?) async throws -> Result<AnyObject> {
+    public func __invoke(params: Any?) async throws -> Result<AnyObject> {
         executeCallsCount += 1
         receivedParams = params
         

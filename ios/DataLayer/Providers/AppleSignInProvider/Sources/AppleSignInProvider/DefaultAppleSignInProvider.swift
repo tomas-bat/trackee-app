@@ -12,11 +12,11 @@ public final class DefaultAppleSignInProvider: NSObject {
     
     private typealias AppleAuthContinuation = CheckedContinuation<String, Error>
     
-    private let presentationAnchor: UIWindow?
+    private let presentationAnchor: UIWindow??
     
     private var appleAuthContinuation: AppleAuthContinuation?
     
-    public init(presentationAnchor: UIWindow?) {
+    public init(presentationAnchor: UIWindow??) {
         self.presentationAnchor = presentationAnchor
     }
 }
@@ -54,7 +54,7 @@ extension DefaultAppleSignInProvider: AppleSignInProvider, KMPSharedDomain.Apple
 extension DefaultAppleSignInProvider: ASAuthorizationControllerDelegate,
                                       ASAuthorizationControllerPresentationContextProviding {
     public func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
-        presentationAnchor ?? UIWindow()
+        (presentationAnchor ?? UIWindow()) ?? UIWindow()
     }
     
     public func authorizationController(

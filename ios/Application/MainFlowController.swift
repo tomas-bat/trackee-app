@@ -4,16 +4,12 @@
 //
 
 import Profile
-import Recipes
 import SharedDomain
 import UIKit
 import UIToolkit
-import Users
 
 enum MainTab: Int {
-    case users = 0
-    case profile = 1
-    case recipes = 2
+    case profile
 }
 
 protocol MainFlowControllerDelegate: AnyObject {
@@ -26,21 +22,8 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate {
     
     override func setup() -> UIViewController {
         let main = UITabBarController()
-        main.viewControllers = [setupUsersTab(), setupProfileTab(), setupRecipesTab()]
+        main.viewControllers = [setupProfileTab()]
         return main
-    }
-    
-    private func setupUsersTab() -> UINavigationController {
-        let usersNC = BaseNavigationController(statusBarStyle: .lightContent)
-        usersNC.tabBarItem = UITabBarItem(
-            title: L10n.bottom_bar_item_1,
-            image: Asset.Images.usersTabBar.uiImage,
-            tag: MainTab.users.rawValue
-        )
-        let usersFC = UsersFlowController(navigationController: usersNC)
-        let usersRootVC = startChildFlow(usersFC)
-        usersNC.viewControllers = [usersRootVC]
-        return usersNC
     }
     
     private func setupProfileTab() -> UINavigationController {
@@ -57,19 +40,6 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate {
         return profileNC
     }
     
-    private func setupRecipesTab() -> UINavigationController {
-        let recipesNC = BaseNavigationController(statusBarStyle: .lightContent)
-        recipesNC.tabBarItem = UITabBarItem(
-            title: L10n.bottom_bar_item_3,
-            image: Asset.Images.recipesTabBar.uiImage,
-            tag: MainTab.recipes.rawValue
-        )
-        let recipesFC = RecipesFlowController(navigationController: recipesNC)
-        let recipesRootVC = startChildFlow(recipesFC)
-        recipesNC.viewControllers = [recipesRootVC]
-        return recipesNC
-    }
-    
     func presentOnboarding() {
         delegate?.presentOnboarding(animated: true, completion: { [weak self] in
             self?.navigationController.viewControllers = []
@@ -84,15 +54,15 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate {
         return childControllers[index.rawValue]
     }
     
-    func handleDeeplink(for notification: PushNotification) {
-        switch notification.type {
-        case .userDetail: handleUserDetailDeeplink(userId: notification.entityId)
-        default: return
-        }
-    }
-    
-    private func handleUserDetailDeeplink(userId: String) {
-        guard let usersFlowController = switchTab(.users) as? UsersFlowController else { return }
-        usersFlowController.handleUserDetailDeeplink(userId: userId)
-    }
+//    func handleDeeplink(for notification: PushNotification) {
+//        switch notification.type {
+//        case .userDetail: handleUserDetailDeeplink(userId: notification.entityId)
+//        default: return
+//        }
+//    }
+//    
+//    private func handleUserDetailDeeplink(userId: String) {
+//        guard let usersFlowController = switchTab(.users) as? UsersFlowController else { return }
+//        usersFlowController.handleUserDetailDeeplink(userId: userId)
+//    }
 }
