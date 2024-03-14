@@ -34,7 +34,7 @@ public final class FullscreenImageViewController: BaseViewController {
         super.setupUI()
         
         view.backgroundColor = UIColor(AppTheme.Colors.background)
-        activityIndicator.color = UIColor(AppTheme.Colors.progressView)
+//        activityIndicator.color = UIColor(AppTheme.Colors.progressView)
         imageView.contentMode = .scaleAspectFit
         scrollView.maximumZoomScale = 10.0
         

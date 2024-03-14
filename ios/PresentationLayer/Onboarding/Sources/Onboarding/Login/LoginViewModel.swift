@@ -38,20 +38,43 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Published private(set) var state: State = State()
 
     struct State {
+        var email = ""
+        var password = ""
+        
+        var isLoading = false
+        
         var alert: AlertData?
     }
     
     // MARK: Intent
     enum Intent {
-
+        case sync(Sync)
+        case async(Async)
+        
+        enum Sync {
+            case onEmailChange(to: String)
+            case onPasswordChange(to: String)
+        }
+        
+        enum Async {
+            case onLoginTap
+        }
     }
 
     func onIntent(_ intent: Intent) {
-        executeTask(Task {
-            switch intent {
-
+        switch intent {
+        case let .sync(syncIntent):
+            switch syncIntent {
+            case let .onEmailChange(email): state.email = email
+            case let .onPasswordChange(password): state.password = password
             }
-        })
+        case let .async(asyncIntent):
+            executeTask(Task {
+                switch asyncIntent {
+                case .onLoginTap: ()
+                }
+            })
+        }
     }
     
     // MARK: Private

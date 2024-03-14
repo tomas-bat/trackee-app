@@ -29,7 +29,7 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate {
     private func setupProfileTab() -> UINavigationController {
         let profileNC = BaseNavigationController(statusBarStyle: .lightContent)
         profileNC.tabBarItem = UITabBarItem(
-            title: L10n.bottom_bar_item_2,
+            title: L10n.bottom_bar_profile,
             image: Asset.Images.profileTabBar.uiImage,
             tag: MainTab.profile.rawValue
         )

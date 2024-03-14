@@ -17,8 +17,8 @@ struct Whisper: View {
         GeometryReader { geometry in
             VStack {
                 Text(data.message)
-                    .font(AppTheme.Fonts.whisperMessage)
-                    .foregroundColor(AppTheme.Colors.whisperMessage)
+//                    .font(AppTheme.Fonts.whisperMessage)
+//                    .foregroundColor(AppTheme.Colors.whisperMessage)
                     .padding(.bottom, 5)
             }
             .frame(

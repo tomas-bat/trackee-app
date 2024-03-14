@@ -65,16 +65,16 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
     private func setupAppearance() {
         // Navigation bar
         let appearance = UINavigationBarAppearance()
-        appearance.backgroundColor = UIColor(AppTheme.Colors.navBarBackground)
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(AppTheme.Colors.navBarTitle)]
+//        appearance.backgroundColor = UIColor(AppTheme.Colors.navBarBackground)
+//        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor(AppTheme.Colors.navBarTitle)]
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().tintColor = UIColor(AppTheme.Colors.navBarTitle)
+//        UINavigationBar.appearance().tintColor = UIColor(AppTheme.Colors.navBarTitle)
 
         // Tab bar
-        UITabBar.appearance().tintColor = UIColor(AppTheme.Colors.primaryColor)
+//        UITabBar.appearance().tintColor = UIColor(AppTheme.Colors.primaryColor)
 
         // UITextField
-        UITextField.appearance().tintColor = UIColor(AppTheme.Colors.primaryColor)
+//        UITextField.appearance().tintColor = UIColor(AppTheme.Colors.primaryColor)
     }
 }

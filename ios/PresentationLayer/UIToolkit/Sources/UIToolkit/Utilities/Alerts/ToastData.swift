@@ -5,6 +5,7 @@
 
 import Foundation
 import SwiftUI
+import SFSafeSymbols
 
 public struct ToastData: Equatable {
     let style: ToastStyle
@@ -34,18 +35,19 @@ public enum ToastStyle {
     case info, success, error
     
     var color: Color {
-        switch self {
-        case .info: AppTheme.Colors.toastInfoColor
-        case .success: AppTheme.Colors.toastSuccessColor
-        case .error: AppTheme.Colors.toastErrorColor
-        }
+        AppTheme.Colors.foreground
+//        switch self {
+//        case .info: AppTheme.Colors.toastInfoColor
+//        case .success: AppTheme.Colors.toastSuccessColor
+//        case .error: AppTheme.Colors.toastErrorColor
+//        }
     }
     
     var image: Image {
         switch self {
-        case .info: Image(systemName: "info.circle")
-        case .success: Image(systemName: "checkmark.circle")
-        case .error: Image(systemName: "xmark.circle")
+        case .info: Image(systemSymbol: .infoCircle)
+        case .success: Image(systemSymbol: .checkmarkCircle)
+        case .error: Image(systemSymbol: .xmarkCircle)
         }
     }
 }

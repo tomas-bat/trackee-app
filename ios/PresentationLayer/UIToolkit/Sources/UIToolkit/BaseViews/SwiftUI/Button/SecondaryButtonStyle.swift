@@ -11,8 +11,8 @@ public struct SecondaryButtonStyle: ButtonStyle {
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(AppTheme.Fonts.secondaryButton)
-            .foregroundColor(AppTheme.Colors.secondaryButtonTitle)
+//            .font(AppTheme.Fonts.secondaryButton)
+//            .foregroundColor(AppTheme.Colors.secondaryButtonTitle)
             .padding()
     }
 }

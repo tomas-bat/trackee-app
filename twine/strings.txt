@@ -305,26 +305,10 @@
 		sk = Arabčina
 
 [[Bottom bar view]]
-	[bottom_bar_item_1]
-		cs = Uživatelé
-		en = Users
-		sk = Užívatelia
-	[bottom_bar_item_2]
+	[bottom_bar_profile]
 		cs = Profil
 		en = Profile
 		sk = Profil
-	[bottom_bar_item_3]
-		cs = Recepty
-		en = Recipes
-		sk = Recepty
-	[bottom_bar_item_4]
-		cs = Knihy
-		en = Books
-		sk = Kniznice
-	[bottom_bar_item_5]
-		cs = Tab5
-		en = Tab5
-		sk = Tab5
 
 [[Permissions]]
 	[permission_external_storage_msg]
@@ -673,210 +657,23 @@
 		sk = %1$d bodov
 
 [[Login View]]
-	[login_view_headline_title]
-		cs = Přihlášení
-		en = Sign in
-		sk = Prihlásenie
-	[login_view_email_field_hint]
+	[login_view_title]
+		cs = Trackee
+		en = Trackee
+		sk = Trackee
+	[login_view_subtitle]
+		cs = Time tracking & integration
+		en = Time tracking & integration
+		sk = Time tracking & integration
+	[login_view_email_placeholder]
 		cs = E-mail
 		en = E-mail
 		sk = E-mail
-	[login_view_password_field_hint]
+	[login_view_password_placeholder]
 		cs = Heslo
 		en = Password
 		sk = Heslo
-	[login_view_login_button_title]
-		cs = Přihlásit se
-		en = Sign in
-		sk = Prihlásiť sa
-	[login_view_register_button_title]
-		cs = Registrovat se
-		en = Register
-		sk = Registrovať sa
-	[login_view_error_email_not_verified]
-		cs = Uživatelský účet nemá ověřený email.
-		en = User email hasn't been verified yet.
-		sk = Užívateľský účet nemá overený email.
-	[login_view_error_invalid_credentials]
-		cs = Neplatné přihlašovací údaje 
-		en = Invalid login credentials
-		sk = Neplatné prihlasovacie údaje 
-
-[[Registration View]]
-	[registration_view_headline_title]
-		cs = Registrace
-		en = Registration
-		sk = Registrácia
-	[registration_view_email_field_hint]
-		cs = E-mail
-		en = E-mail
-		sk = E-mail
-	[registration_view_password_field_hint]
-		cs = Heslo
-		en = Password
-		sk = Heslo
-	[registration_view_register_button_title]
-		cs = Registrovat se
-		en = Register
-		sk = Registrovať sa
-	[registration_view_login_button_title]
-		cs = Přihlásit se
-		en = Sign in
-		sk = Prihlásiť sa
-	[register_view_email_already_exists]
-		cs = Uživatel s daným emailem již existuje.
-		en = User with specified email already exists.
-		sk = Užívateľ s daným emailom už existuje.
-
-[[Users View]]
-	[users_view_toolbar_title]
-		cs = Uživatelé
-		en = Users
-		sk = Užívatelia
-
-[[Books View]]
-	[books_view_toolbar_title]
-		cs = Knihy
-		en = Books
-		sk = Knicnice
-  
-[[Rocket Launches View]]
-    [rocket_launches_view_toolbar_title]
-        cs = Starty raket
-        en = Rocket launches
-        sk = Štarty rakiet
-        
-[[Skeleton View]]
-    [skeleton_view_toolbar_title]
-        cs = Skeleton
-        en = Skeleton
-        sk = Skeleton
-
-[[User Detail View]]
-	[user_detail_view_toolbar_title]
-		cs = Detail uživatele
-		en = User detail
-		sk = Detail užívateľa
-	[user_detail_view_label_email]
-		cs = E-mail
-		en = Email
-		sk = E-mail
-	[user_detail_view_label_phone]
-		cs = Telefon
-		en = Phone
-		sk = Telefón
-
-[[Profile View]]
-	[profile_view_toolbar_title]
-		cs = Profil
-		en = Profile
-		sk = Profil
-	[profile_view_tab_bar_profile_title]
-		cs = Profil
-		en = Profile
-		sk = Profil
-	[profile_view_tab_bar_settings_title]
-		cs = Nastavení
-		en = Settings
-		sk = Nastavenie
-	[profile_view_remote_config_label]
-		cs = RemoteConfigLabel
-		en = RemoteConfigLabel
-		sk = RemoteConfigLabel
-	[profile_view_push_notifications_register_button]
-		cs = Registrovat příjem Push Notifikací
-		en = Register for Push Notifications
-		sk = Registrovať príjem Push Notifikácií
-	[profile_view_logout_button]
-		cs = Odhlásit se
-		en = Logout
-		sk = Odhlásiť sa
-	[profile_view_label_email]
-		cs = E-mail
-		en = Email
-		sk = E-mail
-	[profile_view_label_phone]
-		cs = Telefon
-		en = Phone
-		sk = Telefón
-	
-[[Profile edit view]]
-	[profile_edit_view_title]
-		cs = Úprava profilu 
-		en = Edit profile 
-		sk = Úprava profilu 
-
-[[Counter view]]
-	[counter_view_toolbar_title]
-		cs = Počítadlo
-		en = Counter
-		sk = Počítadlo
-	[counter_view_counter_label]
-		cs = Counter: %1$d
-		en = Counter: %1$d
-		sk = Counter: %1$d
-	[counter_view_counter_increase_button]
-		cs = Zvýšit
-		en = Increase
-		sk = Zvýšiť
-	[counter_view_counter_decrease_button]
-		cs = Snížit
-		en = Decrease
-		sk = Znížiť
-	[counter_view_counter_hide_button]
-		cs = Skrýt
-		en = Hide
-		sk = Skryť
-	[counter_view_counter_show_button]
-		cs = Zobrazit
-		en = Show
-		sk = Zobraziť
-    [counter_view_load_toast_message]
-        cs = Počítadlo zobrazeno
-        en = Counter displayed
-        sk = Počítadlo zobrazeno
-    [counter_view_increased_toast_message]
-        cs = Zvýšeno
-        en = Increased
-        sk = Zvýšeno
-    [counter_view_decreased_toast_message]
-        cs = Sníženo
-        en = Decreased
-        sk = Sníženo
-
-
-[[Recipes view]]
-	[recipes_view_toolbar_title]
-		cs = Recepty
-		en = Recipes
-		sk = Recepty
-	[recipes_view_rope_name]
-		cs = Základy animace a Canvasu
-		en = Animation and Canvas basics
-		sk = Základy animácie a Canvasu
-	[recipes_view_rope_description]
-		cs = Learn how to use animate*AsState, how to draw line on a Canvas and how to detect gestures
-		en = Learn how to use animate*AsState, how to draw line on a Canvas and how to detect gestures
-		sk = Learn how to use animate*AsState, how to draw line on a Canvas and how to detect gestures
-	[recipes_view_clock_name]
-		cs = Pokročilé využití canvasu a concurrent work
-		en = Advanced Canvas and concurrent work
-		sk = Pokročilé využitie canvasu a concurrent work 
-	[recipes_view_clock_description]
-		cs = More in-depth usage of the Canvas (arcs, line styles) and concurrent work using LaunchedEffect
-		en = More in-depth usage of the Canvas (arcs, line styles) and concurrent work using LaunchedEffect
-		sk = More in-depth usage of the Canvas (arcs, line styles) and concurrent work using LaunchedEffect
-	[recipes_view_list_name]
-		cs = Pokročilý přechod a nested scrolling 
-		en = Advanced transition and nested scrolling
-		sk = Pokročilý prechod a nested scrolling
-	[recipes_view_list_description]
-		cs = Transform transition and reacting to nested scrolling list to drive this animation.
-		en = Transform transition and reacting to nested scrolling list to drive this animation.
-		sk = Transform transition and reacting to nested scrolling list to drive this animation.
-
-[[Recipe - Clock]]
-	[recipes_clock_view_tutorial]
-		cs = Tažením svisle upravte čas 
-		en = Drag vertically to adjust the time
-		sk = Čas upravíte presunutím zvisle
+	[login_view_login_with_credentials_button_title]
+		cs = Přihlásit se nebo registrovat
+		en = Sign-in or register
+		sk = Prihlásiť sa alebo registrovať

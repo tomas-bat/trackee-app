@@ -20,13 +20,13 @@ final class LoginViewModelTests: XCTestCase {
     
     private var disposeBag = Set<AnyCancellable>()
     
-    private let loginUseCase = LoginUseCaseSpy()
-    private let trackAnalyticsEventUseCase = TrackAnalyticsEventUseCaseSpy()
+//    private let loginUseCase = LoginUseCaseSpy()
+//    private let trackAnalyticsEventUseCase = TrackAnalyticsEventUseCaseSpy()
     
     private func createViewModel() -> LoginViewModel {
         Container.shared.reset()
-        Container.shared.loginUseCase.register { self.loginUseCase }
-        Container.shared.trackAnalyticsEventUseCase.register { self.trackAnalyticsEventUseCase }
+//        Container.shared.loginUseCase.register { self.loginUseCase }
+//        Container.shared.trackAnalyticsEventUseCase.register { self.trackAnalyticsEventUseCase }
         
         let vm = LoginViewModel(flowController: fc)
         observeSnackState(vm: vm)
@@ -45,84 +45,4 @@ final class LoginViewModelTests: XCTestCase {
 
     // MARK: Tests
     
-    func testAppear() async {
-        let vm = createViewModel()
-        
-        vm.onAppear()
-        
-        XCTAssert(trackAnalyticsEventUseCase.executeReceivedInvocations == [LoginEvent.screenAppear.analyticsEvent])
-    }
-
-    func testLoginEmptyEmail() async {
-        let vm = createViewModel()
-        loginUseCase.executeThrowableError = ValidationError.email(.isEmpty)
-        
-        vm.onIntent(.changeEmail(LoginData.stubEmptyEmail.email))
-        vm.onIntent(.changePassword(LoginData.stubEmptyEmail.password))
-        vm.onIntent(.login)
-        await vm.awaitAllTasks()
-        
-        XCTAssert(!vm.state.isLoading)
-        XCTAssertEqual(fc.handleFlowValue, nil)
-        XCTAssert(loginUseCase.executeReceivedInvocations == [.stubEmptyEmail])
-        XCTAssertEqual(trackAnalyticsEventUseCase.executeCallsCount, 0)
-    }
-    
-    func testLoginEmptyPassword() async {
-        let vm = createViewModel()
-        loginUseCase.executeThrowableError = ValidationError.password(.isEmpty)
-        
-        vm.onIntent(.changeEmail(LoginData.stubEmptyPassword.email))
-        vm.onIntent(.changePassword(LoginData.stubEmptyPassword.password))
-        vm.onIntent(.login)
-        await vm.awaitAllTasks()
-        
-        XCTAssert(!vm.state.isLoading)
-        XCTAssertEqual(fc.handleFlowValue, nil)
-        XCTAssert(loginUseCase.executeReceivedInvocations == [.stubEmptyPassword])
-        XCTAssertEqual(trackAnalyticsEventUseCase.executeCallsCount, 0)
-    }
-    
-    func testLoginValid() async {
-        let vm = createViewModel()
-        
-        vm.onIntent(.changeEmail(LoginData.stubValid.email))
-        vm.onIntent(.changePassword(LoginData.stubValid.password))
-        vm.onIntent(.login)
-        await vm.awaitAllTasks()
-        
-        XCTAssert(vm.state.isLoading)
-        XCTAssertEqual(vm.state.alert, nil)
-        XCTAssertEqual(fc.handleFlowValue, .login(.dismiss))
-        XCTAssert(loginUseCase.executeReceivedInvocations == [.stubValid])
-        XCTAssert(trackAnalyticsEventUseCase.executeReceivedInvocations == [LoginEvent.loginButtonTap.analyticsEvent])
-    }
-    
-    func testLoginInvalidPassword() async {
-        let vm = createViewModel()
-        loginUseCase.executeThrowableError = AuthError.login(.invalidCredentials)
-        
-        vm.onIntent(.changeEmail(LoginData.stubValid.email))
-        vm.onIntent(.changePassword(LoginData.stubValid.password))
-        vm.onIntent(.login)
-        await vm.awaitAllTasks()
-        
-        XCTAssert(!vm.state.isLoading)
-        XCTAssertEqual(fc.handleFlowValue, nil)
-        XCTAssert(loginUseCase.executeReceivedInvocations == [.stubValid])
-        XCTAssertEqual(trackAnalyticsEventUseCase.executeCallsCount, 0)
-    }
-
-    func testRegister() async {
-        let vm = createViewModel()
-        
-        vm.onIntent(.register)
-        await vm.awaitAllTasks()
-        
-        XCTAssert(!vm.state.isLoading)
-        XCTAssertEqual(vm.state.alert, nil)
-        XCTAssertEqual(fc.handleFlowValue, .login(.showRegistration))
-        XCTAssertEqual(loginUseCase.executeCallsCount, 0)
-        XCTAssert(trackAnalyticsEventUseCase.executeReceivedInvocations == [LoginEvent.registerButtonTap.analyticsEvent])
-    }
 }

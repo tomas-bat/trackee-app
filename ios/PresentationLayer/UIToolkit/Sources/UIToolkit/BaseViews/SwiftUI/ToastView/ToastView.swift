@@ -20,7 +20,7 @@ struct ToastView: View {
                     .foregroundColor(data.style.color)
                 
                 Text(data.title)
-                    .foregroundColor(AppTheme.Colors.text)
+//                    .foregroundColor(AppTheme.Colors.text)
                     .font(.system(size: 14, weight: .semibold))
             }
             .padding()

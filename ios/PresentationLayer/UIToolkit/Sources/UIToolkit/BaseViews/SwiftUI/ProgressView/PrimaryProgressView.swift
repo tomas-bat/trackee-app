@@ -11,7 +11,7 @@ public struct PrimaryProgressView: View {
     
     public var body: some View {
         ProgressView()
-            .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.progressView))
+            .progressViewStyle(CircularProgressViewStyle(tint: AppTheme.Colors.foreground))
             .scaleEffect(2)
     }
 }

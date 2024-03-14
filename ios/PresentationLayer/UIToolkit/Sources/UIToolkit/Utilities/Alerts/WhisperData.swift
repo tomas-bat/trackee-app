@@ -34,10 +34,11 @@ public enum WhisperStyle {
     case info, success, error
     
     var color: Color {
-        switch self {
-        case .info: AppTheme.Colors.whisperBackgroundInfo
-        case .success: AppTheme.Colors.whisperBackgroundSuccess
-        case .error: AppTheme.Colors.whisperBackgroundError
-        }
+        .gray
+//        switch self {
+//        case .info: AppTheme.Colors.whisperBackgroundInfo
+//        case .success: AppTheme.Colors.whisperBackgroundSuccess
+//        case .error: AppTheme.Colors.whisperBackgroundError
+//        }
     }
 }
