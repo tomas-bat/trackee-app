@@ -1,5 +1,6 @@
 package kmp.shared.feature.auth.data.repository
 
+import kmp.shared.base.Result
 import kmp.shared.common.provider.AppleSignInProvider
 import kmp.shared.common.provider.AuthProvider
 import kmp.shared.feature.auth.domain.model.ExternalLoginType
@@ -11,8 +12,10 @@ internal class AuthRepositoryImpl(
     private val authProvider: AuthProvider
 ) : AuthRepository {
 
-    override suspend fun loginWithProvider(providerType: ExternalLoginType, retryIfCancelled: Boolean): LoginResponse {
-//        TODO("Not yet implemented")
+    override suspend fun loginWithProvider(
+        providerType: ExternalLoginType,
+        retryIfCancelled: Boolean
+    ): Result<LoginResponse> {
         val providerCredential = when (providerType) {
             ExternalLoginType.Apple -> appleSignInProvider.readAppleCredential()
         }
@@ -23,8 +26,10 @@ internal class AuthRepositoryImpl(
         )
     }
 
-    override suspend fun loginWithCredentials(username: String, password: String): LoginResponse {
-        TODO("Not yet implemented")
-    }
+    override suspend fun loginWithCredentials(
+        username: String,
+        password: String
+    ): Result<LoginResponse> =
+        authProvider.signIn(username, password)
 
 }

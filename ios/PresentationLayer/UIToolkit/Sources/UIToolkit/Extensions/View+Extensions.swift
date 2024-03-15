@@ -58,6 +58,20 @@ public extension View {
             )
         )
     }
+    
+    func snack(
+        _ snackState: SnackState<InfoErrorSnackVisuals>
+    ) -> some View {
+        self
+            .overlay(
+                VStack {
+                    Spacer()
+                    
+                    InfoErrorSnackHost(snackState: snackState)
+                        .padding(.bottom, 64)
+                }
+            )
+    }
 }
 
 public extension View {

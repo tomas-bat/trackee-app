@@ -11,5 +11,6 @@ public extension Container {
     // Koin
     private var kmp: Factory<KMPDependency> { self { KMPKoinDependency() }.singleton }
     
-    
+    // Auth
+    var loginWithCredentialsUseCase: Factory<LoginWithCredentialsUseCase> { self { self.kmp().get(LoginWithCredentialsUseCase.self) } }
 }

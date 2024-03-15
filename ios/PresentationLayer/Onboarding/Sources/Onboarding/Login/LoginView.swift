@@ -29,6 +29,8 @@ struct LoginView: View {
     
     var body: some View {
         VStack(spacing: spacing) {
+            Spacer()
+            
             // Title
             VStack(spacing: titleSpacing) {
                 Text(L10n.login_view_title)
@@ -52,9 +54,12 @@ struct LoginView: View {
                     viewModel.onIntent(.async(.onLoginTap))
                 }
             )
+            
+            Spacer()
         }
         .padding(padding)
         .foregroundStyle(AppTheme.Colors.foreground)
+        .snack(viewModel.snackState)
         .environment(\.isLoading, viewModel.state.isLoading)
         .lifecycle(viewModel)
     }

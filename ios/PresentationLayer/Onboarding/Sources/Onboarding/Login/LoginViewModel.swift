@@ -9,13 +9,14 @@ import SharedDomain
 import SwiftUI
 import UIToolkit
 import Utilities
+import KMPSharedDomain
 
 final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: Dependencies
     private weak var flowController: FlowController?
     
-    @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
+    @Injected(\.loginWithCredentialsUseCase) private var loginWithCredentialsUseCase
 
     init(flowController: FlowController?) {
         self.flowController = flowController
@@ -36,6 +37,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: State
     
     @Published private(set) var state: State = State()
+    @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
 
     struct State {
         var email = ""
@@ -71,7 +73,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         case let .async(asyncIntent):
             executeTask(Task {
                 switch asyncIntent {
-                case .onLoginTap: ()
+                case .onLoginTap: await loginWithCredentials()
                 }
             })
         }
@@ -81,5 +83,30 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func dismissAlert() {
         state.alert = nil
+    }
+    
+    private func loginWithCredentials() async {
+        state.isLoading = true
+        defer { state.isLoading = false }
+        
+        do {
+            let params = LoginWithCredentialsUseCaseParams(
+                username: state.email,
+                password: state.password
+            )
+            
+            try await loginWithCredentialsUseCase.execute(params: params)
+            
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.info(message: "Login Success"))
+        } catch {
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(
+                .error(
+                    message: error.localizedDescription,
+                    actionLabel: nil
+                )
+            )
+        }
     }
 }

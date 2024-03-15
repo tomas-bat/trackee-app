@@ -13,7 +13,12 @@ import SharedDomainMocks
 
 public extension Container {
     func registerUseCaseMocks() {
-    
+        // Auth
+        let loginWithCredentialsUseCaseMock = LoginWithCredentialsUseCaseMock()
+        loginWithCredentialsUseCaseMock.executeReturnValue = ResultSuccess(
+            data: LoginResponse(userUid: UUID().uuidString)
+        )
+        loginWithCredentialsUseCase.register { loginWithCredentialsUseCaseMock }
     }
 }
 #endif

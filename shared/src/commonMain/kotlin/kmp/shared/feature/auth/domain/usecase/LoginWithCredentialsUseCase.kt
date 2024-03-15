@@ -2,10 +2,10 @@ package kmp.shared.feature.auth.domain.usecase
 
 import kmp.shared.base.Result
 import kmp.shared.base.usecase.UseCaseResult
-import kmp.shared.feature.auth.domain.model.LoginResponse
+import kmp.shared.base.util.extension.toEmptyResult
 import kmp.shared.feature.auth.domain.repository.AuthRepository
 
-interface LoginWithCredentialsUseCase : UseCaseResult<LoginWithCredentialsUseCase.Params, LoginResponse> {
+interface LoginWithCredentialsUseCase : UseCaseResult<LoginWithCredentialsUseCase.Params, Unit> {
     data class Params(
         val username: String,
         val password: String
@@ -13,9 +13,8 @@ interface LoginWithCredentialsUseCase : UseCaseResult<LoginWithCredentialsUseCas
 }
 
 internal class LoginWithCredentialsUseCaseImpl(
-    authRepository: AuthRepository
+    private val authRepository: AuthRepository
 ) : LoginWithCredentialsUseCase {
-    override suspend fun invoke(params: LoginWithCredentialsUseCase.Params): Result<LoginResponse> {
-        TODO("Not yet implemented")
-    }
+    override suspend fun invoke(params: LoginWithCredentialsUseCase.Params): Result<Unit> =
+        authRepository.loginWithCredentials(params.username, params.password).toEmptyResult()
 }

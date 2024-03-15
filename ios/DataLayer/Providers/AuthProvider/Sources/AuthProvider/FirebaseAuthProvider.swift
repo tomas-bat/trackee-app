@@ -11,8 +11,6 @@ import DataUtilities
 
 public final class FirebaseAuthProvider {
     
-    private typealias AuthContinuation = CheckedContinuation<LoginResponse, Error>
-    
     public init() {
         // Start Firebase if not yet started
         FirebaseSetup.setup()
@@ -23,7 +21,7 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
     public func __signIn(
         providerType: ExternalLoginType,
         providerCredential: ExternalProviderCredential
-    ) async throws -> LoginResponse {
+    ) async -> Result<LoginResponse> {
         var credential: AuthCredential {
             switch providerType {
             case .apple:
@@ -35,20 +33,54 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
             }
         }
         
-        return try await withCheckedThrowingContinuation { (continuation: AuthContinuation) in
-            Auth.auth().signIn(with: credential) { result, error in
-                if let error {
-                    continuation.resume(throwing: error)
-                } else if let result {
-                    continuation.resume(
-                        returning: LoginResponse(
-                            userUid: result.user.uid
-                        )
-                    )
-                } else {
-//                    continuation.resume(throwing: LocalizedError)
-                }
-            }
+        do {
+            return ResultSuccess(
+                data: LoginResponse(
+                    userUid: try await Auth.auth().signIn(
+                        with: credential
+                    ).user.uid
+                )
+            )
+        } catch {
+            return ResultError(
+                error: ErrorResult(message: error.localizedDescription)
+            )
+        }
+    }
+    
+    public func __createUser(
+        email: String,
+        password: String
+    ) async -> Result<LoginResponse> {
+        do {
+            return ResultSuccess(
+                data: LoginResponse(
+                    userUid: try await Auth.auth().createUser(
+                        withEmail: email,
+                        password: password
+                    ).user.uid
+                )
+            )
+        } catch {
+            return ResultError(error: ErrorResult(message: error.localizedDescription))
+        }
+    }
+    
+    public func __signIn(
+        email: String,
+        password: String
+    ) async -> Result<LoginResponse> {
+        do {
+            return ResultSuccess(
+                data: LoginResponse(
+                    userUid: try await Auth.auth().signIn(
+                        withEmail: email,
+                        password: password
+                    ).user.uid
+                )
+            )
+        } catch {
+            return ResultError(error: ErrorResult(message: error.localizedDescription))
         }
     }
 }

@@ -1,23 +1,15 @@
 package plugin
 
 import com.android.build.api.dsl.LibraryExtension
-import config.KmmConfig
+import config.*
 import config.KmmConfig.copyXCFramework
-import config.configureBuildVariants
-import config.configureKotlinAndroid
-import config.configureTests
-import config.kmm
 import constants.ProjectConstants
 import extensions.apply
 import extensions.libs
 import extensions.pluginManager
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.creating
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.getting
-import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.*
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 @Suppress("unused")
@@ -70,6 +62,7 @@ class KmmLibraryConventionPlugin : Plugin<Project> {
                             implementation(libs.bundles.sqlDelight.common)
                             implementation(libs.bundles.ktor.common)
                             implementation(libs.kermit)
+                            implementation(libs.skie.annotations)
                         }
                     }
 

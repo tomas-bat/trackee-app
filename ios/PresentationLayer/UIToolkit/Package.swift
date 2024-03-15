@@ -18,6 +18,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
         .package(name: "Utilities", path: "../../DomainLayer/Utilities"),
+        .package(name: "SharedDomain", path: "../../DomainLayer/SharedDomain"),
         .package(url: "https://github.com/SwiftGen/SwiftGenPlugin", .upToNextMajor(from: "6.6.0")),
         .package(url: "https://github.com/SFSafeSymbols/SFSafeSymbols.git", exact: "5.2.0")
     ],
@@ -28,6 +29,7 @@ let package = Package(
             name: "UIToolkit",
             dependencies: [
                 .product(name: "Utilities", package: "Utilities"),
+                .product(name: "SharedDomain", package: "SharedDomain"),
                 .product(name: "SFSafeSymbols", package: "SFSafeSymbols")
             ],
             exclude: [

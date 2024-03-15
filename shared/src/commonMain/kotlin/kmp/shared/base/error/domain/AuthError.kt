@@ -7,6 +7,14 @@ sealed class AuthError(
     throwable: Throwable? = null,
 ) : ErrorResult(message, throwable) {
 
-    class InvalidLoginCredentials(throwable: Throwable?) : AuthError(null, throwable)
-    class EmailAlreadyExist(throwable: Throwable?) : AuthError(null, throwable)
+    class InvalidLoginCredentials(throwable: Throwable? = null) : AuthError(null, throwable)
+    class EmailAlreadyExist(throwable: Throwable? = null) : AuthError(null, throwable)
+
+    class ProviderLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
+        constructor() : this(null)
+    }
+
+    class CredentialLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
+        constructor() : this(null)
+    }
 }

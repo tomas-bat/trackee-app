@@ -6,7 +6,7 @@ public extension ErrorResult {
         switch self {
         // CommonError
         case is KMPSharedDomain.CommonError.NoNetworkConnection: CommonError.noNetworkConnection
-        default: CommonError.unknownError
+        default: CommonError.unknownError(message: message)
         }
     }
 }

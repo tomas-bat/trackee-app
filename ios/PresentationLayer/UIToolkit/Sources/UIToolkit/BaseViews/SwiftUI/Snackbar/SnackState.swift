@@ -52,6 +52,27 @@ public class SnackState<Visuals: SnackVisuals>: ObservableObject {
         
         return result
     }
+    
+    /// Synchronous function for displaying the snackbar.
+    /// Only one snackbar can be visible at one time. If called asynchronously from different places, one caller will be suspended until the firs snack is dismissed.
+    ///
+    /// - Parameters:
+    ///    - visuals: ``SnackVisuals`` the visual information of the snackbar shown
+    ///
+    /// - Returns: The ``SnackResult`` result of the asction - either ``.dismissed`` or ``.actionPerformed`` if action
+    @discardableResult
+    public func showSnackSync(_ visuals: Visuals) -> Task<SnackResult, Never> {
+        Task {
+            await semaphore.wait()
+            let result = await withCheckedContinuation(function: "SnackState.showSnack continuation") { continuation in
+                currentData = SnackData(visuals: visuals, continuation: continuation)
+            }
+            currentData = nil
+            semaphore.signal()
+            
+            return result
+        }
+    }
 }
 
 /// Control object for a single snackbar. Provides functionality for dimsmissing the Snackbar using `dismiss()` or `performAction()` functions.
