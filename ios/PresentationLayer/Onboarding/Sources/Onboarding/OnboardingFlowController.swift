@@ -9,9 +9,16 @@ import UIToolkit
 
 enum OnboardingFlow: Flow, Equatable {
     case login(Login)
+    case register(Register)
     
     enum Login: Equatable {
         case dismiss
+        case showRegistration
+    }
+    
+    enum Register: Equatable {
+        case dismiss
+        case pop
     }
 }
 
@@ -36,7 +43,8 @@ public final class OnboardingFlowController: FlowController {
     override public func handleFlow(_ flow: Flow) {
         guard let onboardingFlow = flow as? OnboardingFlow else { return }
         switch onboardingFlow {
-        case .login(let loginFlow): handleLoginFlow(loginFlow)
+        case let .login(loginFlow): handleLoginFlow(loginFlow)
+        case let .register(registerFlow): handleRegisterFlow(registerFlow)
         }
     }
 }
@@ -46,6 +54,24 @@ extension OnboardingFlowController {
     func handleLoginFlow(_ flow: OnboardingFlow.Login) {
         switch flow {
         case .dismiss: dismiss()
+        case .showRegistration: showRegistration()
+        }
+    }
+    
+    private func showRegistration() {
+        let vm = RegisterViewModel(flowController: self)
+        let view = RegisterView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Register flow
+extension OnboardingFlowController {
+    func handleRegisterFlow(_ flow: OnboardingFlow.Register) {
+        switch flow {
+        case .dismiss: dismiss()
+        case .pop: pop()
         }
     }
 }

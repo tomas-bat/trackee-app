@@ -9,6 +9,9 @@ sealed class AuthError(
 
     class InvalidLoginCredentials(throwable: Throwable? = null) : AuthError(null, throwable)
     class EmailAlreadyExist(throwable: Throwable? = null) : AuthError(null, throwable)
+    class EmptyField : AuthError()
+    class PasswordsDontMatch : AuthError()
+    class NoAccessToken : AuthError()
 
     class ProviderLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
         constructor() : this(null)

@@ -51,15 +51,22 @@ struct LoginView: View {
                     set: { password in viewModel.onIntent(.sync(.onPasswordChange(to: password))) }
                 ),
                 onLoginTap: {
-                    viewModel.onIntent(.async(.onLoginTap))
+                    viewModel.onIntent(.async(.login))
                 }
             )
             
             Spacer()
+            
+            Button(L10n.login_view_register_button_title) {
+                viewModel.onIntent(.sync(.register))
+            }
+            .buttonStyle(SecondaryButtonStyle())
         }
         .padding(padding)
         .foregroundStyle(AppTheme.Colors.foreground)
+        .background(AppTheme.Colors.background)
         .snack(viewModel.snackState)
+        .toolbar(.hidden)
         .environment(\.isLoading, viewModel.state.isLoading)
         .lifecycle(viewModel)
     }

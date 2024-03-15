@@ -1,6 +1,10 @@
 import Foundation
+import KMPSharedDomain
 
-public enum CommonError: Swift.Error, Equatable {
-    case noNetworkConnection
-    case unknownError(message: String?)
+public struct KMPError: Error {
+    public let kmpError: ErrorResult
+    
+    public init(_ kmpError: ErrorResult) {
+        self.kmpError = kmpError
+    }
 }

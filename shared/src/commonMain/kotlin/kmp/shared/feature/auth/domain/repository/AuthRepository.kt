@@ -14,4 +14,13 @@ internal interface AuthRepository {
         username: String,
         password: String
     ): Result<LoginResponse>
+
+    suspend fun createUser(
+        username: String,
+        password: String
+    ): Result<LoginResponse>
+
+    suspend fun readAccessToken(): Result<String>
+
+    suspend fun logout(): Result<Unit>
 }

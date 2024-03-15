@@ -11,13 +11,27 @@ import UIToolkit
 
 final class AppFlowController: FlowController, MainFlowControllerDelegate, OnboardingFlowControllerDelegate {
     
+    // MARK: - Dependencies
+    
+    @Injected(\.isLoggedInUseCase) private var isLoggedInUseCase
+    
+    // MARK: - Flow handling
+    
     func start() {
         setupAppearance()
         
-        if false {//isUserLoggedUseCase.execute() {
-            setupMain()
-        } else {
-            presentOnboarding(animated: false, completion: nil)
+        let loadingView = ApplicationLoadingView()
+        let loadingVC = BaseHostingController(rootView: loadingView)
+        navigationController.viewControllers = [loadingVC]
+        
+        Task {
+            let isLoggedIn: Bool = (try? await isLoggedInUseCase.execute()) ?? false
+            
+            if isLoggedIn {
+                setupMain()
+            } else {
+                presentOnboarding(animated: false, completion: nil)
+            }
         }
     }
     
@@ -35,7 +49,7 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
         let rootVC = startChildFlow(fc)
         nc.viewControllers = [rootVC]
         nc.modalPresentationStyle = .fullScreen
-        nc.navigationBar.isHidden = true
+        nc.navigationBar.isHidden = false
         navigationController.present(nc, animated: animated, completion: completion)
     }
     

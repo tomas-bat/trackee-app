@@ -7,7 +7,9 @@ import Foundation
 import KMPSharedDomain
 import SharedDomain
 
-//public final class GetBooksUseCaseMock: UseCaseFlowNoParamsMock<[Book]>, GetBooksUseCase {}
-//public final class RefreshBooksUseCaseMock: UseCaseResultMock, RefreshBooksUseCase {}
 
+// Auth
 public final class LoginWithCredentialsUseCaseMock: UseCaseResultMock, LoginWithCredentialsUseCase {}
+public final class RegisterUseCaseMock: UseCaseResultMock, RegisterUseCase {}
+public final class IsLoggedInUseCaseMock: UseCaseResultNoParamsMock, IsLoggedInUseCase {}
+public final class LogoutUseCaseMock: UseCaseResultNoParamsMock, LogoutUseCase {}

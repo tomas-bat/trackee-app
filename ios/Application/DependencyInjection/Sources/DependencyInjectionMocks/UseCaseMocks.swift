@@ -13,12 +13,28 @@ import SharedDomainMocks
 
 public extension Container {
     func registerUseCaseMocks() {
-        // Auth
-        let loginWithCredentialsUseCaseMock = LoginWithCredentialsUseCaseMock()
-        loginWithCredentialsUseCaseMock.executeReturnValue = ResultSuccess(
-            data: LoginResponse(userUid: UUID().uuidString)
-        )
-        loginWithCredentialsUseCase.register { loginWithCredentialsUseCaseMock }
+        
+        // MARK: - Auth
+        loginWithCredentialsUseCase.register {
+            LoginWithCredentialsUseCaseMock(
+                executeReturnValue: ResultSuccess(data: LoginResponse(idToken: UUID().uuidString))
+            )
+        }
+        registerUseCase.register {
+            RegisterUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinUnit())
+            )
+        }
+        isLoggedInUseCase.register {
+            IsLoggedInUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: true))
+            )
+        }
+        logoutUseCase.register {
+            LogoutUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinUnit())
+            )
+        }
     }
 }
 #endif

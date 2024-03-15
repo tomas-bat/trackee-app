@@ -6,8 +6,8 @@ import PackageDescription
 let package = Package(
     name: "SharedDomain",
     platforms: [
-        .iOS(.v15),
-        .macOS(.v10_15)
+        .iOS(.v16),
+        .macOS(.v14)
     ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.

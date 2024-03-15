@@ -1,6 +1,6 @@
 //
-//  Created by Petr Chmelar on 20.02.2022
-//  Copyright © 2022 Matee. All rights reserved.
+//  Created by Tomáš Batěk on 15.03.2024
+//  Copyright © 2024 Matee. All rights reserved.
 //
 
 import DependencyInjection
@@ -8,80 +8,71 @@ import Factory
 import SharedDomain
 import SwiftUI
 import UIToolkit
-import Utilities
 import KMPSharedDomain
 
-final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
+final class RegisterViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Dependencies
+    
     private weak var flowController: FlowController?
     
-    @Injected(\.loginWithCredentialsUseCase) private var loginWithCredentialsUseCase
+    @Injected(\.registerUseCase) private var registerUseCase
     
     // MARK: - Stored properties
     
-    
-    
     // MARK: - Init
-
-    init(flowController: FlowController?) {
+    
+    init(flowController: FlowController? = nil) {
         self.flowController = flowController
-        super.init()
-        
-        if Environment.flavor == .debug && Environment.type == .alpha {
-            
-        }
     }
     
     // MARK: - Lifecycle
     
     override func onAppear() {
         super.onAppear()
-        
     }
     
     // MARK: - State
     
     @Published private(set) var state: State = State()
     @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
-
+    
     struct State {
         var email = ""
-        var password = ""
-        
+        var newPassword = ""
+        var verifyPassword = ""
         var isLoading = false
-        
-        var alert: AlertData?
     }
     
     // MARK: - Intent
+    
     enum Intent {
         case sync(Sync)
         case async(Async)
         
         enum Sync {
             case onEmailChange(to: String)
-            case onPasswordChange(to: String)
-            case register
+            case onNewPasswordChange(to: String)
+            case onVerifyPasswordChange(to: String)
         }
         
         enum Async {
-            case login
+            case register
         }
     }
-
+    
     func onIntent(_ intent: Intent) {
         switch intent {
         case let .sync(syncIntent):
             switch syncIntent {
             case let .onEmailChange(email): state.email = email
-            case let .onPasswordChange(password): state.password = password
-            case .register: register()
+            case let .onNewPasswordChange(newPassword): state.newPassword = newPassword
+            case let .onVerifyPasswordChange(verifyPassword): state.verifyPassword = verifyPassword
             }
         case let .async(asyncIntent):
             executeTask(Task {
                 switch asyncIntent {
-                case .login: await loginWithCredentials()
+                case .register: await register()
                 }
             })
         }
@@ -89,35 +80,23 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Private
     
-    private func dismissAlert() {
-        state.alert = nil
-    }
-    
-    private func loginWithCredentials() async {
+    private func register() async {
         state.isLoading = true
         defer { state.isLoading = false }
         
         do {
-            let params = LoginWithCredentialsUseCaseParams(
+            let params = RegisterUseCaseParams(
                 username: state.email,
-                password: state.password
+                newPassword: state.newPassword,
+                verifyPassword: state.verifyPassword
             )
             
-            try await loginWithCredentialsUseCase.execute(params: params)
+            try await registerUseCase.execute(params: params)
             
-            flowController?.handleFlow(OnboardingFlow.login(.dismiss))
+            flowController?.handleFlow(OnboardingFlow.register(.dismiss))
         } catch {
             snackState.currentData?.dismiss()
-            snackState.showSnackSync(
-                .error(
-                    message: error.localizedDescription,
-                    actionLabel: nil
-                )
-            )
+            snackState.showSnackSync(.info(message: error.localizedDescription))
         }
-    }
-    
-    private func register() {
-        flowController?.handleFlow(OnboardingFlow.login(.showRegistration))
     }
 }

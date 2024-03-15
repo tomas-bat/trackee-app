@@ -18,6 +18,7 @@ public final class FirebaseAuthProvider {
 }
 
 extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
+    
     public func __signIn(
         providerType: ExternalLoginType,
         providerCredential: ExternalProviderCredential
@@ -36,9 +37,9 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
         do {
             return ResultSuccess(
                 data: LoginResponse(
-                    userUid: try await Auth.auth().signIn(
+                    idToken: try await Auth.auth().signIn(
                         with: credential
-                    ).user.uid
+                    ).user.getIDToken()
                 )
             )
         } catch {
@@ -55,10 +56,10 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
         do {
             return ResultSuccess(
                 data: LoginResponse(
-                    userUid: try await Auth.auth().createUser(
+                    idToken: try await Auth.auth().createUser(
                         withEmail: email,
                         password: password
-                    ).user.uid
+                    ).user.getIDToken()
                 )
             )
         } catch {
@@ -73,14 +74,32 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
         do {
             return ResultSuccess(
                 data: LoginResponse(
-                    userUid: try await Auth.auth().signIn(
+                    idToken: try await Auth.auth().signIn(
                         withEmail: email,
                         password: password
-                    ).user.uid
+                    ).user.getIDToken()
                 )
             )
         } catch {
             return ResultError(error: ErrorResult(message: error.localizedDescription))
         }
     }
+    
+    public func __readAccessToken() async -> Result<NSString> {
+        guard let accessToken = try? await Auth.auth().currentUser?.getIDToken() else {
+            return ResultError(error: AuthError.NoAccessToken())
+        }
+        
+        return ResultSuccess(data: NSString(string: accessToken))
+    }
+    
+    public func __logout() async -> Result<KotlinUnit> {
+        do {
+            try Auth.auth().signOut()
+            return ResultSuccess(data: KotlinUnit())
+        } catch {
+            return ResultError(error: ErrorResult(message: error.localizedDescription))
+        }
+    }
+    
 }

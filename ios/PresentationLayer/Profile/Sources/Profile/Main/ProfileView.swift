@@ -15,7 +15,13 @@ struct ProfileView: View {
     }
     
     var body: some View {
-        Text("Hello World!")
+        VStack {
+            Text("You are logged in.")
+            
+            Button("Logout") {
+                viewModel.onIntent(.logout)
+            }
+        }
     }
 }
 

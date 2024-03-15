@@ -13,4 +13,7 @@ public extension Container {
     
     // Auth
     var loginWithCredentialsUseCase: Factory<LoginWithCredentialsUseCase> { self { self.kmp().get(LoginWithCredentialsUseCase.self) } }
+    var registerUseCase: Factory<RegisterUseCase> { self { self.kmp().get(RegisterUseCase.self) } }
+    var isLoggedInUseCase: Factory<IsLoggedInUseCase> { self { self.kmp().get(IsLoggedInUseCase.self) } }
+    var logoutUseCase: Factory<LogoutUseCase> { self { self.kmp().get(LogoutUseCase.self) } }
 }

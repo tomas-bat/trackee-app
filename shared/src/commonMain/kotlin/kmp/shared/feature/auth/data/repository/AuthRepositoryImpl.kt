@@ -32,4 +32,12 @@ internal class AuthRepositoryImpl(
     ): Result<LoginResponse> =
         authProvider.signIn(username, password)
 
+    override suspend fun createUser(username: String, password: String): Result<LoginResponse> =
+        authProvider.createUser(username, password)
+
+    override suspend fun readAccessToken(): Result<String> =
+        authProvider.readAccessToken()
+
+    override suspend fun logout(): Result<Unit> =
+        authProvider.logout()
 }

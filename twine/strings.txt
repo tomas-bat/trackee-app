@@ -674,6 +674,40 @@
 		en = Password
 		sk = Heslo
 	[login_view_login_with_credentials_button_title]
-		cs = Přihlásit se nebo registrovat
-		en = Sign-in or register
-		sk = Prihlásiť sa alebo registrovať
+		cs = Přihlásit se
+		en = Sign-in or
+		sk = Prihlásiť sa
+	[login_view_register_button_title]
+		cs = Registrovat
+		en = Register
+		sk = Registrovať
+
+[[Register View]]
+	[register_view_navigation_title]
+		cs = Registrace
+		en = Registration
+		sk = Registrácia
+	[register_view_email_placeholder]
+		cs = E-mail
+		en = E-mail
+		sk = E-mail
+	[register_view_new_password_placeholder]
+		cs = Nové heslo
+		en = New password
+		sk = Nové heslo
+	[register_view_new_password_again_placeholder]
+		cs = Nové heslo znovu
+		en = Repeat new password
+		sk = Nové heslo znova
+	[register_view_button_title]
+		cs = Registrovat
+		en = Register
+		sk = Registrovať
+	[register_view_fill_all_fields]
+		cs = Vyplňte všechna pole
+		en = Fill all fields
+		sk = Vyplňte všetky polia
+	[register_view_passwords_dont_match]
+		cs = Hesla se neshodují
+		en = Passwords don't match
+		sk = Heslá sa nezhodujú

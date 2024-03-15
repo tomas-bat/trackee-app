@@ -7,13 +7,21 @@ import SwiftUI
 
 public struct SecondaryButtonStyle: ButtonStyle {
     
+    // MARK: - Constants
+    
+    private let pressedOpacity: CGFloat = 0.5
+    
+    // MARK: - Init
+    
     public init() {}
+    
+    // MARK: - Body
     
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-//            .font(AppTheme.Fonts.secondaryButton)
-//            .foregroundColor(AppTheme.Colors.secondaryButtonTitle)
-            .padding()
+            .font(AppTheme.Fonts.headline)
+            .foregroundStyle(AppTheme.Colors.foreground)
+            .opacity(configuration.isPressed ? pressedOpacity : 1)
     }
 }
 
