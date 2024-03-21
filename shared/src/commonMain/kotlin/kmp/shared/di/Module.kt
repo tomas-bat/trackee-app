@@ -1,6 +1,10 @@
 package kmp.shared.di
 
+import kmp.shared.configuration.domain.Configuration
 import kmp.shared.feature.auth.authModule
+import kmp.shared.feature.timer.timerModule
+import kmp.shared.feature.user.userModule
+import kmp.shared.network.NetworkClient
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -11,7 +15,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}): KoinApplication {
     val koinApplication = startKoin {
         appDeclaration()
         modules(commonModule, platformModule)
-        modules(authModule)
+        modules(sharedModules)
     }
 
     // Dummy initialization logic, making use of appModule declarations for demonstration purposes.
@@ -24,11 +28,15 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}): KoinApplication {
 }
 
 private val sharedModules = listOf(
-    authModule
+    authModule,
+    timerModule,
+    userModule
 )
 
 private val commonModule = module {
-
+    single {
+        NetworkClient.Ktor.getClient(Configuration.Alpha, get())
+    }
 
 }
 

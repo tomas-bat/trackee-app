@@ -305,6 +305,10 @@
 		sk = Arabčina
 
 [[Bottom bar view]]
+	[bottom_bar_timer]
+		cs = Časovač
+		en = Timer
+		sk = Časovač
 	[bottom_bar_profile]
 		cs = Profil
 		en = Profile

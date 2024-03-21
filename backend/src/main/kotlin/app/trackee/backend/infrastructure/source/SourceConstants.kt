@@ -5,6 +5,7 @@ internal class SourceConstants {
         internal class Collection {
             companion object {
                 const val users = "users"
+                const val entries = "entries"
             }
         }
     }

@@ -8,7 +8,7 @@ import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FirestoreTimerData(
+internal data class FirestoreTimerData(
     val status: String = "",
     val projectId: String? = null,
     val description: String? = null,
@@ -16,8 +16,8 @@ data class FirestoreTimerData(
     val startedAt: Timestamp? = null,
 )
 
-fun FirestoreTimerData.toDomain() = TimerData(
-    status = TimerStatus.Off,
+internal fun FirestoreTimerData.toDomain() = TimerData(
+    status = TimerStatus.entries.firstOrNull { it.rawValue == status } ?: TimerStatus.Off,
     projectId = projectId,
     description = description,
     startedAt = startedAt?.toDate()?.toInstant()?.toKotlinInstant(),

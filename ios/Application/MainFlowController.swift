@@ -7,8 +7,10 @@ import Profile
 import SharedDomain
 import UIKit
 import UIToolkit
+import Timer
 
 enum MainTab: Int {
+    case timer
     case profile
 }
 
@@ -16,7 +18,7 @@ protocol MainFlowControllerDelegate: AnyObject {
     func presentOnboarding(animated: Bool, completion: (() -> Void)?)
 }
 
-final class MainFlowController: FlowController, ProfileFlowControllerDelegate {
+final class MainFlowController: FlowController, ProfileFlowControllerDelegate, TimerFlowControllerDelegate {
     
     weak var delegate: MainFlowControllerDelegate?
     
@@ -24,6 +26,20 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate {
         let main = UITabBarController()
         main.viewControllers = [setupProfileTab()]
         return main
+    }
+    
+    private func setupTimerTab() -> UINavigationController {
+        let timerNC = BaseNavigationController(statusBarStyle: .lightContent)
+        timerNC.tabBarItem = UITabBarItem(
+            title: L10n.bottom_bar_timer,
+            image: UIImage(systemSymbol: .timer),
+            tag: MainTab.timer.rawValue
+        )
+        let timerFC = TimerFlowController(navigationController: timerNC)
+        timerFC.delegate = self
+        let rootVC = startChildFlow(timerFC)
+        timerNC.viewControllers = [rootVC]
+        return timerNC
     }
     
     private func setupProfileTab() -> UINavigationController {
