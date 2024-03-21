@@ -6,6 +6,7 @@ import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.io.File
 
 fun Application.configureRouting() {
     install(StatusPages) {
@@ -16,6 +17,9 @@ fun Application.configureRouting() {
     routing {
         get("/") {
             call.respondText("Hello World!")
+        }
+        get("/.well-known/apple-app-site-association") {
+            call.respondFile(File("src/main/resources/apple-app-site-association"))
         }
         userRoute()
     }
