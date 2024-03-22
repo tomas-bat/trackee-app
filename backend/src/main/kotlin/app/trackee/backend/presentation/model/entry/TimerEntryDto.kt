@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class TimerEntryDto(
     val id: String,
+    @SerialName("client_id") val clientId: String,
     @SerialName("project_id") val projectId: String,
     val description: String?,
     @SerialName("started_at") val startedAt: String,
@@ -15,6 +16,7 @@ internal data class TimerEntryDto(
 
 internal fun TimerEntry.toDto() = TimerEntryDto(
     id = id,
+    clientId = clientId,
     projectId = projectId,
     description = description,
     startedAt = startedAt.toString(),

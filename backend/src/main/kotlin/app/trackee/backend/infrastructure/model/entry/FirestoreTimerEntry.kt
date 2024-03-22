@@ -10,6 +10,10 @@ internal data class FirestoreTimerEntry(
     val id: String = "",
     val description: String? = null,
 
+    @get:PropertyName("client_id")
+    @set:PropertyName("client_id")
+    var clientId: String = "",
+
     @get:PropertyName("project_id")
     @set:PropertyName("project_id")
     var projectId: String = "",
@@ -27,6 +31,7 @@ internal data class FirestoreTimerEntry(
 
 internal fun FirestoreTimerEntry.toDomain() = TimerEntry(
     id = id,
+    clientId = clientId,
     projectId = projectId,
     description = description,
     startedAt = startedAt.toDate().toInstant().toKotlinInstant(),
