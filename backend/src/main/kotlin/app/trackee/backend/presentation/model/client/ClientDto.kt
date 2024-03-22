@@ -1,11 +1,15 @@
 package app.trackee.backend.presentation.model.client
 
-import app.trackee.backend.presentation.model.project.ProjectDto
+import app.trackee.backend.domain.model.client.Client
 import kotlinx.serialization.Serializable
 
 @Serializable
 internal data class ClientDto(
     val id: String,
     val name: String,
-    val projects: List<ProjectDto>
+)
+
+internal fun Client.toDto() = ClientDto(
+    id = id,
+    name = name
 )

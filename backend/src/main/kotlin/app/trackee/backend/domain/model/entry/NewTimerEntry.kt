@@ -2,7 +2,7 @@ package app.trackee.backend.domain.model.entry
 
 import kotlinx.datetime.Instant
 
-data class NewTimeEntry(
+data class NewTimerEntry(
     val projectId: String?,
     val description: String?,
     val startedAt: Instant?,

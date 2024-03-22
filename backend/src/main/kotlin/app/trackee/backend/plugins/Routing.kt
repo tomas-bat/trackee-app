@@ -1,5 +1,6 @@
 package app.trackee.backend.plugins
 
+import app.trackee.backend.presentation.route.user.clientRoute
 import app.trackee.backend.presentation.route.user.userRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -22,5 +23,6 @@ fun Application.configureRouting() {
             call.respondFile(File("src/main/resources/apple-app-site-association"))
         }
         userRoute()
+        clientRoute()
     }
 }

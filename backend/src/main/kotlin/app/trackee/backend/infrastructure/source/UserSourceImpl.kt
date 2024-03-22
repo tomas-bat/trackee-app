@@ -4,8 +4,6 @@ import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
-import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntryWithId
-import app.trackee.backend.infrastructure.model.entry.withId
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import com.google.firebase.cloud.FirestoreClient
 
@@ -20,7 +18,7 @@ internal class UserSourceImpl : UserSource {
             ?: throw UserException.UserNotFound(uid = uid)
     }
 
-    override suspend fun readEntries(uid: String): List<FirestoreTimerEntryWithId> {
+    override suspend fun readEntries(uid: String): List<FirestoreTimerEntry> {
         val snapshot = db
             .collection(SourceConstants.Firestore.Collection.users)
             .document(uid)
@@ -30,9 +28,7 @@ internal class UserSourceImpl : UserSource {
 
 
         return snapshot.documents.map { document ->
-            document
-                .toObject<FirestoreTimerEntry>(FirestoreTimerEntry::class.java)
-                .withId(id = document.id)
+            document.toObject<FirestoreTimerEntry>(FirestoreTimerEntry::class.java)
         }
     }
 }

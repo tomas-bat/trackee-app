@@ -11,7 +11,7 @@ internal class UserRepositoryImpl(
     private val source: UserSource
 ) : UserRepository {
     override suspend fun readUserByUid(uid: String): User =
-        source.readUserByUid(uid).toDomain(uid)
+        source.readUserByUid(uid).toDomain()
 
     override suspend fun readEntries(uid: String): List<TimerEntry> =
         source.readEntries(uid).map { it.toDomain() }

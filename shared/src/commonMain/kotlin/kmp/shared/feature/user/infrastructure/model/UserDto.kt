@@ -6,11 +6,12 @@ import kmp.shared.feature.timer.infrastructure.model.toDomain
 import kmp.shared.feature.user.domain.model.User
 
 internal data class UserDto(
+    val uid: String,
     val timer: TimerDataDto,
     val entries: List<TimerEntryDto>
 )
 
-internal fun UserDto.toDomain(uid: String) = User(
+internal fun UserDto.toDomain() = User(
     uid = uid,
     timer = timer.toDomain(),
     entries = entries.map { it.toDomain() }

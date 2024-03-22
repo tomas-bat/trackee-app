@@ -9,18 +9,18 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class FirestoreTimerEntry(
     val id: String = "",
-    val projectId: String = "",
+    val project_id: String = "",
     val description: String? = null,
     @Contextual
-    val startedAt: Timestamp = Timestamp.now(),
+    val started_at: Timestamp = Timestamp.now(),
     @Contextual
-    val endedAt: Timestamp = Timestamp.now()
+    val ended_at: Timestamp = Timestamp.now()
 )
 
 internal fun FirestoreTimerEntry.toDomain() = TimerEntry(
     id = id,
-    projectId = projectId,
+    projectId = project_id,
     description = description,
-    startedAt = startedAt.toDate().toInstant().toKotlinInstant(),
-    endedAt = endedAt.toDate().toInstant().toKotlinInstant(),
+    startedAt = started_at.toDate().toInstant().toKotlinInstant(),
+    endedAt = ended_at.toDate().toInstant().toKotlinInstant(),
 )
