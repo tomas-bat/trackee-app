@@ -1,39 +1,35 @@
 package kmp.shared.feature.timer.domain.usecase
 
 import kmp.shared.base.Result
+import kmp.shared.base.error.domain.AuthError
 import kmp.shared.base.error.domain.TimerError
-import kmp.shared.base.usecase.UseCaseResult
+import kmp.shared.base.usecase.UseCaseResultNoParams
 import kmp.shared.base.util.extension.getOrNull
 import kmp.shared.base.util.extension.map
+import kmp.shared.feature.auth.domain.repository.AuthRepository
 import kmp.shared.feature.timer.domain.model.TimerEntryPreview
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 
 /**
- * Get timer entries for a specific user.
- *
- * **Input** GetTimerEntriesUseCase.Params
+ * Get timer entries for the current user.
  *
  * **Returns** List<TimerEntryPreview>
  */
-interface GetTimerEntriesUseCase : UseCaseResult<GetTimerEntriesUseCase.Params, List<TimerEntryPreview>> {
-    /**
-     * @param uid UID of user
-     */
-    data class Params(
-        val uid: String
-    )
-}
+interface GetTimerEntriesUseCase : UseCaseResultNoParams<List<TimerEntryPreview>>
 
 internal class GetTimerEntriesUseCaseImpl(
-    private val repository: TimerRepository
+    private val timerRepository: TimerRepository,
+    private val authRepository: AuthRepository
 ) : GetTimerEntriesUseCase {
-    override suspend fun invoke(params: GetTimerEntriesUseCase.Params): Result<List<TimerEntryPreview>> =
-        repository.readEntries(params.uid).map { entries ->
+    override suspend fun invoke(): Result<List<TimerEntryPreview>> {
+        val uid = authRepository.readCurrentUserUid().getOrNull() ?: return Result.Error(AuthError.NoCurrentUser())
+
+        return timerRepository.readEntries(uid).map { entries ->
             entries.map { entry ->
-                val client = repository.readClient(entry.clientId).getOrNull()
+                val client = timerRepository.readClient(entry.clientId).getOrNull()
                     ?: return Result.Error(TimerError.ClientNotFound("clientId=${entry.clientId}"))
 
-                val project = repository.readProject(entry.clientId, entry.projectId).getOrNull()
+                val project = timerRepository.readProject(entry.clientId, entry.projectId).getOrNull()
                     ?: return Result.Error(
                         TimerError.ProjectNotFound("clientId=${entry.clientId}, projectId=${entry.projectId}")
                     )
@@ -48,4 +44,5 @@ internal class GetTimerEntriesUseCaseImpl(
                 )
             }
         }
+    }
 }

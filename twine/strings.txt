@@ -715,3 +715,13 @@
 		cs = Hesla se neshodují
 		en = Passwords don't match
 		sk = Heslá sa nezhodujú
+
+[[Timer View]]
+	[timer_view_summary_today]
+		cs = Dnes
+		en = Today
+		sk = Dnes
+	[timer_view_summary_this_week]
+		cs = Tento týden
+		en = This week
+		sk = Tento týždeň

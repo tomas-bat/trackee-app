@@ -12,6 +12,8 @@ struct TimerListView: View {
     // MARK: - Constants
     
     private let entrySpacing: CGFloat = 8
+    private let padding: CGFloat = 16
+    private let toolbarVerticalPadding: CGFloat = 16
     
     // MARK: - Stored properties
     
@@ -26,23 +28,44 @@ struct TimerListView: View {
     // MARK: - Body
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: entrySpacing) {
-                
+        Group {
+            switch viewModel.state.viewData {
+            case let .data(entries), let .loading(entries):
+                ScrollView {
+                    VStack(spacing: entrySpacing) {
+                        ForEach(entries) { entry in
+                            TimerEntryView(timerEntry: entry)
+                                .skeleton(viewModel.state.viewData.isLoading)
+                        }
+                    }
+                    .padding(padding)
+                }
+                .defaultScrollAnchor(.bottom)
+            case let .error(error):
+                VStack {
+                    Text(error.localizedDescription)
+                    
+                    Button(L10n.retry) {
+                        viewModel.onIntent(.tryAgain)
+                    }
+                    .buttonStyle(PrimaryButtonStyle())
+                }
+            default: ZStack {}
             }
         }
         .background(AppTheme.Colors.background)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                VStack(alignment: .leading) {
-                    Text("7h 26m Today")
-                    
-                    Text("31h 13m This week")
+                switch viewModel.state.summaryViewData {
+                case let .data(summaries), let .loading(summaries):
+                    TimerSummaryView(summaries: summaries)
+                        .skeleton(viewModel.state.summaryViewData.isLoading)
+                        .padding(.vertical, toolbarVerticalPadding)
+                default: EmptyView()
                 }
-                
-                Spacer()
             }
         }
+        .lifecycle(viewModel)
     }
 }
 

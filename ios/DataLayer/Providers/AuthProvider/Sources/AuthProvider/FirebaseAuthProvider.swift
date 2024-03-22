@@ -93,6 +93,14 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
         return ResultSuccess(data: NSString(string: accessToken))
     }
     
+    public func __readCurrentUserUid() async -> Result<NSString> {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return ResultError(error: AuthError.NoCurrentUser())
+        }
+        
+        return ResultSuccess(data: NSString(string: uid))
+    }
+    
     public func __logout() async -> Result<KotlinUnit> {
         do {
             try Auth.auth().signOut()

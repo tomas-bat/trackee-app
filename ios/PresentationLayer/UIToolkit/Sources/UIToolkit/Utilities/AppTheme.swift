@@ -17,6 +17,7 @@ public enum AppTheme {
         public static let field = Asset.Colors.field.color
         
         public static let background = Asset.Colors.background.color
+        public static let contentBackground = Asset.Colors.contentBackground.color
     }
     
     /// Defines all the fonts used in the app in a semantic way
@@ -28,5 +29,7 @@ public enum AppTheme {
         public static let headlineAdditional: Font = UIFont.preferredFont(forTextStyle: .headline, weight: .regular, size: 14)
         
         public static let screenTitle: Font = UIFont.preferredFont(forTextStyle: .largeTitle, weight: .bold, size: 32)
+        
+        public static let index: Font = UIFont.preferredFont(forTextStyle: .footnote, weight: .regular, size: 10)
     }
 }

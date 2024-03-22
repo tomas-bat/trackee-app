@@ -35,6 +35,32 @@ public extension Container {
                 executeReturnValue: ResultSuccess(data: KotlinUnit())
             )
         }
+        
+        // MARK: - Timer
+        getTimerEntriesUseCase.register {
+            GetTimerEntriesUseCaseMock(
+                executeReturnValue: ResultSuccess(
+                    data: (0..<15).map { id in
+                        TimerEntryPreview(
+                            id: "\(id)",
+                            project: .stub(),
+                            client: .stub(),
+                            description: "Lorem ipsum dolor sit amet",
+                            startedAt: Date(timeIntervalSinceNow: -20_000).asInstant,
+                            endedAt: Date.now.asInstant
+                        )
+                    } as NSArray
+                )
+            )
+        }
+        getTimerSummariesUseCase.register {
+            GetTimerSummariesUseCaseMock(
+                executeReturnValue: ResultSuccess(data: [
+                    TimerSummary(component: .today, interval: 12_000),
+                    TimerSummary(component: .thisWeek, interval: 123_000)
+                ] as NSArray)
+            )
+        }   
     }
 }
 #endif

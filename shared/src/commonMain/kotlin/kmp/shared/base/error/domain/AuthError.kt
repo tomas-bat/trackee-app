@@ -12,6 +12,7 @@ sealed class AuthError(
     class EmptyField : AuthError()
     class PasswordsDontMatch : AuthError()
     class NoAccessToken : AuthError()
+    class NoCurrentUser : AuthError()
 
     class ProviderLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
         constructor() : this(null)

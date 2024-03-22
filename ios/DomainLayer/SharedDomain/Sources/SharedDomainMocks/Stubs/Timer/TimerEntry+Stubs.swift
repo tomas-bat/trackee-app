@@ -10,7 +10,8 @@ public extension TimerEntry {
     static func stub(id: String = UUID().uuidString) -> TimerEntry {
         TimerEntry(
             id: id,
-            projectId: "project_id",
+            clientId: "client_\(id)",
+            projectId: "project_\(id)",
             description: "Lorem ipsum dolor sit amet",
             startedAt: Date(timeIntervalSinceNow: -20_000).asInstant,
             endedAt: Date.now.asInstant

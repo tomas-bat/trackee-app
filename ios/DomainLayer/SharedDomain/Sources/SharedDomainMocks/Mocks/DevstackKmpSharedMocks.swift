@@ -8,8 +8,12 @@ import KMPSharedDomain
 import SharedDomain
 
 
-// Auth
+// MARK: - Auth
 public final class LoginWithCredentialsUseCaseMock: UseCaseResultMock, LoginWithCredentialsUseCase {}
 public final class RegisterUseCaseMock: UseCaseResultMock, RegisterUseCase {}
 public final class IsLoggedInUseCaseMock: UseCaseResultNoParamsMock, IsLoggedInUseCase {}
 public final class LogoutUseCaseMock: UseCaseResultNoParamsMock, LogoutUseCase {}
+
+// MARK: - Timer
+public final class GetTimerEntriesUseCaseMock: UseCaseResultNoParamsMock, GetTimerEntriesUseCase {}
+public final class GetTimerSummariesUseCaseMock: UseCaseResultNoParamsMock, GetTimerSummariesUseCase {}

@@ -38,6 +38,9 @@ internal class AuthRepositoryImpl(
     override suspend fun readAccessToken(): Result<String> =
         authProvider.readAccessToken()
 
+    override suspend fun readCurrentUserUid(): Result<String> =
+        authProvider.readCurrentUserUid()
+
     override suspend fun logout(): Result<Unit> =
         authProvider.logout()
 }

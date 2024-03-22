@@ -5,6 +5,8 @@
 
 import SwiftUI
 import KMPSharedDomain
+import UIToolkit
+import SharedDomain
 
 struct TimerEntryView: View {
     
@@ -13,15 +15,18 @@ struct TimerEntryView: View {
     private let spacing: CGFloat = 8
     private let headerHorizontalSpacing: CGFloat = 4
     private let headerVerticalSpacing: CGFloat = 4
-    private let imageSize: CGFloat = 22
+    private let imageSize: CGFloat = 16
+    private let timeIntervalStackSpacing: CGFloat = 1
+    private let padding: CGFloat = 16
+    private let cornerRadius: CGSize = CGFloat(8).squared
     
     // MARK: - Stored properties
     
-    private let timerEntry: TimerEntry
+    private let timerEntry: TimerEntryPreview
     
     // MARK: - Init
     
-    init(timerEntry: TimerEntry) {
+    init(timerEntry: TimerEntryPreview) {
         self.timerEntry = timerEntry
     }
     
@@ -35,11 +40,55 @@ struct TimerEntryView: View {
                     .scaledToFit()
                     .frame(width: imageSize, height: imageSize)
                 
-                VStack(spacing: headerVerticalSpacing) {
+                VStack(alignment: .leading, spacing: headerVerticalSpacing) {
+                    Text(timerEntry.project.name)
+                        .font(AppTheme.Fonts.headline)
                     
+                    Text(timerEntry.client.name)
+                        .font(AppTheme.Fonts.headlineAdditional)
+                        .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                 }
             }
+            
+            if let description = timerEntry.description_ {
+                Text(description)
+                    .font(AppTheme.Fonts.body)
+            }
+            
+            HStack {
+                HStack(alignment: .top, spacing: timeIntervalStackSpacing) {
+                    Text(timerEntryInterval.localizedRange.time)
+                    
+                    if let extra = timerEntryInterval.localizedRange.extra {
+                        Text(extra)
+                            .font(AppTheme.Fonts.index)
+                    }
+                }
+                
+                Spacer()
+                
+                if let interval = timerEntryInterval.localizedInterval {
+                    Text(interval)
+                }
+            }
+            .font(AppTheme.Fonts.headline)
         }
+        .padding(padding)
+        .background(AppTheme.Colors.contentBackground)
+        .clipShape(
+            RoundedRectangle(cornerSize: cornerRadius)
+        )
+        .multilineTextAlignment(.leading)
+        .foregroundStyle(AppTheme.Colors.foreground)
+    }
+    
+    // MARK: - Private
+    
+    private var timerEntryInterval: TimerEntryInterval {
+        TimerEntryInterval(
+            start: timerEntry.startedAt.asDate,
+            end: timerEntry.endedAt.asDate
+        )
     }
 }
 
@@ -48,5 +97,8 @@ struct TimerEntryView: View {
     TimerEntryView(
         timerEntry: .stub()
     )
+    .padding(16)
+    .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .background(AppTheme.Colors.background)
 }
 #endif

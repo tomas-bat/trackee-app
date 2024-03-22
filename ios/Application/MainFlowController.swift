@@ -24,12 +24,12 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate, T
     
     override func setup() -> UIViewController {
         let main = UITabBarController()
-        main.viewControllers = [setupProfileTab()]
+        main.viewControllers = [setupTimerTab(), setupProfileTab()]
         return main
     }
     
     private func setupTimerTab() -> UINavigationController {
-        let timerNC = BaseNavigationController(statusBarStyle: .lightContent)
+        let timerNC = BaseNavigationController()
         timerNC.tabBarItem = UITabBarItem(
             title: L10n.bottom_bar_timer,
             image: UIImage(systemSymbol: .timer),
@@ -43,7 +43,7 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate, T
     }
     
     private func setupProfileTab() -> UINavigationController {
-        let profileNC = BaseNavigationController(statusBarStyle: .lightContent)
+        let profileNC = BaseNavigationController()
         profileNC.tabBarItem = UITabBarItem(
             title: L10n.bottom_bar_profile,
             image: Asset.Images.profileTabBar.uiImage,

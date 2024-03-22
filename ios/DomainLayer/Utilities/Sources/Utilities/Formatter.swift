@@ -13,6 +13,11 @@ public struct Formatter {
     public enum Date {
         public static let iso8601 = ISO8601DateFormatter()
         public static let `default` = createDateFormatter()
+        public static let timeOnly = createDateFormatter(dateStyle: .none, timeStyle: .short)
+    }
+    
+    public enum DateComponents {
+        public static let `default` = createDateComponentsFormatter()
     }
     
     public enum Number {
@@ -44,6 +49,19 @@ public struct Formatter {
     private static func createDateFormatter(dateFormat: String) -> DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = dateFormat
+        return formatter
+    }
+    
+    /// Creates a `DateComponentsFormatter` based on given parameters.
+    private static func createDateComponentsFormatter(
+        allowedUnits: NSCalendar.Unit = [.hour, .minute],
+        unitsStyle: DateComponentsFormatter.UnitsStyle = .abbreviated,
+        zeroFormattingBehaviour: DateComponentsFormatter.ZeroFormattingBehavior = .default
+    ) -> DateComponentsFormatter {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = allowedUnits
+        formatter.unitsStyle = unitsStyle
+        formatter.zeroFormattingBehavior = zeroFormattingBehaviour
         return formatter
     }
     
