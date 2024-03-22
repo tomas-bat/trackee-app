@@ -17,8 +17,8 @@ internal class ClientSourceImpl : ClientSource {
             .document(id)
             .get()
             .await()
-        
-        return snapshot.toObject<FirestoreClient>(FirestoreClient::class.java)
+
+        return snapshot.toObject(FirestoreClient::class.java)
             ?: throw ClientException.ClientNotFound(id)
     }
 
@@ -31,7 +31,7 @@ internal class ClientSourceImpl : ClientSource {
             .await()
 
         return snapshot.documents.map { document ->
-            document.toObject<FirestoreProject>(FirestoreProject::class.java)
+            document.toObject(FirestoreProject::class.java)
         }
     }
 
@@ -44,7 +44,7 @@ internal class ClientSourceImpl : ClientSource {
             .get()
             .await()
 
-        return snapshot.toObject<FirestoreProject>(FirestoreProject::class.java)
+        return snapshot.toObject(FirestoreProject::class.java)
             ?: throw ClientException.ProjectNotFound(clientId, projectId)
     }
 }

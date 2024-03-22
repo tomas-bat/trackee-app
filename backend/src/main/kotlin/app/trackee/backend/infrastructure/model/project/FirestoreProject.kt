@@ -2,19 +2,22 @@ package app.trackee.backend.infrastructure.model.project
 
 import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.project.ProjectType
-import kotlinx.serialization.Serializable
+import com.google.cloud.firestore.annotation.PropertyName
 
-@Serializable
+
 internal data class FirestoreProject(
     val id: String = "",
-    val client_id: String = "",
     val type: String? = null,
-    val name: String = ""
+    val name: String = "",
+
+    @get:PropertyName("client_id")
+    @set:PropertyName("client_id")
+    var clientId: String = ""
 )
 
 internal fun FirestoreProject.toDomain(): Project = Project(
     id = id,
-    clientId = client_id,
+    clientId = clientId,
     type = ProjectType.entries.firstOrNull { it.rawValue == type },
     name = name
 )

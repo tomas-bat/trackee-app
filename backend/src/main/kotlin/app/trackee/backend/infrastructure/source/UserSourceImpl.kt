@@ -14,7 +14,7 @@ internal class UserSourceImpl : UserSource {
     override suspend fun readUserByUid(uid: String): FirestoreUser {
         val documentSnapshot = db.collection(SourceConstants.Firestore.Collection.users).document(uid).get().await()
 
-        return documentSnapshot.toObject<FirestoreUser>(FirestoreUser::class.java)
+        return documentSnapshot.toObject(FirestoreUser::class.java)
             ?: throw UserException.UserNotFound(uid = uid)
     }
 
@@ -28,7 +28,7 @@ internal class UserSourceImpl : UserSource {
 
 
         return snapshot.documents.map { document ->
-            document.toObject<FirestoreTimerEntry>(FirestoreTimerEntry::class.java)
+            document.toObject(FirestoreTimerEntry::class.java)
         }
     }
 }

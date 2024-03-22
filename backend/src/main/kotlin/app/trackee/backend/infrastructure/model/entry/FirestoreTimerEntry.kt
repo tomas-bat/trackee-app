@@ -2,25 +2,33 @@ package app.trackee.backend.infrastructure.model.entry
 
 import app.trackee.backend.domain.model.entry.TimerEntry
 import com.google.cloud.Timestamp
+import com.google.cloud.firestore.annotation.PropertyName
 import kotlinx.datetime.toKotlinInstant
 import kotlinx.serialization.Contextual
-import kotlinx.serialization.Serializable
 
-@Serializable
 internal data class FirestoreTimerEntry(
     val id: String = "",
-    val project_id: String = "",
     val description: String? = null,
+
+    @get:PropertyName("project_id")
+    @set:PropertyName("project_id")
+    var projectId: String = "",
+
     @Contextual
-    val started_at: Timestamp = Timestamp.now(),
+    @get:PropertyName("started_at")
+    @set:PropertyName("started_at")
+    var startedAt: Timestamp = Timestamp.now(),
+
     @Contextual
-    val ended_at: Timestamp = Timestamp.now()
+    @get:PropertyName("ended_at")
+    @set:PropertyName("ended_at")
+    var endedAt: Timestamp = Timestamp.now()
 )
 
 internal fun FirestoreTimerEntry.toDomain() = TimerEntry(
     id = id,
-    projectId = project_id,
+    projectId = projectId,
     description = description,
-    startedAt = started_at.toDate().toInstant().toKotlinInstant(),
-    endedAt = ended_at.toDate().toInstant().toKotlinInstant(),
+    startedAt = startedAt.toDate().toInstant().toKotlinInstant(),
+    endedAt = endedAt.toDate().toInstant().toKotlinInstant(),
 )
