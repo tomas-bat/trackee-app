@@ -13,7 +13,6 @@ struct TimerListView: View {
     
     private let entrySpacing: CGFloat = 8
     private let padding: CGFloat = 16
-    private let toolbarVerticalPadding: CGFloat = 16
     
     // MARK: - Stored properties
     
@@ -60,7 +59,6 @@ struct TimerListView: View {
                 case let .data(summaries), let .loading(summaries):
                     TimerSummaryView(summaries: summaries)
                         .skeleton(viewModel.state.summaryViewData.isLoading)
-                        .padding(.vertical, toolbarVerticalPadding)
                 default: EmptyView()
                 }
             }

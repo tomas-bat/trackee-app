@@ -38,6 +38,10 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     override func onAppear() {
         super.onAppear()
         
+        if Utilities.Environment.type == .alpha, Utilities.Environment.flavor == .debug {
+            state.email = "tomas.batek@matee.cz"
+            state.password = "Sygbos-tyfxih-7xydra"
+        }
     }
     
     // MARK: - State

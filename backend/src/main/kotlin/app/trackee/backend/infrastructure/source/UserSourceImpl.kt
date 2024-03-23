@@ -20,7 +20,7 @@ internal class UserSourceImpl : UserSource {
 
     override suspend fun readEntries(uid: String): List<FirestoreTimerEntry> {
         val snapshot = db
-            .collection(SourceConstants.Firestore.Collection.users)
+            .collection(SourceConstants.Firestore.Collection.entries)
             .document(uid)
             .collection(SourceConstants.Firestore.Collection.entries)
             .get()

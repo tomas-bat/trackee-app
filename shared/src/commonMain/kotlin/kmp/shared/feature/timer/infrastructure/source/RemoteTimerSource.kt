@@ -15,7 +15,7 @@ internal class RemoteTimerSource(
 ) : TimerSource {
     override suspend fun readEntries(uid: String): Result<List<TimerEntryDto>> =
         runCatchingCommonNetworkExceptions {
-            val res = client.get("user/${uid}/entries")
+            val res = client.get("users/${uid}/entries")
             res.body<List<TimerEntryDto>>()
         }
 

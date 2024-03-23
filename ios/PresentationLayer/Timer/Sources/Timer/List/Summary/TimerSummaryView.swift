@@ -45,8 +45,6 @@ struct TimerSummaryView: View {
                 }
             }
         }
-        
-        Spacer()
     }
 }
 

@@ -26,7 +26,7 @@
    </Group>
    <Group
       location = "container:"
-      name = "Kotlin">
+      name = "Shared">
       <Group
          location = "group:../shared/src/commonMain"
          name = "commonMain">
@@ -40,10 +40,28 @@
                   location = "group:shared"
                   name = "shared">
                   <Group
+                     location = "group:configuration"
+                     name = "configuration">
+                     <Group
+                        location = "group:domain"
+                        name = "domain">
+                        <FileRef
+                           location = "group:Configuration.kt">
+                        </FileRef>
+                     </Group>
+                  </Group>
+                  <Group
                      location = "group:di"
                      name = "di">
                      <FileRef
                         location = "group:Module.kt">
+                     </FileRef>
+                  </Group>
+                  <Group
+                     location = "group:network"
+                     name = "network">
+                     <FileRef
+                        location = "group:NetworkClient.kt">
                      </FileRef>
                   </Group>
                   <Group
@@ -119,6 +137,181 @@
                               <FileRef
                                  location = "group:LoginWithCredentialsUseCase.kt">
                               </FileRef>
+                              <FileRef
+                                 location = "group:RegisterUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:IsLoggedInUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:LogoutUseCase.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                     </Group>
+                     <Group
+                        location = "group:timer"
+                        name = "timer">
+                        <FileRef
+                           location = "group:module.kt">
+                        </FileRef>
+                        <Group
+                           location = "group:infrastructure"
+                           name = "infrastructure">
+                           <Group
+                              location = "group:source"
+                              name = "source">
+                              <FileRef
+                                 location = "group:RemoteTimerSource.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:model"
+                              name = "model">
+                              <FileRef
+                                 location = "group:TimerEntryDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerDataDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:ClientDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:ProjectDto.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <Group
+                           location = "group:data"
+                           name = "data">
+                           <Group
+                              location = "group:repository"
+                              name = "repository">
+                              <FileRef
+                                 location = "group:TimerRepository.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:source"
+                              name = "source">
+                              <FileRef
+                                 location = "group:TimerSource.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <Group
+                           location = "group:domain"
+                           name = "domain">
+                           <Group
+                              location = "group:repository"
+                              name = "repository">
+                              <FileRef
+                                 location = "group:TimerRepository.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:model"
+                              name = "model">
+                              <FileRef
+                                 location = "group:TimerData.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:ProjectType.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:Project.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerStatus.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerSummary.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerEntry.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerEntryPreview.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:Client.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:usecase"
+                              name = "usecase">
+                              <FileRef
+                                 location = "group:GetTimerSummariesUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GetTimerEntriesUseCase.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                     </Group>
+                     <Group
+                        location = "group:user"
+                        name = "user">
+                        <FileRef
+                           location = "group:module.kt">
+                        </FileRef>
+                        <Group
+                           location = "group:infrastructure"
+                           name = "infrastructure">
+                           <Group
+                              location = "group:source"
+                              name = "source">
+                              <FileRef
+                                 location = "group:RemoteUserSource.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:model"
+                              name = "model">
+                              <FileRef
+                                 location = "group:UserDto.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <Group
+                           location = "group:data"
+                           name = "data">
+                           <Group
+                              location = "group:repository"
+                              name = "repository">
+                              <FileRef
+                                 location = "group:UserRepository.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:source"
+                              name = "source">
+                              <FileRef
+                                 location = "group:UserSource.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <Group
+                           location = "group:domain"
+                           name = "domain">
+                           <Group
+                              location = "group:repository"
+                              name = "repository">
+                              <FileRef
+                                 location = "group:UserRepository.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:model"
+                              name = "model">
+                              <FileRef
+                                 location = "group:User.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:usecase"
+                              name = "usecase">
                            </Group>
                         </Group>
                      </Group>
@@ -168,6 +361,9 @@
                            name = "domain">
                            <FileRef
                               location = "group:AuthError.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TimerError.kt">
                            </FileRef>
                            <FileRef
                               location = "group:CommonError.kt">
