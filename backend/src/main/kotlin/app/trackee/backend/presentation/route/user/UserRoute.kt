@@ -2,6 +2,8 @@ package app.trackee.backend.presentation.route.user
 
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.presentation.model.entry.toDto
+import app.trackee.backend.presentation.model.project.toDto
+import app.trackee.backend.presentation.model.timer.toDto
 import app.trackee.backend.presentation.model.user.toDto
 import app.trackee.backend.presentation.util.requireUserPrincipal
 import com.google.firebase.auth.FirebaseAuth
@@ -34,12 +36,34 @@ fun Routing.userRoute() {
                     call.respond(HttpStatusCode.OK, entryDtos)
                 }
             }
-            route("/current") {
-                get {
-                    call.respond(HttpStatusCode.OK, call.requireUserPrincipal().user)
-                }
+        }
+
+        route("/user") {
+            get {
+                val userDto = call.requireUserPrincipal().user.toDto()
+                call.respond(HttpStatusCode.OK, userDto)
             }
 
+            get("/projects") {
+                val user = call.requireUserPrincipal().user
+                val projectDtos = userRepository.readProjects(user.uid).map { it.toDto() }
+
+                call.respond(HttpStatusCode.OK, projectDtos)
+            }
+
+            get("/entries") {
+                val user = call.requireUserPrincipal().user
+                val entryDtos = userRepository.readEntries(user.uid).map { it.toDto() }
+
+                call.respond(HttpStatusCode.OK, entryDtos)
+            }
+
+            get("/timer") {
+                val user = call.requireUserPrincipal().user
+                val timerDataDto = userRepository.readTimer(user.uid).toDto()
+
+                call.respond(HttpStatusCode.OK, timerDataDto)
+            }
         }
     }
 }

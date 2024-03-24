@@ -3,7 +3,9 @@ package app.trackee.backend.infrastructure.source
 import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.UserSource
+import app.trackee.backend.infrastructure.model.client.FirestoreUserClient
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
+import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import com.google.firebase.cloud.FirestoreClient
 
@@ -31,4 +33,18 @@ internal class UserSourceImpl : UserSource {
             document.toObject(FirestoreTimerEntry::class.java)
         }
     }
+
+    override suspend fun readProjectIds(uid: String): List<IdentifiableProject> =
+        db
+            .collection(SourceConstants.Firestore.Collection.users)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.clients)
+            .get()
+            .await()
+            .map { snapshot ->
+                snapshot.toObject(FirestoreUserClient::class.java).projectIds.map { projectId ->
+                    IdentifiableProject(snapshot.id, projectId)
+                }
+            }
+            .flatten()
 }

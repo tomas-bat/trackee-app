@@ -11,6 +11,10 @@ internal data class FirestoreTimerData(
     val status: String = "",
     val description: String? = null,
 
+    @get:PropertyName("client_id")
+    @set:PropertyName("client_id")
+    var clientId: String? = null,
+
     @get:PropertyName("project_id")
     @set:PropertyName("project_id")
     var projectId: String? = null,
@@ -23,6 +27,7 @@ internal data class FirestoreTimerData(
 
 internal fun FirestoreTimerData.toDomain() = TimerData(
     status = TimerStatus.entries.firstOrNull { it.rawValue == status } ?: TimerStatus.Off,
+    clientId = clientId,
     projectId = projectId,
     description = description,
     startedAt = startedAt?.toDate()?.toInstant()?.toKotlinInstant(),

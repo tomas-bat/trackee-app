@@ -20,6 +20,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     @Injected(\.getTimerEntriesUseCase) private var getTimerEntriesUseCase
     @Injected(\.getTimerSummariesUseCase) private var getTimerSummariesUseCase
+    @Injected(\.getTimerDataPreviewUseCase) private var getTimerDataPreviewUseCase
     
     // MARK: - Stored properties
     
@@ -44,8 +45,9 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
     
     struct State {
-        var summaryViewData: ViewData<[TimerSummary]> = .loading(mock: .stub.reversed())
-        var viewData: ViewData<[TimerEntryPreview]> = .loading(mock: .stub.reversed())
+        var summaryViewData: ViewData<[TimerSummary]> = .loading(mock: .stub)
+        var listData: ViewData<[TimerEntryPreview]> = .loading(mock: .stub)
+        var timerData: ViewData<TimerDataPreview> = .loading(mock: .stub)
     }
     
     // MARK: - Intent
@@ -65,20 +67,27 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Private
     
     private func fetchData() async {
-        guard !state.viewData.hasData || !state.summaryViewData.hasData else { return }
+        guard !state.listData.hasData 
+                || !state.summaryViewData.hasData
+                || !state.timerData.hasData
+        else { return }
         
-        state.viewData = .loading(mock: .stub)
+        state.listData = .loading(mock: .stub)
         state.summaryViewData = .loading(mock: .stub)
+        state.timerData = .loading(mock: .stub)
         
         do {
             let entries: [TimerEntryPreview] = try await getTimerEntriesUseCase.execute()
             let summaries: [TimerSummary] = try await getTimerSummariesUseCase.execute()
+            let timer: TimerDataPreview = try await getTimerDataPreviewUseCase.execute()
             
-            state.viewData = .data(entries)
+            state.listData = .data(entries)
             state.summaryViewData = .data(summaries)
+            state.timerData = .data(timer)
         } catch {
-            state.viewData = .error(error)
+            state.listData = .error(error)
             state.summaryViewData = .empty
+            state.timerData = .empty
         }
     }
 }

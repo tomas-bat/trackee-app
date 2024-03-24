@@ -27,11 +27,11 @@ struct TimerListView: View {
     
     var body: some View {
         Group {
-            switch viewModel.state.viewData {
+            switch viewModel.state.listData {
             case let .data(entries), let .loading(entries):
                 TimerListContentView(
                     entries: entries,
-                    isLoading: viewModel.state.viewData.isLoading
+                    isLoading: viewModel.state.listData.isLoading
                 )
             case let .error(error):
                 ErrorView(

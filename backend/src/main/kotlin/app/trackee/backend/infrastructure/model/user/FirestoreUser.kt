@@ -11,14 +11,9 @@ internal data class FirestoreUser(
     @get:PropertyName("timer_data")
     @set:PropertyName("timer_data")
     var timerData: FirestoreTimerData = FirestoreTimerData(),
-
-    @get:PropertyName("client_ids")
-    @set:PropertyName("client_ids")
-    var clientIds: List<String> = emptyList(),
 )
 
 internal fun FirestoreUser.toDomain() = User(
     uid = uid,
-    timerData = timerData.toDomain(),
-    clientIds = clientIds
+    timerData = timerData.toDomain()
 )

@@ -2,10 +2,12 @@ package kmp.shared.feature.timer.domain.model
 
 import kotlinx.datetime.Instant
 
-data class TimerData (
+data class TimerDataPreview(
     val status: TimerStatus,
-    val clientId: String?,
-    val projectId: String?,
+    val type: TimerType,
+    val client: Client?,
+    val project: Project?,
     val description: String?,
     val startedAt: Instant?,
+    val availableProjects: List<Project>
 )

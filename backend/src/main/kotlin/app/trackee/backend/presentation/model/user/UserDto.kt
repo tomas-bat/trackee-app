@@ -9,12 +9,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class UserDto(
     val uid: String,
-    @SerialName("timer_data") val timerData: TimerDataDto?,
-    @SerialName("client_ids") val clientIds: List<String>
+    @SerialName("timer_data") val timerData: TimerDataDto?
 )
 
 internal fun User.toDto() = UserDto(
     uid = uid,
-    timerData = timerData?.toDto(),
-    clientIds = clientIds
+    timerData = timerData?.toDto()
 )

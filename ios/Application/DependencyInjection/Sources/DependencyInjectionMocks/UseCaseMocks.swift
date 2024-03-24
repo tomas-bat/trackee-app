@@ -61,6 +61,21 @@ public extension Container {
                 ] as NSArray)
             )
         }   
+        getTimerDataPreviewUseCase.register {
+            GetTimerDataPreviewUseCaseMock(
+                executeReturnValue: ResultSuccess(
+                    data: TimerDataPreview(
+                        status: .active,
+                        type: .manual,
+                        client: .stub(),
+                        project: .stub(),
+                        description: "Lorem ipsum dolor sit amet.",
+                        startedAt: Date(timeIntervalSinceNow: -20_000).asInstant,
+                        availableProjects: .stub
+                    )
+                )
+            )
+        }
     }
 }
 #endif

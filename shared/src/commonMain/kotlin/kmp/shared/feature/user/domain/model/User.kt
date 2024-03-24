@@ -4,6 +4,5 @@ import kmp.shared.feature.timer.domain.model.TimerData
 
 data class User(
     val uid: String,
-    val timerData: TimerData?,
-    val clientIds: List<String>
+    val timerData: TimerData?
 )

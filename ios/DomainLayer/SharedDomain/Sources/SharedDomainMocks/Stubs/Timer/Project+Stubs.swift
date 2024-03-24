@@ -16,3 +16,9 @@ public extension Project {
         )
     }
 }
+
+public extension [Project] {
+    static var stub: [Project] {
+        (0..<10).map { id in .stub(id: "\(id)") }
+    }
+}

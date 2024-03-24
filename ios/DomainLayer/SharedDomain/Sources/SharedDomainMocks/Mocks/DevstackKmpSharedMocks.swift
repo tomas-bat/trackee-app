@@ -17,3 +17,4 @@ public final class LogoutUseCaseMock: UseCaseResultNoParamsMock, LogoutUseCase {
 // MARK: - Timer
 public final class GetTimerEntriesUseCaseMock: UseCaseResultNoParamsMock, GetTimerEntriesUseCase {}
 public final class GetTimerSummariesUseCaseMock: UseCaseResultNoParamsMock, GetTimerSummariesUseCase {}
+public final class GetTimerDataPreviewUseCaseMock: UseCaseResultNoParamsMock, GetTimerDataPreviewUseCase {}
