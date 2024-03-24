@@ -11,9 +11,6 @@ struct TimerListView: View {
     
     // MARK: - Constants
     
-    private let entrySpacing: CGFloat = 8
-    private let padding: CGFloat = 16
-    
     // MARK: - Stored properties
     
     @ObservedObject private var viewModel: TimerListViewModel
@@ -30,16 +27,10 @@ struct TimerListView: View {
         Group {
             switch viewModel.state.viewData {
             case let .data(entries), let .loading(entries):
-                ScrollView {
-                    VStack(spacing: entrySpacing) {
-                        ForEach(entries) { entry in
-                            TimerEntryView(timerEntry: entry)
-                                .skeleton(viewModel.state.viewData.isLoading)
-                        }
-                    }
-                    .padding(padding)
-                }
-                .defaultScrollAnchor(.bottom)
+                TimerListContentView(
+                    entries: entries,
+                    isLoading: viewModel.state.viewData.isLoading
+                )
             case let .error(error):
                 VStack {
                     Text(error.localizedDescription)

@@ -12,7 +12,7 @@ struct TimerSummaryView: View {
     
     // MARK: - Constants
     
-    private let summaryVerticalSpacing: CGFloat = 8
+    private let summaryVerticalSpacing: CGFloat = 4
     private let summaryHorizontalSpacing: CGFloat = 4
     
     // MARK: - Stored properties
@@ -45,6 +45,11 @@ struct TimerSummaryView: View {
                 }
             }
         }
+    }
+    
+    private var padding: some View {
+        // Workaround for nav bar padding
+        Text("")
     }
 }
 
