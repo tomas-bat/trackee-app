@@ -47,6 +47,7 @@ struct TimerListContentView: View {
                                 .skeleton(isLoading)
                         }
                     }
+                    .animateContent(isLoading)
                     .padding(padding)
                     .background(
                         GeometryReader { contentGeometry in

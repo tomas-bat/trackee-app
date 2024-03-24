@@ -11,6 +11,8 @@ struct TimerListView: View {
     
     // MARK: - Constants
     
+    private let padding: CGFloat = 16
+    
     // MARK: - Stored properties
     
     @ObservedObject private var viewModel: TimerListViewModel
@@ -32,15 +34,17 @@ struct TimerListView: View {
                     isLoading: viewModel.state.viewData.isLoading
                 )
             case let .error(error):
-                VStack {
-                    Text(error.localizedDescription)
-                    
-                    Button(L10n.retry) {
-                        viewModel.onIntent(.tryAgain)
-                    }
-                    .buttonStyle(PrimaryButtonStyle())
-                }
-            default: ZStack {}
+                ErrorView(
+                    error: error,
+                    onRetryTap: { viewModel.onIntent(.tryAgain) }
+                )
+                .padding(padding)
+            case .empty:
+                EmptyContentView(
+                    text: L10n.timer_no_entries_title
+                )
+                .padding(padding)
+                .buttonStyle(.bordered)
             }
         }
         .background(AppTheme.Colors.background)

@@ -105,9 +105,7 @@ struct RegisterCredentialsView: View {
                 L10n.register_view_button_title,
                 action: onRegisterTap
             )
-            .buttonStyle(
-                PrimaryButtonStyle()
-            )
+            .buttonStyle(.primary)
         }
         .autocorrectionDisabled()
         .textInputAutocapitalization(.never)

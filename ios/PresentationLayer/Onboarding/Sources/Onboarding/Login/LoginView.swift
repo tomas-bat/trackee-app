@@ -60,7 +60,7 @@ struct LoginView: View {
             Button(L10n.login_view_register_button_title) {
                 viewModel.onIntent(.sync(.register))
             }
-            .buttonStyle(SecondaryButtonStyle())
+            .buttonStyle(.secondary)
         }
         .padding(padding)
         .foregroundStyle(AppTheme.Colors.foreground)

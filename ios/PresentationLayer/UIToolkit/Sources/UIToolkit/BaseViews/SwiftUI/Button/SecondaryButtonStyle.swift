@@ -28,6 +28,6 @@ public struct SecondaryButtonStyle: ButtonStyle {
 #if DEBUG
 #Preview {
     Button("Lorem Ipsum") {}
-        .buttonStyle(SecondaryButtonStyle())
+        .buttonStyle(.secondary)
 }
 #endif

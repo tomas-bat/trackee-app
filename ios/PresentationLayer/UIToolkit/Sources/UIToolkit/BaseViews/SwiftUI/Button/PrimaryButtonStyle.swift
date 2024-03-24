@@ -98,12 +98,10 @@ struct PrimaryButtonStyle_Preview: PreviewProvider {
         
         var body: some View {
             Button("Click me", action: action)
-                .buttonStyle(
-                    PrimaryButtonStyle(
-                        image: Image(systemSymbol: .applewatch),
-                        expanded: true
-                    )
-                )
+                .buttonStyle(.primary(
+                    image: Image(systemSymbol: .applewatch),
+                    expanded: true
+                ))
                 .padding()
                 .environment(\.isLoading, isLoading)
         }

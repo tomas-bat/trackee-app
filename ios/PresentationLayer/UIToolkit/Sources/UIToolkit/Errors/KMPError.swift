@@ -12,7 +12,7 @@ extension SharedDomain.KMPError: LocalizedError {
         switch kmpError {
         case is AuthError.EmptyField: L10n.register_view_fill_all_fields
         case is AuthError.PasswordsDontMatch: L10n.register_view_passwords_dont_match
-        default: kmpError.message
+        default: L10n.unknown_error
         }
     }
 }

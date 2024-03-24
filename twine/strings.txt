@@ -259,6 +259,10 @@
 		cs = Žádné výsledky
 		en = No results
 		sk = Žiadne výsledky
+	[empty_list]
+		cs = Žádné položky
+		en = No items
+		sk = Žiadne položky
 
 [[Time events]]
 	[time_events_now]
@@ -725,3 +729,7 @@
 		cs = Tento týden
 		en = This week
 		sk = Tento týždeň
+	[timer_no_entries_title]
+		cs = Žádné záznamy
+		en = No entries
+		sk = Žiadne záznamy

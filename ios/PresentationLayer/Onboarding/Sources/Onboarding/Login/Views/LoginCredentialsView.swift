@@ -84,9 +84,7 @@ struct LoginCredentialsView: View {
                 L10n.login_view_login_with_credentials_button_title,
                 action: onLoginTap
             )
-            .buttonStyle(
-                PrimaryButtonStyle()
-            )
+            .buttonStyle(.primary)
         }
         .autocorrectionDisabled()
         .textInputAutocapitalization(.never)
