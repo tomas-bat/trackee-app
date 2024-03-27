@@ -1,5 +1,6 @@
 package kmp.shared.feature.timer.domain.model
 
-enum class TimerStatus {
-    Active, Off
+enum class TimerStatus(val rawValue: String) {
+    Active("active"),
+    Off("off")
 }

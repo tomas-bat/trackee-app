@@ -39,6 +39,38 @@ fun Routing.userRoute() {
         }
 
         route("/user") {
+            route("/entries") {
+                get {
+                    val user = call.requireUserPrincipal().user
+                    val entryDtos = userRepository.readEntries(user.uid).map { it.toDto() }
+
+                    call.respond(HttpStatusCode.OK, entryDtos)
+                }
+
+                get("/previews") {
+                    val user = call.requireUserPrincipal().user
+                    val entryPreviewDtos = userRepository.readEntryPreviews(user.uid).map { it.toDto() }
+
+                    call.respond(HttpStatusCode.OK, entryPreviewDtos)
+                }
+            }
+
+            route("/timer") {
+                get {
+                    val user = call.requireUserPrincipal().user
+                    val timerDataDto = userRepository.readTimer(user.uid).toDto()
+
+                    call.respond(HttpStatusCode.OK, timerDataDto)
+                }
+
+                get("/preview") {
+                    val user = call.requireUserPrincipal().user
+                    val timerDataPreviewDto = userRepository.readTimerPreview(user.uid).toDto()
+
+                    call.respond(HttpStatusCode.OK, timerDataPreviewDto)
+                }
+            }
+
             get {
                 val userDto = call.requireUserPrincipal().user.toDto()
                 call.respond(HttpStatusCode.OK, userDto)
@@ -49,20 +81,6 @@ fun Routing.userRoute() {
                 val projectDtos = userRepository.readProjects(user.uid).map { it.toDto() }
 
                 call.respond(HttpStatusCode.OK, projectDtos)
-            }
-
-            get("/entries") {
-                val user = call.requireUserPrincipal().user
-                val entryDtos = userRepository.readEntries(user.uid).map { it.toDto() }
-
-                call.respond(HttpStatusCode.OK, entryDtos)
-            }
-
-            get("/timer") {
-                val user = call.requireUserPrincipal().user
-                val timerDataDto = userRepository.readTimer(user.uid).toDto()
-
-                call.respond(HttpStatusCode.OK, timerDataDto)
             }
         }
     }

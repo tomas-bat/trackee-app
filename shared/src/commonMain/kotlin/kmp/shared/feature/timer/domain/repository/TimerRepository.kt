@@ -1,13 +1,12 @@
 package kmp.shared.feature.timer.domain.repository
 
 import kmp.shared.base.Result
-import kmp.shared.feature.timer.domain.model.Client
-import kmp.shared.feature.timer.domain.model.Project
-import kmp.shared.feature.timer.domain.model.TimerData
-import kmp.shared.feature.timer.domain.model.TimerEntry
+import kmp.shared.feature.timer.domain.model.*
 
 internal interface TimerRepository {
     suspend fun readEntries(): Result<List<TimerEntry>>
+
+    suspend fun readEntryPreviews(): Result<List<TimerEntryPreview>>
 
     suspend fun readProject(
         clientId: String,
@@ -19,6 +18,8 @@ internal interface TimerRepository {
     ): Result<Client>
 
     suspend fun readTimerData(): Result<TimerData>
+
+    suspend fun readTimerDataPreview(): Result<TimerDataPreview>
 
     suspend fun readAllProjects(): Result<List<Project>>
 }

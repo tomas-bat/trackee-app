@@ -1,13 +1,12 @@
 package kmp.shared.feature.timer.data.source
 
 import kmp.shared.base.Result
-import kmp.shared.feature.timer.infrastructure.model.ClientDto
-import kmp.shared.feature.timer.infrastructure.model.ProjectDto
-import kmp.shared.feature.timer.infrastructure.model.TimerDataDto
-import kmp.shared.feature.timer.infrastructure.model.TimerEntryDto
+import kmp.shared.feature.timer.infrastructure.model.*
 
 internal interface TimerSource {
     suspend fun readEntries(): Result<List<TimerEntryDto>>
+
+    suspend fun readEntryPreviews(): Result<List<TimerEntryPreviewDto>>
 
     suspend fun readProject(
         clientId: String,
@@ -19,6 +18,8 @@ internal interface TimerSource {
     ): Result<ClientDto>
 
     suspend fun readTimerData(): Result<TimerDataDto>
+
+    suspend fun readTimerDataPreview(): Result<TimerDataPreviewDto>
 
     suspend fun readAllProjects(): Result<List<ProjectDto>>
 }

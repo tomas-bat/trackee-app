@@ -1,8 +1,10 @@
 package app.trackee.backend.domain.repository
 
 import app.trackee.backend.domain.model.entry.TimerEntry
+import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.timer.TimerData
+import app.trackee.backend.domain.model.timer.TimerDataPreview
 import app.trackee.backend.domain.model.user.User
 
 interface UserRepository {
@@ -13,4 +15,8 @@ interface UserRepository {
     suspend fun readProjects(uid: String): List<Project>
 
     suspend fun readTimer(uid: String): TimerData
+
+    suspend fun readTimerPreview(uid: String): TimerDataPreview
+
+    suspend fun readEntryPreviews(uid: String): List<TimerEntryPreview>
 }
