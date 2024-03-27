@@ -6,6 +6,7 @@ import com.google.cloud.Timestamp
 import com.google.cloud.firestore.annotation.PropertyName
 import kotlinx.datetime.toKotlinInstant
 import kotlinx.serialization.Contextual
+import java.util.*
 
 internal data class FirestoreTimerData(
     val status: String = "",
@@ -31,4 +32,16 @@ internal fun FirestoreTimerData.toDomain() = TimerData(
     projectId = projectId,
     description = description,
     startedAt = startedAt?.toDate()?.toInstant()?.toKotlinInstant(),
+)
+
+internal fun TimerData.toFirestore() = FirestoreTimerData(
+    status = status.rawValue,
+    clientId = clientId,
+    projectId = projectId,
+    description = description,
+    startedAt = startedAt?.let { instant ->
+        val javaInstant = java.time.Instant.ofEpochMilli(instant.toEpochMilliseconds())
+        val javaDate = Date.from(javaInstant)
+        Timestamp.of(javaDate)
+    }
 )

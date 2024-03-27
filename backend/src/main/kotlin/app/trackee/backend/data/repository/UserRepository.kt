@@ -8,6 +8,7 @@ import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.project.ProjectPreview
 import app.trackee.backend.domain.model.timer.TimerData
 import app.trackee.backend.domain.model.timer.TimerDataPreview
+import app.trackee.backend.domain.model.timer.TimerStatus
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.infrastructure.model.client.toDomain
@@ -73,4 +74,18 @@ internal class UserRepositoryImpl(
                     endedAt = entry.endedAt
                 )
             }
+
+    override suspend fun createUser(uid: String): User =
+        source.createUser(
+            User(
+                uid = uid,
+                timerData = TimerData(
+                    status = TimerStatus.Off,
+                    clientId = null,
+                    projectId = null,
+                    description = null,
+                    startedAt = null
+                )
+            )
+        ).toDomain()
 }

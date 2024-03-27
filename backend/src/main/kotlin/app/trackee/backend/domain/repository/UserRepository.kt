@@ -22,4 +22,6 @@ interface UserRepository {
     suspend fun readTimerPreview(uid: String): TimerDataPreview
 
     suspend fun readEntryPreviews(uid: String): List<TimerEntryPreview>
+
+    suspend fun createUser(uid: String): User
 }
