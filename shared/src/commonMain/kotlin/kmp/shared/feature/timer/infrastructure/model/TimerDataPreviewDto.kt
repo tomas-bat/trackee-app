@@ -13,8 +13,7 @@ data class TimerDataPreviewDto(
     val client: ClientDto?,
     val project: ProjectDto?,
     val description: String?,
-    @SerialName("started_at") val startedAt: String?,
-    @SerialName("available_projects") val availableProjects: List<ProjectDto>
+    @SerialName("started_at") val startedAt: String?
 )
 
 fun TimerDataPreviewDto.toDomain(type: TimerType): TimerDataPreview =
@@ -24,6 +23,5 @@ fun TimerDataPreviewDto.toDomain(type: TimerType): TimerDataPreview =
         client = client?.toDomain(),
         project = project?.toDomain(),
         description = description,
-        startedAt = startedAt?.toInstant(),
-        availableProjects = availableProjects.map { it.toDomain() }
+        startedAt = startedAt?.toInstant()
     )

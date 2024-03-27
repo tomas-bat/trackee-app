@@ -9,14 +9,14 @@ import UIKit
 
 enum TimerFlow: Flow, Equatable {
     case list(List)
-    case detail(Detail)
+    case projectSelection(ProjectSelection)
     
     enum List: Equatable {
-        
+        case showProjectSelection
     }
     
-    enum Detail: Equatable {
-        
+    enum ProjectSelection: Equatable {
+        case dismiss
     }
 }
 
@@ -40,7 +40,7 @@ public final class TimerFlowController: FlowController {
         guard let flow = flow as? TimerFlow else { return }
         switch flow {
         case let .list(flow): handleListFlow(flow)
-        case let .detail(flow): handleDetailFlow(flow)
+        case let .projectSelection(flow): handleProjectSelectionFlow(flow)
         }
     }
 }
@@ -49,16 +49,21 @@ public final class TimerFlowController: FlowController {
 extension TimerFlowController {
     func handleListFlow(_ flow: TimerFlow.List) {
         switch flow {
+        case .showProjectSelection:
+            let vm = ProjectSelectionViewModel(flowController: self)
+            let view = ProjectSelectionView(viewModel: vm)
+            let vc = BaseHostingController(rootView: view)
             
+            navigationController.present(vc, animated: true)
         }
     }
 }
 
-// MARK: - Detail flow
+// MARK: - ProjectSelection flow
 extension TimerFlowController {
-    func handleDetailFlow(_ flow: TimerFlow.Detail) {
+    func handleProjectSelectionFlow(_ flow: TimerFlow.ProjectSelection) {
         switch flow {
-            
+        case .dismiss: dismiss()
         }
     }
 }

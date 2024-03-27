@@ -22,4 +22,5 @@ internal val timerModule = module {
     factoryOf(::GetTimerEntriesUseCaseImpl) bind GetTimerEntriesUseCase::class
     factoryOf(::GetTimerSummariesUseCaseImpl) bind GetTimerSummariesUseCase::class
     factoryOf(::GetTimerDataPreviewUseCaseImpl) bind GetTimerDataPreviewUseCase::class
+    factoryOf(::GetProjectsUseCaseImpl) bind GetProjectsUseCase::class
 }

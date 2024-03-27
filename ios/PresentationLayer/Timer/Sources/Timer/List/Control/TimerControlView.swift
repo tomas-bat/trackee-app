@@ -23,9 +23,9 @@ struct TimerControlView: View {
     private let onControlClick: () -> Void
     private let onSwitchClick: () -> Void
     private let onDeleteClick: () -> Void
-    private let onStartChange: (Date) -> Void
-    private let onEndChange: (Date) -> Void
-    private let onProjectChange: (Project) -> Void
+    private let onStartChange: (Date?) -> Void
+    private let onEndChange: (Date?) -> Void
+    private let onProjectChange: (Project?) -> Void
     private let onDescriptionChange: (String?) -> Void
     
     // MARK: - Init
@@ -35,9 +35,9 @@ struct TimerControlView: View {
         onControlClick: @escaping () -> Void,
         onSwitchClick: @escaping () -> Void,
         onDeleteClick: @escaping () -> Void,
-        onStartChange: @escaping (Date) -> Void,
-        onEndChange: @escaping (Date) -> Void,
-        onProjectChange: @escaping (Project) -> Void,
+        onStartChange: @escaping (Date?) -> Void,
+        onEndChange: @escaping (Date?) -> Void,
+        onProjectChange: @escaping (Project?) -> Void,
         onDescriptionChange: @escaping (String?) -> Void
     ) {
         self.data = data
@@ -71,7 +71,7 @@ struct TimerControlView: View {
                         type.image
                             .resizable()
                             .scaledToFit()
-                            .frame(height: imageSize)
+                            .frame(width: imageSize, height: imageSize)
                     }
                     
                     Text(project.name)

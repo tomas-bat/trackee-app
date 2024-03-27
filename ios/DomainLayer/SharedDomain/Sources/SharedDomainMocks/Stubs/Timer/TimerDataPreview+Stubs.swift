@@ -14,8 +14,7 @@ public extension TimerDataPreview {
             client: .stub(),
             project: .stub(),
             description: "Lorem ipsum dolor sit amet.",
-            startedAt: Date(timeIntervalSinceNow: -20_000).asInstant,
-            availableProjects: .stub
+            startedAt: Date(timeIntervalSinceNow: -20_000).asInstant
         )
     }
 }

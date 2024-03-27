@@ -76,11 +76,20 @@ fun Routing.userRoute() {
                 call.respond(HttpStatusCode.OK, userDto)
             }
 
-            get("/projects") {
-                val user = call.requireUserPrincipal().user
-                val projectDtos = userRepository.readProjects(user.uid).map { it.toDto() }
+            route("/projects") {
+                get {
+                    val user = call.requireUserPrincipal().user
+                    val projectDtos = userRepository.readProjects(user.uid).map { it.toDto() }
 
-                call.respond(HttpStatusCode.OK, projectDtos)
+                    call.respond(HttpStatusCode.OK, projectDtos)
+                }
+
+                get("/previews") {
+                    val user = call.requireUserPrincipal().user
+                    val projectPreviewDtos = userRepository.readProjectPreviews(user.uid).map { it.toDto() }
+
+                    call.respond(HttpStatusCode.OK, projectPreviewDtos)
+                }
             }
         }
     }

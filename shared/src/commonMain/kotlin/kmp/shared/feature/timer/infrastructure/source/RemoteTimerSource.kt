@@ -52,4 +52,10 @@ internal class RemoteTimerSource(
             val res = client.get("user/projects")
             res.body<List<ProjectDto>>()
         }
+
+    override suspend fun readAllProjectPreviews(): Result<List<ProjectPreviewDto>> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.get("user/projects/previews")
+            res.body<List<ProjectPreviewDto>>()
+        }
 }

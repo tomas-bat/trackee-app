@@ -14,8 +14,7 @@ internal data class TimerDataPreviewDto(
     val client: ClientDto?,
     val project: ProjectDto?,
     val description: String?,
-    @SerialName("started_at") val startedAt: String?,
-    @SerialName("available_projects") val availableProjects: List<ProjectDto>
+    @SerialName("started_at") val startedAt: String?
 )
 
 internal fun TimerDataPreview.toDto(): TimerDataPreviewDto =
@@ -24,6 +23,5 @@ internal fun TimerDataPreview.toDto(): TimerDataPreviewDto =
         client = client?.toDto(),
         project = project?.toDto(),
         description = description,
-        startedAt = startedAt?.toString(),
-        availableProjects = availableProjects.map { it.toDto() }
+        startedAt = startedAt?.toString()
     )

@@ -5,6 +5,7 @@ import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.project.Project
+import app.trackee.backend.domain.model.project.ProjectPreview
 import app.trackee.backend.domain.model.timer.TimerData
 import app.trackee.backend.domain.model.timer.TimerDataPreview
 import app.trackee.backend.domain.model.user.User
@@ -30,6 +31,16 @@ internal class UserRepositoryImpl(
             clientSource.readProjectById(project.clientId, project.projectId).toDomain()
         }
 
+    override suspend fun readProjectPreviews(uid: String): List<ProjectPreview> =
+        readProjects(uid).map { project ->
+            ProjectPreview(
+                id = project.id,
+                client = clientSource.readClientById(project.clientId).toDomain(),
+                type = project.type,
+                name = project.name
+            )
+        }
+
     override suspend fun readTimer(uid: String): TimerData =
         source.readUserByUid(uid).timerData.toDomain()
 
@@ -45,8 +56,7 @@ internal class UserRepositoryImpl(
                 }
             },
             description = timerData.description,
-            startedAt = timerData.startedAt,
-            availableProjects = readProjects(uid)
+            startedAt = timerData.startedAt
         )
     }
 

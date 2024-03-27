@@ -9,5 +9,4 @@ data class TimerDataPreview(
     val project: Project?,
     val description: String?,
     val startedAt: Instant?,
-    val availableProjects: List<Project>
 )

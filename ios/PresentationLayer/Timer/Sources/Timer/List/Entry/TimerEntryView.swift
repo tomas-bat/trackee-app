@@ -15,7 +15,7 @@ struct TimerEntryView: View {
     private let spacing: CGFloat = 8
     private let headerHorizontalSpacing: CGFloat = 4
     private let headerVerticalSpacing: CGFloat = 4
-    private let imageSize: CGFloat = 16
+    private let imageSize: CGFloat = 17
     private let timeIntervalStackSpacing: CGFloat = 1
     private let padding: CGFloat = 16
     private let cornerRadius: CGSize = CGFloat(8).squared
@@ -35,10 +35,12 @@ struct TimerEntryView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
             HStack(alignment: .top, spacing: headerHorizontalSpacing) {
-                Image(systemSymbol: .briefcase)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: imageSize, height: imageSize)
+                if let type = timerEntry.project.type {
+                    type.image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: imageSize, height: imageSize)
+                }
                 
                 VStack(alignment: .leading, spacing: headerVerticalSpacing) {
                     Text(timerEntry.project.name)

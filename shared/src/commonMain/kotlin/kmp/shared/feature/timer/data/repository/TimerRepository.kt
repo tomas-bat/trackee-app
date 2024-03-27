@@ -30,4 +30,7 @@ internal class TimerRepositoryImpl(
 
     override suspend fun readAllProjects(): Result<List<Project>> =
         timerSource.readAllProjects().map { list -> list.map { it.toDomain() } }
+
+    override suspend fun readAllProjectPreviews(): Result<List<ProjectPreview>> =
+        timerSource.readAllProjectPreviews().map { list -> list.map { it.toDomain() } }
 }

@@ -733,3 +733,32 @@
 		cs = Žádné záznamy
 		en = No entries
 		sk = Žiadne záznamy
+
+[[Project Selection View]]
+	[project_selection_view_title]
+		cs = Výběr projektu
+		en = Project selection
+		sk = Výber projektu
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
