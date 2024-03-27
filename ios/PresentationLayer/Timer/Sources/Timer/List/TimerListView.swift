@@ -31,6 +31,17 @@ struct TimerListView: View {
             case let .data(entries), let .loading(entries):
                 TimerListContentView(
                     entries: entries,
+                    timerControlParams: TimerControlView.Params(
+                        data: viewModel.state.timerData,
+                        manualEnd: viewModel.state.manualTimerEnd,
+                        formattedLength: viewModel.state.formattedLength,
+                        onProjectClick: { viewModel.onIntent(.onProjectClick) },
+                        onControlClick: { viewModel.onIntent(.onControlClick) },
+                        onSwitchClick: { viewModel.onIntent(.onSwitchClick) },
+                        onDeleteClick: { viewModel.onIntent(.onDeleteClick) },
+                        onTimeEditClick: { viewModel.onIntent(.onTimeEditClick) },
+                        onDescriptionChange: { description in viewModel.onIntent(.onDescriptionChange(description)) }
+                    ),
                     isLoading: viewModel.state.listData.isLoading
                 )
             case let .error(error):

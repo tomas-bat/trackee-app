@@ -56,9 +56,7 @@ struct RegisterCredentialsView: View {
                     text: $email
                 )
                 .textFieldStyle(
-                    PrimaryTextFieldStyle(
-                        image: Image(systemSymbol: .envelope)
-                    )
+                    .primary(image: Image(systemSymbol: .envelope))
                 )
                 .focused($focus, equals: .email)
                 .onTapGesture {
@@ -73,7 +71,7 @@ struct RegisterCredentialsView: View {
                     text: $newPassword
                 )
                 .textFieldStyle(
-                    PasswordTextFieldStyle(passwordShown: newPasswordShown) {
+                    .password(passwordShown: newPasswordShown) {
                         newPasswordShown.toggle()
                     }
                 )
@@ -90,7 +88,7 @@ struct RegisterCredentialsView: View {
                     text: $verifyPassword
                 )
                 .textFieldStyle(
-                    PasswordTextFieldStyle(passwordShown: verifyPasswordShown) {
+                    .password(passwordShown: verifyPasswordShown) {
                         verifyPasswordShown.toggle()
                     }
                 )

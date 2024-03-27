@@ -33,6 +33,13 @@ public enum ViewData<Data: Equatable>: Equatable {
         }
     }
     
+    public var data: Data? {
+        switch self {
+        case let .data(data): data
+        default: nil
+        }
+    }
+    
     public static func == (lhs: ViewData<Data>, rhs: ViewData<Data>) -> Bool {
         switch (lhs, rhs) {
         case let (.data(ldata), .data(rdata)): ldata == rdata

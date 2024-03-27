@@ -14,6 +14,10 @@ import SharedDomainMocks
 
 final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
+    // MARK: - Constants
+    
+    private let timerInterval: TimeInterval = 1
+    
     // MARK: - Dependencies
     
     private weak var flowController: FlowController?
@@ -23,6 +27,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Injected(\.getTimerDataPreviewUseCase) private var getTimerDataPreviewUseCase
     
     // MARK: - Stored properties
+    
+    private var formatTimer: Timer?
     
     // MARK: - Init
     
@@ -36,7 +42,15 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     override func onAppear() {
         super.onAppear()
         
+        startFormatTimer()
+        
         executeTask(Task { await fetchData() })
+    }
+    
+    override func onDisappear() {
+        super.onDisappear()
+        
+        stopFormatTimer()
     }
     
     // MARK: - State
@@ -48,18 +62,36 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         var summaryViewData: ViewData<[TimerSummary]> = .loading(mock: .stub)
         var listData: ViewData<[TimerEntryPreview]> = .loading(mock: .stub)
         var timerData: ViewData<TimerDataPreview> = .loading(mock: .stub)
+        var manualTimerEnd: Date?
+        var formattedLength: String?
     }
     
     // MARK: - Intent
     
     enum Intent {
         case tryAgain
+        case onProjectClick
+        case onControlClick
+        case onSwitchClick
+        case onDeleteClick
+        case onStartChange(Date?)
+        case onEndChange(Date?)
+        case onDescriptionChange(String?)
+        case onTimeEditClick
     }
     
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
             case .tryAgain: await fetchData()
+            case .onProjectClick: flowController?.handleFlow(TimerFlow.list(.showProjectSelection))
+            case .onControlClick: ()
+            case .onSwitchClick: ()
+            case .onDeleteClick: ()
+            case let .onStartChange(start): onStartChange(start)
+            case let .onEndChange(end): onEndChange(end)
+            case let .onDescriptionChange(description): onDescriptionChange(description)
+            case .onTimeEditClick: ()
             }
         })
     }
@@ -84,10 +116,63 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.listData = .data(entries)
             state.summaryViewData = .data(summaries)
             state.timerData = .data(timer)
+            
+            startFormatTimer()
         } catch {
             state.listData = .error(error)
             state.summaryViewData = .empty
             state.timerData = .empty
         }
+    }
+    
+    private func onStartChange(_ date: Date?) {
+        guard let data = state.timerData.data else { return }
+        state.timerData = .data(
+            TimerDataPreview(
+                copy: data,
+                startedAt: date?.asInstant
+            )
+        )
+    }
+    
+    private func onEndChange(_ date: Date?) {
+        state.manualTimerEnd = date
+    }
+    
+    private func onDescriptionChange(_ description: String?) {
+        guard let data = state.timerData.data else { return }
+        state.timerData = .data(
+            TimerDataPreview(
+                copy: data,
+                description: description
+            )
+        )
+    }
+    
+    private func formatTime(from: Date) -> String? {
+        let formatter = Formatter.DateComponents.timer
+        return formatter.string(from: from, to: .now)
+    }
+    
+    private func startFormatTimer() {
+        formatTimer?.invalidate()
+        
+        guard state.timerData.data?.status == .active,
+              let start = state.timerData.data?.startedAt?.asDate
+        else { return }
+        
+        formatTimer = Timer.scheduledTimer(
+            withTimeInterval: timerInterval,
+            repeats: true
+        ) { [weak self] timer in
+            guard let self else { return }
+            state.formattedLength = formatTime(from: start)
+        }
+        
+        formatTimer?.fire()
+    }
+    
+    private func stopFormatTimer() {
+        formatTimer?.invalidate()
     }
 }

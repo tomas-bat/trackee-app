@@ -41,6 +41,7 @@ struct ProjectSelectionView: View {
                                     project: project,
                                     isSelected: project.id == viewModel.state.selectedProjectId
                                 )
+                                .skeleton(viewModel.state.viewData.isLoading)
                             }
                         }
                     case let .error(error):
@@ -52,6 +53,7 @@ struct ProjectSelectionView: View {
                     }
                 }
                 .padding(16)
+                .animateContent(viewModel.state.viewData.isLoading)
             }
             .background(AppTheme.Colors.background)
             .navigationTitle(L10n.project_selection_view_title)

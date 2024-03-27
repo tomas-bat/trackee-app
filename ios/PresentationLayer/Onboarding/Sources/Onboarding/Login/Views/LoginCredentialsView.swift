@@ -52,9 +52,7 @@ struct LoginCredentialsView: View {
                     text: $email
                 )
                 .textFieldStyle(
-                    PrimaryTextFieldStyle(
-                        image: Image(systemSymbol: .envelope)
-                    )
+                    .primary(image: Image(systemSymbol: .envelope))
                 )
                 .focused($focus, equals: .email)
                 .onTapGesture {
@@ -69,7 +67,7 @@ struct LoginCredentialsView: View {
                     text: $password
                 )
                 .textFieldStyle(
-                    PasswordTextFieldStyle(passwordShown: passwordShown) {
+                    .password(passwordShown: passwordShown) {
                         passwordShown.toggle()
                     }
                 )

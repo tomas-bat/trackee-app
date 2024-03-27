@@ -21,15 +21,18 @@ struct TimerListContentView: View {
     @State private var fillerSize: CGFloat = .zero
     
     private let entries: [TimerEntryPreview]
+    private let timerControlParams: TimerControlView.Params
     private let isLoading: Bool
     
     // MARK: - Init
     
     init(
         entries: [TimerEntryPreview],
+        timerControlParams: TimerControlView.Params,
         isLoading: Bool
     ) {
         self.entries = entries
+        self.timerControlParams = timerControlParams
         self.isLoading = isLoading
     }
     
@@ -46,6 +49,9 @@ struct TimerListContentView: View {
                             TimerEntryView(timerEntry: entry)
                                 .skeleton(isLoading)
                         }
+                        
+                        TimerControlView(params: timerControlParams)
+                            .skeleton(isLoading)
                     }
                     .animateContent(isLoading)
                     .padding(padding)
@@ -84,6 +90,17 @@ import DependencyInjectionMocks
 #Preview {
     TimerListContentView(
         entries: .stub,
+        timerControlParams: TimerControlView.Params(
+            data: .data(.stub),
+            manualEnd: nil,
+            formattedLength: "05:24:14",
+            onProjectClick: {},
+            onControlClick: {},
+            onSwitchClick: {},
+            onDeleteClick: {},
+            onTimeEditClick: {},
+            onDescriptionChange: { _ in }
+        ),
         isLoading: false
     )
     .background(

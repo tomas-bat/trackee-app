@@ -65,7 +65,7 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
             case .retry: await fetchData(force: true)
             case let .selectProject(id): state.selectedProjectId = id
             case .save: () // TODO: save
-            case .dismiss: flowController?.dismiss()
+            case .dismiss: flowController?.handleFlow(TimerFlow.projectSelection(.dismiss))
             }
         })
     }

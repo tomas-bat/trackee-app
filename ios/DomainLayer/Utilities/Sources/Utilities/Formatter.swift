@@ -18,6 +18,11 @@ public struct Formatter {
     
     public enum DateComponents {
         public static let `default` = createDateComponentsFormatter()
+        public static let timer = createDateComponentsFormatter(
+            allowedUnits: [.hour, .minute, .second],
+            unitsStyle: .positional,
+            zeroFormattingBehaviour: .pad
+        )
     }
     
     public enum Number {

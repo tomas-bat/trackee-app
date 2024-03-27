@@ -733,7 +733,10 @@
 		cs = Žádné záznamy
 		en = No entries
 		sk = Žiadne záznamy
-
+	[timer_control_add_description_placeholder]
+		cs = Přidejte popis
+		en = Add a description
+		sk = Pridajte popis
 [[Project Selection View]]
 	[project_selection_view_title]
 		cs = Výběr projektu

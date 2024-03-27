@@ -63,7 +63,7 @@ extension TimerFlowController {
 extension TimerFlowController {
     func handleProjectSelectionFlow(_ flow: TimerFlow.ProjectSelection) {
         switch flow {
-        case .dismiss: dismiss()
+        case .dismiss: navigationController.dismiss(animated: true)
         }
     }
 }
