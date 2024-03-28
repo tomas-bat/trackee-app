@@ -52,6 +52,7 @@ struct TimerListContentView: View {
                         
                         TimerControlView(params: timerControlParams)
                             .skeleton(isLoading)
+                            .animateContent(timerControlParams.data.data?.type)
                     }
                     .animateContent(isLoading)
                     .padding(padding)
@@ -94,6 +95,10 @@ import DependencyInjectionMocks
             data: .data(.stub),
             manualEnd: nil,
             formattedLength: "05:24:14",
+            formattedInterval: TimerEntryInterval(
+                start: TimerDataPreview.stub.startedAt?.asDate ?? .now,
+                end: .now
+            ),
             onProjectClick: {},
             onControlClick: {},
             onSwitchClick: {},

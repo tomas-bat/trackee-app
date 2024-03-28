@@ -64,6 +64,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         var timerData: ViewData<TimerDataPreview> = .loading(mock: .stub)
         var manualTimerEnd: Date?
         var formattedLength: String?
+        var formattedInterval: TimerEntryInterval?
     }
     
     // MARK: - Intent
@@ -74,10 +75,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onControlClick
         case onSwitchClick
         case onDeleteClick
-        case onStartChange(Date?)
-        case onEndChange(Date?)
-        case onDescriptionChange(String?)
         case onTimeEditClick
+        case onDescriptionChange(String?)
     }
     
     func onIntent(_ intent: Intent) {
@@ -86,12 +85,10 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .tryAgain: await fetchData()
             case .onProjectClick: flowController?.handleFlow(TimerFlow.list(.showProjectSelection))
             case .onControlClick: ()
-            case .onSwitchClick: ()
+            case .onSwitchClick: onSwitchClick()
             case .onDeleteClick: ()
-            case let .onStartChange(start): onStartChange(start)
-            case let .onEndChange(end): onEndChange(end)
+            case .onTimeEditClick: onTimeEditClick()
             case let .onDescriptionChange(description): onDescriptionChange(description)
-            case .onTimeEditClick: ()
             }
         })
     }
@@ -125,6 +122,49 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
     }
     
+    private func onSwitchClick() {
+        guard let data = state.timerData.data else { return }
+        
+        let newType = data.type.switched
+        
+        var start: Date? {
+            switch (newType, data.startedAt) {
+            case (.manual, nil): Date.now
+            case (.timer, _): nil
+            default: data.startedAt?.asDate
+            }
+        }
+        
+        var end: Date? {
+            switch (newType, state.manualTimerEnd) {
+            case (.manual, nil): Date.now
+            case (.timer, _): nil
+            default: state.manualTimerEnd
+            }
+        }
+        
+        state.timerData = .data(
+            TimerDataPreview(
+                copy: data,
+                type: newType
+            )
+        )
+        onStartChange(start)
+        onEndChange(end)
+    }
+    
+    private func onTimeEditClick() {
+        flowController?.handleFlow(
+            TimerFlow.list(
+                .showTimeSelection(
+                    initialStart: state.timerData.data?.startedAt?.asDate,
+                    initialEnd: state.manualTimerEnd,
+                    delegate: self
+                )
+            )
+        )
+    }
+    
     private func onStartChange(_ date: Date?) {
         guard let data = state.timerData.data else { return }
         state.timerData = .data(
@@ -133,10 +173,12 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 startedAt: date?.asInstant
             )
         )
+        formatInterval()
     }
     
     private func onEndChange(_ date: Date?) {
         state.manualTimerEnd = date
+        formatInterval()
     }
     
     private func onDescriptionChange(_ description: String?) {
@@ -147,6 +189,16 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 description: description
             )
         )
+    }
+    
+    private func formatInterval() {
+        guard let start = state.timerData.data?.startedAt?.asDate,
+              let end = state.manualTimerEnd
+        else {
+            state.formattedInterval = nil
+            return
+        }
+        state.formattedInterval = TimerEntryInterval(start: start, end: end)
     }
     
     private func formatTime(from: Date) -> String? {
@@ -174,5 +226,14 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func stopFormatTimer() {
         formatTimer?.invalidate()
+    }
+}
+
+// MARK: - TimeSelectionViewModelDelegate
+
+extension TimerListViewModel: TimeSelectionViewModelDelegate {
+    func didConfirmSelection(start: Date, end: Date) {
+        onStartChange(start)
+        onEndChange(end)
     }
 }

@@ -10,12 +10,30 @@ import UIKit
 enum TimerFlow: Flow, Equatable {
     case list(List)
     case projectSelection(ProjectSelection)
+    case timeSelection(TimeSelection)
     
     enum List: Equatable {
         case showProjectSelection
+        case showTimeSelection(
+            initialStart: Date?,
+            initialEnd: Date?,
+            delegate: TimeSelectionViewModelDelegate?
+        )
+        
+        static func == (lhs: TimerFlow.List, rhs: TimerFlow.List) -> Bool {
+            switch (lhs, rhs) {
+            case (.showProjectSelection, .showProjectSelection): true
+            case (.showTimeSelection, .showTimeSelection): true
+            default: false
+            }
+        }
     }
     
     enum ProjectSelection: Equatable {
+        case dismiss
+    }
+    
+    enum TimeSelection: Equatable {
         case dismiss
     }
 }
@@ -41,6 +59,7 @@ public final class TimerFlowController: FlowController {
         switch flow {
         case let .list(flow): handleListFlow(flow)
         case let .projectSelection(flow): handleProjectSelectionFlow(flow)
+        case let .timeSelection(flow): handleTimeSelectionFlow(flow)
         }
     }
 }
@@ -49,19 +68,54 @@ public final class TimerFlowController: FlowController {
 extension TimerFlowController {
     func handleListFlow(_ flow: TimerFlow.List) {
         switch flow {
-        case .showProjectSelection:
-            let vm = ProjectSelectionViewModel(flowController: self)
-            let view = ProjectSelectionView(viewModel: vm)
-            let vc = BaseHostingController(rootView: view)
-            
-            navigationController.present(vc, animated: true)
+        case .showProjectSelection: showProjectSelection()
+        case let .showTimeSelection(start, end, delegate):
+            showTimeSelection(
+                initialStart: start,
+                initialEnd: end,
+                delegate: delegate
+            )
         }
+    }
+    
+    private func showProjectSelection() {
+        let vm = ProjectSelectionViewModel(flowController: self)
+        let view = ProjectSelectionView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        
+        navigationController.present(vc, animated: true)
+    }
+    
+    private func showTimeSelection(
+        initialStart: Date?,
+        initialEnd: Date?,
+        delegate: TimeSelectionViewModelDelegate?
+    ) {
+        let vm = TimeSelectionViewModel(
+            initialStart: initialStart,
+            initialEnd: initialEnd,
+            flowController: self
+        )
+        vm.delegate = delegate
+        let view = TimeSelectionView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        
+        navigationController.present(vc, animated: true)
     }
 }
 
 // MARK: - ProjectSelection flow
 extension TimerFlowController {
     func handleProjectSelectionFlow(_ flow: TimerFlow.ProjectSelection) {
+        switch flow {
+        case .dismiss: navigationController.dismiss(animated: true)
+        }
+    }
+}
+
+// MARK: - TimeSelection flow
+extension TimerFlowController {
+    func handleTimeSelectionFlow(_ flow: TimerFlow.TimeSelection) {
         switch flow {
         case .dismiss: navigationController.dismiss(animated: true)
         }

@@ -35,6 +35,7 @@ struct TimerListView: View {
                         data: viewModel.state.timerData,
                         manualEnd: viewModel.state.manualTimerEnd,
                         formattedLength: viewModel.state.formattedLength,
+                        formattedInterval: viewModel.state.formattedInterval,
                         onProjectClick: { viewModel.onIntent(.onProjectClick) },
                         onControlClick: { viewModel.onIntent(.onControlClick) },
                         onSwitchClick: { viewModel.onIntent(.onSwitchClick) },

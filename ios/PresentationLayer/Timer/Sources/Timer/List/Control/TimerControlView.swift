@@ -15,6 +15,7 @@ struct TimerControlView: View {
         let data: ViewData<TimerDataPreview>
         let manualEnd: Date?
         let formattedLength: String?
+        let formattedInterval: TimerEntryInterval?
         let onProjectClick: () -> Void
         let onControlClick: () -> Void
         let onSwitchClick: () -> Void
@@ -79,11 +80,6 @@ struct TimerControlView: View {
     
     // MARK: - Private
     
-    private var formattedInterval: TimerEntryInterval? {
-        guard let start = params.data.data?.startedAt?.asDate else { return nil }
-        return TimerEntryInterval(start: start, end: .now)
-    }
-    
     private func projectSelector(data: TimerDataPreview) -> some View {
         Button(action: params.onProjectClick) {
             HStack(spacing: selectorHorizontalSpacing) {
@@ -133,23 +129,21 @@ struct TimerControlView: View {
                 if data.type == .timer, data.status == .active, let length = params.formattedLength {
                     Text(length)
                         .font(AppTheme.Fonts.headline)
-                } else if data.type == .manual {
-                    if let formattedInterval {
-                        Button(action: params.onTimeEditClick) {
-                            HStack(alignment: .top, spacing: timeIntervalStackSpacing) {
-                                Text(formattedInterval.localizedRange.time)
-                                
-                                if let extra = formattedInterval.localizedRange.extra {
-                                    Text(extra)
-                                        .font(AppTheme.Fonts.index)
-                                }
+                } else if data.type == .manual, let formattedInterval = params.formattedInterval {
+                    Button(action: params.onTimeEditClick) {
+                        HStack(alignment: .top, spacing: timeIntervalStackSpacing) {
+                            Text(formattedInterval.localizedRange.time)
+                            
+                            if let extra = formattedInterval.localizedRange.extra {
+                                Text(extra)
+                                    .font(AppTheme.Fonts.index)
                             }
-                            .padding(timePadding)
-                            .background(AppTheme.Colors.field)
-                            .clipShape(RoundedRectangle(cornerSize: timeCornerRadius.squared))
                         }
-                        .font(AppTheme.Fonts.headline)
+                        .padding(timePadding)
+                        .background(AppTheme.Colors.field)
+                        .clipShape(RoundedRectangle(cornerSize: timeCornerRadius.squared))
                     }
+                    .font(AppTheme.Fonts.headline)
                 }
                 
                 Spacer()
@@ -233,6 +227,10 @@ struct TimerControlView_Previews: PreviewProvider {
                     data: .data(timerData),
                     manualEnd: nil,
                     formattedLength: length,
+                    formattedInterval: TimerEntryInterval(
+                        start: timerData.startedAt?.asDate ?? .now,
+                        end: .now
+                    ),
                     onProjectClick: {},
                     onControlClick: {},
                     onSwitchClick: {},

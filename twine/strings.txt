@@ -737,11 +737,30 @@
 		cs = Přidejte popis
 		en = Add a description
 		sk = Pridajte popis
+
 [[Project Selection View]]
 	[project_selection_view_title]
 		cs = Výběr projektu
 		en = Project selection
 		sk = Výber projektu
+
+[[Time Selection View]]
+	[time_selection_view_title]
+		cs = Výběr času
+		en = Time selection
+		sk = Výber času
+	[time_selection_view_start_label]
+		cs = Začátek
+		en = Start
+		sk = Začiatok
+	[time_selection_view_end_label]
+		cs = Konec
+		en = End
+		sk = Koniec
+	[time_selection_view_wrong_range]
+		cs = Začátek musí být dříve než konec
+		en = Start date must precede the end date
+		sk = Začiatok musí byť skôr ako koniec
 
 
 
