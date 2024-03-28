@@ -6,7 +6,7 @@ import kmp.shared.feature.timer.domain.model.TimerEntryPreview
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 
 /**
- * Get timer entries for the current user.
+ * Get timer entries for the signed user
  *
  * **Returns** List<TimerEntryPreview>
  */

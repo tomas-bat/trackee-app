@@ -15,6 +15,7 @@ import app.trackee.backend.infrastructure.model.client.toDomain
 import app.trackee.backend.infrastructure.model.entry.toDomain
 import app.trackee.backend.infrastructure.model.project.toDomain
 import app.trackee.backend.infrastructure.model.timer.toDomain
+import app.trackee.backend.infrastructure.model.timer.toFirestore
 import app.trackee.backend.infrastructure.model.user.toDomain
 
 internal class UserRepositoryImpl(
@@ -88,4 +89,8 @@ internal class UserRepositoryImpl(
                 )
             )
         ).toDomain()
+
+    override suspend fun updateTimer(uid: String, timerData: TimerData) {
+        source.updateTimer(uid, timerData.toFirestore())
+    }
 }

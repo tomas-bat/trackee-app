@@ -5,6 +5,11 @@ import kmp.shared.base.usecase.UseCaseResultNoParams
 import kmp.shared.feature.timer.domain.model.ProjectPreview
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 
+/**
+ * Get all projects for the signed user
+ *
+ * **Returns:** List<ProjectPreview>
+ */
 interface GetProjectsUseCase : UseCaseResultNoParams<List<ProjectPreview>>
 
 internal class GetProjectsUseCaseImpl(

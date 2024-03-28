@@ -4,10 +4,16 @@ internal class SourceConstants {
     internal class Firestore {
         internal class Collection {
             companion object {
-                const val users = "users"
-                const val entries = "entries"
-                const val clients = "clients"
-                const val projects = "projects"
+                const val USERS = "users"
+                const val ENTRIES = "entries"
+                const val CLIENTS = "clients"
+                const val PROJECTS = "projects"
+            }
+        }
+
+        internal class FieldName {
+            companion object {
+                const val TIMER_DATA = "timer_data"
             }
         }
     }

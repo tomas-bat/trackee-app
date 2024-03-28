@@ -3,6 +3,8 @@ package app.trackee.backend.presentation.route.user
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.presentation.model.entry.toDto
 import app.trackee.backend.presentation.model.project.toDto
+import app.trackee.backend.presentation.model.timer.TimerDataDto
+import app.trackee.backend.presentation.model.timer.toDomain
 import app.trackee.backend.presentation.model.timer.toDto
 import app.trackee.backend.presentation.model.user.toDto
 import app.trackee.backend.presentation.util.requireUserPrincipal
@@ -61,6 +63,13 @@ fun Routing.userRoute() {
                     val timerDataDto = userRepository.readTimer(user.uid).toDto()
 
                     call.respond(HttpStatusCode.OK, timerDataDto)
+                }
+
+                put<TimerDataDto> { body ->
+                    val user = call.requireUserPrincipal().user
+                    userRepository.updateTimer(user.uid, body.toDomain())
+
+                    call.respond(HttpStatusCode.OK)
                 }
 
                 get("/preview") {

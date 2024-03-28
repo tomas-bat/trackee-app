@@ -14,7 +14,8 @@ extension TimerDataPreview {
         client: Client? = nil,
         project: Project? = nil,
         description: String? = nil,
-        startedAt: Kotlinx_datetimeInstant? = nil
+        startedAt: Kotlinx_datetimeInstant? = nil,
+        removeStartTime: Bool = false
     ) {
         self.init(
             status: status ?? copy.status,
@@ -22,7 +23,17 @@ extension TimerDataPreview {
             client: client ?? copy.client,
             project: project ?? copy.project,
             description: description ?? copy.description_,
-            startedAt: startedAt ?? copy.startedAt
+            startedAt: removeStartTime ? nil : (startedAt ?? copy.startedAt)
+        )
+    }
+    
+    var rawTimerData: TimerData {
+        TimerData(
+            status: status,
+            clientId: client?.id,
+            projectId: project?.id,
+            description: description_,
+            startedAt: startedAt
         )
     }
 }

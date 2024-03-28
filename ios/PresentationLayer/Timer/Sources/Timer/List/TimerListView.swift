@@ -70,6 +70,7 @@ struct TimerListView: View {
                 }
             }
         }
+        .snack(viewModel.snackState)
         .lifecycle(viewModel)
     }
 }

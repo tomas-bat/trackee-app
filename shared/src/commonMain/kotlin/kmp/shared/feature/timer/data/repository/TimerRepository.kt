@@ -6,6 +6,7 @@ import kmp.shared.feature.timer.data.source.TimerSource
 import kmp.shared.feature.timer.domain.model.*
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 import kmp.shared.feature.timer.infrastructure.model.toDomain
+import kmp.shared.feature.timer.infrastructure.model.toDto
 
 internal class TimerRepositoryImpl(
     private val timerSource: TimerSource
@@ -33,4 +34,7 @@ internal class TimerRepositoryImpl(
 
     override suspend fun readAllProjectPreviews(): Result<List<ProjectPreview>> =
         timerSource.readAllProjectPreviews().map { list -> list.map { it.toDomain() } }
+
+    override suspend fun updateTimerData(timerData: TimerData): Result<Unit> =
+        timerSource.updateTimerData(timerData.toDto())
 }

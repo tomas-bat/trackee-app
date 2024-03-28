@@ -25,6 +25,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Injected(\.getTimerEntriesUseCase) private var getTimerEntriesUseCase
     @Injected(\.getTimerSummariesUseCase) private var getTimerSummariesUseCase
     @Injected(\.getTimerDataPreviewUseCase) private var getTimerDataPreviewUseCase
+    @Injected(\.updateTimerDataUseCase) private var updateTimerDataUseCase
     
     // MARK: - Stored properties
     
@@ -85,10 +86,10 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .tryAgain: await fetchData()
             case .onProjectClick: onProjectClick()
             case .onControlClick: ()
-            case .onSwitchClick: onSwitchClick()
+            case .onSwitchClick: await onSwitchClick()
             case .onDeleteClick: ()
             case .onTimeEditClick: onTimeEditClick()
-            case let .onDescriptionChange(description): onDescriptionChange(description)
+            case let .onDescriptionChange(description): await onDescriptionChange(description)
             }
         })
     }
@@ -122,7 +123,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
     }
     
-    private func onSwitchClick() {
+    private func onSwitchClick() async {
         guard let data = state.timerData.data else { return }
         
         let newType = data.type.switched
@@ -149,8 +150,10 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 type: newType
             )
         )
-        onStartChange(start)
-        onEndChange(end)
+        
+        await onStartChange(start, skipUpdate: true)
+        await onEndChange(end, skipUpdate: true)
+        await updateTimerData()
     }
     
     private func onTimeEditClick() {
@@ -175,23 +178,30 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         )
     }
     
-    private func onStartChange(_ date: Date?) {
+    private func onStartChange(_ date: Date?, skipUpdate: Bool = false) async {
         guard let data = state.timerData.data else { return }
         state.timerData = .data(
             TimerDataPreview(
                 copy: data,
-                startedAt: date?.asInstant
+                startedAt: date?.asInstant,
+                removeStartTime: date == nil
             )
         )
         formatInterval()
+        
+        guard !skipUpdate else { return }
+        await updateTimerData()
     }
     
-    private func onEndChange(_ date: Date?) {
+    private func onEndChange(_ date: Date?, skipUpdate: Bool = false) async {
         state.manualTimerEnd = date
         formatInterval()
+        
+        guard !skipUpdate else { return }
+        await updateTimerData()
     }
     
-    private func onDescriptionChange(_ description: String?) {
+    private func onDescriptionChange(_ description: String?) async {
         guard let data = state.timerData.data else { return }
         state.timerData = .data(
             TimerDataPreview(
@@ -199,9 +209,11 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 description: description
             )
         )
+        
+        await updateTimerData()
     }
     
-    private func onProjectChange(_ project: ProjectPreview) {
+    private func onProjectChange(_ project: ProjectPreview) async {
         guard let data = state.timerData.data else { return }
         state.timerData = .data(
             TimerDataPreview(
@@ -210,6 +222,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 project: project.rawProject
             )
         )
+        
+        await updateTimerData()
     }
     
     private func formatInterval() {
@@ -248,13 +262,31 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     private func stopFormatTimer() {
         formatTimer?.invalidate()
     }
+    
+    private func updateTimerData() async {
+        guard let rawTimerData = state.timerData.data?.rawTimerData else { return }
+        
+        do {
+            let params = UpdateTimerDataUseCaseParams(timerData: rawTimerData)
+            try await updateTimerDataUseCase.execute(params: params)
+        } catch {
+            await snackState.showSnack(
+                .error(
+                    message: error.localizedDescription,
+                    actionLabel: nil
+                )
+            )
+        }
+    }
 }
 
 // MARK: - ProjectSelectionViewModelDelegate
 
 extension TimerListViewModel: ProjectSelectionViewModelDelegate {
     func didSelectProject(_ project: ProjectPreview) {
-        onProjectChange(project)
+        executeTask(Task {
+            await onProjectChange(project)
+        })
     }
 }
 
@@ -262,7 +294,9 @@ extension TimerListViewModel: ProjectSelectionViewModelDelegate {
 
 extension TimerListViewModel: TimeSelectionViewModelDelegate {
     func didConfirmSelection(start: Date, end: Date) {
-        onStartChange(start)
-        onEndChange(end)
+        executeTask(Task {
+            await onStartChange(start, skipUpdate: true)
+            await onEndChange(end)
+        })
     }
 }

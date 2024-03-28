@@ -16,9 +16,17 @@ data class TimerDataDto(
 )
 
 fun TimerDataDto.toDomain() = TimerData(
-    status = TimerStatus.Off,
+    status = TimerStatus.entries.firstOrNull { it.rawValue == status } ?: TimerStatus.Off,
     clientId = clientId,
     projectId = projectId,
     description = description,
     startedAt = startedAt?.toInstant(),
+)
+
+fun TimerData.toDto() = TimerDataDto(
+    status = status.rawValue,
+    clientId = clientId,
+    projectId = projectId,
+    description = description,
+    startedAt = startedAt?.toString()
 )

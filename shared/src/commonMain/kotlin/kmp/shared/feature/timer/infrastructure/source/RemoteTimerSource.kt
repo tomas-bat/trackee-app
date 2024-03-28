@@ -6,6 +6,7 @@ import io.ktor.client.request.*
 import kmp.shared.base.Result
 import kmp.shared.base.error.util.runCatchingCommonNetworkExceptions
 import kmp.shared.feature.timer.data.source.TimerSource
+import kmp.shared.feature.timer.domain.model.TimerData
 import kmp.shared.feature.timer.infrastructure.model.*
 
 internal class RemoteTimerSource(
@@ -57,5 +58,14 @@ internal class RemoteTimerSource(
         runCatchingCommonNetworkExceptions {
             val res = client.get("user/projects/previews")
             res.body<List<ProjectPreviewDto>>()
+        }
+
+    override suspend fun updateTimerData(timerData: TimerDataDto): Result<Unit> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.put("user/timer") {
+                setBody(timerData)
+            }
+
+            Result.Success(Unit)
         }
 }

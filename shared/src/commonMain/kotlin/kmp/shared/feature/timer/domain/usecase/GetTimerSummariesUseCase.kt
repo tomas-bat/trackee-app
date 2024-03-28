@@ -7,6 +7,11 @@ import kmp.shared.feature.timer.domain.model.TimerSummary
 import kmp.shared.feature.timer.domain.model.TimerSummaryComponent
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 
+/**
+ * Get timer summaries for the signed user
+ *
+ * **Returns:** List<TimerSummary>
+ */
 interface GetTimerSummariesUseCase : UseCaseResultNoParams<List<TimerSummary>>
 
 internal class GetTimerSummariesUseCaseImpl(

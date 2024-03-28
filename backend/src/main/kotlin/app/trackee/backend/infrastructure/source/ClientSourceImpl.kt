@@ -13,7 +13,7 @@ internal class ClientSourceImpl : ClientSource {
 
     override suspend fun readClientById(id: String): FirestoreClient {
         val snapshot = db
-            .collection(SourceConstants.Firestore.Collection.clients)
+            .collection(SourceConstants.Firestore.Collection.CLIENTS)
             .document(id)
             .get()
             .await()
@@ -24,9 +24,9 @@ internal class ClientSourceImpl : ClientSource {
 
     override suspend fun readProjectsForClient(clientId: String): List<FirestoreProject> {
         val snapshot = db
-            .collection(SourceConstants.Firestore.Collection.projects)
+            .collection(SourceConstants.Firestore.Collection.PROJECTS)
             .document(clientId)
-            .collection(SourceConstants.Firestore.Collection.projects)
+            .collection(SourceConstants.Firestore.Collection.PROJECTS)
             .get()
             .await()
 
@@ -37,9 +37,9 @@ internal class ClientSourceImpl : ClientSource {
 
     override suspend fun readProjectById(clientId: String, projectId: String): FirestoreProject {
         val snapshot = db
-            .collection(SourceConstants.Firestore.Collection.projects)
+            .collection(SourceConstants.Firestore.Collection.PROJECTS)
             .document(clientId)
-            .collection(SourceConstants.Firestore.Collection.projects)
+            .collection(SourceConstants.Firestore.Collection.PROJECTS)
             .document(projectId)
             .get()
             .await()

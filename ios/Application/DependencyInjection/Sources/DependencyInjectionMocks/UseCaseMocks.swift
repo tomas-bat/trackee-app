@@ -59,6 +59,9 @@ public extension Container {
                 executeReturnValue: ResultSuccess(data: [ProjectPreview].stub as NSArray)
             )
         }
+        updateTimerDataUseCase.register {
+            UpdateTimerDataUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

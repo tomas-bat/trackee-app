@@ -1,6 +1,8 @@
 package app.trackee.backend.presentation.model.timer
 
 import app.trackee.backend.domain.model.timer.TimerData
+import app.trackee.backend.domain.model.timer.TimerStatus
+import kotlinx.datetime.toInstant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -19,4 +21,12 @@ internal fun TimerData.toDto() = TimerDataDto(
     projectId = projectId,
     description = description,
     startedAt = startedAt?.toString()
+)
+
+internal fun TimerDataDto.toDomain() = TimerData(
+    status = TimerStatus.entries.firstOrNull { it.rawValue == status } ?: TimerStatus.Off,
+    clientId = clientId,
+    projectId = projectId,
+    description = description,
+    startedAt = startedAt?.toInstant()
 )

@@ -5,6 +5,11 @@ import kmp.shared.base.usecase.UseCaseResultNoParams
 import kmp.shared.feature.timer.domain.model.TimerDataPreview
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 
+/**
+ * Get timer data preview for the signed user
+ *
+ * **Returns:** TimerDataPreview
+ */
 interface GetTimerDataPreviewUseCase : UseCaseResultNoParams<TimerDataPreview>
 
 internal class GetTimerDataPreviewUseCaseImpl(
