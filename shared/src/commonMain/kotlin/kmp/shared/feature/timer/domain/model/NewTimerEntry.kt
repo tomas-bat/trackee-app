@@ -1,4 +1,4 @@
-package app.trackee.backend.domain.model.entry
+package kmp.shared.feature.timer.domain.model
 
 import kotlinx.datetime.Instant
 

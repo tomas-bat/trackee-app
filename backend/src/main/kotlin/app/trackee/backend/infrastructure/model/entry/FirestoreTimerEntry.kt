@@ -1,5 +1,7 @@
 package app.trackee.backend.infrastructure.model.entry
 
+import app.trackee.backend.config.util.toTimestamp
+import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
 import com.google.cloud.Timestamp
 import com.google.cloud.firestore.annotation.PropertyName
@@ -36,4 +38,13 @@ internal fun FirestoreTimerEntry.toDomain() = TimerEntry(
     description = description,
     startedAt = startedAt.toDate().toInstant().toKotlinInstant(),
     endedAt = endedAt.toDate().toInstant().toKotlinInstant(),
+)
+
+internal fun NewTimerEntry.toFirestoreEntry(id: String) = FirestoreTimerEntry(
+    id = id,
+    description = description,
+    clientId = clientId,
+    projectId = projectId,
+    startedAt = startedAt.toTimestamp(),
+    endedAt = endedAt.toTimestamp()
 )

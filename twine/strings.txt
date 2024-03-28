@@ -737,6 +737,10 @@
 		cs = Přidejte popis
 		en = Add a description
 		sk = Pridajte popis
+	[timer_view_time_range_missing]
+		cs = Zadej čas začátku a konce
+		en = Enter start and end time
+		sk = Zadaj čas začiatku a konca
 
 [[Project Selection View]]
 	[project_selection_view_title]
@@ -761,6 +765,7 @@
 		cs = Začátek musí být dříve než konec
 		en = Start date must precede the end date
 		sk = Začiatok musí byť skôr ako koniec
+
 
 
 

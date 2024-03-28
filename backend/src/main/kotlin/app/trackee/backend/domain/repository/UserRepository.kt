@@ -1,5 +1,6 @@
 package app.trackee.backend.domain.repository
 
+import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.project.Project
@@ -26,4 +27,6 @@ interface UserRepository {
     suspend fun createUser(uid: String): User
 
     suspend fun updateTimer(uid: String, timerData: TimerData)
+
+    suspend fun createEntry(uid: String, entry: NewTimerEntry)
 }

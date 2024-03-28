@@ -26,6 +26,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Injected(\.getTimerSummariesUseCase) private var getTimerSummariesUseCase
     @Injected(\.getTimerDataPreviewUseCase) private var getTimerDataPreviewUseCase
     @Injected(\.updateTimerDataUseCase) private var updateTimerDataUseCase
+    @Injected(\.addTimerEntryUseCase) private var addTimerEntryUseCase
     
     // MARK: - Stored properties
     
@@ -45,6 +46,10 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         
         startFormatTimer()
         
+        guard !state.listData.hasData
+                || !state.summaryViewData.hasData
+                || !state.timerData.hasData
+        else { return }
         executeTask(Task { await fetchData() })
     }
     
@@ -66,6 +71,10 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         var manualTimerEnd: Date?
         var formattedLength: String?
         var formattedInterval: TimerEntryInterval?
+        
+        var controlLoading = false
+        var switchLoading = false
+        var discardLoading = false
     }
     
     // MARK: - Intent
@@ -78,6 +87,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onDeleteClick
         case onTimeEditClick
         case onDescriptionChange(String?)
+        case onDescriptionSubmit
     }
     
     func onIntent(_ intent: Intent) {
@@ -85,26 +95,24 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             switch intent {
             case .tryAgain: await fetchData()
             case .onProjectClick: onProjectClick()
-            case .onControlClick: ()
+            case .onControlClick: await onControlClick()
             case .onSwitchClick: await onSwitchClick()
-            case .onDeleteClick: ()
+            case .onDeleteClick: await discardTimer()
             case .onTimeEditClick: onTimeEditClick()
-            case let .onDescriptionChange(description): await onDescriptionChange(description)
+            case let .onDescriptionChange(description): onDescriptionChange(description)
+            case .onDescriptionSubmit: await updateTimerData()
             }
         })
     }
     
     // MARK: - Private
     
-    private func fetchData() async {
-        guard !state.listData.hasData 
-                || !state.summaryViewData.hasData
-                || !state.timerData.hasData
-        else { return }
-        
-        state.listData = .loading(mock: .stub)
-        state.summaryViewData = .loading(mock: .stub)
-        state.timerData = .loading(mock: .stub)
+    private func fetchData(showLoading: Bool = true) async {
+        if showLoading {
+            state.listData = .loading(mock: .stub)
+            state.summaryViewData = .loading(mock: .stub)
+            state.timerData = .loading(mock: .stub)
+        }
         
         do {
             let entries: [TimerEntryPreview] = try await getTimerEntriesUseCase.execute()
@@ -123,8 +131,87 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
     }
     
+    private func onControlClick() async {
+        guard let data = state.timerData.data else { return }
+        
+        state.controlLoading = true
+        defer { state.controlLoading = false }
+        
+        switch (data.type, data.status) {
+        case (.timer, .off):
+            await onStartChange(Date.now, skipUpdate: true)
+            await onEndChange(nil, skipUpdate: true)
+            changeTimerStatus(to: .active)
+            startFormatTimer()
+            await updateTimerData()
+        case (.timer, .active):
+            stopFormatTimer()
+            await saveNewEntry(with: data, endedAt: .now)
+            await onStartChange(nil, skipUpdate: true)
+            await onEndChange(nil, skipUpdate: true)
+            changeTimerStatus(to: .off)
+            await updateTimerData()
+        case (.manual, _):
+            guard let end = state.manualTimerEnd, data.startedAt != nil else {
+                await snackState.showSnack(.error(message: L10n.timer_view_time_range_missing, actionLabel: nil))
+                return
+            }
+            await saveNewEntry(with: data, endedAt: end)
+        }
+    }
+    
+    private func discardTimer() async {
+        state.discardLoading = true
+        defer { state.discardLoading = false }
+        
+        stopFormatTimer()
+        await onStartChange(nil, skipUpdate: true)
+        await onEndChange(nil, skipUpdate: true)
+        changeTimerStatus(to: .off)
+        await updateTimerData()
+    }
+    
+    private func changeTimerStatus(to status: TimerStatus) {
+        guard let data = state.timerData.data else { return }
+        state.timerData = .data(
+            TimerDataPreview(
+                copy: data,
+                status: status
+            )
+        )
+    }
+    
+    private func saveNewEntry(
+        with data: TimerDataPreview,
+        endedAt: Date
+    ) async {
+        guard let projectId = data.project?.id,
+              let clientId = data.client?.id,
+              let startedAt = data.startedAt
+        else { return }
+        
+        do {
+            let params = AddTimerEntryUseCaseParams(
+                entry: NewTimerEntry(
+                    clientId: clientId,
+                    projectId: projectId,
+                    description: data.description_,
+                    startedAt: startedAt,
+                    endedAt: endedAt.asInstant
+                )
+            )
+            try await addTimerEntryUseCase.execute(params: params)
+            await fetchData(showLoading: false)
+        } catch {
+            await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
     private func onSwitchClick() async {
         guard let data = state.timerData.data else { return }
+        
+        state.switchLoading = true
+        defer { state.switchLoading = false }
         
         let newType = data.type.switched
         
@@ -201,7 +288,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         await updateTimerData()
     }
     
-    private func onDescriptionChange(_ description: String?) async {
+    private func onDescriptionChange(_ description: String?) {
         guard let data = state.timerData.data else { return }
         state.timerData = .data(
             TimerDataPreview(
@@ -209,8 +296,6 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 description: description
             )
         )
-        
-        await updateTimerData()
     }
     
     private func onProjectChange(_ project: ProjectPreview) async {
@@ -245,6 +330,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         formatTimer?.invalidate()
         
         guard state.timerData.data?.status == .active,
+              state.timerData.data?.type == .timer,
               let start = state.timerData.data?.startedAt?.asDate
         else { return }
         
@@ -270,12 +356,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             let params = UpdateTimerDataUseCaseParams(timerData: rawTimerData)
             try await updateTimerDataUseCase.execute(params: params)
         } catch {
-            await snackState.showSnack(
-                .error(
-                    message: error.localizedDescription,
-                    actionLabel: nil
-                )
-            )
+            await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
 }

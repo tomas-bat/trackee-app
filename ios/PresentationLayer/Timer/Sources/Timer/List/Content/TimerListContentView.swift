@@ -99,11 +99,15 @@ import DependencyInjectionMocks
                 start: TimerDataPreview.stub.startedAt?.asDate ?? .now,
                 end: .now
             ),
+            controlLoading: false,
+            switchLoading: false,
+            discardLoading: false,
             onProjectClick: {},
             onControlClick: {},
             onSwitchClick: {},
             onDeleteClick: {},
             onTimeEditClick: {},
+            onDescriptionSubmit: {},
             onDescriptionChange: { _ in }
         ),
         isLoading: false

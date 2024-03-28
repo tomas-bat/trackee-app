@@ -26,4 +26,6 @@ internal interface TimerRepository {
     suspend fun readAllProjectPreviews(): Result<List<ProjectPreview>>
 
     suspend fun updateTimerData(timerData: TimerData): Result<Unit>
+
+    suspend fun createEntry(entry: NewTimerEntry): Result<Unit>
 }

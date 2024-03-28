@@ -2,6 +2,7 @@ package app.trackee.backend.data.repository
 
 import app.trackee.backend.data.source.ClientSource
 import app.trackee.backend.data.source.UserSource
+import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.project.Project
@@ -93,4 +94,7 @@ internal class UserRepositoryImpl(
     override suspend fun updateTimer(uid: String, timerData: TimerData) {
         source.updateTimer(uid, timerData.toFirestore())
     }
+
+    override suspend fun createEntry(uid: String, entry: NewTimerEntry) =
+        source.createEntry(uid, entry)
 }

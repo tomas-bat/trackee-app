@@ -37,4 +37,7 @@ internal class TimerRepositoryImpl(
 
     override suspend fun updateTimerData(timerData: TimerData): Result<Unit> =
         timerSource.updateTimerData(timerData.toDto())
+
+    override suspend fun createEntry(entry: NewTimerEntry): Result<Unit> =
+        timerSource.createEntry(entry.toDto())
 }

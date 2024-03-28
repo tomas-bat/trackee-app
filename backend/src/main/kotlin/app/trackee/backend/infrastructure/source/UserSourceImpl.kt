@@ -3,9 +3,11 @@ package app.trackee.backend.infrastructure.source
 import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.UserSource
+import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.client.FirestoreUserClient
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
+import app.trackee.backend.infrastructure.model.entry.toFirestoreEntry
 import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
@@ -72,6 +74,17 @@ internal class UserSourceImpl : UserSource {
             .document(uid)
             .update(SourceConstants.Firestore.FieldName.TIMER_DATA, timerData)
             .await()
+    }
+
+    override suspend fun createEntry(uid: String, entry: NewTimerEntry) {
+        val docRef = db
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document()
+
+        val firestoreEntry = entry.toFirestoreEntry(id = docRef.id)
+        docRef.set(firestoreEntry).await()
     }
 }
 

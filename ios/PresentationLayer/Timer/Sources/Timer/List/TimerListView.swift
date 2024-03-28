@@ -36,11 +36,15 @@ struct TimerListView: View {
                         manualEnd: viewModel.state.manualTimerEnd,
                         formattedLength: viewModel.state.formattedLength,
                         formattedInterval: viewModel.state.formattedInterval,
+                        controlLoading: viewModel.state.controlLoading,
+                        switchLoading: viewModel.state.switchLoading,
+                        discardLoading: viewModel.state.discardLoading,
                         onProjectClick: { viewModel.onIntent(.onProjectClick) },
                         onControlClick: { viewModel.onIntent(.onControlClick) },
                         onSwitchClick: { viewModel.onIntent(.onSwitchClick) },
                         onDeleteClick: { viewModel.onIntent(.onDeleteClick) },
                         onTimeEditClick: { viewModel.onIntent(.onTimeEditClick) },
+                        onDescriptionSubmit: { viewModel.onIntent(.onDescriptionSubmit) },
                         onDescriptionChange: { description in viewModel.onIntent(.onDescriptionChange(description)) }
                     ),
                     isLoading: viewModel.state.listData.isLoading

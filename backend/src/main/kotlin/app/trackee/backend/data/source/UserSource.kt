@@ -1,5 +1,6 @@
 package app.trackee.backend.data.source
 
+import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
 import app.trackee.backend.infrastructure.model.project.IdentifiableProject
@@ -16,4 +17,6 @@ internal interface UserSource {
     suspend fun createUser(user: User): FirestoreUser
 
     suspend fun updateTimer(uid: String, timerData: FirestoreTimerData)
+
+    suspend fun createEntry(uid: String, entry: NewTimerEntry)
 }

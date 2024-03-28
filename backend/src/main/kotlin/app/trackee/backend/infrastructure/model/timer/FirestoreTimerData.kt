@@ -1,12 +1,12 @@
 package app.trackee.backend.infrastructure.model.timer
 
+import app.trackee.backend.config.util.toTimestamp
 import app.trackee.backend.domain.model.timer.TimerData
 import app.trackee.backend.domain.model.timer.TimerStatus
 import com.google.cloud.Timestamp
 import com.google.cloud.firestore.annotation.PropertyName
 import kotlinx.datetime.toKotlinInstant
 import kotlinx.serialization.Contextual
-import java.util.*
 
 internal data class FirestoreTimerData(
     val status: String = "",
@@ -39,9 +39,5 @@ internal fun TimerData.toFirestore() = FirestoreTimerData(
     clientId = clientId,
     projectId = projectId,
     description = description,
-    startedAt = startedAt?.let { instant ->
-        val javaInstant = java.time.Instant.ofEpochMilli(instant.toEpochMilliseconds())
-        val javaDate = Date.from(javaInstant)
-        Timestamp.of(javaDate)
-    }
+    startedAt = startedAt?.toTimestamp()
 )

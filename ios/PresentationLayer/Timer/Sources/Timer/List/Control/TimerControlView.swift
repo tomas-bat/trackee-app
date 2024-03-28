@@ -16,11 +16,15 @@ struct TimerControlView: View {
         let manualEnd: Date?
         let formattedLength: String?
         let formattedInterval: TimerEntryInterval?
+        let controlLoading: Bool
+        let switchLoading: Bool
+        let discardLoading: Bool
         let onProjectClick: () -> Void
         let onControlClick: () -> Void
         let onSwitchClick: () -> Void
         let onDeleteClick: () -> Void
         let onTimeEditClick: () -> Void
+        let onDescriptionSubmit: () -> Void
         let onDescriptionChange: (String?) -> Void
     }
     
@@ -32,10 +36,6 @@ struct TimerControlView: View {
     private let chevronSize: CGFloat = 14
     private let padding: CGFloat = 16
     private let cornerRadius: CGFloat = 8
-    private let smallControlImageSize: CGFloat = 24
-    private let largeControlImageSize: CGFloat = 26
-    private let smallButtonSize: CGFloat = 50
-    private let largeButtonSize: CGFloat = 62
     private let displayedComponents: DatePickerComponents = [.date, .hourAndMinute]
     private let timeIntervalStackSpacing: CGFloat = 1
     private let timePadding: CGFloat = 8
@@ -115,6 +115,9 @@ struct TimerControlView: View {
                 set: { description in params.onDescriptionChange(description) }
             )
         )
+        .onSubmit {
+            params.onDescriptionSubmit()
+        }
         .textFieldStyle(.info)
         .font(AppTheme.Fonts.body)
         .submitLabel(.done)
@@ -152,35 +155,41 @@ struct TimerControlView: View {
             // Control buttons
             HStack(alignment: .center, spacing: 8) {
                 if data.type == .timer, data.status == .active {
-                    styledButton(
-                        image: Image(systemSymbol: .trash),
+                    TimerControlButton(
+                        type: .discard,
+                        isLoading: params.discardLoading,
                         action: params.onDeleteClick
                     )
                     
-                    styledButton(
-                        image: Image(systemSymbol: .stopFill),
+                    TimerControlButton(
+                        type: .stop,
+                        isLoading: params.controlLoading,
                         isLarge: true,
                         action: params.onControlClick
                     )
                 } else if data.type == .timer, data.status == .off {
-                    styledButton(
-                        image: Image(systemSymbol: .plus),
+                    TimerControlButton(
+                        type: .add,
+                        isLoading: params.switchLoading,
                         action: params.onSwitchClick
                     )
                     
-                    styledButton(
-                        image: Image(systemSymbol: .playFill),
+                    TimerControlButton(
+                        type: .start,
+                        isLoading: params.controlLoading,
                         isLarge: true,
                         action: params.onControlClick
                     )
                 } else if data.type == .manual {
-                    styledButton(
-                        image: Image(systemSymbol: .timer),
+                    TimerControlButton(
+                        type: .timer,
+                        isLoading: params.switchLoading,
                         action: params.onSwitchClick
                     )
                     
-                    styledButton(
-                        image: Image(systemSymbol: .plus),
+                    TimerControlButton(
+                        type: .add,
+                        isLoading: params.controlLoading,
                         isLarge: true,
                         action: params.onControlClick
                     )
@@ -188,26 +197,6 @@ struct TimerControlView: View {
                     Spacer()
                 }
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func styledButton(
-        image: Image,
-        isLarge: Bool = false,
-        action: @escaping () -> Void
-    ) -> some View {
-        let imageSize = isLarge ? largeControlImageSize : smallControlImageSize
-        let buttonSize = isLarge ? largeButtonSize : smallButtonSize
-        
-        Button(action: action) {
-            image
-                .resizable()
-                .scaledToFit()
-                .frame(width: imageSize, height: imageSize)
-                .frame(width: buttonSize, height: buttonSize)
-                .background(AppTheme.Colors.field)
-                .clipShape(Circle())
         }
     }
 }
@@ -231,11 +220,15 @@ struct TimerControlView_Previews: PreviewProvider {
                         start: timerData.startedAt?.asDate ?? .now,
                         end: .now
                     ),
+                    controlLoading: false,
+                    switchLoading: false,
+                    discardLoading: false,
                     onProjectClick: {},
                     onControlClick: {},
                     onSwitchClick: {},
                     onDeleteClick: {},
                     onTimeEditClick: {},
+                    onDescriptionSubmit: {},
                     onDescriptionChange: { description in
                         timerData = TimerDataPreview(
                             status: timerData.status,
