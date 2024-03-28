@@ -27,6 +27,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Injected(\.getTimerDataPreviewUseCase) private var getTimerDataPreviewUseCase
     @Injected(\.updateTimerDataUseCase) private var updateTimerDataUseCase
     @Injected(\.addTimerEntryUseCase) private var addTimerEntryUseCase
+    @Injected(\.deleteTimerEntryUseCase) private var deleteTimerEntryUseCase
     
     // MARK: - Stored properties
     
@@ -71,6 +72,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         var manualTimerEnd: Date?
         var formattedLength: String?
         var formattedInterval: TimerEntryInterval?
+        var deletingEntryId: String?
         
         var controlLoading = false
         var switchLoading = false
@@ -88,6 +90,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onTimeEditClick
         case onDescriptionChange(String?)
         case onDescriptionSubmit
+        case onEntryDelete(id: String)
     }
     
     func onIntent(_ intent: Intent) {
@@ -101,6 +104,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .onTimeEditClick: onTimeEditClick()
             case let .onDescriptionChange(description): onDescriptionChange(description)
             case .onDescriptionSubmit: await updateTimerData()
+            case let .onEntryDelete(id): await onEntryDelete(id: id)
             }
         })
     }
@@ -355,6 +359,19 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         do {
             let params = UpdateTimerDataUseCaseParams(timerData: rawTimerData)
             try await updateTimerDataUseCase.execute(params: params)
+        } catch {
+            await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
+    private func onEntryDelete(id: String) async {
+        state.deletingEntryId = id
+        defer { state.deletingEntryId = nil }
+        
+        do {
+            let params = DeleteTimerEntryUseCaseParams(entryId: id)
+            try await deleteTimerEntryUseCase.execute(params: params)
+            await fetchData(showLoading: false)
         } catch {
             await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
         }

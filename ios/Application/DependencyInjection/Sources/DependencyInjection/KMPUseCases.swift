@@ -24,4 +24,5 @@ public extension Container {
     var getProjectsUseCase: Factory<GetProjectsUseCase> { self { self.kmp().get(GetProjectsUseCase.self) } }
     var updateTimerDataUseCase: Factory<UpdateTimerDataUseCase> { self { self.kmp().get(UpdateTimerDataUseCase.self) } }
     var addTimerEntryUseCase: Factory<AddTimerEntryUseCase> { self { self.kmp().get(AddTimerEntryUseCase.self) } }
+    var deleteTimerEntryUseCase: Factory<DeleteTimerEntryUseCase> { self { self.kmp().get(DeleteTimerEntryUseCase.self) } }
 }

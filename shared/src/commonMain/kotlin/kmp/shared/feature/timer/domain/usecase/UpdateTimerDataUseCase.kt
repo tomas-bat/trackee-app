@@ -10,7 +10,7 @@ import kmp.shared.feature.timer.domain.repository.TimerRepository
  *
  * **Input:** UpdateTimerDataUseCase.Params
  *
- * **Returns:** Offer
+ * **Returns:** Unit
  */
 interface UpdateTimerDataUseCase : UseCaseResult<UpdateTimerDataUseCase.Params, Unit> {
     /**

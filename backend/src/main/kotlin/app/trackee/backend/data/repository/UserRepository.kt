@@ -97,4 +97,7 @@ internal class UserRepositoryImpl(
 
     override suspend fun createEntry(uid: String, entry: NewTimerEntry) =
         source.createEntry(uid, entry)
+
+    override suspend fun deleteEntry(uid: String, entryId: String) =
+        source.deleteEntry(uid, entryId)
 }

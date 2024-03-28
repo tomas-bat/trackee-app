@@ -40,4 +40,7 @@ internal class TimerRepositoryImpl(
 
     override suspend fun createEntry(entry: NewTimerEntry): Result<Unit> =
         timerSource.createEntry(entry.toDto())
+
+    override suspend fun deleteEntry(entryId: String): Result<Unit> =
+        timerSource.deleteEntry(entryId)
 }

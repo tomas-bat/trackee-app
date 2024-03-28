@@ -19,4 +19,6 @@ internal interface UserSource {
     suspend fun updateTimer(uid: String, timerData: FirestoreTimerData)
 
     suspend fun createEntry(uid: String, entry: NewTimerEntry)
+
+    suspend fun deleteEntry(uid: String, entryId: String)
 }

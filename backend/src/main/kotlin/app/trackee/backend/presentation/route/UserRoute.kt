@@ -67,6 +67,16 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK, entryPreviewDtos)
                 }
+
+                route("/{entryId}") {
+                    delete {
+                        val user = call.requireUserPrincipal().user
+                        val entryId: String by call.parameters
+                        userRepository.deleteEntry(user.uid, entryId)
+
+                        call.respond(HttpStatusCode.OK)
+                    }
+                }
             }
 
             route("/timer") {

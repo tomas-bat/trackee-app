@@ -76,4 +76,10 @@ internal class RemoteTimerSource(
 
             Result.Success(Unit)
         }
+
+    override suspend fun deleteEntry(entryId: String): Result<Unit> =
+        runCatchingCommonNetworkExceptions {
+            client.delete("user/entries/${entryId}")
+            Result.Success(Unit)
+        }
 }

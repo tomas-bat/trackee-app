@@ -29,4 +29,6 @@ interface UserRepository {
     suspend fun updateTimer(uid: String, timerData: TimerData)
 
     suspend fun createEntry(uid: String, entry: NewTimerEntry)
+
+    suspend fun deleteEntry(uid: String, entryId: String)
 }

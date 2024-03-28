@@ -86,5 +86,15 @@ internal class UserSourceImpl : UserSource {
         val firestoreEntry = entry.toFirestoreEntry(id = docRef.id)
         docRef.set(firestoreEntry).await()
     }
+
+    override suspend fun deleteEntry(uid: String, entryId: String) {
+        db
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(entryId)
+            .delete()
+            .await()
+    }
 }
 

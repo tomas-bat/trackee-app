@@ -71,18 +71,16 @@ public struct InfoErrorSnackHost: View {
 extension InfoErrorSnackVisuals {
     
     var backgroundColor: Color {
-        .gray
-//        switch self {
-//        case .info: AppTheme.Colors.whisperBackgroundInfo
-//        case .error: AppTheme.Colors.toastErrorColor
-//        }
+        switch self {
+        case .info: AppTheme.Colors.field
+        case .error: AppTheme.Colors.destructive
+        }
     }
     
     var foregroundColor: Color {
-        AppTheme.Colors.foreground
-//        switch self {
-//        case .info: AppTheme.Colors.whisperMessage
-//        case .error: AppTheme.Colors.primaryButtonTitle
-//        }
+        switch self {
+        case .info: AppTheme.Colors.foreground
+        case .error: AppTheme.Colors.onDestructive
+        }
     }
 }

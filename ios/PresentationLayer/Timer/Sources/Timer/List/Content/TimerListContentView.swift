@@ -22,6 +22,8 @@ struct TimerListContentView: View {
     
     private let entries: [TimerEntryPreview]
     private let timerControlParams: TimerControlView.Params
+    private let onEntryDelete: (String) -> Void
+    private let deletingEntryId: String?
     private let isLoading: Bool
     
     // MARK: - Init
@@ -29,11 +31,15 @@ struct TimerListContentView: View {
     init(
         entries: [TimerEntryPreview],
         timerControlParams: TimerControlView.Params,
-        isLoading: Bool
+        isLoading: Bool,
+        deletingEntryId: String?,
+        onEntryDelete: @escaping (String) -> Void
     ) {
         self.entries = entries
         self.timerControlParams = timerControlParams
         self.isLoading = isLoading
+        self.deletingEntryId = deletingEntryId
+        self.onEntryDelete = onEntryDelete
     }
     
     // MARK: - Body
@@ -46,8 +52,13 @@ struct TimerListContentView: View {
                     
                     VStack(spacing: entrySpacing) {
                         ForEach(entries) { entry in
-                            TimerEntryView(timerEntry: entry)
-                                .skeleton(isLoading)
+                            TimerEntryView(
+                                timerEntry: entry,
+                                deleteLoading: deletingEntryId == entry.id,
+                                canDelete: deletingEntryId == nil,
+                                onDelete: { onEntryDelete(entry.id) }
+                            )
+                            .skeleton(isLoading)
                         }
                         
                         TimerControlView(params: timerControlParams)
@@ -110,7 +121,9 @@ import DependencyInjectionMocks
             onDescriptionSubmit: {},
             onDescriptionChange: { _ in }
         ),
-        isLoading: false
+        isLoading: false,
+        deletingEntryId: nil,
+        onEntryDelete: { _ in }
     )
     .background(
         AppTheme.Colors.background

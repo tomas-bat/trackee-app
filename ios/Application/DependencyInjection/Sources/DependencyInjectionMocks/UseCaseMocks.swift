@@ -65,6 +65,9 @@ public extension Container {
         addTimerEntryUseCase.register {
             AddTimerEntryUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        deleteTimerEntryUseCase.register {
+            DeleteTimerEntryUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

@@ -21,3 +21,4 @@ public final class GetTimerDataPreviewUseCaseMock: UseCaseResultNoParamsMock, Ge
 public final class GetProjectsUseCaseMock: UseCaseResultNoParamsMock, GetProjectsUseCase {}
 public final class UpdateTimerDataUseCaseMock: UseCaseResultMock, UpdateTimerDataUseCase {}
 public final class AddTimerEntryUseCaseMock: UseCaseResultMock, AddTimerEntryUseCase {}
+public final class DeleteTimerEntryUseCaseMock: UseCaseResultMock, DeleteTimerEntryUseCase {}

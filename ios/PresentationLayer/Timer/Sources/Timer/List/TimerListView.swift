@@ -47,7 +47,9 @@ struct TimerListView: View {
                         onDescriptionSubmit: { viewModel.onIntent(.onDescriptionSubmit) },
                         onDescriptionChange: { description in viewModel.onIntent(.onDescriptionChange(description)) }
                     ),
-                    isLoading: viewModel.state.listData.isLoading
+                    isLoading: viewModel.state.listData.isLoading,
+                    deletingEntryId: viewModel.state.deletingEntryId,
+                    onEntryDelete: { id in viewModel.onIntent(.onEntryDelete(id: id)) }
                 )
             case let .error(error):
                 ErrorView(

@@ -28,4 +28,6 @@ internal interface TimerSource {
     suspend fun updateTimerData(timerData: TimerDataDto): Result<Unit>
 
     suspend fun createEntry(entry: NewTimerEntryDto): Result<Unit>
+
+    suspend fun deleteEntry(entryId: String): Result<Unit>
 }
