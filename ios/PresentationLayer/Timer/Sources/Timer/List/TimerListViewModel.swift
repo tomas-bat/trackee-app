@@ -83,7 +83,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         executeTask(Task {
             switch intent {
             case .tryAgain: await fetchData()
-            case .onProjectClick: flowController?.handleFlow(TimerFlow.list(.showProjectSelection))
+            case .onProjectClick: onProjectClick()
             case .onControlClick: ()
             case .onSwitchClick: onSwitchClick()
             case .onDeleteClick: ()
@@ -165,6 +165,16 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         )
     }
     
+    private func onProjectClick() {
+        flowController?.handleFlow(
+            TimerFlow.list(
+                .showProjectSelection(
+                    delegate: self
+                )
+            )
+        )
+    }
+    
     private func onStartChange(_ date: Date?) {
         guard let data = state.timerData.data else { return }
         state.timerData = .data(
@@ -187,6 +197,17 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             TimerDataPreview(
                 copy: data,
                 description: description
+            )
+        )
+    }
+    
+    private func onProjectChange(_ project: ProjectPreview) {
+        guard let data = state.timerData.data else { return }
+        state.timerData = .data(
+            TimerDataPreview(
+                copy: data,
+                client: project.client,
+                project: project.rawProject
             )
         )
     }
@@ -226,6 +247,14 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func stopFormatTimer() {
         formatTimer?.invalidate()
+    }
+}
+
+// MARK: - ProjectSelectionViewModelDelegate
+
+extension TimerListViewModel: ProjectSelectionViewModelDelegate {
+    func didSelectProject(_ project: ProjectPreview) {
+        onProjectChange(project)
     }
 }
 

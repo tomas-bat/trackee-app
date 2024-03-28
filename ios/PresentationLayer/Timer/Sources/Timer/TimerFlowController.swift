@@ -13,7 +13,10 @@ enum TimerFlow: Flow, Equatable {
     case timeSelection(TimeSelection)
     
     enum List: Equatable {
-        case showProjectSelection
+        case showProjectSelection(
+            delegate: ProjectSelectionViewModelDelegate?
+        )
+        
         case showTimeSelection(
             initialStart: Date?,
             initialEnd: Date?,
@@ -68,7 +71,7 @@ public final class TimerFlowController: FlowController {
 extension TimerFlowController {
     func handleListFlow(_ flow: TimerFlow.List) {
         switch flow {
-        case .showProjectSelection: showProjectSelection()
+        case let .showProjectSelection(delegate): showProjectSelection(delegate: delegate)
         case let .showTimeSelection(start, end, delegate):
             showTimeSelection(
                 initialStart: start,
@@ -78,8 +81,11 @@ extension TimerFlowController {
         }
     }
     
-    private func showProjectSelection() {
+    private func showProjectSelection(
+        delegate: ProjectSelectionViewModelDelegate?
+    ) {
         let vm = ProjectSelectionViewModel(flowController: self)
+        vm.delegate = delegate
         let view = ProjectSelectionView(viewModel: vm)
         let vc = BaseHostingController(rootView: view)
         

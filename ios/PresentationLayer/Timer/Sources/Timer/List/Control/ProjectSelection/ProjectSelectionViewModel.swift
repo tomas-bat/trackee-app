@@ -12,6 +12,10 @@ import Utilities
 import KMPSharedDomain
 import SharedDomainMocks
 
+protocol ProjectSelectionViewModelDelegate: AnyObject {
+    func didSelectProject(_: ProjectPreview)
+}
+
 final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Dependencies
@@ -21,6 +25,8 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     @Injected(\.getProjectsUseCase) private var getProjectsUseCase
     
     // MARK: - Stored properties
+    
+    weak var delegate: ProjectSelectionViewModelDelegate?
     
     // MARK: - Init
     
@@ -64,8 +70,8 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
             case let .updateSearchText(text): state.searchText = text
             case .retry: await fetchData(force: true)
             case let .selectProject(id): state.selectedProjectId = id
-            case .save: () // TODO: save
-            case .dismiss: flowController?.handleFlow(TimerFlow.projectSelection(.dismiss))
+            case .save: save()
+            case .dismiss: dismiss()
             }
         })
     }
@@ -82,5 +88,18 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         } catch {
             state.viewData = .error(error)
         }
+    }
+    
+    private func save() {
+        guard let project = state.viewData.data?.first(
+            where: { $0.id == state.selectedProjectId }
+        ) else { return }
+        
+        delegate?.didSelectProject(project)
+        dismiss()
+    }
+    
+    private func dismiss() {
+        flowController?.handleFlow(TimerFlow.projectSelection(.dismiss))
     }
 }
