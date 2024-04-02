@@ -35,6 +35,7 @@ struct TimerEntryView: View {
     
     @State private var dragOffset: CGFloat = .zero
     @State private var isAfterThreshold = false
+    @State private var fixTask: Task<Void, Error>?
     
     // MARK: - Init
     
@@ -170,10 +171,19 @@ struct TimerEntryView: View {
         .offset(x: dragOffset / trashOffsetDenominator)
     }
     
+    @MainActor 
     private func onGestureChange(_ gesture: DragGesture.Value) {
         guard canDelete, !deleteLoading else { return }
         dragOffset = min(0, gesture.translation.width)
         isAfterThreshold = dragOffset < deleteTreshold
+        
+        fixTask?.cancel()
+        fixTask = Task.delayed(byTimeInterval: 3) {
+            guard !Task.isCancelled, !deleteLoading else { return }
+            withAnimation {
+                dragOffset = 0
+            }
+        }
     }
     
     private func onGestureEnd(_ gesture: DragGesture.Value) {
