@@ -1,4 +1,4 @@
-package kmp.shared.feature.user.domain.model
+package kmp.shared.feature.profile.domain.model
 
 import kmp.shared.feature.timer.domain.model.TimerData
 

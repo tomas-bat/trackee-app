@@ -1,8 +1,8 @@
-package kmp.shared.feature.user.infrastructure.model
+package kmp.shared.feature.profile.infrastructure.model
 
 import kmp.shared.feature.timer.infrastructure.model.TimerDataDto
 import kmp.shared.feature.timer.infrastructure.model.toDomain
-import kmp.shared.feature.user.domain.model.User
+import kmp.shared.feature.profile.domain.model.User
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

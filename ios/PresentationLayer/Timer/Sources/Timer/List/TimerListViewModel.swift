@@ -47,11 +47,11 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         
         startFormatTimer()
         
-        guard !state.listData.hasData
+        let showLoading = !state.listData.hasData
                 || !state.summaryViewData.hasData
                 || !state.timerData.hasData
-        else { return }
-        executeTask(Task { await fetchData() })
+
+        executeTask(Task { await fetchData(showLoading: showLoading) })
     }
     
     override func onDisappear() {

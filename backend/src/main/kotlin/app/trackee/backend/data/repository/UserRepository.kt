@@ -2,6 +2,7 @@ package app.trackee.backend.data.repository
 
 import app.trackee.backend.data.source.ClientSource
 import app.trackee.backend.data.source.UserSource
+import app.trackee.backend.domain.model.client.Client
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
@@ -100,4 +101,9 @@ internal class UserRepositoryImpl(
 
     override suspend fun deleteEntry(uid: String, entryId: String) =
         source.deleteEntry(uid, entryId)
+
+    override suspend fun readClients(uid: String): List<Client> =
+        source.readClientIds(uid).map { clientId ->
+            clientSource.readClientById(clientId).toDomain()
+        }
 }

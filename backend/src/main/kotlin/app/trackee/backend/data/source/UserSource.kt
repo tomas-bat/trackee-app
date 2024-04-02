@@ -21,4 +21,6 @@ internal interface UserSource {
     suspend fun createEntry(uid: String, entry: NewTimerEntry)
 
     suspend fun deleteEntry(uid: String, entryId: String)
+
+    suspend fun readClientIds(uid: String): List<String>
 }

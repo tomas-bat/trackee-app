@@ -1,5 +1,6 @@
 package app.trackee.backend.domain.repository
 
+import app.trackee.backend.domain.model.client.Client
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
@@ -31,4 +32,6 @@ interface UserRepository {
     suspend fun createEntry(uid: String, entry: NewTimerEntry)
 
     suspend fun deleteEntry(uid: String, entryId: String)
+
+    suspend fun readClients(uid: String): List<Client>
 }

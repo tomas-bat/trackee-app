@@ -1,6 +1,7 @@
 package app.trackee.backend.presentation.route.user
 
 import app.trackee.backend.domain.repository.UserRepository
+import app.trackee.backend.presentation.model.client.toDto
 import app.trackee.backend.presentation.model.entry.NewTimerEntryDto
 import app.trackee.backend.presentation.model.entry.toDomain
 import app.trackee.backend.presentation.model.entry.toDto
@@ -120,6 +121,15 @@ fun Routing.userRoute() {
                     val projectPreviewDtos = userRepository.readProjectPreviews(user.uid).map { it.toDto() }
 
                     call.respond(HttpStatusCode.OK, projectPreviewDtos)
+                }
+            }
+
+            route("/clients") {
+                get {
+                    val user = call.requireUserPrincipal().user
+                    val clientDtos = userRepository.readClients(user.uid).map { it.toDto() }
+
+                    call.respond(HttpStatusCode.OK, clientDtos)
                 }
             }
         }

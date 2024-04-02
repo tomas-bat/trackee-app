@@ -2,8 +2,8 @@ package kmp.shared.di
 
 import kmp.shared.configuration.domain.Configuration
 import kmp.shared.feature.auth.authModule
+import kmp.shared.feature.profile.profileModule
 import kmp.shared.feature.timer.timerModule
-import kmp.shared.feature.user.userModule
 import kmp.shared.network.NetworkClient
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
@@ -30,7 +30,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}): KoinApplication {
 private val sharedModules = listOf(
     authModule,
     timerModule,
-    userModule
+    profileModule
 )
 
 private val commonModule = module {

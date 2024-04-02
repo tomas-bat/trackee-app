@@ -14,3 +14,9 @@ public extension Client {
         )
     }
 }
+
+public extension [Client] {
+    static var stub: [Client] {
+        (0..<15).map { id in .stub(id: "\(id)") }
+    }
+}

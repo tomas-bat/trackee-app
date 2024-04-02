@@ -683,7 +683,7 @@
 		sk = Heslo
 	[login_view_login_with_credentials_button_title]
 		cs = Přihlásit se
-		en = Sign-in or
+		en = Sign in
 		sk = Prihlásiť sa
 	[login_view_register_button_title]
 		cs = Registrovat
@@ -781,6 +781,32 @@
 		cs = Začátek musí být dříve než konec
 		en = Start date must precede the end date
 		sk = Začiatok musí byť skôr ako koniec
+
+[[Profile View]]
+	[profile_view_title]
+		cs = Profil
+		en = Profile
+		sk = Profil
+	[profile_view_projects]
+		cs = Projekty
+		en = Projects
+		sk = Projekty
+	[profile_view_clients]
+		cs = Klienti
+		en = Clients
+		sk = Klienti
+	[profile_view_logout_button_title]
+		cs = Odhlásit se
+		en = Sign out
+		sk = Odhlásiť sa
+
+[[Clients View]]
+	[clients_view_title]
+		cs = Klienti
+		en = Clients
+		sk = Klienti
+
+
 
 
 

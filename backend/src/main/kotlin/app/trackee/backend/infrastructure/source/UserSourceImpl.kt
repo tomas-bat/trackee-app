@@ -12,11 +12,11 @@ import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import app.trackee.backend.infrastructure.model.user.toFirestore
-import com.google.firebase.cloud.FirestoreClient
+import com.google.firebase.cloud.FirestoreClient as GoogleFirestoreClient
 
 internal class UserSourceImpl : UserSource {
 
-    private val db = FirestoreClient.getFirestore()
+    private val db = GoogleFirestoreClient.getFirestore()
 
     override suspend fun readUserByUid(uid: String): FirestoreUser {
         val documentSnapshot = db.collection(SourceConstants.Firestore.Collection.USERS).document(uid).get().await()
@@ -97,5 +97,14 @@ internal class UserSourceImpl : UserSource {
             .delete()
             .await()
     }
+
+    override suspend fun readClientIds(uid: String): List<String> =
+        db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.CLIENTS)
+            .get()
+            .await()
+            .map { it.id }
 }
 

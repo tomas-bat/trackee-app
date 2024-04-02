@@ -42,12 +42,16 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Intent
     enum Intent {
         case logout
+        case showClients
+        case showProjects
     }
 
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
             case .logout: await logout()
+            case .showClients: flowController?.handleFlow(ProfileFlow.overview(.showClients))
+            case .showProjects: flowController?.handleFlow(ProfileFlow.overview(.showProjects))
             }
         })
     }
@@ -57,7 +61,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     private func logout() async {
         do {
             try await logoutUseCase.execute()
-            flowController?.handleFlow(ProfileFlow.profile(.presentOnboarding))
+            flowController?.handleFlow(ProfileFlow.overview(.presentOnboarding))
         } catch {
             snackState.currentData?.dismiss()
             snackState.showSnackSync(

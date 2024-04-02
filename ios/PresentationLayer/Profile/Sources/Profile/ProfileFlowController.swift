@@ -8,10 +8,12 @@ import UIKit
 import UIToolkit
 
 enum ProfileFlow: Flow, Equatable {
-    case profile(Profile)
+    case overview(Overview)
     
-    enum Profile: Equatable {
+    enum Overview: Equatable {
         case presentOnboarding
+        case showClients
+        case showProjects
     }
 }
 
@@ -31,20 +33,34 @@ public final class ProfileFlowController: FlowController {
     override public func handleFlow(_ flow: Flow) {
         guard let profileFlow = flow as? ProfileFlow else { return }
         switch profileFlow {
-        case .profile(let profileFlow): handleProfileFlow(profileFlow)
+        case let .overview(flow): handleOverviewFlow(flow)
         }
     }
 }
 
-// MARK: Profile flow
+// MARK: Overview flow
 extension ProfileFlowController {
-    func handleProfileFlow(_ flow: ProfileFlow.Profile) {
+    func handleOverviewFlow(_ flow: ProfileFlow.Overview) {
         switch flow {
         case .presentOnboarding: presentOnboarding()
+        case .showClients: showClients()
+        case .showProjects: showProjects()
         }
     }
     
     private func presentOnboarding() {
         delegate?.presentOnboarding()
+    }
+    
+    private func showClients() {
+        let vm = ClientsViewModel(flowController: self)
+        let view = ClientsView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showProjects() {
+        
     }
 }
