@@ -132,9 +132,9 @@ fun Routing.userRoute() {
                     call.respond(HttpStatusCode.OK, clientDtos)
                 }
 
-                put("/add/{clientId}") {
+                put("/add") {
                     val user = call.requireUserPrincipal().user
-                    val clientId: String by call.parameters
+                    val clientId: String by call.request.queryParameters
 
                     userRepository.assignClientToUser(user.uid, clientId)
 
