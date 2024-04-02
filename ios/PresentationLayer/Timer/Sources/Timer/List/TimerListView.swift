@@ -28,9 +28,9 @@ struct TimerListView: View {
     var body: some View {
         Group {
             switch viewModel.state.listData {
-            case let .data(entries), let .loading(entries):
+            case let .data(groups), let .loading(groups):
                 TimerListContentView(
-                    entries: entries,
+                    groups: groups,
                     timerControlParams: TimerControlView.Params(
                         data: viewModel.state.timerData,
                         manualEnd: viewModel.state.manualTimerEnd,

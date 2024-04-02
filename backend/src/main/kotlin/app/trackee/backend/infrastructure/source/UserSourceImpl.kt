@@ -30,6 +30,7 @@ internal class UserSourceImpl : UserSource {
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
             .document(uid)
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .orderBy(SourceConstants.Firestore.FieldName.STARTED_AT)
             .get()
             .await()
 

@@ -25,14 +25,17 @@ public enum AppTheme {
     
     /// Defines all the fonts used in the app in a semantic way
     public enum Fonts {
+
+        public static let index: Font = UIFont.preferredFont(forTextStyle: .footnote, weight: .regular, size: 10)
         
         public static let body: Font = UIFont.preferredFont(forTextStyle: .body, weight: .regular, size: 13)
         
         public static let headline: Font = UIFont.preferredFont(forTextStyle: .headline, weight: .semibold, size: 14)
         public static let headlineAdditional: Font = UIFont.preferredFont(forTextStyle: .headline, weight: .regular, size: 14)
         
-        public static let screenTitle: Font = UIFont.preferredFont(forTextStyle: .largeTitle, weight: .bold, size: 32)
+        public static let title: Font = UIFont.preferredFont(forTextStyle: .title1, weight: .bold, size: 24)
         
-        public static let index: Font = UIFont.preferredFont(forTextStyle: .footnote, weight: .regular, size: 10)
+        public static let screenTitle: Font = UIFont.preferredFont(forTextStyle: .largeTitle, weight: .bold, size: 32)
+
     }
 }

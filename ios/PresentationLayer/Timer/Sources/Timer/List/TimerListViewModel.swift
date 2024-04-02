@@ -67,7 +67,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     struct State {
         var summaryViewData: ViewData<[TimerSummary]> = .loading(mock: .stub)
-        var listData: ViewData<[TimerEntryPreview]> = .loading(mock: .stub)
+        var listData: ViewData<[TimerEntryGroup]> = .loading(mock: .stub)
         var timerData: ViewData<TimerDataPreview> = .loading(mock: .stub)
         var manualTimerEnd: Date?
         var formattedLength: String?
@@ -119,11 +119,11 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
         
         do {
-            let entries: [TimerEntryPreview] = try await getTimerEntriesUseCase.execute()
+            let groups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute()
             let summaries: [TimerSummary] = try await getTimerSummariesUseCase.execute()
             let timer: TimerDataPreview = try await getTimerDataPreviewUseCase.execute()
             
-            state.listData = .data(entries)
+            state.listData = .data(groups)
             state.summaryViewData = .data(summaries)
             state.timerData = .data(timer)
             

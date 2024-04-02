@@ -40,7 +40,7 @@ public extension Container {
         getTimerEntriesUseCase.register {
             GetTimerEntriesUseCaseMock(
                 executeReturnValue: ResultSuccess(
-                    data: [TimerEntryPreview].stub as NSArray
+                    data: [TimerEntryGroup].stub as NSArray
                 )
             )
         }

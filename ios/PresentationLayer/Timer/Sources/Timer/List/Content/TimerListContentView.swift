@@ -12,6 +12,9 @@ struct TimerListContentView: View {
     
     // MARK: - Constants
     
+    private let entryGroupSpacing: CGFloat = 16
+    private let groupTitleTopPadding: CGFloat = 16
+    private let groupTitleBottomPadding: CGFloat = 8
     private let entrySpacing: CGFloat = 8
     private let padding: CGFloat = 16
     private let wrapperSpacing: CGFloat = 0
@@ -20,7 +23,7 @@ struct TimerListContentView: View {
     
     @State private var fillerSize: CGFloat = .zero
     
-    private let entries: [TimerEntryPreview]
+    private let groups: [TimerEntryGroup]
     private let timerControlParams: TimerControlView.Params
     private let onEntryDelete: (String) -> Void
     private let deletingEntryId: String?
@@ -29,13 +32,13 @@ struct TimerListContentView: View {
     // MARK: - Init
     
     init(
-        entries: [TimerEntryPreview],
+        groups: [TimerEntryGroup],
         timerControlParams: TimerControlView.Params,
         isLoading: Bool,
         deletingEntryId: String?,
         onEntryDelete: @escaping (String) -> Void
     ) {
-        self.entries = entries
+        self.groups = groups
         self.timerControlParams = timerControlParams
         self.isLoading = isLoading
         self.deletingEntryId = deletingEntryId
@@ -50,15 +53,23 @@ struct TimerListContentView: View {
                 VStack(spacing: wrapperSpacing) {
                     Color.clear.frame(height: fillerSize)
                     
-                    VStack(spacing: entrySpacing) {
-                        ForEach(entries) { entry in
-                            TimerEntryView(
-                                timerEntry: entry,
-                                deleteLoading: deletingEntryId == entry.id,
-                                canDelete: deletingEntryId == nil,
-                                onDelete: { onEntryDelete(entry.id) }
-                            )
-                            .skeleton(isLoading)
+                    VStack(alignment: .leading, spacing: entrySpacing) {
+                        ForEach(groups) { group in
+                            Text(group.date.asDate.localizedDate)
+                                .font(AppTheme.Fonts.title)
+                                .foregroundStyle(AppTheme.Colors.foreground)
+                                .padding(.top, groupTitleTopPadding)
+                                .padding(.bottom, groupTitleBottomPadding)
+                            
+                            ForEach(group.entries) { entry in
+                                TimerEntryView(
+                                    timerEntry: entry,
+                                    deleteLoading: deletingEntryId == entry.id,
+                                    canDelete: deletingEntryId == nil,
+                                    onDelete: { onEntryDelete(entry.id) }
+                                )
+                                .skeleton(isLoading)
+                            }
                         }
                         
                         TimerControlView(params: timerControlParams)
@@ -73,7 +84,7 @@ struct TimerListContentView: View {
                                 .onAppear {
                                     onGeometryChange(outer: geometry, content: contentGeometry)
                                 }
-                                .onChange(of: entries) {
+                                .onChange(of: groups) {
                                     onGeometryChange(outer: geometry, content: contentGeometry)
                                 }
                         }
@@ -101,7 +112,7 @@ import DependencyInjectionMocks
 
 #Preview {
     TimerListContentView(
-        entries: .stub,
+        groups: .stub,
         timerControlParams: TimerControlView.Params(
             data: .data(.stub),
             manualEnd: nil,

@@ -741,6 +741,10 @@
 		cs = Zadej čas začátku a konce
 		en = Enter start and end time
 		sk = Zadaj čas začiatku a konca
+	[timer_view_today]
+		cs = Dnes
+		en = Today
+		sk = Dnes
 
 [[Project Selection View]]
 	[project_selection_view_title]
