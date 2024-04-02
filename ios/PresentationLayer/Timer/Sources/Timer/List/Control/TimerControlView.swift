@@ -83,26 +83,31 @@ struct TimerControlView: View {
     private func projectSelector(data: TimerDataPreview) -> some View {
         Button(action: params.onProjectClick) {
             HStack(spacing: selectorHorizontalSpacing) {
-                if let client = data.client, let project = data.project {
-                    if let type = project.type {
-                        type.image
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: imageSize, height: imageSize)
-                    }
-                    
+                if let type = data.project?.type {
+                    type.image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: imageSize, height: imageSize)
+                }
+                
+                if let project = data.project, let client = data.client {
                     Text(project.name)
                         .font(AppTheme.Fonts.headline)
                     
                     Text(client.name)
                         .font(AppTheme.Fonts.headlineAdditional)
                         .foregroundStyle(AppTheme.Colors.foregroundSecondary)
-                    
-                    Image(systemSymbol: .chevronDown)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: chevronSize)
+                } else {
+                    Text(L10n.timer_view_select_project)
+                        .italic()
+                        .font(AppTheme.Fonts.headlineAdditional)
+                        .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                 }
+                
+                Image(systemSymbol: .chevronDown)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: chevronSize)
             }
         }
     }
@@ -285,6 +290,18 @@ struct TimerControlView_Previews: PreviewProvider {
                     startedAt: Date(timeIntervalSinceNow: -5_000).asInstant
                 ),
                 length: "00:51:38"
+            )
+            .padding(.horizontal)
+            
+            PreviewView(
+                timerData: TimerDataPreview(
+                    status: .off,
+                    type: .timer,
+                    client: nil,
+                    project: nil,
+                    description: nil,
+                    startedAt: nil
+                )
             )
             .padding(.horizontal)
             

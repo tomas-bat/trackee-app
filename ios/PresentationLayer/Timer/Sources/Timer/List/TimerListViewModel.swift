@@ -141,26 +141,30 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.controlLoading = true
         defer { state.controlLoading = false }
         
-        switch (data.type, data.status) {
-        case (.timer, .off):
-            await onStartChange(Date.now, skipUpdate: true)
-            await onEndChange(nil, skipUpdate: true)
-            changeTimerStatus(to: .active)
-            startFormatTimer()
-            await updateTimerData()
-        case (.timer, .active):
-            stopFormatTimer()
-            await saveNewEntry(with: data, endedAt: .now)
-            await onStartChange(nil, skipUpdate: true)
-            await onEndChange(nil, skipUpdate: true)
-            changeTimerStatus(to: .off)
-            await updateTimerData()
-        case (.manual, _):
-            guard let end = state.manualTimerEnd, data.startedAt != nil else {
-                await snackState.showSnack(.error(message: L10n.timer_view_time_range_missing, actionLabel: nil))
-                return
+        do {
+            switch (data.type, data.status) {
+            case (.timer, .off):
+                await onStartChange(Date.now, skipUpdate: true)
+                await onEndChange(nil, skipUpdate: true)
+                changeTimerStatus(to: .active)
+                startFormatTimer()
+                await updateTimerData()
+            case (.timer, .active):
+                stopFormatTimer()
+                try await saveNewEntry(with: data, endedAt: .now)
+                await onStartChange(nil, skipUpdate: true)
+                await onEndChange(nil, skipUpdate: true)
+                changeTimerStatus(to: .off)
+                await updateTimerData()
+            case (.manual, _):
+                guard let end = state.manualTimerEnd, data.startedAt != nil else {
+                    await snackState.showSnack(.error(message: L10n.timer_view_time_range_missing, actionLabel: nil))
+                    return
+                }
+                try await saveNewEntry(with: data, endedAt: end)
             }
-            await saveNewEntry(with: data, endedAt: end)
+        } catch {
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
     
@@ -188,27 +192,26 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     private func saveNewEntry(
         with data: TimerDataPreview,
         endedAt: Date
-    ) async {
+    ) async throws {
         guard let projectId = data.project?.id,
-              let clientId = data.client?.id,
-              let startedAt = data.startedAt
-        else { return }
-        
-        do {
-            let params = AddTimerEntryUseCaseParams(
-                entry: NewTimerEntry(
-                    clientId: clientId,
-                    projectId: projectId,
-                    description: data.description_,
-                    startedAt: startedAt,
-                    endedAt: endedAt.asInstant
-                )
-            )
-            try await addTimerEntryUseCase.execute(params: params)
-            await fetchData(showLoading: false)
-        } catch {
-            await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
+              let clientId = data.client?.id
+        else {
+            throw TimerError.projectNotSelected
         }
+        
+        guard let startedAt = data.startedAt else { return }
+        
+        let params = AddTimerEntryUseCaseParams(
+            entry: NewTimerEntry(
+                clientId: clientId,
+                projectId: projectId,
+                description: data.description_,
+                startedAt: startedAt,
+                endedAt: endedAt.asInstant
+            )
+        )
+        try await addTimerEntryUseCase.execute(params: params)
+        await fetchData(showLoading: false)
     }
     
     private func onSwitchClick() async {

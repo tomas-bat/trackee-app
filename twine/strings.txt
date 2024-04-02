@@ -745,12 +745,24 @@
 		cs = Dnes
 		en = Today
 		sk = Dnes
+	[timer_view_select_project]
+		cs = Vyberte projekt...
+		en = Select a project...
+		sk = Vyberte projekt
+	[timer_view_project_not_selected]
+		cs = Není vybrán projekt
+		en = Project not selected
+		sk = Nie je vybraný projekt
 
 [[Project Selection View]]
 	[project_selection_view_title]
 		cs = Výběr projektu
 		en = Project selection
 		sk = Výber projektu
+	[project_selection_view_no_projects]
+		cs = Nemáte žádné projekty. Vytvořte si je v profilu.
+		en = You don't have any projects. Create them in the profile tab.
+		sk = Nemáte žiadne projekty. Vytvorte si ich v profile.
 
 [[Time Selection View]]
 	[time_selection_view_title]

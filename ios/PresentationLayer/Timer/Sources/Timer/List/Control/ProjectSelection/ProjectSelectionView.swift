@@ -29,32 +29,37 @@ struct ProjectSelectionView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack {
-                    switch viewModel.state.viewData {
-                    case let .data(projects), let .loading(projects):
-                        ForEach(projects) { project in
-                            Button {
-                                viewModel.onIntent(.selectProject(id: project.id))
-                            } label: {
-                                SelectableProjectView(
-                                    project: project,
-                                    isSelected: project.id == viewModel.state.selectedProjectId
-                                )
-                                .skeleton(viewModel.state.viewData.isLoading)
+            Group {
+                switch viewModel.state.viewData {
+                case let .data(projects), let .loading(projects):
+                    ScrollView {
+                        VStack {
+                            ForEach(projects) { project in
+                                Button {
+                                    viewModel.onIntent(.selectProject(id: project.id))
+                                } label: {
+                                    SelectableProjectView(
+                                        project: project,
+                                        isSelected: project.id == viewModel.state.selectedProjectId
+                                    )
+                                    .skeleton(viewModel.state.viewData.isLoading)
+                                }
                             }
                         }
-                    case let .error(error):
-                        ErrorView(error: error) {
-                            viewModel.onIntent(.retry)
-                        }
-                    case .empty:
-                        EmptyContentView()
+                        .padding(padding)
+                        .animateContent(viewModel.state.viewData.isLoading)
                     }
+                case let .error(error):
+                    ErrorView(error: error) {
+                        viewModel.onIntent(.retry)
+                    }
+                    .padding(padding)
+                case .empty:
+                    EmptyContentView(text: L10n.project_selection_view_no_projects)
+                        .padding(padding)
                 }
-                .padding(16)
-                .animateContent(viewModel.state.viewData.isLoading)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(AppTheme.Colors.background)
             .navigationTitle(L10n.project_selection_view_title)
             .toolbar(.visible)

@@ -84,7 +84,11 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         do {
             let projects: [ProjectPreview] = try await getProjectsUseCase.execute()
             
-            state.viewData = .data(projects)
+            if projects.isEmpty {
+                state.viewData = .empty
+            } else {
+                state.viewData = .data(projects)
+            }
         } catch {
             state.viewData = .error(error)
         }
