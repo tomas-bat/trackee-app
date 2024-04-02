@@ -53,7 +53,7 @@ struct TimerListContentView: View {
                 VStack(spacing: wrapperSpacing) {
                     Color.clear.frame(height: fillerSize)
                     
-                    VStack(alignment: .leading, spacing: entrySpacing) {
+                    LazyVStack(alignment: .leading, spacing: entrySpacing) {
                         ForEach(groups) { group in
                             Text(group.date.asDate.localizedDate)
                                 .font(AppTheme.Fonts.title)

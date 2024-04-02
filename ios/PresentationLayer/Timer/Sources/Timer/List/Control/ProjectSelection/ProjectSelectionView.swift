@@ -33,7 +33,7 @@ struct ProjectSelectionView: View {
                 switch viewModel.state.viewData {
                 case let .data(projects), let .loading(projects):
                     ScrollView {
-                        VStack {
+                        LazyVStack {
                             ForEach(projects) { project in
                                 Button {
                                     viewModel.onIntent(.selectProject(id: project.id))

@@ -32,7 +32,7 @@ struct ClientsView: View {
             switch viewModel.state.clients {
             case let .data(clients), let .loading(clients):
                 ScrollView {
-                    VStack(spacing: spacing) {
+                    LazyVStack(spacing: spacing) {
                         ForEach(clients) { client in
                             ClientRowView(client: client) {
                                 viewModel.onIntent(.showClientDetail(clientId: client.id))
