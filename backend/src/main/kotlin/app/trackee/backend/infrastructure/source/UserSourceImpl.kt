@@ -1,5 +1,6 @@
 package app.trackee.backend.infrastructure.source
 
+import app.trackee.backend.config.exceptions.ClientException
 import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.UserSource
@@ -106,5 +107,26 @@ internal class UserSourceImpl : UserSource {
             .get()
             .await()
             .map { it.id }
+
+    override suspend fun assignClientToUser(uid: String, clientId: String) {
+        val exists = db
+            .collection(SourceConstants.Firestore.Collection.CLIENTS)
+            .document(clientId)
+            .get()
+            .await()
+            .exists()
+
+        if (!exists) throw ClientException.ClientNotFound(clientId)
+
+        val ref = db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.CLIENTS)
+            .document(clientId)
+
+        if (!ref.get().await().exists()) {
+            ref.set(FirestoreUserClient()).await()
+        }
+    }
 }
 

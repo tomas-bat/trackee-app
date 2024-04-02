@@ -13,3 +13,8 @@ internal fun Client.toDto() = ClientDto(
     id = id,
     name = name
 )
+
+internal fun ClientDto.toDomain() = Client(
+    id = id,
+    name = name
+)

@@ -106,4 +106,7 @@ internal class UserRepositoryImpl(
         source.readClientIds(uid).map { clientId ->
             clientSource.readClientById(clientId).toDomain()
         }
+
+    override suspend fun assignClientToUser(uid: String, clientId: String) =
+        source.assignClientToUser(uid, clientId)
 }

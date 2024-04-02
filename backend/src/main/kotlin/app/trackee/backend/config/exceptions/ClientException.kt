@@ -24,4 +24,11 @@ sealed class ClientException(
             append("does not exist")
         }
     )
+
+    class ClientIdMismatch(first: String?, second: String?) : ClientException(
+        publicMessage = buildString {
+            append("Client ID and document ID don't match")
+            if (first != null && second != null) append(" (${first} != ${second})")
+        }
+    )
 }

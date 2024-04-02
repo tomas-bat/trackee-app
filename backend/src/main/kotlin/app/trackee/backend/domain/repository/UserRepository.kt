@@ -34,4 +34,6 @@ interface UserRepository {
     suspend fun deleteEntry(uid: String, entryId: String)
 
     suspend fun readClients(uid: String): List<Client>
+
+    suspend fun assignClientToUser(uid: String, clientId: String)
 }

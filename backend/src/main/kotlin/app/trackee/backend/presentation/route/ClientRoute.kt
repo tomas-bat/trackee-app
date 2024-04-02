@@ -1,6 +1,10 @@
 package app.trackee.backend.presentation.route.user
 
+import app.trackee.backend.config.exceptions.ClientException
 import app.trackee.backend.domain.repository.ClientRepository
+import app.trackee.backend.presentation.model.client.ClientDto
+import app.trackee.backend.presentation.model.client.NewClientDto
+import app.trackee.backend.presentation.model.client.toDomain
 import app.trackee.backend.presentation.model.client.toDto
 import app.trackee.backend.presentation.model.project.toDto
 import com.google.firebase.auth.FirebaseAuth
@@ -18,12 +22,35 @@ fun Routing.clientRoute() {
 
     authenticate {
         route("/clients") {
+            post<NewClientDto> { body ->
+                clientRepository.createClient(body.toDomain())
+
+                call.respond(HttpStatusCode.Created)
+            }
+
             route("/{clientId}") {
                 get {
                     val clientId: String by call.parameters
                     val clientDto = clientRepository.readClientById(clientId).toDto()
 
                     call.respond(HttpStatusCode.OK, clientDto)
+                }
+
+                put<ClientDto> { body ->
+                    val clientId: String by call.parameters
+
+                    if (clientId != body.id) throw ClientException.ClientIdMismatch(clientId, body.id)
+
+                    clientRepository.updateClient(body.toDomain())
+
+                    call.respond(HttpStatusCode.OK)
+                }
+
+                delete {
+                    val clientId: String by call.parameters
+                    clientRepository.deleteClient(clientId)
+
+                    call.respond(HttpStatusCode.OK)
                 }
 
                 route("/projects") {

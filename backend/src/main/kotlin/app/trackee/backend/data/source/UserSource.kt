@@ -23,4 +23,6 @@ internal interface UserSource {
     suspend fun deleteEntry(uid: String, entryId: String)
 
     suspend fun readClientIds(uid: String): List<String>
+
+    suspend fun assignClientToUser(uid: String, clientId: String)
 }
