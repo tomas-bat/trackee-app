@@ -4,6 +4,7 @@ import app.trackee.backend.config.exceptions.ProjectException
 import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.ProjectSource
 import app.trackee.backend.domain.model.project.NewProject
+import app.trackee.backend.domain.model.project.NewProjectResponse
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
 import app.trackee.backend.infrastructure.model.project.FirestoreClientProject
 import app.trackee.backend.infrastructure.model.project.FirestoreProject
@@ -16,7 +17,7 @@ internal class ProjectSourceImpl : ProjectSource {
 
     private val db = GoogleFirestoreClient.getFirestore()
 
-    override suspend fun createProject(project: NewProject) {
+    override suspend fun createProject(project: NewProject): NewProjectResponse {
         val clientProjectRef = db
             .collection(SourceConstants.Firestore.Collection.PROJECTS)
             .document(project.clientId)
@@ -33,6 +34,8 @@ internal class ProjectSourceImpl : ProjectSource {
 
         val firestoreProject = project.toFirestore(id = ref.id)
         ref.set(firestoreProject).await()
+
+        return NewProjectResponse(clientId = project.clientId, projectId = ref.id)
     }
 
     override suspend fun updateProject(project: FirestoreProject) {

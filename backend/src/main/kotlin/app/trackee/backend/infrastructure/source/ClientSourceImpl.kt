@@ -4,6 +4,7 @@ import app.trackee.backend.config.exceptions.ClientException
 import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.ClientSource
 import app.trackee.backend.domain.model.client.NewClient
+import app.trackee.backend.domain.model.client.NewClientResponse
 import app.trackee.backend.infrastructure.model.client.FirestoreClient
 import app.trackee.backend.infrastructure.model.client.toFirestore
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
@@ -143,12 +144,14 @@ internal class ClientSourceImpl : ClientSource {
             .await()
     }
 
-    override suspend fun createClient(client: NewClient) {
+    override suspend fun createClient(client: NewClient): NewClientResponse {
         val ref = db
             .collection(SourceConstants.Firestore.Collection.CLIENTS)
             .document()
 
         val firestoreClient = client.toFirestore(id = ref.id)
         ref.set(firestoreClient).await()
+
+        return NewClientResponse(clientId = ref.id)
     }
 }

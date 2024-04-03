@@ -19,3 +19,10 @@ fun ProjectDto.toDomain() = Project(
     type = ProjectType.entries.firstOrNull { it.rawValue == type },
     name = name
 )
+
+fun Project.toDto() = ProjectDto(
+    id = id,
+    clientId = clientId,
+    type = type?.rawValue,
+    name = name
+)

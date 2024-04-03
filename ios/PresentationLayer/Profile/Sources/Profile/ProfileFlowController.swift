@@ -9,11 +9,23 @@ import UIToolkit
 
 enum ProfileFlow: Flow, Equatable {
     case overview(Overview)
+    case clients(Clients)
+    case projects(Projects)
     
     enum Overview: Equatable {
         case presentOnboarding
         case showClients
         case showProjects
+    }
+    
+    enum Clients: Equatable {
+        case showDetail
+        case showNewClient
+    }
+    
+    enum Projects: Equatable {
+        case showDetail
+        case showNewProject
     }
 }
 
@@ -34,6 +46,8 @@ public final class ProfileFlowController: FlowController {
         guard let profileFlow = flow as? ProfileFlow else { return }
         switch profileFlow {
         case let .overview(flow): handleOverviewFlow(flow)
+        case let .clients(flow): handleClientsFlow(flow)
+        case let .projects(flow): handleProjectsFlow(flow)
         }
     }
 }
@@ -64,3 +78,41 @@ extension ProfileFlowController {
         
     }
 }
+
+// MARK: Clients flow
+extension ProfileFlowController {
+    func handleClientsFlow(_ flow: ProfileFlow.Clients) {
+        switch flow {
+        case .showDetail: showClientDetail()
+        case .showNewClient: showNewClient()
+        }
+    }
+    
+    private func showClientDetail() {
+        
+    }
+    
+    private func showNewClient() {
+        
+    }
+}
+
+// MARK: Projects flow
+extension ProfileFlowController {
+    func handleProjectsFlow(_ flow: ProfileFlow.Projects) {
+        switch flow {
+        case .showDetail: showProjectDetail()
+        case .showNewProject: showNewProject()
+        }
+    }
+    
+    private func showProjectDetail() {
+        
+    }
+    
+    private func showNewProject() {
+        
+    }
+}
+
+

@@ -23,9 +23,9 @@ fun Routing.clientRoute() {
     authenticate {
         route("/clients") {
             post<NewClientDto> { body ->
-                clientRepository.createClient(body.toDomain())
+                val responseDto = clientRepository.createClient(body.toDomain()).toDto()
 
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.Created, responseDto)
             }
 
             route("/{clientId}") {

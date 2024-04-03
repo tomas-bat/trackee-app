@@ -5,6 +5,7 @@ import app.trackee.backend.domain.repository.ProjectRepository
 import app.trackee.backend.presentation.model.project.NewProjectDto
 import app.trackee.backend.presentation.model.project.ProjectDto
 import app.trackee.backend.presentation.model.project.toDomain
+import app.trackee.backend.presentation.model.project.toDto
 import com.google.firebase.auth.FirebaseAuth
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -21,9 +22,9 @@ fun Routing.projectRoute() {
     authenticate {
         route("/projects") {
             post<NewProjectDto> { body ->
-                projectRepository.createProject(body.toDomain())
+                val responseDto = projectRepository.createProject(body.toDomain()).toDto()
 
-                call.respond(HttpStatusCode.Created)
+                call.respond(HttpStatusCode.Created, responseDto)
             }
 
             route("/{projectId}") {

@@ -806,6 +806,64 @@
 		en = Clients
 		sk = Klienti
 
+[[Client Detail View]]
+	[client_detail_new_client_title]
+		cs = Nový klient
+		en = New client
+		sk = Nový klient
+	[client_detail_edit_client_title]
+		cs = Klient
+		en = Client
+		sk = Klient
+	[client_detail_view_name_label]
+		cs = Název
+		en = Name
+		sk = Názov
+	[client_detail_view_name_placeholder]
+		cs = Název klienta
+		en = Client name
+		sk = Názov klienta
+	[client_detail_remove_client]
+		cs = Smazat klienta
+		en = Remove client
+		sk = Zmazať klienta
+
+[[Project Detail View]]
+	[project_detail_new_project_title]
+		cs = Nový projekt
+		en = New project
+		sk = Nový projekt
+	[project_detail_edit_project_title]
+		cs = Projekt
+		en = Project
+		sk = Projekt
+	[project_detail_view_name_label]
+		cs = Název
+		en = Name
+		sk = Názov
+	[project_detail_view_name_placeholder]
+		cs = Název projektu
+		en = Project name
+		sk = Názov projektu
+	[project_detail_view_client_label]
+		cs = Klient
+		en = Client
+		sk = Klient
+	[project_detail_remove_project]
+		cs = Smazat projekt
+		en = Remove projetc
+		sk = Zmazať projekt
+
+[[Client Selection View]]
+	[client_selection_view_title]
+		cs = Výběr klienta
+		en = Client selection
+		sk = Výber klienta
+	[client_selection_view_no_clients]
+		cs = Nemáte žádné klienty. Vytvořte si je v profilu.
+		en = You don't have any clients. Create them in the profile tab.
+		sk = Nemáte žiadnych klientov. Vytvorte si ich v profile.
+
 
 
 

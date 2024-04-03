@@ -3,6 +3,7 @@ package app.trackee.backend.data.repository
 import app.trackee.backend.data.source.ClientSource
 import app.trackee.backend.domain.model.client.Client
 import app.trackee.backend.domain.model.client.NewClient
+import app.trackee.backend.domain.model.client.NewClientResponse
 import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.repository.ClientRepository
 import app.trackee.backend.infrastructure.model.client.toDomain
@@ -21,7 +22,7 @@ internal class ClientRepositoryImpl(
     override suspend fun readProject(clientId: String, projectId: String): Project =
         source.readProjectById(clientId, projectId).toDomain()
 
-    override suspend fun createClient(client: NewClient) =
+    override suspend fun createClient(client: NewClient): NewClientResponse =
         source.createClient(client)
 
     override suspend fun updateClient(client: Client) =

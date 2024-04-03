@@ -67,9 +67,11 @@ struct ProfileView: View {
 #if DEBUG
 import DependencyInjectionMocks
 import Factory
+import Utilities
 
 #Preview {
     Container.shared.registerUseCaseMocks()
+    Environment.locale = .init(identifier: "cs")
     
     let vm = ProfileViewModel(flowController: nil)
     return NavigationStack {
