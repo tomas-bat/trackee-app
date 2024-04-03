@@ -109,4 +109,7 @@ internal class UserRepositoryImpl(
 
     override suspend fun assignClientToUser(uid: String, clientId: String) =
         source.assignClientToUser(uid, clientId)
+
+    override suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String) =
+        source.assignProjectToUser(uid, clientId, projectId)
 }

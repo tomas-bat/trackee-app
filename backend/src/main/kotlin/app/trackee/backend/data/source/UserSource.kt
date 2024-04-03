@@ -25,4 +25,6 @@ internal interface UserSource {
     suspend fun readClientIds(uid: String): List<String>
 
     suspend fun assignClientToUser(uid: String, clientId: String)
+
+    suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String)
 }

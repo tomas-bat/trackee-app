@@ -1,5 +1,6 @@
 package app.trackee.backend.plugins
 
+import app.trackee.backend.presentation.route.projectRoute
 import app.trackee.backend.presentation.route.user.clientRoute
 import app.trackee.backend.presentation.route.user.userRoute
 import io.ktor.http.*
@@ -24,5 +25,6 @@ fun Application.configureRouting() {
         }
         userRoute()
         clientRoute()
+        projectRoute()
     }
 }

@@ -122,6 +122,16 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK, projectPreviewDtos)
                 }
+
+                put("/add") {
+                    val user = call.requireUserPrincipal().user
+                    val clientId: String by call.request.queryParameters
+                    val projectId: String by call.request.queryParameters
+
+                    userRepository.assignProjectToUser(user.uid, clientId, projectId)
+
+                    call.respond(HttpStatusCode.OK)
+                }
             }
 
             route("/clients") {

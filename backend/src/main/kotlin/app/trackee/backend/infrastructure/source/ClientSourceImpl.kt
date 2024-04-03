@@ -8,6 +8,7 @@ import app.trackee.backend.infrastructure.model.client.FirestoreClient
 import app.trackee.backend.infrastructure.model.client.toFirestore
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
 import app.trackee.backend.infrastructure.model.project.FirestoreProject
+import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import com.google.firebase.cloud.FirestoreClient as GoogleFirestoreClient
 
 internal class ClientSourceImpl : ClientSource {
@@ -78,18 +79,27 @@ internal class ClientSourceImpl : ClientSource {
         db
             .collection(SourceConstants.Firestore.Collection.USERS)
             .listDocuments()
-            .map { userDocRef ->
+            .forEach { userDocRef ->
                 userDocRef
                     .collection(SourceConstants.Firestore.Collection.CLIENTS)
                     .listDocuments()
                     .filter { it.id == clientId }
-            }
-            .flatten()
-            .forEach { userClient ->
-                print("[DEBUG] Delete ${userClient.path}")
-//                userClient
-//                    .delete()
-//                    .await()
+                    .forEach { userClient ->
+                        userClient
+                            .delete()
+                            .await()
+                    }
+
+                if (userDocRef.get().await().toObject(FirestoreUser::class.java)?.timerData?.clientId == clientId) {
+                    userDocRef.update(
+                        SourceConstants.Firestore.FieldName.TIMER_DATA_CLIENT_ID,
+                        null
+                    )
+                    userDocRef.update(
+                        SourceConstants.Firestore.FieldName.TIMER_DATA_PROJECT_ID,
+                        null
+                    )
+                }
             }
 
         // Delete projects of this client
@@ -98,10 +108,9 @@ internal class ClientSourceImpl : ClientSource {
             .listDocuments()
             .filter { it.id == clientId }
             .forEach { projectClient ->
-                print("[DEBUG] Delete ${projectClient.path}")
-//                projectClient
-//                    .delete()
-//                    .await()
+                projectClient
+                    .delete()
+                    .await()
             }
 
         // Delete entries of projects of this client
@@ -120,10 +129,9 @@ internal class ClientSourceImpl : ClientSource {
                             ?.clientId == clientId
                     }
                     .forEach { entryRef ->
-                        print("[DEBUG] Delete ${entryRef.path}")
-//                        entryRef
-//                            .delete()
-//                            .await()
+                        entryRef
+                            .delete()
+                            .await()
                     }
             }
 
@@ -131,11 +139,8 @@ internal class ClientSourceImpl : ClientSource {
         db
             .collection(SourceConstants.Firestore.Collection.CLIENTS)
             .document(clientId)
-            .also {
-                print("[DEBUG] Delete ${it.path}")
-            }
-//            .delete()
-//            .await()
+            .delete()
+            .await()
     }
 
     override suspend fun createClient(client: NewClient) {

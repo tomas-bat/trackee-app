@@ -15,6 +15,9 @@ internal class SourceConstants {
             companion object {
                 const val TIMER_DATA = "timer_data"
                 const val STARTED_AT = "started_at"
+                const val PROJECT_IDS = "project_ids"
+                const val TIMER_DATA_PROJECT_ID = "timer_data.project_id"
+                const val TIMER_DATA_CLIENT_ID = "timer_data.client_id"
             }
         }
     }

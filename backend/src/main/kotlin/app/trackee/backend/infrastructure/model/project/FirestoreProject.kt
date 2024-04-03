@@ -1,5 +1,6 @@
 package app.trackee.backend.infrastructure.model.project
 
+import app.trackee.backend.domain.model.project.NewProject
 import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.project.ProjectType
 import com.google.cloud.firestore.annotation.PropertyName
@@ -20,4 +21,18 @@ internal fun FirestoreProject.toDomain(): Project = Project(
     clientId = clientId,
     type = ProjectType.entries.firstOrNull { it.rawValue == type },
     name = name
+)
+
+internal fun NewProject.toFirestore(id: String) = FirestoreProject(
+    id = id,
+    type = type?.rawValue,
+    name = name,
+    clientId = clientId
+)
+
+internal fun Project.toFirestore() = FirestoreProject(
+    id = id,
+    type = type?.rawValue,
+    name = name,
+    clientId = clientId
 )
