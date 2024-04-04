@@ -33,9 +33,18 @@ enum ProfileFlow: Flow, Equatable {
     }
     
     enum Projects: Equatable {
-        case showDetail(projectId: String)
-        case showNewProject
+        case showDetail(clientId: String, projectId: String, delegate: ProjectDetailViewModelDelegate?)
+        case showNewProject(delegate: ProjectDetailViewModelDelegate?)
         case dismissModal
+        case pop
+        
+        static func == (lhs: ProfileFlow.Projects, rhs: ProfileFlow.Projects) -> Bool {
+            switch (lhs, rhs) {
+            case (.showDetail, .showDetail), (.showNewProject, .showNewProject),
+                (.dismissModal, .dismissModal), (.pop, .pop): true
+            default: false
+            }
+        }
     }
 }
 
@@ -85,7 +94,11 @@ extension ProfileFlowController {
     }
     
     private func showProjects() {
+        let vm = ProjectsViewModel(flowController: self)
+        let view = ProjectsView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
         
+        navigationController.pushViewController(vc, animated: true)
     }
 }
 
@@ -122,18 +135,48 @@ extension ProfileFlowController {
 extension ProfileFlowController {
     func handleProjectsFlow(_ flow: ProfileFlow.Projects) {
         switch flow {
-        case let .showDetail(projectId): showProjectDetail(projectId: projectId)
-        case .showNewProject: showNewProject()
+        case let .showDetail(clientId, projectId, delegate): showProjectDetail(clientId: clientId, projectId: projectId, delegate: delegate)
+        case let .showNewProject(delegate): showNewProject(delegate: delegate)
         case .dismissModal: navigationController.presentedViewController?.dismiss(animated: true)
+        case .pop: pop()
         }
     }
     
-    private func showProjectDetail(projectId: String) {
-        
+    private func showProjectDetail(
+        clientId: String,
+        projectId: String,
+        delegate: ProjectDetailViewModelDelegate?
+    ) {
+        startProjectDetailFlow(
+            editingClientId: clientId,
+            editingProejctId: projectId,
+            delegate: delegate
+        )
     }
     
-    private func showNewProject() {
-        
+    private func showNewProject(delegate: ProjectDetailViewModelDelegate?) {
+        startProjectDetailFlow(
+            editingClientId: nil,
+            editingProejctId: nil,
+            delegate: delegate
+        )
+    }
+    
+    private func startProjectDetailFlow(
+        editingClientId: String?,
+        editingProejctId: String?,
+        delegate: ProjectDetailViewModelDelegate?
+    ) {
+        let nc = BaseNavigationController()
+        let fc = ProjectDetailFlowController(
+            editingClientId: editingClientId,
+            editingProejctId: editingProejctId,
+            delegate: delegate,
+            navigationController: nc
+        )
+        let rootVC = startChildFlow(fc)
+        nc.viewControllers = [rootVC]
+        navigationController.present(nc, animated: true)
     }
 }
 

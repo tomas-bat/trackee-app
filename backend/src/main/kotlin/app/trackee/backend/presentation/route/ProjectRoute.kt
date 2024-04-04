@@ -39,10 +39,11 @@ fun Routing.projectRoute() {
 
                 put<ProjectDto> { body ->
                     val projectId: String by call.parameters
+                    val originalClientId: String by call.request.queryParameters
 
                     if (projectId != body.id) throw ProjectException.ProjectIdMismatch(projectId, body.id)
 
-                    projectRepository.updateProject(body.toDomain())
+                    projectRepository.updateProject(originalClientId, body.toDomain())
 
                     call.respond(HttpStatusCode.OK)
                 }

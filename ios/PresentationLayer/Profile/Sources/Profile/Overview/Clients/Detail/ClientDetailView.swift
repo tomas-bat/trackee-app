@@ -55,12 +55,14 @@ struct ClientDetailView: View {
                 }
             }
             .skeleton(viewModel.state.isLoading)
+            .animateContent(viewModel.state.isLoading)
             .scrollBounceBehavior(.basedOnSize)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(AppTheme.Colors.background)
             .navigationTitle(navigationTitle)
             .toolbar(.visible)
             .toolbarTitleDisplayMode(.inline)
+            .interactiveDismissDisabled()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L10n.cancel) {

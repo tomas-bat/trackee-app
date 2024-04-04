@@ -13,6 +13,7 @@ extension ProfileError: LocalizedError {
         case let .validation(reason):
             switch reason {
             case .nameTooShort: L10n.client_detail_name_too_short
+            case .missingClient: L10n.project_detail_view_missing_client
             }
         }
     }

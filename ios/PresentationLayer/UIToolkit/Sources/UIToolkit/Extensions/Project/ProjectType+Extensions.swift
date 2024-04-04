@@ -7,7 +7,7 @@ import Foundation
 import KMPSharedDomain
 import SwiftUI
 
-extension ProjectType {
+public extension ProjectType {
     var image: Image {
         switch self {
         case .school: Image(systemSymbol: .graduationcap)

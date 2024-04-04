@@ -840,6 +840,12 @@
 		en = Are you sure you want to remove this client? All projects and timer entries belonging to this client will be removed.
 		sk = Naozaj chcete zmazať tohto klienta? Budú zmazané všetky projekty a časové zápisy, ktoré k nemu patria.
 
+[[Projects View]]
+	[projects_view_title]
+		cs = Projekty
+		en = Projects
+		sk = Projekty
+
 [[Project Detail View]]
 	[project_detail_new_project_title]
 		cs = Nový projekt
@@ -861,9 +867,21 @@
 		cs = Klient
 		en = Client
 		sk = Klient
+	[project_detail_view_client_none_selected]
+		cs = Vyber
+		en = Select
+		sk = Vyber
+	[project_detail_view_type_label]
+		cs = Typ projektu
+		en = Project type
+		sk = Typ projektu
+	[project_detail_view_type_none]
+		cs = Žádný
+		en = None
+		sk = Žiadny
 	[project_detail_remove_project]
 		cs = Smazat projekt
-		en = Remove projetc
+		en = Remove project
 		sk = Zmazať projekt
 	[project_detail_name_too_short]
 		cs = Název projektu musí mít alespoň 2 znaky
@@ -877,6 +895,10 @@
 		cs = Opravdu chcete smazat tento projekt? Budou smazány všechny časové zápisy, které k němu patří.
 		en = Are you sure you want to remove this project? All timer entries belonging to this project will be removed.
 		sk = Naozaj chcete zmazať tento projekt? Budú zmazané všetky časové zápisy, ktoré k nemu patria.
+	[project_detail_view_missing_client]
+		cs = Vyberte klienta
+		en = Choose a client
+		sk = Vyberte klienta
 
 [[Client Selection View]]
 	[client_selection_view_title]

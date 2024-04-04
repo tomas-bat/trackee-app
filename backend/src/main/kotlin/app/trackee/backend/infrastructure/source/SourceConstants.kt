@@ -18,6 +18,7 @@ internal class SourceConstants {
                 const val PROJECT_IDS = "project_ids"
                 const val TIMER_DATA_PROJECT_ID = "timer_data.project_id"
                 const val TIMER_DATA_CLIENT_ID = "timer_data.client_id"
+                const val CLIENT_ID = "client_id"
             }
         }
     }

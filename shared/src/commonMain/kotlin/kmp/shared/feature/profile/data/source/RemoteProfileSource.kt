@@ -27,7 +27,7 @@ internal interface RemoteProfileSource {
 
     suspend fun readProjectPreview(clientId: String, projectId: String): Result<ProjectPreview>
 
-    suspend fun updateProject(project: Project): Result<Unit>
+    suspend fun updateProject(originalClientId: String, project: Project): Result<Unit>
 
     suspend fun deleteProject(clientId: String, projectId: String): Result<Unit>
 

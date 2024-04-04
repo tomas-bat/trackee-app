@@ -10,5 +10,6 @@ public enum ProfileError {
     
     public enum Validation {
         case nameTooShort
+        case missingClient
     }
 }

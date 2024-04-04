@@ -90,10 +90,13 @@ internal class RemoteProfileSourceImpl(
             res.body<ProjectPreviewDto>().toDomain()
         }
 
-    override suspend fun updateProject(project: Project): Result<Unit> =
+    override suspend fun updateProject(originalClientId: String, project: Project): Result<Unit> =
         runCatchingCommonNetworkExceptions {
             client.put("/projects/${project.id}") {
                 setBody(project.toDto())
+                url {
+                    parameters.append("originalClientId", originalClientId)
+                }
             }
 
             Result.Success(Unit)

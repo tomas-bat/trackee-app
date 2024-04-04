@@ -30,8 +30,8 @@ internal class ProjectRepositoryImpl(
         )
     }
 
-    override suspend fun updateProject(project: Project) =
-        source.updateProject(project.toFirestore())
+    override suspend fun updateProject(originalClientId: String, project: Project) =
+        source.updateProject(originalClientId, project.toFirestore())
 
     override suspend fun deleteProject(clientId: String, projectId: String) =
         source.deleteProject(clientId, projectId)

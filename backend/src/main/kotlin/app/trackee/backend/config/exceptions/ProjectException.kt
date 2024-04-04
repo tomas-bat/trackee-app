@@ -23,4 +23,12 @@ sealed class ProjectException(
             if (first != null && second != null) append(" (${first} != ${second})")
         }
     )
+
+    class FailedToDecodeProject : ClientException(
+        publicMessage = "The project object could not be decoded"
+    )
+
+    class FailedToDecodeEntry : ClientException(
+        publicMessage = "The entry object could not be decoded"
+    )
 }

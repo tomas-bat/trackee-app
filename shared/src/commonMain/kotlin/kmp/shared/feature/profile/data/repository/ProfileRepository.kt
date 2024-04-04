@@ -40,8 +40,8 @@ internal class ProfileRepositoryImpl(
     override suspend fun readProjectPreview(clientId: String, projectId: String): Result<ProjectPreview> =
         source.readProjectPreview(clientId, projectId)
 
-    override suspend fun updateProject(project: Project): Result<Unit> =
-        source.updateProject(project)
+    override suspend fun updateProject(originalClientId: String, project: Project): Result<Unit> =
+        source.updateProject(originalClientId, project)
 
     override suspend fun deleteProject(clientId: String, projectId: String): Result<Unit> =
         source.deleteProject(clientId, projectId)

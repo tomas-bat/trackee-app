@@ -11,7 +11,7 @@ interface ProjectRepository {
 
     suspend fun readProjectPreview(clientId: String, projectId: String): ProjectPreview
 
-    suspend fun updateProject(project: Project)
+    suspend fun updateProject(originalClientId: String, project: Project)
 
     suspend fun deleteProject(clientId: String, projectId: String)
 }
