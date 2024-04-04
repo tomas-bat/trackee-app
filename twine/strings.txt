@@ -689,6 +689,14 @@
 		cs = Registrovat
 		en = Register
 		sk = Registrovať
+	[login_view_logged_out_info]
+		cs = Byli jste odhlášeni
+		en = You have been logged out
+		sk = Boli ste odhlásení
+	[login_view_account_deleted_info]
+		cs = Váš účet byl smazán
+		en = Your account has been deleted
+		sk = Váš účet bol zmazaný
 
 [[Register View]]
 	[register_view_navigation_title]
@@ -799,6 +807,18 @@
 		cs = Odhlásit se
 		en = Sign out
 		sk = Odhlásiť sa
+	[profile_view_delete_user_button_title]
+		cs = Smazat účet
+		en = Delete account
+		sk = Zmazať účet
+	[profile_view_delete_user_alert_title]
+		cs = Smazat účet
+		en = Delete account
+		sk = Zmazať účet
+	[profile_view_delete_user_alert_message]
+		cs = Určitě chcete smazat svůj účet? Všechny vaše záznamy budou smazány.
+		en = Are you sure you want to delete your account? All your timer entries will be deleted.
+		sk = Určite chcete zmazať svoj účet? Všetky vaše záznamy budú zmazané.
 
 [[Clients View]]
 	[clients_view_title]

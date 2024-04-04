@@ -29,6 +29,36 @@ internal class UserSourceImpl : UserSource {
             ?: throw UserException.UserNotFound(uid = uid)
     }
 
+    override suspend fun deleteUser(uid: String) {
+        // Delete user's entries
+        val userEntriesRef = db
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(uid)
+
+        userEntriesRef
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .listDocuments()
+            .forEach { entryRef ->
+                entryRef.delete().await()
+            }
+
+        userEntriesRef.delete().await()
+
+        // Delete user
+        val userRef = db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .document(uid)
+
+        userRef
+            .collection(SourceConstants.Firestore.Collection.CLIENTS)
+            .listDocuments()
+            .forEach { userClientRef ->
+                userClientRef.delete().await()
+            }
+
+        userRef.delete().await()
+    }
+
     override suspend fun readEntries(uid: String): List<FirestoreTimerEntry> {
         val snapshot = db
             .collection(SourceConstants.Firestore.Collection.ENTRIES)

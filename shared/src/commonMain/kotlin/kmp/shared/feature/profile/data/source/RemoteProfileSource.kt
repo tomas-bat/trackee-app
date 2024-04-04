@@ -32,4 +32,6 @@ internal interface RemoteProfileSource {
     suspend fun deleteProject(clientId: String, projectId: String): Result<Unit>
 
     suspend fun assignProjectToUser(clientId: String, projectId: String): Result<Unit>
+
+    suspend fun deleteUser(): Result<Unit>
 }

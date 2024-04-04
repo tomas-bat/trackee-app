@@ -158,12 +158,14 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 await updateTimerData()
             case (.manual, _):
                 guard let end = state.manualTimerEnd, data.startedAt != nil else {
+                    snackState.currentData?.dismiss()
                     await snackState.showSnack(.error(message: L10n.timer_view_time_range_missing, actionLabel: nil))
                     return
                 }
                 try await saveNewEntry(with: data, endedAt: end)
             }
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
@@ -364,6 +366,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             let params = UpdateTimerDataUseCaseParams(timerData: rawTimerData)
             try await updateTimerDataUseCase.execute(params: params)
         } catch {
+            snackState.currentData?.dismiss()
             await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
@@ -377,6 +380,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             try await deleteTimerEntryUseCase.execute(params: params)
             await fetchData(showLoading: false)
         } catch {
+            snackState.currentData?.dismiss()
             await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }

@@ -13,6 +13,8 @@ import app.trackee.backend.domain.model.user.User
 interface UserRepository {
     suspend fun readUserByUid(uid: String): User
 
+    suspend fun deleteUser(uid: String)
+
     suspend fun readEntries(uid: String): List<TimerEntry>
 
     suspend fun readProjects(uid: String): List<Project>

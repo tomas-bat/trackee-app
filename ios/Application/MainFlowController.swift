@@ -15,7 +15,11 @@ enum MainTab: Int {
 }
 
 protocol MainFlowControllerDelegate: AnyObject {
-    func presentOnboarding(animated: Bool, completion: (() -> Void)?)
+    func presentOnboarding(
+        message: String?,
+        animated: Bool,
+        completion: (() -> Void)?
+    )
 }
 
 final class MainFlowController: FlowController, ProfileFlowControllerDelegate, TimerFlowControllerDelegate {
@@ -56,11 +60,14 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate, T
         return profileNC
     }
     
-    func presentOnboarding() {
-        delegate?.presentOnboarding(animated: true, completion: { [weak self] in
+    func presentOnboarding(message: String?) {
+        delegate?.presentOnboarding(
+            message: message,
+            animated: true
+        ) { [weak self] in
             self?.navigationController.viewControllers = []
             self?.stopFlow()
-        })
+        }
     }
     
     @discardableResult private func switchTab(_ index: MainTab) -> FlowController? {

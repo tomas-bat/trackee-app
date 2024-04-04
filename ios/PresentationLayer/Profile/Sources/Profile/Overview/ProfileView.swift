@@ -35,6 +35,16 @@ struct ProfileView: View {
                     viewModel.onIntent(.showProjects)
                 }
             }
+            
+            Section {
+                Button(L10n.profile_view_delete_user_button_title) {
+                    viewModel.onIntent(.deleteAccount)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.loading)
+                .foregroundStyle(AppTheme.Colors.destructive)
+                .environment(\.isLoading, viewModel.state.deleteLoading)
+            }
         }
         .foregroundStyle(AppTheme.Colors.foreground)
         .scrollBounceBehavior(.basedOnSize)
@@ -47,6 +57,12 @@ struct ProfileView: View {
         }
         .navigationTitle(L10n.profile_view_title)
         .toolbar(.visible)
+        .snack(viewModel.snackState)
+        .alert(item: Binding<AlertData?>(
+            get: { viewModel.state.alertData },
+            set: { data in viewModel.onIntent(.changeAlertData(to: data)) }
+        )) { data in .init(data) }
+        .lifecycle(viewModel)
     }
     
     // MARK: - Private

@@ -36,8 +36,6 @@ struct ClientsView: View {
                         ForEach(0..<clients.count, id: \.self) { idx in
                             let client = clients[idx]
                             
-                            
-                            
                             ClientRowView(client: client) {
                                 viewModel.onIntent(.showClientDetail(clientId: client.id))
                             }

@@ -13,23 +13,33 @@ import KMPSharedDomain
 
 final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     
+    // MARK: - Constants
+    
+    private let messageDelay: TimeInterval = 0.5
+    
     // MARK: - Dependencies
+    
     private weak var flowController: FlowController?
     
     @Injected(\.loginWithCredentialsUseCase) private var loginWithCredentialsUseCase
     
     // MARK: - Stored properties
     
-    
+    private var message: String?
     
     // MARK: - Init
 
-    init(flowController: FlowController?) {
+    init(
+        message: String? = nil,
+        flowController: FlowController?
+    ) {
         self.flowController = flowController
+        self.message = message
         super.init()
         
-        if Environment.flavor == .debug && Environment.type == .alpha {
-            
+        if Utilities.Environment.type == .alpha, Utilities.Environment.flavor == .debug {
+            state.email = "tomas.batek@matee.cz"
+            state.password = "Sygbos-tyfxih-7xydra"
         }
     }
     
@@ -38,9 +48,13 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     override func onAppear() {
         super.onAppear()
         
-        if Utilities.Environment.type == .alpha, Utilities.Environment.flavor == .debug {
-            state.email = "tomas.batek@matee.cz"
-            state.password = "Sygbos-tyfxih-7xydra"
+        if let message {
+            Task.delayed(byTimeInterval: messageDelay) { [weak self] in
+                guard !Task.isCancelled else { return }
+                self?.snackState.currentData?.dismiss()
+                self?.snackState.showSnackSync(.info(message: message))
+                self?.message = nil
+            }
         }
     }
     

@@ -37,4 +37,5 @@ public extension Container {
     var getProjectPreviewUseCase: Factory<GetProjectPreviewUseCase> { self { self.kmp().get(GetProjectPreviewUseCase.self) } }
     var updateProjectUseCase: Factory<UpdateProjectUseCase> { self { self.kmp().get(UpdateProjectUseCase.self) } }
     var removeProjectUseCase: Factory<RemoveProjectUseCase> { self { self.kmp().get(RemoveProjectUseCase.self) } }
+    var deleteUserUseCase: Factory<DeleteUserUseCase> { self { self.kmp().get(DeleteUserUseCase.self) } }
 }

@@ -48,4 +48,7 @@ internal class ProfileRepositoryImpl(
 
     override suspend fun assignProjectToUser(clientId: String, projectId: String): Result<Unit> =
         source.assignProjectToUser(clientId, projectId)
+
+    override suspend fun deleteUser(): Result<Unit> =
+        source.deleteUser()
 }

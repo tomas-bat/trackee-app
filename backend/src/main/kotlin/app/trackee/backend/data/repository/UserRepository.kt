@@ -27,6 +27,9 @@ internal class UserRepositoryImpl(
     override suspend fun readUserByUid(uid: String): User =
         source.readUserByUid(uid).toDomain()
 
+    override suspend fun deleteUser(uid: String) =
+        source.deleteUser(uid)
+
     override suspend fun readEntries(uid: String): List<TimerEntry> =
         source.readEntries(uid).map { it.toDomain() }
 

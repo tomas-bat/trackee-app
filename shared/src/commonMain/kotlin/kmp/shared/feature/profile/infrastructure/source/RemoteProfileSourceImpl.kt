@@ -124,4 +124,10 @@ internal class RemoteProfileSourceImpl(
 
             Result.Success(Unit)
         }
+
+    override suspend fun deleteUser(): Result<Unit> =
+        runCatchingCommonNetworkExceptions {
+            client.delete("/user")
+            Result.Success(Unit)
+        }
 }

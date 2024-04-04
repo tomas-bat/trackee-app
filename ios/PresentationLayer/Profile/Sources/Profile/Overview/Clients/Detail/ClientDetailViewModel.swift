@@ -109,6 +109,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
                 
             didFetch = true
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
@@ -140,6 +141,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             await delegate?.refreshClients()
             dismiss()
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
@@ -179,6 +181,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             await delegate?.refreshClients()
             dismiss()
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }

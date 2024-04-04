@@ -10,6 +10,8 @@ import app.trackee.backend.infrastructure.model.user.FirestoreUser
 internal interface UserSource {
     suspend fun readUserByUid(uid: String): FirestoreUser
 
+    suspend fun deleteUser(uid: String)
+
     suspend fun readEntries(uid: String): List<FirestoreTimerEntry>
 
     suspend fun readProjectIds(uid: String): List<IdentifiableProject>

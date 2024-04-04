@@ -33,6 +33,6 @@ public final class AddAndAssignProjectUseCaseMock: UseCaseResultMock, AddAndAssi
 public final class GetProjectPreviewUseCaseMock: UseCaseResultMock, GetProjectPreviewUseCase {}
 public final class UpdateProjectUseCaseMock: UseCaseResultMock, UpdateProjectUseCase {}
 public final class RemoveProjectUseCaseMock: UseCaseResultMock, RemoveProjectUseCase {}
-
+public final class DeleteUserUseCaseMock: UseCaseResultNoParamsMock, DeleteUserUseCase {}
 
 

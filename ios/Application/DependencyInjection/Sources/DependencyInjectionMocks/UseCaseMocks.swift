@@ -97,6 +97,9 @@ public extension Container {
         removeProjectUseCase.register {
             RemoveProjectUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        deleteUserUseCase.register {
+            DeleteUserUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

@@ -44,6 +44,18 @@ fun Routing.userRoute() {
         }
 
         route("/user") {
+            get {
+                val userDto = call.requireUserPrincipal().user.toDto()
+                call.respond(HttpStatusCode.OK, userDto)
+            }
+
+            delete {
+                val user = call.requireUserPrincipal().user
+                userRepository.deleteUser(user.uid)
+
+                call.respond(HttpStatusCode.OK)
+            }
+
             route("/entries") {
                 get {
                     val user = call.requireUserPrincipal().user
@@ -101,11 +113,6 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK, timerDataPreviewDto)
                 }
-            }
-
-            get {
-                val userDto = call.requireUserPrincipal().user.toDto()
-                call.respond(HttpStatusCode.OK, userDto)
             }
 
             route("/projects") {

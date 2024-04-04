@@ -101,6 +101,7 @@ final class TimeSelectionViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func save() {
         guard state.start < state.end else {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(
                 .error(
                     message: L10n.time_selection_view_wrong_range,

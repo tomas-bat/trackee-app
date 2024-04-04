@@ -28,4 +28,5 @@ internal val profileModule = module {
     factoryOf(::GetProjectPreviewUseCaseImpl) bind GetProjectPreviewUseCase::class
     factoryOf(::UpdateProjectUseCaseImpl) bind UpdateProjectUseCase::class
     factoryOf(::RemoveProjectUseCaseImpl) bind RemoveProjectUseCase::class
+    factoryOf(::DeleteUserUseCaseImpl) bind DeleteUserUseCase::class
 }

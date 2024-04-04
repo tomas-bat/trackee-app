@@ -30,7 +30,11 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
             if isLoggedIn {
                 setupMain()
             } else {
-                presentOnboarding(animated: false, completion: nil)
+                presentOnboarding(
+                    message: nil,
+                    animated: false,
+                    completion: nil
+                )
             }
         }
     }
@@ -42,9 +46,16 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
         navigationController.viewControllers = [rootVC]
     }
     
-    func presentOnboarding(animated: Bool, completion: (() -> Void)?) {
+    func presentOnboarding(
+        message: String?,
+        animated: Bool,
+        completion: (() -> Void)?
+    ) {
         let nc = BaseNavigationController()
-        let fc = OnboardingFlowController(navigationController: nc)
+        let fc = OnboardingFlowController(
+            message: message,
+            navigationController: nc
+        )
         fc.delegate = self
         let rootVC = startChildFlow(fc)
         nc.viewControllers = [rootVC]

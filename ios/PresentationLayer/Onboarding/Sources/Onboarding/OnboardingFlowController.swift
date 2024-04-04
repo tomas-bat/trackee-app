@@ -30,8 +30,21 @@ public final class OnboardingFlowController: FlowController {
     
     public weak var delegate: OnboardingFlowControllerDelegate?
     
+    private let message: String?
+    
+    public init(
+        message: String?,
+        navigationController: UINavigationController
+    ) {
+        self.message = message
+        super.init(navigationController: navigationController)
+    }
+    
     override public func setup() -> UIViewController {
-        let vm = LoginViewModel(flowController: self)
+        let vm = LoginViewModel(
+            message: message,
+            flowController: self
+        )
         return BaseHostingController(rootView: LoginView(viewModel: vm))
     }
     

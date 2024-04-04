@@ -7,6 +7,7 @@ import Foundation
 
 @MainActor
 public extension Task where Failure == Error {
+    @discardableResult
     static func delayed(
         byTimeInterval delayInterval: TimeInterval,
         priority: TaskPriority? = nil,

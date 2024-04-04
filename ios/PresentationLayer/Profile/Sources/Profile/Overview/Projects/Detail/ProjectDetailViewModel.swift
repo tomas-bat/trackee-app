@@ -128,6 +128,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
                 
             didFetch = true
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
@@ -175,6 +176,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             await delegate?.refreshProjects()
             dismiss()
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
@@ -224,6 +226,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             await delegate?.refreshProjects()
             dismiss()
         } catch {
+            snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }

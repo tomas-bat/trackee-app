@@ -13,7 +13,7 @@ enum ProfileFlow: Flow, Equatable {
     case projects(Projects)
     
     enum Overview: Equatable {
-        case presentOnboarding
+        case presentOnboarding(message: String?)
         case showClients
         case showProjects
     }
@@ -49,7 +49,7 @@ enum ProfileFlow: Flow, Equatable {
 }
 
 public protocol ProfileFlowControllerDelegate: AnyObject {
-    func presentOnboarding()
+    func presentOnboarding(message: String?)
 }
 
 public final class ProfileFlowController: FlowController {
@@ -75,14 +75,14 @@ public final class ProfileFlowController: FlowController {
 extension ProfileFlowController {
     func handleOverviewFlow(_ flow: ProfileFlow.Overview) {
         switch flow {
-        case .presentOnboarding: presentOnboarding()
+        case let .presentOnboarding(message): presentOnboarding(message: message)
         case .showClients: showClients()
         case .showProjects: showProjects()
         }
     }
     
-    private func presentOnboarding() {
-        delegate?.presentOnboarding()
+    private func presentOnboarding(message: String?) {
+        delegate?.presentOnboarding(message: message)
     }
     
     private func showClients() {
