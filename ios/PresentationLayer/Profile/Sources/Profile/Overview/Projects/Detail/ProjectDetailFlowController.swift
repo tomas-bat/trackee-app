@@ -8,7 +8,10 @@ import UIToolkit
 import UIKit
 
 enum ProjectDetailFlow: Flow, Equatable {
-    case showClientSelection(delegate: ClientSelectionViewModelDelegate?)
+    case showClientSelection(
+        selectedClientId: String?,
+        delegate: ClientSelectionViewModelDelegate?
+    )
     case dismiss
     case pop
     
@@ -56,14 +59,24 @@ final class ProjectDetailFlowController: FlowController {
     override func handleFlow(_ flow: Flow) {
         guard let flow = flow as? ProjectDetailFlow else { return }
         switch flow {
-        case let .showClientSelection(delegate): showClientSelection(delegate: delegate)
+        case let .showClientSelection(selectedClientId, delegate):
+            showClientSelection(
+                selectedClientId: selectedClientId,
+                delegate: delegate
+            )
         case .dismiss: dismiss()
         case .pop: pop()
         }
     }
     
-    private func showClientSelection(delegate: ClientSelectionViewModelDelegate?) {
-        let vm = ClientSelectionViewModel(flowController: self)
+    private func showClientSelection(
+        selectedClientId: String?,
+        delegate: ClientSelectionViewModelDelegate?
+    ) {
+        let vm = ClientSelectionViewModel(
+            selectedClientId: selectedClientId,
+            flowController: self
+        )
         vm.delegate = delegate
         let view = ClientSelectionView(viewModel: vm)
         let vc = BaseHostingController(rootView: view)

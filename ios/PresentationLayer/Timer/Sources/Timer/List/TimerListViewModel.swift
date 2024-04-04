@@ -130,8 +130,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             startFormatTimer()
         } catch {
             state.listData = .error(error)
-            state.summaryViewData = .empty
-            state.timerData = .empty
+            state.summaryViewData = .empty(.noData)
+            state.timerData = .empty(.noData)
         }
     }
     
@@ -266,6 +266,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         flowController?.handleFlow(
             TimerFlow.list(
                 .showProjectSelection(
+                    selectedProjectId: state.timerData.data?.project?.id,
                     delegate: self
                 )
             )

@@ -7,10 +7,15 @@ import Foundation
 
 public enum ViewData<Data: Equatable>: Equatable {
     
+    public enum EmptyReason: Equatable {
+        case noData
+        case search
+    }
+    
     case data(Data)
     case error(Error)
     case loading(mock: Data)
-    case empty
+    case empty(EmptyReason)
     
     public var isLoading: Bool {
         switch self {
@@ -45,7 +50,7 @@ public enum ViewData<Data: Equatable>: Equatable {
         case let (.data(ldata), .data(rdata)): ldata == rdata
         case let (.error(lerror), .error(rerror)): lerror.localizedDescription == rerror.localizedDescription
         case let (.loading(ldata), .loading(rdata)): ldata == rdata
-        case (.empty, .empty): true
+        case let (.empty(lreason), .empty(rreason)): lreason == rreason
         default: false
         }
     }

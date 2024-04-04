@@ -79,7 +79,7 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
             let projects: [ProjectPreview] = try await getProjectsUseCase.execute()
             
             if projects.isEmpty {
-                state.projects = .empty
+                state.projects = .empty(.noData)
             } else {
                 state.projects = .data(projects)
             }

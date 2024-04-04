@@ -28,11 +28,18 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     
     weak var delegate: ProjectSelectionViewModelDelegate?
     
+    private var projects: [ProjectPreview] = []
+    
     // MARK: - Init
     
-    init(flowController: FlowController? = nil) {
+    init(
+        selectedProjectId: String? = nil,
+        flowController: FlowController? = nil
+    ) {
         self.flowController = flowController
         super.init()
+        
+        state.selectedProjectId = selectedProjectId
     }
     
     // MARK: - Lifecycle
@@ -67,7 +74,7 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
-            case let .updateSearchText(text): state.searchText = text
+            case let .updateSearchText(text): updateSearchText(to: text)
             case .retry: await fetchData(force: true)
             case let .selectProject(id): state.selectedProjectId = id
             case .save: save()
@@ -80,18 +87,20 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     
     private func fetchData(force: Bool = false) async {
         guard force || !state.viewData.hasData else { return }
+        
+        state.searchText = ""
                 
         do {
-            let projects: [ProjectPreview] = try await getProjectsUseCase.execute()
-            
-            if projects.isEmpty {
-                state.viewData = .empty
-            } else {
-                state.viewData = .data(projects)
-            }
+            projects = try await getProjectsUseCase.execute()
+            filterProjects()
         } catch {
             state.viewData = .error(error)
         }
+    }
+    
+    private func updateSearchText(to text: String) {
+        state.searchText = text
+        filterProjects()
     }
     
     private func save() {
@@ -105,5 +114,35 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     
     private func dismiss() {
         flowController?.handleFlow(TimerFlow.projectSelection(.dismiss))
+    }
+    
+    private func filterProjects() {
+        if projects.isEmpty {
+            state.viewData = .empty(.noData)
+            return
+        }
+        if state.searchText.isEmpty {
+            state.viewData = .data(projects)
+            return
+        }
+        let filtered = projects.filter { project in
+            let expr = state.searchText
+                .filter { !$0.isWhitespace }
+                .lowercased()
+            
+            return project.name
+                .filter { !$0.isWhitespace }
+                .lowercased()
+                .contains(expr)
+            || project.client.name
+                .filter { !$0.isWhitespace }
+                .lowercased()
+                .contains(expr)
+        }
+        if filtered.isEmpty {
+            state.viewData = .empty(.search)
+        } else {
+            state.viewData = .data(filtered)
+        }
     }
 }

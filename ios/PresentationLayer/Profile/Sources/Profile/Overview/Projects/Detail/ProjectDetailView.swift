@@ -124,7 +124,7 @@ struct ProjectDetailView: View {
                         .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                         .if(viewModel.state.client == nil) { $0.italic() }
                     
-                    Image(systemSymbol: .chevronDown)
+                    Image(systemSymbol: .chevronRight)
                 }
             }
         }

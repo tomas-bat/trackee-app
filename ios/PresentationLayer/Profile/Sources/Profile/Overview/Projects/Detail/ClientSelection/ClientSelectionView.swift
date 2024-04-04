@@ -33,7 +33,9 @@ struct ClientSelectionView: View {
             case let .data(clients), let .loading(clients):
                 ScrollView {
                     LazyVStack(spacing: spacing) {
-                        ForEach(clients) { client in
+                        ForEach(0..<clients.count, id: \.self) { idx in
+                            let client = clients[idx]
+                            
                             Button {
                                 viewModel.onIntent(.selectClient(id: client.id))
                             } label: {

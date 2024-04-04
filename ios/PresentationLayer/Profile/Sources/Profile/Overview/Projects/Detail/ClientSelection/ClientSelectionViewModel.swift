@@ -30,9 +30,14 @@ final class ClientSelectionViewModel: BaseViewModel, ViewModel, ObservableObject
     
     // MARK: - Init
     
-    init(flowController: FlowController? = nil) {
+    init(
+        selectedClientId: String? = nil,
+        flowController: FlowController? = nil
+    ) {
         self.flowController = flowController
         super.init()
+        
+        state.selectedClientId = selectedClientId
     }
     
     // MARK: - Lifecycle
@@ -86,7 +91,7 @@ final class ClientSelectionViewModel: BaseViewModel, ViewModel, ObservableObject
             let clients: [Client] = try await getClientsUseCase.execute()
             
             if clients.isEmpty {
-                state.clients = .empty
+                state.clients = .empty(.noData)
             } else {
                 state.clients = .data(clients)
             }

@@ -133,7 +133,10 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     private func selectClient() {
-        flowController?.handleFlow(ProjectDetailFlow.showClientSelection(delegate: self))
+        flowController?.handleFlow(ProjectDetailFlow.showClientSelection(
+            selectedClientId: state.client?.id,
+            delegate: self
+        ))
     }
     
     private func dismiss() {

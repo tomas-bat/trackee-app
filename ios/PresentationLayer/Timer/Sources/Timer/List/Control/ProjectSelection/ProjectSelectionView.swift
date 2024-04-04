@@ -34,7 +34,9 @@ struct ProjectSelectionView: View {
                 case let .data(projects), let .loading(projects):
                     ScrollView {
                         LazyVStack {
-                            ForEach(projects) { project in
+                            ForEach(0..<projects.count, id: \.self) { idx in
+                                let project = projects[idx]
+                                
                                 Button {
                                     viewModel.onIntent(.selectProject(id: project.id))
                                 } label: {
@@ -54,8 +56,8 @@ struct ProjectSelectionView: View {
                         viewModel.onIntent(.retry)
                     }
                     .padding(padding)
-                case .empty:
-                    EmptyContentView(text: L10n.project_selection_view_no_projects)
+                case let .empty(reason):
+                    EmptyContentView(text: localizedEmptyReason(for: reason))
                         .padding(padding)
                 }
             }
@@ -84,7 +86,17 @@ struct ProjectSelectionView: View {
                 set: { text in viewModel.onIntent(.updateSearchText(to: text)) }
             )
         )
+        .interactiveDismissDisabled()
         .lifecycle(viewModel)
+    }
+    
+    // MARK: - Private
+    
+    private func localizedEmptyReason(for reason: ViewData<[ProjectPreview]>.EmptyReason) -> String {
+        switch reason {
+        case .noData: L10n.project_selection_view_no_projects
+        case .search: L10n.empty_results
+        }
     }
 }
 

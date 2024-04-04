@@ -79,7 +79,7 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
             let clients: [Client] = try await getClientsUseCase.execute()
             
             if clients.isEmpty {
-                state.clients = .empty
+                state.clients = .empty(.noData)
             } else {
                 state.clients = .data(clients)
             }

@@ -54,14 +54,19 @@ struct TimerListContentView: View {
                     Color.clear.frame(height: fillerSize)
                     
                     LazyVStack(alignment: .leading, spacing: entrySpacing) {
-                        ForEach(groups) { group in
+                        ForEach(0..<groups.count, id: \.self) { idx in
+                            let group = groups[idx]
+                            
                             Text(group.date.asDate.localizedDate)
                                 .font(AppTheme.Fonts.title)
                                 .foregroundStyle(AppTheme.Colors.foreground)
                                 .padding(.top, groupTitleTopPadding)
                                 .padding(.bottom, groupTitleBottomPadding)
+                                .animation(nil, value: UUID())
                             
-                            ForEach(group.entries) { entry in
+                            ForEach(0..<group.entries.count, id: \.self) { idx in
+                                let entry = group.entries[idx]
+                                
                                 TimerEntryView(
                                     timerEntry: entry,
                                     deleteLoading: deletingEntryId == entry.id,

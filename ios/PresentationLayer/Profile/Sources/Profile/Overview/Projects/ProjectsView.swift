@@ -33,7 +33,9 @@ struct ProjectsView: View {
             case let .data(projects), let .loading(projects):
                 ScrollView {
                     LazyVStack(spacing: spacing) {
-                        ForEach(projects) { project in
+                        ForEach(0..<projects.count, id: \.self) { idx in
+                            let project = projects[idx]
+                            
                             ProjectRowView(project: project) {
                                 viewModel.onIntent(
                                     .showProjectDetail(
