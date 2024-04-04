@@ -28,6 +28,15 @@ fun Routing.projectRoute() {
             }
 
             route("/{projectId}") {
+                get("/preview") {
+                    val clientId: String by call.request.queryParameters
+                    val projectId: String by call.parameters
+
+                    val projectPreviewDto = projectRepository.readProjectPreview(clientId, projectId).toDto()
+
+                    call.respond(HttpStatusCode.OK, projectPreviewDto)
+                }
+
                 put<ProjectDto> { body ->
                     val projectId: String by call.parameters
 

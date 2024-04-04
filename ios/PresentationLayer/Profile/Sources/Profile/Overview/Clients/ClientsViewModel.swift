@@ -89,10 +89,18 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     private func showClientDetail(clientId: String) {
-        
+        flowController?.handleFlow(ProfileFlow.clients(.showDetail(clientId: clientId, delegate: self)))
     }
     
     private func addClient() {
-        
+        flowController?.handleFlow(ProfileFlow.clients(.showNewClient(delegate: self)))
+    }
+}
+
+// MARK: - ClientDetailViewModelDelegate
+
+extension ClientsViewModel: ClientDetailViewModelDelegate {
+    func refreshClients() async {
+        await fetchData()
     }
 }

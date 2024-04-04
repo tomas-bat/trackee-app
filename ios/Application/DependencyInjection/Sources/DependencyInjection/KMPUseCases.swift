@@ -27,6 +27,14 @@ public extension Container {
     var addTimerEntryUseCase: Factory<AddTimerEntryUseCase> { self { self.kmp().get(AddTimerEntryUseCase.self) } }
     var deleteTimerEntryUseCase: Factory<DeleteTimerEntryUseCase> { self { self.kmp().get(DeleteTimerEntryUseCase.self) } }
     
-    // MARK: -
+    // MARK: - Profile
     var getClientsUseCase: Factory<GetClientsUseCase> { self { self.kmp().get(GetClientsUseCase.self) } }
+    var addAndAssignClientUseCase: Factory<AddAndAssignClientUseCase> { self { self.kmp().get(AddAndAssignClientUseCase.self) } }
+    var getClientUseCase: Factory<GetClientUseCase> { self { self.kmp().get(GetClientUseCase.self) } }
+    var updateClientUseCase: Factory<UpdateClientUseCase> { self { self.kmp().get(UpdateClientUseCase.self) } }
+    var removeClientUseCase: Factory<RemoveClientUseCase> { self { self.kmp().get(RemoveClientUseCase.self) } }
+    var addAndAssignProjectUseCase: Factory<AddAndAssignProjectUseCase> { self { self.kmp().get(AddAndAssignProjectUseCase.self) } }
+    var getProjectPreviewUseCase: Factory<GetProjectPreviewUseCase> { self { self.kmp().get(GetProjectPreviewUseCase.self) } }
+    var updateProjectUseCase: Factory<UpdateProjectUseCase> { self { self.kmp().get(UpdateProjectUseCase.self) } }
+    var removeProjectUseCase: Factory<RemoveProjectUseCase> { self { self.kmp().get(RemoveProjectUseCase.self) } }
 }

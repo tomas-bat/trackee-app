@@ -30,39 +30,32 @@ struct ClientDetailView: View {
     
     var body: some View {
         NavigationStack {
-            Group {
-                switch viewModel.state.client {
-                case let .data(client), let .loading(client):
-                        List {
-                            Section {
-                                fieldRow(
-                                    label: L10n.client_detail_view_name_label,
-                                    placeholder: L10n.client_detail_view_name_placeholder,
-                                    text: Binding<String>(
-                                        get: { viewModel.state.name },
-                                        set: { name in viewModel.onIntent(.changeName(to: name)) }
-                                    )
-                                )
-                            }
-                            
-                            if !viewModel.state.isCreating {
-                                Section {
-                                    Button(L10n.client_detail_remove_client) {
-                                        viewModel.onIntent(.remove)
-                                    }
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .foregroundStyle(AppTheme.Colors.destructive)
-                                }
-                            }
+            List {
+                Section {
+                    fieldRow(
+                        label: L10n.client_detail_view_name_label,
+                        placeholder: L10n.client_detail_view_name_placeholder,
+                        text: Binding<String>(
+                            get: { viewModel.state.name },
+                            set: { name in viewModel.onIntent(.changeName(to: name)) }
+                        )
+                    )
+                }
+                
+                if !viewModel.state.isCreating {
+                    Section {
+                        Button(L10n.client_detail_remove_client) {
+                            viewModel.onIntent(.remove)
                         }
-                        .skeleton(viewModel.state.client.isLoading)
-                        .scrollBounceBehavior(.basedOnSize)
-                case let .error(error):
-                    ErrorView(error: error)
-                        .padding(padding)
-                case .empty: EmptyView()
+                        .buttonStyle(.loading)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .foregroundStyle(AppTheme.Colors.destructive)
+                        .environment(\.isLoading, viewModel.state.removeLoading)
+                    }
                 }
             }
+            .skeleton(viewModel.state.isLoading)
+            .scrollBounceBehavior(.basedOnSize)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(AppTheme.Colors.background)
             .navigationTitle(navigationTitle)
@@ -79,9 +72,16 @@ struct ClientDetailView: View {
                     Button(L10n.save_label) {
                         viewModel.onIntent(.save)
                     }
+                    .buttonStyle(.loading)
+                    .environment(\.isLoading, viewModel.state.saveLoading)
                 }
             }
+            .alert(item: Binding<AlertData?>(
+                get: { viewModel.state.alertData },
+                set: { alertData in viewModel.onIntent(.changeAlertData(to: alertData)) }
+            )) { alertData in .init(alertData) }
         }
+        .snack(viewModel.snackState)
         .lifecycle(viewModel)
     }
     
@@ -116,8 +116,7 @@ import Utilities
     Environment.locale = .init(identifier: "cs")
     
     let vm = ClientDetailViewModel(
-        id: UUID().uuidString,
-        isCreating: false
+        editingClientId: UUID().uuidString
     )
     
     return Text("Base view")

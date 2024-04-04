@@ -27,3 +27,9 @@ public extension ButtonStyle where Self == SecondaryButtonStyle {
         .init()
     }
 }
+
+public extension ButtonStyle where Self == LoadingButtonStyle {
+    static var loading: Self {
+        .init()
+    }
+}

@@ -73,6 +73,30 @@ public extension Container {
         getClientsUseCase.register {
             GetClientsUseCaseMock(executeReturnValue: ResultSuccess(data: [Client].stub as NSArray))
         }
+        addAndAssignClientUseCase.register {
+            AddAndAssignClientUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        getClientUseCase.register {
+            GetClientUseCaseMock(executeReturnValue: ResultSuccess(data: Client.stub()))
+        }
+        updateClientUseCase.register {
+            UpdateClientUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        removeClientUseCase.register {
+            RemoveClientUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        addAndAssignProjectUseCase.register {
+            AddAndAssignProjectUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        getProjectPreviewUseCase.register {
+            GetProjectPreviewUseCaseMock(executeReturnValue: ResultSuccess(data: ProjectPreview.stub()))
+        }
+        updateProjectUseCase.register {
+            UpdateProjectUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        removeProjectUseCase.register {
+            RemoveProjectUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

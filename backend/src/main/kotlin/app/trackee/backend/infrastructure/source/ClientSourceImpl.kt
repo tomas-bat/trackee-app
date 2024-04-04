@@ -104,15 +104,20 @@ internal class ClientSourceImpl : ClientSource {
             }
 
         // Delete projects of this client
-        db
+        val projectClient = db
+            .collection(SourceConstants.Firestore.Collection.PROJECTS)
+            .document(clientId)
+
+        projectClient
             .collection(SourceConstants.Firestore.Collection.PROJECTS)
             .listDocuments()
-            .filter { it.id == clientId }
-            .forEach { projectClient ->
-                projectClient
+            .forEach { clientProject ->
+                clientProject
                     .delete()
                     .await()
             }
+
+        projectClient.delete().await()
 
         // Delete entries of projects of this client
         db

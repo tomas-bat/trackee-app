@@ -10,29 +10,40 @@ import SwiftUI
 import UIToolkit
 import KMPSharedDomain
 
+protocol ClientDetailViewModelDelegate: AnyObject {
+    func refreshClients() async
+}
+
 final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Dependencies
     
-    
+    @Injected(\.addAndAssignClientUseCase) private var addAndAssignClientUseCase
+    @Injected(\.getClientUseCase) private var getClientUseCase
+    @Injected(\.updateClientUseCase) private var updateClientUseCase
+    @Injected(\.removeClientUseCase) private var removeClientUseCase
     
     private weak var flowController: FlowController?
     
     // MARK: - Stored properties
     
-    private let id: String
+    weak var delegate: ClientDetailViewModelDelegate?
+    
+    private let editingClientId: String?
+    
+    private var didFetch = false
     
     // MARK: - Init
     
     init(
-        id: String,
-        isCreating: Bool,
+        editingClientId: String? = nil,
         flowController: FlowController? = nil
     ) {
-        self.id = id
+        self.editingClientId = editingClientId
         self.flowController = flowController
         super.init()
-        state.isCreating = isCreating
+        
+        state.isCreating = editingClientId == nil
     }
     
     // MARK: - Lifecycle
@@ -41,16 +52,19 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         super.onAppear()
         
         executeTask(Task {
-            await fetchData(showLoading: state.client.isLoading)
+            await fetchData(showLoading: !didFetch)
         })
     }
     
     // MARK: - State
     
     struct State {
-        var client: ViewData<Client> = .loading(mock: .stub())
         var isCreating = false
         var name = ""
+        var isLoading = true
+        var saveLoading = false
+        var removeLoading = false
+        var alertData: AlertData?
     }
     
     @Published private(set) var state = State()
@@ -63,15 +77,17 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         case remove
         case cancel
         case save
+        case changeAlertData(to: AlertData?)
     }
     
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
             case let .changeName(name): state.name = name
-            case .remove: ()
-            case .cancel: ()
-            case .save: ()
+            case .remove: showRemoveAlert()
+            case .cancel: dismiss()
+            case .save: await save()
+            case let .changeAlertData(alertData): state.alertData = alertData
             }
         })
     }
@@ -80,14 +96,88 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func fetchData(showLoading: Bool) async {
         if showLoading {
-            state.client = .loading(mock: .stub())
+            state.isLoading = true
         }
+        defer { state.isLoading = false }
         
         do {
-            try await Task.sleep(for: .seconds(2))
-            let client = Client.stub()
-            state.client = .data(client)
-            state.name = client.name
+            if let editingClientId {
+                let params = GetClientUseCaseParams(clientId: editingClientId)
+                let client: Client = try await getClientUseCase.execute(params: params)
+                state.name = client.name
+            }
+                
+            didFetch = true
+        } catch {
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
+    private func dismiss() {
+        flowController?.handleFlow(ProfileFlow.clients(.dismissModal))
+    }
+    
+    private func save() async {
+        state.saveLoading = true
+        defer { state.saveLoading = false }
+        
+        do {
+            try validate()
+            
+            if let editingClientId {
+                let client = Client(
+                    id: editingClientId,
+                    name: state.name
+                )
+                let params = UpdateClientUseCaseParams(client: client)
+                try await updateClientUseCase.execute(params: params)
+            } else {
+                let client = NewClient(name: state.name)
+                let params = AddAndAssignClientUseCaseParams(client: client)
+                try await addAndAssignClientUseCase.execute(params: params)
+            }
+            
+            await delegate?.refreshClients()
+            dismiss()
+        } catch {
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
+    private func validate() throws {
+        guard state.name.count >= 2 else {
+            throw ProfileError.validation(.nameTooShort)
+        }
+    }
+    
+    private func showRemoveAlert() {
+        state.alertData = AlertData(
+            title: L10n.client_detail_remove_alert_title,
+            message: L10n.client_detail_remove_alert_text,
+            primaryAction: .init(
+                title: L10n.yes,
+                style: .destruction
+            ) { [weak self] in
+                self?.executeTask(Task {
+                    await self?.remove()
+                })
+            },
+            secondaryAction: .init(title: L10n.cancel)
+        )
+    }
+    
+    private func remove() async {
+        guard let editingClientId else { return }
+        
+        state.removeLoading = true
+        defer { state.removeLoading = false }
+        
+        do {
+            let params = RemoveClientUseCaseParams(clientId: editingClientId)
+            try await removeClientUseCase.execute(params: params)
+            
+            await delegate?.refreshClients()
+            dismiss()
         } catch {
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

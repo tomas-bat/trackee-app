@@ -19,13 +19,23 @@ enum ProfileFlow: Flow, Equatable {
     }
     
     enum Clients: Equatable {
-        case showDetail
-        case showNewClient
+        case showDetail(clientId: String, delegate: ClientDetailViewModelDelegate?)
+        case showNewClient(delegate: ClientDetailViewModelDelegate?)
+        case dismissModal
+        
+        static func == (lhs: ProfileFlow.Clients, rhs: ProfileFlow.Clients) -> Bool {
+            switch (lhs, rhs) {
+            case (.showDetail, .showDetail), (.showNewClient, .showNewClient), 
+                (.dismissModal, .dismissModal): true
+            default: false
+            }
+        }
     }
     
     enum Projects: Equatable {
-        case showDetail
+        case showDetail(projectId: String)
         case showNewProject
+        case dismissModal
     }
 }
 
@@ -83,17 +93,28 @@ extension ProfileFlowController {
 extension ProfileFlowController {
     func handleClientsFlow(_ flow: ProfileFlow.Clients) {
         switch flow {
-        case .showDetail: showClientDetail()
-        case .showNewClient: showNewClient()
+        case let .showDetail(clientId, delegate): showClientDetail(clientId: clientId, delegate: delegate)
+        case let .showNewClient(delegate): showNewClient(delegate: delegate)
+        case .dismissModal: navigationController.presentedViewController?.dismiss(animated: true)
         }
     }
     
-    private func showClientDetail() {
+    private func showClientDetail(clientId: String, delegate: ClientDetailViewModelDelegate?) {
+        let vm = ClientDetailViewModel(editingClientId: clientId, flowController: self)
+        vm.delegate = delegate
+        let view = ClientDetailView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
         
+        navigationController.present(vc, animated: true)
     }
     
-    private func showNewClient() {
+    private func showNewClient(delegate: ClientDetailViewModelDelegate?) {
+        let vm = ClientDetailViewModel(flowController: self)
+        vm.delegate = delegate
+        let view = ClientDetailView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
         
+        navigationController.present(vc, animated: true)
     }
 }
 
@@ -101,12 +122,13 @@ extension ProfileFlowController {
 extension ProfileFlowController {
     func handleProjectsFlow(_ flow: ProfileFlow.Projects) {
         switch flow {
-        case .showDetail: showProjectDetail()
+        case let .showDetail(projectId): showProjectDetail(projectId: projectId)
         case .showNewProject: showNewProject()
+        case .dismissModal: navigationController.presentedViewController?.dismiss(animated: true)
         }
     }
     
-    private func showProjectDetail() {
+    private func showProjectDetail(projectId: String) {
         
     }
     

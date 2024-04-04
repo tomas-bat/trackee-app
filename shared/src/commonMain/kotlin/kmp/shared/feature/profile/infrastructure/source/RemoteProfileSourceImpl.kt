@@ -16,7 +16,10 @@ import kmp.shared.feature.profile.infrastructure.model.toDomain
 import kmp.shared.feature.profile.infrastructure.model.toDto
 import kmp.shared.feature.timer.domain.model.Client
 import kmp.shared.feature.timer.domain.model.Project
+import kmp.shared.feature.timer.domain.model.ProjectPreview
 import kmp.shared.feature.timer.infrastructure.model.ClientDto
+import kmp.shared.feature.timer.infrastructure.model.ProjectPreviewDto
+import kmp.shared.feature.timer.infrastructure.model.toDomain
 import kmp.shared.feature.timer.infrastructure.model.toDto
 
 internal class RemoteProfileSourceImpl(
@@ -34,6 +37,12 @@ internal class RemoteProfileSourceImpl(
                 setBody(client.toDto())
             }
             res.body<NewClientResponseDto>().toDomain()
+        }
+
+    override suspend fun readClient(clientId: String): Result<Client> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.get("/clients/${clientId}")
+            res.body<ClientDto>().toDomain()
         }
 
     override suspend fun updateClient(client: Client): Result<Unit> =
@@ -69,6 +78,16 @@ internal class RemoteProfileSourceImpl(
                 setBody(project.toDto())
             }
             res.body<NewProjectResponseDto>().toDomain()
+        }
+
+    override suspend fun readProjectPreview(clientId: String, projectId: String): Result<ProjectPreview> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.get("/projects/${projectId}/preview") {
+                url {
+                    parameters.append("clientId", clientId)
+                }
+            }
+            res.body<ProjectPreviewDto>().toDomain()
         }
 
     override suspend fun updateProject(project: Project): Result<Unit> =

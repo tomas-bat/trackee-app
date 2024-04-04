@@ -10,6 +10,7 @@ import kmp.shared.feature.profile.domain.model.NewProjectResponse
 import kmp.shared.feature.profile.domain.repository.ProfileRepository
 import kmp.shared.feature.timer.domain.model.Client
 import kmp.shared.feature.timer.domain.model.Project
+import kmp.shared.feature.timer.domain.model.ProjectPreview
 import kmp.shared.feature.timer.infrastructure.model.toDomain
 
 internal class ProfileRepositoryImpl(
@@ -20,6 +21,9 @@ internal class ProfileRepositoryImpl(
 
     override suspend fun createClient(client: NewClient): Result<NewClientResponse> =
         source.createClient(client)
+
+    override suspend fun readClient(clientId: String): Result<Client> =
+        source.readClient(clientId)
 
     override suspend fun updateClient(client: Client): Result<Unit> =
         source.updateClient(client)
@@ -32,6 +36,9 @@ internal class ProfileRepositoryImpl(
 
     override suspend fun createProject(project: NewProject): Result<NewProjectResponse> =
         source.createProject(project)
+
+    override suspend fun readProjectPreview(clientId: String, projectId: String): Result<ProjectPreview> =
+        source.readProjectPreview(clientId, projectId)
 
     override suspend fun updateProject(project: Project): Result<Unit> =
         source.updateProject(project)
