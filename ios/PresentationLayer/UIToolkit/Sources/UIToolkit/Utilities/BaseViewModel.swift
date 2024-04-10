@@ -8,12 +8,12 @@ import OSLog
 import Utilities
 
 @MainActor
-open class BaseViewModel {
+open class BaseViewModel: NSObject {
     
     /// All tasks that are currently executed
     public private(set) var tasks: [Task<Void, Never>] = []
     
-    public init() {
+    public override init() {
         Logger.lifecycle.info("\(type(of: self)) initialized")
     }
     

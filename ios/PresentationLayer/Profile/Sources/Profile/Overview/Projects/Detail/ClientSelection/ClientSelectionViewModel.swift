@@ -28,6 +28,8 @@ final class ClientSelectionViewModel: BaseViewModel, ViewModel, ObservableObject
     
     weak var delegate: ClientSelectionViewModelDelegate?
     
+    private var clients: [Client] = []
+    
     // MARK: - Init
     
     init(
@@ -72,7 +74,7 @@ final class ClientSelectionViewModel: BaseViewModel, ViewModel, ObservableObject
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
-            case let .updateSearchText(text): state.searchText = text
+            case let .updateSearchText(text): updateSearchText(to: text)
             case .retry: await fetchData(showLoading: true)
             case let .selectClient(id): state.selectedClientId = id
             case .save: save()
@@ -87,16 +89,44 @@ final class ClientSelectionViewModel: BaseViewModel, ViewModel, ObservableObject
             state.clients = .loading(mock: .stub)
         }
         
+        state.searchText = ""
+        
         do {
-            let clients: [Client] = try await getClientsUseCase.execute()
-            
-            if clients.isEmpty {
-                state.clients = .empty(.noData)
-            } else {
-                state.clients = .data(clients)
-            }
+            clients = try await getClientsUseCase.execute()
+            filterClients()
         } catch {
             state.clients = .error(error)
+        }
+    }
+    
+    private func updateSearchText(to text: String) {
+        state.searchText = text
+        filterClients()
+    }
+    
+    private func filterClients() {
+        if clients.isEmpty {
+            state.clients = .empty(.noData)
+            return
+        }
+        if state.searchText.isEmpty {
+            state.clients = .data(clients)
+            return
+        }
+        let filtered = clients.filter { client in
+            let expr = state.searchText
+                .filter { !$0.isWhitespace }
+                .lowercased()
+            
+            return client.name
+                .filter { !$0.isWhitespace }
+                .lowercased()
+                .contains(expr)
+        }
+        if filtered.isEmpty {
+            state.clients = .empty(.search)
+        } else {
+            state.clients = .data(filtered)
         }
     }
     

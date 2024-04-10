@@ -22,6 +22,8 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Stored properties
     
+    private var projects: [ProjectPreview] = []
+    
     // MARK: - Init
     
     init(flowController: FlowController? = nil) {
@@ -60,7 +62,7 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
-            case let .updateSearchText(text): state.searchText = text
+            case let .updateSearchText(text): updateSearchText(to: text)
             case .retry: await fetchData(showLoading: true)
             case let .showProjectDetail(clientId, projectId): showProjectDetail(clientId: clientId, projectId: projectId)
             case .addProject: addProject()
@@ -75,16 +77,48 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.projects = .loading(mock: .stub)
         }
         
+        state.searchText = ""
+        
         do {
-            let projects: [ProjectPreview] = try await getProjectsUseCase.execute()
-            
-            if projects.isEmpty {
-                state.projects = .empty(.noData)
-            } else {
-                state.projects = .data(projects)
-            }
+            projects = try await getProjectsUseCase.execute()
+            filterProjects()
         } catch {
             state.projects = .error(error)
+        }
+    }
+    
+    private func updateSearchText(to text: String) {
+        state.searchText = text
+        filterProjects()
+    }
+    
+    private func filterProjects() {
+        if projects.isEmpty {
+            state.projects = .empty(.noData)
+            return
+        }
+        if state.searchText.isEmpty {
+            state.projects = .data(projects)
+            return
+        }
+        let filtered = projects.filter { project in
+            let expr = state.searchText
+                .filter { !$0.isWhitespace }
+                .lowercased()
+            
+            return project.name
+                .filter { !$0.isWhitespace }
+                .lowercased()
+                .contains(expr)
+            || project.client.name
+                .filter { !$0.isWhitespace }
+                .lowercased()
+                .contains(expr)
+        }
+        if filtered.isEmpty {
+            state.projects = .empty(.search)
+        } else {
+            state.projects = .data(filtered)
         }
     }
     
