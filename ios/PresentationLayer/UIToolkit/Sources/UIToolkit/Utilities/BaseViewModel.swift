@@ -30,7 +30,8 @@ open class BaseViewModel {
         tasks.forEach { $0.cancel() }
     }
     
-    public func executeTask(_ task: Task<Void, Never>) {
+    @discardableResult
+    public func executeTask(_ task: Task<Void, Never>) -> Task<Void, Never> {
         tasks.append(task)
         Task {
             await task.value
@@ -40,6 +41,7 @@ open class BaseViewModel {
             tasks = tasks.filter { $0 != task }
             objc_sync_exit(tasks)
         }
+        return task
     }
     
     public func awaitAllTasks() async {

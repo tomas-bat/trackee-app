@@ -84,6 +84,7 @@ struct TimerControlView: View {
                     
                     controlView(data: data)
                 }
+                .skeleton(params.data.isLoading)
                 .foregroundStyle(AppTheme.Colors.foreground)
                 .padding(padding)
                 .background(AppTheme.Colors.contentBackground)

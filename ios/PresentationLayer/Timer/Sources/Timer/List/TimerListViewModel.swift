@@ -118,19 +118,43 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.timerData = .loading(mock: .stub)
         }
         
+        let tasks = [
+            executeTask(Task { await fetchEntries() }),
+            executeTask(Task { await fetchSummaries() }),
+            executeTask(Task { await fetchTimer() })
+        ]
+        
+        for task in tasks {
+            await task.value
+        }
+    }
+    
+    private func fetchEntries() async {
         do {
             let groups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute()
-            let summaries: [TimerSummary] = try await getTimerSummariesUseCase.execute()
-            let timer: TimerDataPreview = try await getTimerDataPreviewUseCase.execute()
-            
             state.listData = .data(groups)
+        } catch {
+            state.timerData = .error(error)
+        }
+    }
+    
+    private func fetchSummaries() async {
+        do {
+            let summaries: [TimerSummary] = try await getTimerSummariesUseCase.execute()
             state.summaryViewData = .data(summaries)
+        } catch {
+            state.summaryViewData = .empty(.noData)
+        }
+    }
+    
+    private func fetchTimer() async {
+        do {
+            try await Task.sleep(for: .seconds(5))
+            let timer: TimerDataPreview = try await getTimerDataPreviewUseCase.execute()
             state.timerData = .data(timer)
             
             startFormatTimer()
         } catch {
-            state.listData = .error(error)
-            state.summaryViewData = .empty(.noData)
             state.timerData = .empty(.noData)
         }
     }
