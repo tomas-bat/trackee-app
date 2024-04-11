@@ -29,6 +29,7 @@ public extension View {
     ) -> some View {
         redacted(reason: condition() ? .placeholder : [])
             .shimmering(active: condition(), duration: duration, bounce: bounce)
+            .disabled(condition())
     }
     
     /// Applies the given transform if the given condition evaluates to `true`.
