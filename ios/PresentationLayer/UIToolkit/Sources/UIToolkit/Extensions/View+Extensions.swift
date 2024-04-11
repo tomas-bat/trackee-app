@@ -72,6 +72,25 @@ public extension View {
                 }
             )
     }
+    
+    func onKeyboardShow(call function: @escaping () -> Void) -> some View {
+        modifier(KeyboardScrollModifier(type: .didShow, function: function))
+    }
+    
+    func onKeyboardHide(call function: @escaping () -> Void) -> some View {
+        modifier(KeyboardScrollModifier(type: .willHide, function: function))
+    }
+    
+    /// Inspired by https://www.fivestars.blog/articles/swiftui-share-layout-information/
+    func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { geometryProxy in
+                Color.clear
+                    .preference(key: SizePreferenceKey.self, value: geometryProxy.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self, perform: onChange)
+    }
 }
 
 public extension View {

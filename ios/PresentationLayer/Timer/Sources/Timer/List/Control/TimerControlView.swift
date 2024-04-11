@@ -40,10 +40,28 @@ struct TimerControlView: View {
     private let timeIntervalStackSpacing: CGFloat = 1
     private let timePadding: CGFloat = 8
     private let timeCornerRadius: CGFloat = 4
+    private let selectorLineLimit: Int? = 1
+    private let expandedSelectorLineLimit: Int? = nil
+    private let overviewSpacing: CGFloat = 4
+    private let chevronPadding: CGFloat = 4
     
     // MARK: - Stored properties
     
     private let params: Params
+    
+    @State private var isTruncated = false
+    
+    @State private var clientTruncated = false {
+        didSet {
+            isTruncated = clientTruncated || projectTruncated
+        }
+    }
+    
+    @State private var projectTruncated = false {
+        didSet {
+            isTruncated = clientTruncated || projectTruncated
+        }
+    }
     
     // MARK: - Init
     
@@ -80,9 +98,17 @@ struct TimerControlView: View {
     
     // MARK: - Private
     
+    private var chevron: some View {
+        Image(systemSymbol: .chevronDown)
+            .resizable()
+            .scaledToFit()
+            .frame(width: chevronSize)
+            .padding(.vertical, chevronPadding)
+    }
+    
     private func projectSelector(data: TimerDataPreview) -> some View {
         Button(action: params.onProjectClick) {
-            HStack(spacing: selectorHorizontalSpacing) {
+            HStack(alignment: .top, spacing: selectorHorizontalSpacing) {
                 if let type = data.project?.type {
                     type.image
                         .resizable()
@@ -91,24 +117,60 @@ struct TimerControlView: View {
                 }
                 
                 if let project = data.project, let client = data.client {
-                    Text(project.name)
-                        .font(AppTheme.Fonts.headline)
+                    ZStack(alignment: .topLeading) {
+                        horizontalProjectOverview(client: client, project: project)
+                            .opacity(isTruncated ? 0 : 1)
+                        
+                        if isTruncated {
+                            verticalProjectOverview(client: client, project: project)
+                        }
+                    }
                     
-                    Text(client.name)
-                        .font(AppTheme.Fonts.headlineAdditional)
-                        .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                 } else {
                     Text(L10n.timer_view_select_project)
                         .italic()
                         .font(AppTheme.Fonts.headlineAdditional)
                         .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                 }
-                
-                Image(systemSymbol: .chevronDown)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: chevronSize)
             }
+            .multilineTextAlignment(.leading)
+        }
+    }
+    
+    private func verticalProjectOverview(client: Client, project: Project) -> some View {
+        VStack(alignment: .leading, spacing: overviewSpacing) {
+            HStack(alignment: .top, spacing: selectorHorizontalSpacing) {
+                Text(project.name)
+                    .font(AppTheme.Fonts.headline)
+                
+                chevron
+            }
+            
+            Text(client.name)
+                .font(AppTheme.Fonts.headlineAdditional)
+                .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+        }
+        .lineLimit(nil)
+    }
+    
+    private func horizontalProjectOverview(client: Client, project: Project) -> some View {
+        HStack(spacing: selectorHorizontalSpacing) {
+            TruncableText(
+                text: Text(project.name),
+                lineLimit: selectorLineLimit,
+                isTruncatedUpdate: { projectTruncated = $0 }
+            )
+            .font(AppTheme.Fonts.headline)
+            
+            TruncableText(
+                text: Text(client.name),
+                lineLimit: selectorLineLimit,
+                isTruncatedUpdate: { clientTruncated = $0 }
+            )
+            .font(AppTheme.Fonts.headlineAdditional)
+            .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+            
+            chevron
         }
     }
     
@@ -250,62 +312,79 @@ struct TimerControlView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        VStack {
-            Spacer()
-            
-            PreviewView()
-                .padding(.horizontal)
-            
-            PreviewView(
-                timerData: TimerDataPreview(
-                    status: .off,
-                    type: .timer,
-                    client: .stub(),
-                    project: .stub(),
-                    description: nil,
-                    startedAt: nil
+        ScrollView(showsIndicators: false) {
+            VStack {
+                Spacer()
+                
+                PreviewView(
+                    timerData: .init(
+                        status: .active,
+                        type: .timer,
+                        client: .init(
+                            id: UUID().uuidString,
+                            name: "Lorem ipsum dolor sit clientelos los mongos"
+                        ),
+                        project: .init(
+                            id: UUID().uuidString,
+                            clientId: UUID().uuidString,
+                            type: .work,
+                            name: "Dolor sit amet des uvales projecteles verimal"
+                        ),
+                        description: "Vestibulum at iaculis risus. Donec facilisis non elit ut dignissim. Maecenas lobortis cursus fringilla.",
+                        startedAt: Date(timeIntervalSinceNow: -5_000).asInstant
+                    )
                 )
-            )
-            .padding(.horizontal)
-            
-            PreviewView(
-                timerData: TimerDataPreview(
-                    status: .off,
-                    type: .manual,
-                    client: .stub(),
-                    project: .stub(),
-                    description: nil,
-                    startedAt: nil
+                
+                PreviewView()
+                
+                PreviewView(
+                    timerData: TimerDataPreview(
+                        status: .off,
+                        type: .timer,
+                        client: .stub(),
+                        project: .stub(),
+                        description: nil,
+                        startedAt: nil
+                    )
                 )
-            )
-            .padding(.horizontal)
-            
-            PreviewView(
-                timerData: TimerDataPreview(
-                    status: .active,
-                    type: .timer,
-                    client: .stub(),
-                    project: .stub(),
-                    description: nil,
-                    startedAt: Date(timeIntervalSinceNow: -5_000).asInstant
-                ),
-                length: "00:51:38"
-            )
-            .padding(.horizontal)
-            
-            PreviewView(
-                timerData: TimerDataPreview(
-                    status: .off,
-                    type: .timer,
-                    client: nil,
-                    project: nil,
-                    description: nil,
-                    startedAt: nil
+                
+                PreviewView(
+                    timerData: TimerDataPreview(
+                        status: .off,
+                        type: .manual,
+                        client: .stub(),
+                        project: .stub(),
+                        description: nil,
+                        startedAt: nil
+                    )
                 )
-            )
+                
+                PreviewView(
+                    timerData: TimerDataPreview(
+                        status: .active,
+                        type: .timer,
+                        client: .stub(),
+                        project: .stub(),
+                        description: nil,
+                        startedAt: Date(timeIntervalSinceNow: -5_000).asInstant
+                    ),
+                    length: "00:51:38"
+                )
+                
+                PreviewView(
+                    timerData: TimerDataPreview(
+                        status: .off,
+                        type: .timer,
+                        client: nil,
+                        project: nil,
+                        description: nil,
+                        startedAt: nil
+                    )
+                )
+                
+                Spacer()
+            }
             .padding(.horizontal)
-            
-            Spacer()
         }
         .background(AppTheme.Colors.background)
     }
