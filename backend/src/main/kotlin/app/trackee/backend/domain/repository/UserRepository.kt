@@ -8,6 +8,7 @@ import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.project.ProjectPreview
 import app.trackee.backend.domain.model.timer.TimerData
 import app.trackee.backend.domain.model.timer.TimerDataPreview
+import app.trackee.backend.domain.model.timer.TimerSummary
 import app.trackee.backend.domain.model.user.User
 
 interface UserRepository {
@@ -40,4 +41,6 @@ interface UserRepository {
     suspend fun assignClientToUser(uid: String, clientId: String)
 
     suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String)
+
+    suspend fun readTimerSummariesUseCase(uid: String): List<TimerSummary>
 }

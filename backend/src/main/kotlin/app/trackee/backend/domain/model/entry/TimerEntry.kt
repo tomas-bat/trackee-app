@@ -10,3 +10,5 @@ data class TimerEntry(
     val startedAt: Instant,
     val endedAt: Instant
 )
+
+fun TimerEntry.length() = endedAt - startedAt

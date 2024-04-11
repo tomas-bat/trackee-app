@@ -6,11 +6,10 @@ import app.trackee.backend.domain.model.client.Client
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
+import app.trackee.backend.domain.model.entry.length
 import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.project.ProjectPreview
-import app.trackee.backend.domain.model.timer.TimerData
-import app.trackee.backend.domain.model.timer.TimerDataPreview
-import app.trackee.backend.domain.model.timer.TimerStatus
+import app.trackee.backend.domain.model.timer.*
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.infrastructure.model.client.toDomain
@@ -19,6 +18,9 @@ import app.trackee.backend.infrastructure.model.project.toDomain
 import app.trackee.backend.infrastructure.model.timer.toDomain
 import app.trackee.backend.infrastructure.model.timer.toFirestore
 import app.trackee.backend.infrastructure.model.user.toDomain
+import kotlinx.datetime.Clock
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 internal class UserRepositoryImpl(
     private val source: UserSource,
@@ -115,4 +117,18 @@ internal class UserRepositoryImpl(
 
     override suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String) =
         source.assignProjectToUser(uid, clientId, projectId)
+
+    override suspend fun readTimerSummariesUseCase(uid: String): List<TimerSummary> {
+        val entries = readEntries(uid)
+        val localDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val today = localDateTime.date
+
+        val totalToday = entries
+            .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date == today }
+            .sumOf { it.length().inWholeSeconds }
+
+        val todaySummary = TimerSummary(TimerSummaryComponent.Today, totalToday)
+
+        return listOf(todaySummary)
+    }
 }

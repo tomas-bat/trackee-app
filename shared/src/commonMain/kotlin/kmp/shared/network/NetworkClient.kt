@@ -42,16 +42,22 @@ object NetworkClient {
             defaultRequest {
                 contentType(ContentType.Application.Json)
 
+                url(
+                    scheme = URLProtocol.HTTPS.name,
+                    host = config.host
+                )
+
 //                url(
-//                    scheme = URLProtocol.HTTPS.name,
-//                    host = config.host
+//                    scheme = URLProtocol.HTTP.name,
+//                    host = "0.0.0.0",
+//                    port = 8080,
 //                )
 
-                url(
-                    scheme = URLProtocol.HTTP.name,
-                    host = "0.0.0.0",
-                    port = 8080,
-                )
+//                url(
+//                    scheme = URLProtocol.HTTP.name,
+//                    host = "192.168.88.199",
+//                    port = 8080,
+//                )
             }
 
             install("AuthInterceptor") {

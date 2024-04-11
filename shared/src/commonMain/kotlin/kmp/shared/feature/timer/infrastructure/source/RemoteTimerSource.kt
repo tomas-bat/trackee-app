@@ -82,4 +82,10 @@ internal class RemoteTimerSource(
             client.delete("user/entries/${entryId}")
             Result.Success(Unit)
         }
+
+    override suspend fun readTimerSummaries(): Result<List<TimerSummaryDto>> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.get("/user/summaries")
+            res.body<List<TimerSummaryDto>>()
+        }
 }

@@ -157,8 +157,15 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK)
                 }
+            }
 
+            route("/summaries") {
+                get {
+                    val user = call.requireUserPrincipal().user
+                    val summaryDtos = userRepository.readTimerSummariesUseCase(user.uid).map { it.toDto() }
 
+                    call.respond(HttpStatusCode.OK, summaryDtos)
+                }
             }
         }
     }

@@ -30,4 +30,6 @@ internal interface TimerRepository {
     suspend fun createEntry(entry: NewTimerEntry): Result<Unit>
 
     suspend fun deleteEntry(entryId: String): Result<Unit>
+
+    suspend fun readTimerSummaries(): Result<List<TimerSummary>>
 }

@@ -1,6 +1,8 @@
-package kmp.shared.feature.timer.domain.model
+package app.trackee.backend.domain.model.timer
 
-enum class TimerSummaryComponent(val rawValue: String) {
+enum class TimerSummaryComponent(
+    val rawValue: String
+) {
     Today("today"),
     ThisWeek("this_week")
 }

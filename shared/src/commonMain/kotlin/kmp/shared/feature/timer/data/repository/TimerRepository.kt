@@ -43,4 +43,7 @@ internal class TimerRepositoryImpl(
 
     override suspend fun deleteEntry(entryId: String): Result<Unit> =
         timerSource.deleteEntry(entryId)
+
+    override suspend fun readTimerSummaries(): Result<List<TimerSummary>> =
+        timerSource.readTimerSummaries().map { list -> list.mapNotNull { it.toDomain() } }
 }
