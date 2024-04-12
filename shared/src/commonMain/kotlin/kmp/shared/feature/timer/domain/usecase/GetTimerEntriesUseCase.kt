@@ -26,7 +26,7 @@ internal class GetTimerEntriesUseCaseImpl(
                     .groupBy { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date }
                     .toList()
                     .map { pair ->
-                        TimerEntryGroup(pair.first, pair.second)
+                        TimerEntryGroup(pair.first, pair.second.sortedBy { it.startedAt })
                     }
                     .toMutableList()
 
@@ -39,6 +39,6 @@ internal class GetTimerEntriesUseCaseImpl(
                     )
                 }
 
-               groups.toList()
+               groups.toList().sortedBy { it.date }
             }
 }

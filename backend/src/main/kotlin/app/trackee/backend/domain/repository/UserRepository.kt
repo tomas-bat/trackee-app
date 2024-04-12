@@ -10,13 +10,19 @@ import app.trackee.backend.domain.model.timer.TimerData
 import app.trackee.backend.domain.model.timer.TimerDataPreview
 import app.trackee.backend.domain.model.timer.TimerSummary
 import app.trackee.backend.domain.model.user.User
+import kotlinx.datetime.Instant
 
 interface UserRepository {
     suspend fun readUserByUid(uid: String): User
 
     suspend fun deleteUser(uid: String)
 
-    suspend fun readEntries(uid: String): List<TimerEntry>
+    suspend fun readEntries(
+        uid: String,
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): List<TimerEntry>
 
     suspend fun readProjects(uid: String): List<Project>
 
@@ -26,7 +32,12 @@ interface UserRepository {
 
     suspend fun readTimerPreview(uid: String): TimerDataPreview
 
-    suspend fun readEntryPreviews(uid: String): List<TimerEntryPreview>
+    suspend fun readEntryPreviews(
+        uid: String,
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): List<TimerEntryPreview>
 
     suspend fun createUser(uid: String): User
 

@@ -30,8 +30,13 @@ internal class UserRepositoryImpl(
     override suspend fun deleteUser(uid: String) =
         source.deleteUser(uid)
 
-    override suspend fun readEntries(uid: String): List<TimerEntry> =
-        source.readEntries(uid).map { it.toDomain() }
+    override suspend fun readEntries(
+        uid: String,
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): List<TimerEntry> =
+        source.readEntries(uid, startAfter, limit, endAt).map { it.toDomain() }
 
     override suspend fun readProjects(uid: String): List<Project> =
         source.readProjectIds(uid).map { project ->
@@ -67,8 +72,13 @@ internal class UserRepositoryImpl(
         )
     }
 
-    override suspend fun readEntryPreviews(uid: String): List<TimerEntryPreview> =
-        source.readEntries(uid)
+    override suspend fun readEntryPreviews(
+        uid: String,
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): List<TimerEntryPreview> =
+        source.readEntries(uid, startAfter, limit, endAt)
             .map { it.toDomain() }
             .map { entry ->
                 TimerEntryPreview(
@@ -117,18 +127,23 @@ internal class UserRepositoryImpl(
         source.assignProjectToUser(uid, clientId, projectId)
 
     override suspend fun readTimerSummariesUseCase(uid: String): List<TimerSummary> {
-        val entries = readEntries(uid)
         val localDateTime = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
         val today = localDateTime.date
-
-        val totalToday = entries
-            .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date == today }
-            .sumOf { it.length().inWholeSeconds }
-
         val weekStart = today.minus(DatePeriod(days = today.dayOfWeek.ordinal))
         val weekEnd = weekStart.plus(DatePeriod(days = 7))
 
         val range = weekStart..weekEnd
+
+        val entries = readEntries(
+            uid = uid,
+            startAfter = null,
+            limit = null,
+            endAt = weekStart.atStartOfDayIn(TimeZone.currentSystemDefault())
+        )
+
+        val totalToday = entries
+            .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date == today }
+            .sumOf { it.length().inWholeSeconds }
 
         val totalThisWeek = entries
             .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date in range }

@@ -4,6 +4,7 @@ import app.trackee.backend.config.exceptions.ClientException
 import app.trackee.backend.config.exceptions.ProjectException
 import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.config.util.await
+import app.trackee.backend.config.util.toTimestamp
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.user.User
@@ -15,8 +16,11 @@ import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import app.trackee.backend.infrastructure.model.user.toFirestore
+import com.google.cloud.Timestamp
 import com.google.cloud.firestore.FieldValue
+import com.google.cloud.firestore.Query
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.datetime.Instant
 import com.google.firebase.cloud.FirestoreClient as GoogleFirestoreClient
 
 
@@ -64,12 +68,20 @@ internal class UserSourceImpl : UserSource {
         auth.deleteUser(uid)
     }
 
-    override suspend fun readEntries(uid: String): List<FirestoreTimerEntry> {
+    override suspend fun readEntries(
+        uid: String,
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): List<FirestoreTimerEntry> {
         val snapshot = db
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
             .document(uid)
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
-            .orderBy(SourceConstants.Firestore.FieldName.STARTED_AT)
+            .orderBy(SourceConstants.Firestore.FieldName.STARTED_AT, Query.Direction.DESCENDING)
+            .startAfter(startAfter?.toTimestamp() ?: Timestamp.now())
+            .endAt(endAt?.toTimestamp() ?: Timestamp.MIN_VALUE)
+            .limit(limit ?: Int.MAX_VALUE)
             .get()
             .await()
 

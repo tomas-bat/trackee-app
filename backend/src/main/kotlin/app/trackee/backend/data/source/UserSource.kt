@@ -6,13 +6,19 @@ import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
 import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
+import kotlinx.datetime.Instant
 
 internal interface UserSource {
     suspend fun readUserByUid(uid: String): FirestoreUser
 
     suspend fun deleteUser(uid: String)
 
-    suspend fun readEntries(uid: String): List<FirestoreTimerEntry>
+    suspend fun readEntries(
+        uid: String,
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): List<FirestoreTimerEntry>
 
     suspend fun readProjectIds(uid: String): List<IdentifiableProject>
 

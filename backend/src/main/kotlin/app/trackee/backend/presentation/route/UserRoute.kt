@@ -18,6 +18,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
+import kotlinx.datetime.toInstant
 import org.koin.ktor.ext.inject
 
 fun Routing.userRoute() {
@@ -36,7 +37,16 @@ fun Routing.userRoute() {
 
                 get("/entries") {
                     val uid: String by call.parameters
-                    val entryDtos = userRepository.readEntries(uid).map { it.toDto() }
+                    val startAfter = call.request.queryParameters["startAfter"]
+                    val limit = call.request.queryParameters["limit"]
+                    val endAt = call.request.queryParameters["endAt"]
+
+                    val entryDtos = userRepository.readEntries(
+                        uid = uid,
+                        startAfter = startAfter?.toInstant(),
+                        limit = limit?.toInt(),
+                        endAt = endAt?.toInstant()
+                    ).map { it.toDto() }
 
                     call.respond(HttpStatusCode.OK, entryDtos)
                 }
@@ -59,7 +69,16 @@ fun Routing.userRoute() {
             route("/entries") {
                 get {
                     val user = call.requireUserPrincipal().user
-                    val entryDtos = userRepository.readEntries(user.uid).map { it.toDto() }
+                    val startAfter = call.request.queryParameters["startAfter"]
+                    val limit = call.request.queryParameters["limit"]
+                    val endAt = call.request.queryParameters["endAt"]
+
+                    val entryDtos = userRepository.readEntries(
+                        uid = user.uid,
+                        startAfter = startAfter?.toInstant(),
+                        limit = limit?.toInt(),
+                        endAt = endAt?.toInstant()
+                    ).map { it.toDto() }
 
                     call.respond(HttpStatusCode.OK, entryDtos)
                 }
@@ -76,7 +95,17 @@ fun Routing.userRoute() {
 
                 get("/previews") {
                     val user = call.requireUserPrincipal().user
-                    val entryPreviewDtos = userRepository.readEntryPreviews(user.uid).map { it.toDto() }
+                    val startAfter = call.request.queryParameters["startAfter"]
+                    val limit = call.request.queryParameters["limit"]
+                    val endAt = call.request.queryParameters["endAt"]
+
+
+                    val entryPreviewDtos = userRepository.readEntryPreviews(
+                        uid = user.uid,
+                        startAfter = startAfter?.toInstant(),
+                        limit = limit?.toInt(),
+                        endAt = endAt?.toInstant()
+                    ).map { it.toDto() }
 
                     call.respond(HttpStatusCode.OK, entryPreviewDtos)
                 }
