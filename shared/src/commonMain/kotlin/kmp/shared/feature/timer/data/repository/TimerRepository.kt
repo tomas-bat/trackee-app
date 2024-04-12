@@ -7,15 +7,32 @@ import kmp.shared.feature.timer.domain.model.*
 import kmp.shared.feature.timer.domain.repository.TimerRepository
 import kmp.shared.feature.timer.infrastructure.model.toDomain
 import kmp.shared.feature.timer.infrastructure.model.toDto
+import kotlinx.datetime.Instant
 
 internal class TimerRepositoryImpl(
     private val timerSource: TimerSource
 ) : TimerRepository {
-    override suspend fun readEntries(): Result<List<TimerEntry>> =
-        timerSource.readEntries().map { list -> list.map { entry -> entry.toDomain() } }
+    override suspend fun readEntries(
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): Result<List<TimerEntry>> =
+        timerSource.readEntries(
+            startAfter = startAfter?.toString(),
+            limit = limit,
+            endAt = endAt?.toString()
+        ).map { list -> list.map { entry -> entry.toDomain() } }
 
-    override suspend fun readEntryPreviews(): Result<List<TimerEntryPreview>> =
-        timerSource.readEntryPreviews().map { list -> list.map { entry -> entry.toDomain() } }
+    override suspend fun readEntryPreviews(
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): Result<List<TimerEntryPreview>> =
+        timerSource.readEntryPreviews(
+            startAfter = startAfter?.toString(),
+            limit = limit,
+            endAt = endAt?.toString()
+        ).map { list -> list.map { entry -> entry.toDomain() } }
 
     override suspend fun readProject(clientId: String, projectId: String): Result<Project> =
         timerSource.readProject(clientId, projectId).map { it.toDomain() }

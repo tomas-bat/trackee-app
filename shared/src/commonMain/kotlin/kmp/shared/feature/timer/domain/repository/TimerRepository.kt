@@ -2,11 +2,20 @@ package kmp.shared.feature.timer.domain.repository
 
 import kmp.shared.base.Result
 import kmp.shared.feature.timer.domain.model.*
+import kotlinx.datetime.Instant
 
 internal interface TimerRepository {
-    suspend fun readEntries(): Result<List<TimerEntry>>
+    suspend fun readEntries(
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): Result<List<TimerEntry>>
 
-    suspend fun readEntryPreviews(): Result<List<TimerEntryPreview>>
+    suspend fun readEntryPreviews(
+        startAfter: Instant?,
+        limit: Int?,
+        endAt: Instant?
+    ): Result<List<TimerEntryPreview>>
 
     suspend fun readProject(
         clientId: String,

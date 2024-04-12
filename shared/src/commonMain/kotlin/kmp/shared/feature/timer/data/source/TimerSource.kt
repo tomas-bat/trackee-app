@@ -4,9 +4,17 @@ import kmp.shared.base.Result
 import kmp.shared.feature.timer.infrastructure.model.*
 
 internal interface TimerSource {
-    suspend fun readEntries(): Result<List<TimerEntryDto>>
+    suspend fun readEntries(
+        startAfter: String?,
+        limit: Int?,
+        endAt: String?
+    ): Result<List<TimerEntryDto>>
 
-    suspend fun readEntryPreviews(): Result<List<TimerEntryPreviewDto>>
+    suspend fun readEntryPreviews(
+        startAfter: String?,
+        limit: Int?,
+        endAt: String?
+    ): Result<List<TimerEntryPreviewDto>>
 
     suspend fun readProject(
         clientId: String,

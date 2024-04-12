@@ -33,3 +33,9 @@ public extension ButtonStyle where Self == LoadingButtonStyle {
         .init()
     }
 }
+
+public extension ButtonStyle where Self == FetchMoreButtonStyle {
+    static var fetchMore: Self {
+        .init()
+    }
+}

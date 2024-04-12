@@ -15,7 +15,7 @@ public final class IsLoggedInUseCaseMock: UseCaseResultNoParamsMock, IsLoggedInU
 public final class LogoutUseCaseMock: UseCaseResultNoParamsMock, LogoutUseCase {}
 
 // MARK: - Timer
-public final class GetTimerEntriesUseCaseMock: UseCaseResultNoParamsMock, GetTimerEntriesUseCase {}
+public final class GetTimerEntriesUseCaseMock: UseCaseResultMock, GetTimerEntriesUseCase {}
 public final class GetTimerSummariesUseCaseMock: UseCaseResultNoParamsMock, GetTimerSummariesUseCase {}
 public final class GetTimerDataPreviewUseCaseMock: UseCaseResultNoParamsMock, GetTimerDataPreviewUseCase {}
 public final class GetProjectsUseCaseMock: UseCaseResultNoParamsMock, GetProjectsUseCase {}

@@ -17,6 +17,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Constants
     
     private let timerInterval: TimeInterval = 1
+    private let entryPagingLimit = KotlinInt(int: 10)
     
     // MARK: - Dependencies
     
@@ -73,10 +74,12 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         var formattedLength: String?
         var formattedInterval: TimerEntryInterval?
         var deletingEntryId: String?
+        var canLoadMoreData = true
         
         var controlLoading = false
         var switchLoading = false
         var discardLoading = false
+        var isFetchingMore = false
     }
     
     // MARK: - Intent
@@ -92,6 +95,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onDescriptionChange(String?)
         case onDescriptionSubmit
         case onEntryDelete(id: String)
+        case onFetchMore
     }
     
     func onIntent(_ intent: Intent) {
@@ -107,6 +111,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .onDescriptionChange(description): onDescriptionChange(description)
             case .onDescriptionSubmit: await updateTimerData()
             case let .onEntryDelete(id): await onEntryDelete(id: id)
+            case .onFetchMore: await fetchMoreEntries()
             }
         })
     }
@@ -133,8 +138,50 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func fetchEntries() async {
         do {
-            let groups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute()
+            let params = GetTimerEntriesUseCaseParams(limit: entryPagingLimit)
+            let groups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute(params: params)
             state.listData = .data(groups)
+            state.canLoadMoreData = groups.flatMap { $0.entries }.count == entryPagingLimit.int
+        } catch {
+            state.listData = .error(error)
+        }
+    }
+    
+    private func fetchMoreEntries() async {
+        guard let currentGroups = state.listData.data,
+              let firstEntryStart = currentGroups.first?.entries.first?.startedAt else { return }
+        
+        state.isFetchingMore = true
+        defer { state.isFetchingMore = false }
+        
+        do {
+            let params = GetTimerEntriesUseCaseParams(startAfter: firstEntryStart, limit: entryPagingLimit)
+            let fetchedGroups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute(params: params)
+            
+            var newGroups: [TimerEntryGroup] = []
+            
+            // Handle overlapping group
+            if let firstOfCurrent = currentGroups.first,
+               let lastOfNew = fetchedGroups.last,
+               firstOfCurrent.date == lastOfNew.date {
+                newGroups.append(contentsOf: fetchedGroups.dropLast())
+                
+                newGroups.append(TimerEntryGroup(
+                    date: firstOfCurrent.date,
+                    entries: lastOfNew.entries + firstOfCurrent.entries
+                ))
+                
+                newGroups.append(contentsOf: currentGroups.dropFirst())
+            } else {
+                newGroups.append(contentsOf: fetchedGroups)
+                newGroups.append(contentsOf: currentGroups)
+            }
+            
+            
+            state.listData = .data(newGroups)
+            
+            state.canLoadMoreData = fetchedGroups.flatMap { $0.entries }.count == entryPagingLimit.int
+            
         } catch {
             state.listData = .error(error)
         }

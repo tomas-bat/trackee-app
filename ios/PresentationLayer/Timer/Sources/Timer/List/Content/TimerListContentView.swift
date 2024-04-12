@@ -28,6 +28,9 @@ struct TimerListContentView: View {
     private let onEntryDelete: (String) -> Void
     private let deletingEntryId: String?
     private let isLoading: Bool
+    private let canLoadMoreData: Bool
+    private let isFetchingMore: Bool
+    private let onFetchMore: () -> Void
     
     // MARK: - Init
     
@@ -35,14 +38,20 @@ struct TimerListContentView: View {
         groups: [TimerEntryGroup],
         timerControlParams: TimerControlView.Params,
         isLoading: Bool,
+        canLoadMoreData: Bool,
+        isFetchingMore: Bool,
         deletingEntryId: String?,
-        onEntryDelete: @escaping (String) -> Void
+        onEntryDelete: @escaping (String) -> Void,
+        onFetchMore: @escaping () -> Void
     ) {
         self.groups = groups
         self.timerControlParams = timerControlParams
         self.isLoading = isLoading
+        self.canLoadMoreData = canLoadMoreData
+        self.isFetchingMore = isFetchingMore
         self.deletingEntryId = deletingEntryId
         self.onEntryDelete = onEntryDelete
+        self.onFetchMore = onFetchMore
     }
     
     // MARK: - Body
@@ -54,6 +63,13 @@ struct TimerListContentView: View {
                     Color.clear.frame(height: fillerSize)
                     
                     LazyVStack(alignment: .leading, spacing: entrySpacing) {
+                        if canLoadMoreData {
+                            Button(L10n.fetch_more, action: onFetchMore)
+                                .buttonStyle(.fetchMore)
+                                .environment(\.isLoading, isFetchingMore)
+                                .padding(padding)
+                        }
+                        
                         ForEach(0..<groups.count, id: \.self) { idx in
                             let group = groups[idx]
                             
@@ -83,17 +99,9 @@ struct TimerListContentView: View {
                     }
                     .animateContent(isLoading)
                     .padding(padding)
-                    .background(
-                        GeometryReader { contentGeometry in
-                            Color.clear
-                                .onAppear {
-                                    onGeometryChange(outer: geometry, content: contentGeometry)
-                                }
-                                .onChange(of: groups) {
-                                    onGeometryChange(outer: geometry, content: contentGeometry)
-                                }
-                        }
-                    )
+                    .readSize { size in
+                        onGeometryChange(outer: geometry.size, content: size)
+                    }
                 }
             }
             .defaultScrollAnchor(.bottom)
@@ -103,12 +111,12 @@ struct TimerListContentView: View {
     
     // MARK: - Private
     
-    private func onGeometryChange(outer: GeometryProxy, content: GeometryProxy) {
-        guard content.size.height < outer.size.height else {
+    private func onGeometryChange(outer: CGSize, content: CGSize) {
+        guard content.height < outer.height else {
             fillerSize = 0
             return
         }
-        fillerSize = outer.size.height - content.size.height
+        fillerSize = outer.height - content.height
     }
 }
 
@@ -139,8 +147,11 @@ import DependencyInjectionMocks
             onDescriptionChange: { _ in }
         ),
         isLoading: false,
+        canLoadMoreData: true,
+        isFetchingMore: false,
         deletingEntryId: nil,
-        onEntryDelete: { _ in }
+        onEntryDelete: { _ in },
+        onFetchMore: {}
     )
     .background(
         AppTheme.Colors.background

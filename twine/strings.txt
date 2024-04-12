@@ -263,6 +263,10 @@
 		cs = Žádné položky
 		en = No items
 		sk = Žiadne položky
+	[fetch_more]
+		cs = Načíst další...
+		en = Fetch more...
+		sk = Načítať ďalšie...
 
 [[Time events]]
 	[time_events_now]

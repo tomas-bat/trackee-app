@@ -11,15 +11,35 @@ import kmp.shared.feature.timer.infrastructure.model.*
 internal class RemoteTimerSource(
     private val client: HttpClient
 ) : TimerSource {
-    override suspend fun readEntries(): Result<List<TimerEntryDto>> =
+    override suspend fun readEntries(
+        startAfter: String?,
+        limit: Int?,
+        endAt: String?
+    ): Result<List<TimerEntryDto>> =
         runCatchingCommonNetworkExceptions {
-            val res = client.get("user/entries")
+            val res = client.get("user/entries") {
+                url {
+                    startAfter?.let { parameters.append("startAfter", it) }
+                    limit?.let { parameters.append("limit", it.toString()) }
+                    endAt?.let { parameters.append("endAt", it) }
+                }
+            }
             res.body<List<TimerEntryDto>>()
         }
 
-    override suspend fun readEntryPreviews(): Result<List<TimerEntryPreviewDto>> =
+    override suspend fun readEntryPreviews(
+        startAfter: String?,
+        limit: Int?,
+        endAt: String?
+    ): Result<List<TimerEntryPreviewDto>> =
         runCatchingCommonNetworkExceptions {
-            val res = client.get("user/entries/previews")
+            val res = client.get("user/entries/previews") {
+                url {
+                    startAfter?.let { parameters.append("startAfter", it) }
+                    limit?.let { parameters.append("limit", it.toString()) }
+                    endAt?.let { parameters.append("endAt", it) }
+                }
+            }
             res.body<List<TimerEntryPreviewDto>>()
         }
 

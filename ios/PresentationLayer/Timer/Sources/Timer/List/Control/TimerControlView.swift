@@ -133,6 +133,8 @@ struct TimerControlView: View {
                         .italic()
                         .font(AppTheme.Fonts.headlineAdditional)
                         .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+                    
+                    chevron
                 }
             }
             .multilineTextAlignment(.leading)
