@@ -136,7 +136,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             let groups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute()
             state.listData = .data(groups)
         } catch {
-            state.timerData = .error(error)
+            state.listData = .error(error)
         }
     }
     
