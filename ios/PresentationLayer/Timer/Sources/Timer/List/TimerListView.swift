@@ -43,6 +43,7 @@ struct TimerListView: View {
                         onControlClick: { viewModel.onIntent(.onControlClick) },
                         onSwitchClick: { viewModel.onIntent(.onSwitchClick) },
                         onDeleteClick: { viewModel.onIntent(.onDeleteClick) },
+                        onStartEditClick: { viewModel.onIntent(.onStartEditClick) },
                         onTimeEditClick: { viewModel.onIntent(.onTimeEditClick) },
                         onDescriptionSubmit: { viewModel.onIntent(.onDescriptionSubmit) },
                         onDescriptionChange: { description in viewModel.onIntent(.onDescriptionChange(description)) }

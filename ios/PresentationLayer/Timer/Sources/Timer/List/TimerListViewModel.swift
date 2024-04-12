@@ -66,7 +66,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
     
     struct State {
-        var summaryViewData: ViewData<[TimerSummary]> = .loading(mock: .stub)
+        var summaryViewData: ViewData<[TimerSummaryViewObject]> = .loading(mock: .stub)
         var listData: ViewData<[TimerEntryGroup]> = .loading(mock: .stub)
         var timerData: ViewData<TimerDataPreview> = .loading(mock: .stub)
         var manualTimerEnd: Date?
@@ -87,6 +87,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onControlClick
         case onSwitchClick
         case onDeleteClick
+        case onStartEditClick
         case onTimeEditClick
         case onDescriptionChange(String?)
         case onDescriptionSubmit
@@ -101,6 +102,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .onControlClick: await onControlClick()
             case .onSwitchClick: await onSwitchClick()
             case .onDeleteClick: await discardTimer()
+            case .onStartEditClick: onStartEditClick()
             case .onTimeEditClick: onTimeEditClick()
             case let .onDescriptionChange(description): onDescriptionChange(description)
             case .onDescriptionSubmit: await updateTimerData()
@@ -141,7 +143,17 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     private func fetchSummaries() async {
         do {
             let summaries: [TimerSummary] = try await getTimerSummariesUseCase.execute()
-            state.summaryViewData = .data(summaries)
+            let viewObjects = summaries.map { summary in
+                if state.timerData.data?.status == .active,
+                   state.timerData.data?.type == .timer,
+                   let start = state.timerData.data?.startedAt?.asDate {
+                    return summary.asViewObject.adding(start.distance(to: .now))
+                }
+                
+                return summary.asViewObject
+            }
+            
+            state.summaryViewData = .data(viewObjects)
         } catch {
             state.summaryViewData = .empty(.noData)
         }
@@ -149,7 +161,6 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func fetchTimer() async {
         do {
-            try await Task.sleep(for: .seconds(5))
             let timer: TimerDataPreview = try await getTimerDataPreviewUseCase.execute()
             state.timerData = .data(timer)
             
@@ -180,6 +191,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 await onEndChange(nil, skipUpdate: true)
                 changeTimerStatus(to: .off)
                 await updateTimerData()
+                await fetchData(showLoading: false)
             case (.manual, _):
                 guard let end = state.manualTimerEnd, data.startedAt != nil else {
                     snackState.currentData?.dismiss()
@@ -187,10 +199,12 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                     return
                 }
                 try await saveNewEntry(with: data, endedAt: end)
+                await fetchData(showLoading: false)
             }
         } catch {
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+            startFormatTimer() // In case something failed and the timer is still running
         }
     }
     
@@ -237,7 +251,6 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             )
         )
         try await addTimerEntryUseCase.execute(params: params)
-        await fetchData(showLoading: false)
     }
     
     private func onSwitchClick() async {
@@ -274,6 +287,17 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         await onStartChange(start, skipUpdate: true)
         await onEndChange(end, skipUpdate: true)
         await updateTimerData()
+    }
+    
+    private func onStartEditClick() {
+        flowController?.handleFlow(
+            TimerFlow.list(
+                .showStartTimeSelection(
+                    initialStart: state.timerData.data?.startedAt?.asDate,
+                    delegate: self
+                )
+            )
+        )
     }
     
     private func onTimeEditClick() {
@@ -374,6 +398,9 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         ) { [weak self] timer in
             guard let self else { return }
             state.formattedLength = formatTime(from: start)
+            if let data = state.summaryViewData.data {
+                state.summaryViewData = .data(data.map { $0.adding(start.distance(to: .now)) })
+            }
         }
         
         formatTimer?.fire()
@@ -427,6 +454,17 @@ extension TimerListViewModel: TimeSelectionViewModelDelegate {
         executeTask(Task {
             await onStartChange(start, skipUpdate: true)
             await onEndChange(end)
+        })
+    }
+}
+
+// MARK: - StartTimeSelectionViewModelDelegate
+
+extension TimerListViewModel: StartTimeSelectionViewModelDelegate {
+    func didConfirmSelection(start: Date) {
+        executeTask(Task {
+            await onStartChange(start)
+            startFormatTimer()
         })
     }
 }

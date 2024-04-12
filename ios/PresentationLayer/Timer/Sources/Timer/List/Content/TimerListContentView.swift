@@ -133,6 +133,7 @@ import DependencyInjectionMocks
             onControlClick: {},
             onSwitchClick: {},
             onDeleteClick: {},
+            onStartEditClick: {},
             onTimeEditClick: {},
             onDescriptionSubmit: {},
             onDescriptionChange: { _ in }

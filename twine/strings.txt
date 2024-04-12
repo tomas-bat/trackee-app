@@ -790,6 +790,20 @@
 		en = Start date must precede the end date
 		sk = Začiatok musí byť skôr ako koniec
 
+[[Start Time Selection View]]
+	[start_time_selection_view_title]
+		cs = Úprava začátku
+		en = Edit start time
+		sk = Úprava začiatku
+	[start_time_selection_view_start_label]
+		cs = Začátek
+		en = Start
+		sk = Začiatok
+	[start_time_selection_view_wrong_range]
+		cs = Začátek musí být dříve než nyní
+		en = Start date must precede the current date
+		sk = Začiatok musí byť skôr ako teraz
+
 [[Profile View]]
 	[profile_view_title]
 		cs = Profil

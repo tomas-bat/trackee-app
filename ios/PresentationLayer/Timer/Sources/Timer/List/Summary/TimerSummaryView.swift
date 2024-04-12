@@ -17,12 +17,12 @@ struct TimerSummaryView: View {
     
     // MARK: - Stored properties
     
-    private let summaries: [TimerSummary]
+    private let summaries: [TimerSummaryViewObject]
     
     // MARK: - Init
     
     init(
-        summaries: [TimerSummary]
+        summaries: [TimerSummaryViewObject]
     ) {
         self.summaries = summaries
     }
@@ -31,14 +31,16 @@ struct TimerSummaryView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: summaryVerticalSpacing) {
-            ForEach(summaries) { summary in
-                if let interval = summary.formattedInterval {
+            ForEach(summaries.indices, id: \.self) { idx in
+                let summary = summaries[idx]
+                
+                if let interval = summary.formattedTime {
                     HStack(spacing: summaryHorizontalSpacing) {
                         Text(interval)
                             .font(AppTheme.Fonts.headline)
                             .foregroundStyle(AppTheme.Colors.foreground)
                         
-                        Text(summary.formattedComponent)
+                        Text(summary.summary.formattedComponent)
                             .font(AppTheme.Fonts.headlineAdditional)
                             .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                     }

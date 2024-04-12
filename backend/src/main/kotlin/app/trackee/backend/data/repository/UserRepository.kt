@@ -18,9 +18,7 @@ import app.trackee.backend.infrastructure.model.project.toDomain
 import app.trackee.backend.infrastructure.model.timer.toDomain
 import app.trackee.backend.infrastructure.model.timer.toFirestore
 import app.trackee.backend.infrastructure.model.user.toDomain
-import kotlinx.datetime.Clock
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
+import kotlinx.datetime.*
 
 internal class UserRepositoryImpl(
     private val source: UserSource,
@@ -127,8 +125,18 @@ internal class UserRepositoryImpl(
             .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date == today }
             .sumOf { it.length().inWholeSeconds }
 
-        val todaySummary = TimerSummary(TimerSummaryComponent.Today, totalToday)
+        val weekStart = today.minus(DatePeriod(days = today.dayOfWeek.ordinal))
+        val weekEnd = weekStart.plus(DatePeriod(days = 7))
 
-        return listOf(todaySummary)
+        val range = weekStart..weekEnd
+
+        val totalThisWeek = entries
+            .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date in range }
+            .sumOf { it.length().inWholeSeconds }
+
+        val todaySummary = TimerSummary(TimerSummaryComponent.Today, totalToday)
+        val weekSummary = TimerSummary(TimerSummaryComponent.ThisWeek, totalThisWeek)
+
+        return listOf(todaySummary, weekSummary)
     }
 }

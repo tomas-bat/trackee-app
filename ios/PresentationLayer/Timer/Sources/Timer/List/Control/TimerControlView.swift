@@ -23,6 +23,7 @@ struct TimerControlView: View {
         let onControlClick: () -> Void
         let onSwitchClick: () -> Void
         let onDeleteClick: () -> Void
+        let onStartEditClick: () -> Void
         let onTimeEditClick: () -> Void
         let onDescriptionSubmit: () -> Void
         let onDescriptionChange: (String?) -> Void
@@ -198,8 +199,13 @@ struct TimerControlView: View {
                 Spacer()
                 
                 if data.type == .timer, data.status == .active, let length = params.formattedLength {
-                    Text(length)
-                        .font(AppTheme.Fonts.headline)
+                    Button(action: params.onStartEditClick) {
+                        Text(length)
+                            .font(AppTheme.Fonts.headline)
+                            .padding(timePadding)
+                            .background(AppTheme.Colors.field)
+                            .clipShape(RoundedRectangle(cornerSize: timeCornerRadius.squared))
+                    }
                 } else if data.type == .manual, let formattedInterval = params.formattedInterval {
                     Button(action: params.onTimeEditClick) {
                         HStack(alignment: .top, spacing: timeIntervalStackSpacing) {
@@ -295,6 +301,7 @@ struct TimerControlView_Previews: PreviewProvider {
                     onControlClick: {},
                     onSwitchClick: {},
                     onDeleteClick: {},
+                    onStartEditClick: {},
                     onTimeEditClick: {},
                     onDescriptionSubmit: {},
                     onDescriptionChange: { description in
