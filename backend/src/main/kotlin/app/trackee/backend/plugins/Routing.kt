@@ -21,7 +21,9 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
         get("/.well-known/apple-app-site-association") {
-            call.respondFile(File("src/main/resources/apple-app-site-association"))
+            val url = this.javaClass.classLoader.getResource("apple-app-site-association")
+            val file = File(url.file)
+            call.respondFile(file)
         }
         userRoute()
         clientRoute()

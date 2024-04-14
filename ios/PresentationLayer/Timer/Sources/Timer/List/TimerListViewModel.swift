@@ -33,12 +33,29 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Stored properties
     
     private var formatTimer: Timer?
+    private var foregroundObserver: NSObjectProtocol?
     
     // MARK: - Init
     
     init(flowController: FlowController? = nil) {
         self.flowController = flowController
         super.init()
+        
+        foregroundObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.willEnterForegroundNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.executeTask(Task {
+                await self?.fetchData(showLoading: false)
+            })
+        }
+    }
+    
+    deinit {
+        if let foregroundObserver {
+            NotificationCenter.default.removeObserver(foregroundObserver)
+        }
     }
     
     // MARK: - Lifecycle
