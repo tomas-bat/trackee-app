@@ -33,6 +33,8 @@ public enum AppTheme {
         public static let headline: Font = UIFont.preferredFont(forTextStyle: .headline, weight: .semibold, size: 14)
         public static let headlineAdditional: Font = UIFont.preferredFont(forTextStyle: .headline, weight: .regular, size: 14)
         
+        public static let subtitle: Font = UIFont.preferredFont(forTextStyle: .title1, weight: .semibold, size: 16)
+        
         public static let title: Font = UIFont.preferredFont(forTextStyle: .title1, weight: .bold, size: 24)
         
         public static let screenTitle: Font = UIFont.preferredFont(forTextStyle: .largeTitle, weight: .bold, size: 32)

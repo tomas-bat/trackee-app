@@ -39,30 +39,36 @@ interface GetTimerEntriesUseCase : UseCaseResult<GetTimerEntriesUseCase.Params, 
 internal class GetTimerEntriesUseCaseImpl(
     private val timerRepository: TimerRepository
 ) : GetTimerEntriesUseCase {
-    override suspend fun invoke(params: GetTimerEntriesUseCase.Params): Result<List<TimerEntryGroup>> =
-        timerRepository.readEntryPreviews(
+    override suspend fun invoke(params: GetTimerEntriesUseCase.Params): Result<List<TimerEntryGroup>> {
+        val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
+
+        return timerRepository.readEntryPreviews(
             startAfter = params.startAfter,
             limit = params.limit,
             endAt = params.endAt
         )
-        .map { entries ->
-            val groups = entries
-                .groupBy { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date }
-                .toList()
-                .map { pair ->
-                    TimerEntryGroup(pair.first, pair.second.sortedBy { it.startedAt })
+            .map { entries ->
+                val groups = entries
+                    .groupBy { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date }
+                    .toList()
+                    .map { pair ->
+                        TimerEntryGroup(
+                            date = pair.first,
+                            interval = if (pair.first == today) null else pair.second.sumOf { (it.endedAt - it.startedAt).inWholeSeconds },
+                            entries = pair.second.sortedBy { it.startedAt }
+                        )
+                    }
+                    .toMutableList()
+
+                if (params.startAfter == null && groups.firstOrNull { it.date == today } == null) {
+                    groups += TimerEntryGroup(
+                        date = today,
+                        interval = null,
+                        entries = emptyList()
+                    )
                 }
-                .toMutableList()
 
-            val today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date
-
-            if (params.startAfter == null && groups.firstOrNull { it.date == today } == null) {
-                groups += TimerEntryGroup(
-                    date = today,
-                    entries = emptyList()
-                )
+                groups.toList().sortedBy { it.date }
             }
-
-           groups.toList().sortedBy { it.date }
-        }
+    }
 }

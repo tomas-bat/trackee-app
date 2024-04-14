@@ -166,8 +166,14 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                firstOfCurrent.date == lastOfNew.date {
                 newGroups.append(contentsOf: fetchedGroups.dropLast())
                 
+                var interval: KotlinLong? {
+                    if lastOfNew.interval == nil && firstOfCurrent.interval == nil { return nil }
+                    return KotlinLong(value: ((lastOfNew.interval?.int ?? 0) + (firstOfCurrent.interval?.int ?? 0)).int64)
+                }
+                
                 newGroups.append(TimerEntryGroup(
                     date: firstOfCurrent.date,
+                    interval: interval,
                     entries: lastOfNew.entries + firstOfCurrent.entries
                 ))
                 

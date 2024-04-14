@@ -948,6 +948,16 @@
 		en = You don't have any clients. Create them in the profile tab.
 		sk = Nemáte žiadnych klientov. Vytvorte si ich v profile.
 
+[[Intents]]
+	[start_timer_intent_title]
+		cs = Zapnout časovač
+		en = Start timer
+		sk = Zapnúť časovač
+	[start_timer_intent_description]
+		cs = Zapne časovač s Vaším aktuálním nastavením.
+		en = Starts the timer with your current setting.
+		sk = Zapne časovač s Vašim aktuálnym nastavením.
+
 
 
 

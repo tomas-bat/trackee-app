@@ -73,12 +73,21 @@ struct TimerListContentView: View {
                         ForEach(0..<groups.count, id: \.self) { idx in
                             let group = groups[idx]
                             
-                            Text(group.date.asDate.localizedDate)
-                                .font(AppTheme.Fonts.title)
-                                .foregroundStyle(AppTheme.Colors.foreground)
-                                .padding(.top, groupTitleTopPadding)
-                                .padding(.bottom, groupTitleBottomPadding)
-                                .animation(nil, value: UUID())
+                            HStack {
+                                Text(group.date.asDate.localizedDate)
+                                    .font(AppTheme.Fonts.title)
+                                
+                                Spacer()
+                                
+                                if let interval = group.formattedInterval {
+                                    Text(interval)
+                                        .font(AppTheme.Fonts.subtitle)
+                                }
+                            }
+                            .foregroundStyle(AppTheme.Colors.foreground)
+                            .padding(.top, groupTitleTopPadding)
+                            .padding(.bottom, groupTitleBottomPadding)
+                            .animation(nil, value: UUID())
                             
                             ForEach(0..<group.entries.count, id: \.self) { idx in
                                 let entry = group.entries[idx]
