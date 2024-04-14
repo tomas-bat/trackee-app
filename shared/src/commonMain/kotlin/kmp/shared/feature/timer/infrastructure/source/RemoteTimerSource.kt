@@ -108,4 +108,10 @@ internal class RemoteTimerSource(
             val res = client.get("/user/summaries")
             res.body<List<TimerSummaryDto>>()
         }
+
+    override suspend fun startTimer(): Result<Unit> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.put("user/timer/start")
+            Result.Success(Unit)
+        }
 }

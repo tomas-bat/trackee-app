@@ -54,4 +54,6 @@ interface UserRepository {
     suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String)
 
     suspend fun readTimerSummariesUseCase(uid: String): List<TimerSummary>
+
+    suspend fun startTimer(uid: String)
 }

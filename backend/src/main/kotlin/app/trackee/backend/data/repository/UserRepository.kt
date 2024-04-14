@@ -154,4 +154,7 @@ internal class UserRepositoryImpl(
 
         return listOf(todaySummary, weekSummary)
     }
+
+    override suspend fun startTimer(uid: String) =
+        source.startTimer(uid)
 }

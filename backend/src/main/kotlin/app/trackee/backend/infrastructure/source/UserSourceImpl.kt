@@ -7,6 +7,7 @@ import app.trackee.backend.config.util.await
 import app.trackee.backend.config.util.toTimestamp
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.entry.NewTimerEntry
+import app.trackee.backend.domain.model.timer.TimerStatus
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.client.FirestoreUserClient
 import app.trackee.backend.infrastructure.model.entry.FirestoreEntryUser
@@ -212,6 +213,24 @@ internal class UserSourceImpl : UserSource {
             SourceConstants.Firestore.FieldName.PROJECT_IDS,
             FieldValue.arrayUnion(projectId)
         )
+    }
+
+    override suspend fun startTimer(uid: String) {
+        val userRef = db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .document(uid)
+
+        val timerData = userRef.get().await().toObject(FirestoreUser::class.java)?.timerData
+            ?: throw UserException.UserNotFound(uid)
+
+        if (timerData.status == TimerStatus.Off.rawValue) {
+            userRef.update(
+                mapOf(
+                    SourceConstants.Firestore.FieldName.TIMER_DATA_STARTED_AT to Timestamp.now(),
+                    SourceConstants.Firestore.FieldName.TIMER_DATA_STATUS to TimerStatus.Active.rawValue
+                )
+            ).await()
+        }
     }
 }
 

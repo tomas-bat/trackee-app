@@ -22,6 +22,7 @@ public final class GetProjectsUseCaseMock: UseCaseResultNoParamsMock, GetProject
 public final class UpdateTimerDataUseCaseMock: UseCaseResultMock, UpdateTimerDataUseCase {}
 public final class AddTimerEntryUseCaseMock: UseCaseResultMock, AddTimerEntryUseCase {}
 public final class DeleteTimerEntryUseCaseMock: UseCaseResultMock, DeleteTimerEntryUseCase {}
+public final class StartTimerUseCaseMock: UseCaseResultNoParamsMock, StartTimerUseCase {}
 
 // MARK: - Profile
 public final class GetClientsUseCaseMock: UseCaseResultNoParamsMock, GetClientsUseCase {}

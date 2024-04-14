@@ -41,4 +41,6 @@ internal interface TimerRepository {
     suspend fun deleteEntry(entryId: String): Result<Unit>
 
     suspend fun readTimerSummaries(): Result<List<TimerSummary>>
+
+    suspend fun startTimer(): Result<Unit>
 }

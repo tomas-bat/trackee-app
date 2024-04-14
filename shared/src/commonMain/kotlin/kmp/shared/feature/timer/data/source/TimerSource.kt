@@ -40,4 +40,6 @@ internal interface TimerSource {
     suspend fun deleteEntry(entryId: String): Result<Unit>
 
     suspend fun readTimerSummaries(): Result<List<TimerSummaryDto>>
+
+    suspend fun startTimer(): Result<Unit>
 }

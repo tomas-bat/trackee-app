@@ -142,6 +142,13 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK, timerDataPreviewDto)
                 }
+
+                put("/start") {
+                    val user = call.requireUserPrincipal().user
+                    userRepository.startTimer(user.uid)
+
+                    call.respond(HttpStatusCode.OK)
+                }
             }
 
             route("/projects") {
