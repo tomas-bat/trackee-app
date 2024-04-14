@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:www.trackee.app</string>
+		<string>applinks:trackee-app-production.up.railway.app</string>
 		<string>applinks:0.0.0.0:8080?mode=developer</string>
 		<string>applinks:192.168.88.41?mode=developer</string>
 	</array>
