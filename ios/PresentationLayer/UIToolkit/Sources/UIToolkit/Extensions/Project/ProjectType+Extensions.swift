@@ -14,4 +14,11 @@ public extension ProjectType {
         case .work: Image(systemSymbol: .briefcase)
         }
     }
+    
+    var imageSystemName: String {
+        switch self {
+        case .school: "graduationcap"
+        case .work: "briefcase"
+        }
+    }
 }

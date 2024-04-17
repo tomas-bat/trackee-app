@@ -7,6 +7,7 @@ import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.project.Project
 import app.trackee.backend.domain.model.project.ProjectPreview
+import app.trackee.backend.domain.model.timer.StartTimerBody
 import app.trackee.backend.domain.model.timer.TimerData
 import app.trackee.backend.domain.model.timer.TimerDataPreview
 import app.trackee.backend.domain.model.timer.TimerSummary
@@ -56,5 +57,5 @@ interface UserRepository {
 
     suspend fun readTimerSummariesUseCase(uid: String): List<TimerSummary>
 
-    suspend fun startTimer(uid: String)
+    suspend fun startTimer(uid: String, body: StartTimerBody)
 }

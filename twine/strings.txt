@@ -957,6 +957,18 @@
 		cs = Zapne časovač s Vaším aktuálním nastavením.
 		en = Starts the timer with your current setting.
 		sk = Zapne časovač s Vašim aktuálnym nastavením.
+	[start_timer_intent_parameter_description]
+		cs = Popis
+		sk = Popis
+		en = Description
+	[start_timer_project_parameter_type]
+		cs = Projekt
+		sk = Projekt
+		en = Project
+	[start_timer_intent_parameter_project]
+		cs = Projekt
+		sk = Projekt
+		en = Project
 
 
 

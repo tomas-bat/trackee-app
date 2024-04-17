@@ -2,6 +2,7 @@ package app.trackee.backend.data.source
 
 import app.trackee.backend.common.Page
 import app.trackee.backend.domain.model.entry.NewTimerEntry
+import app.trackee.backend.domain.model.timer.StartTimerBody
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
 import app.trackee.backend.infrastructure.model.project.IdentifiableProject
@@ -37,5 +38,5 @@ internal interface UserSource {
 
     suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String)
 
-    suspend fun startTimer(uid: String)
+    suspend fun startTimer(uid: String, body: StartTimerBody)
 }

@@ -68,9 +68,6 @@ public extension Container {
         deleteTimerEntryUseCase.register {
             DeleteTimerEntryUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
-        startTimerUseCase.register {
-            StartTimerUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
-        }
         
         // MARK: - Profile
         getClientsUseCase.register {
@@ -102,6 +99,11 @@ public extension Container {
         }
         deleteUserUseCase.register {
             DeleteUserUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        
+        // MARK: - Intent
+        startTimerUseCase.register {
+            StartTimerUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
     }
 }

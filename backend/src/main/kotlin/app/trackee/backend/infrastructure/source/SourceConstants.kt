@@ -20,6 +20,7 @@ internal class SourceConstants {
                 const val TIMER_DATA_CLIENT_ID = "timer_data.client_id"
                 const val TIMER_DATA_STATUS = "timer_data.status"
                 const val TIMER_DATA_STARTED_AT = "timer_data.started_at"
+                const val TIMER_DATA_DESCRIPTION = "timer_data.description"
                 const val CLIENT_ID = "client_id"
             }
         }

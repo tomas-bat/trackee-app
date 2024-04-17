@@ -6,6 +6,7 @@ import app.trackee.backend.presentation.model.entry.NewTimerEntryDto
 import app.trackee.backend.presentation.model.entry.toDomain
 import app.trackee.backend.presentation.model.entry.toDto
 import app.trackee.backend.presentation.model.project.toDto
+import app.trackee.backend.presentation.model.timer.StartTimerBodyDto
 import app.trackee.backend.presentation.model.timer.TimerDataDto
 import app.trackee.backend.presentation.model.timer.toDomain
 import app.trackee.backend.presentation.model.timer.toDto
@@ -143,9 +144,9 @@ fun Routing.userRoute() {
                     call.respond(HttpStatusCode.OK, timerDataPreviewDto)
                 }
 
-                put("/start") {
+                put<StartTimerBodyDto>("/start") { body ->
                     val user = call.requireUserPrincipal().user
-                    userRepository.startTimer(user.uid)
+                    userRepository.startTimer(user.uid, body.toDomain())
 
                     call.respond(HttpStatusCode.OK)
                 }

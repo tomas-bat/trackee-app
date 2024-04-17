@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  Trackee
+
+  Created by Tomáš Batěk on 17.04.2024.
+  Copyright © 2024 Matee. All rights reserved.
+*/
+
+"start_timer_intent_title" = "Start timer";
+"start_timer_intent_description" = "Starts the timer with your current setting.";
+"start_timer_intent_parameter_description" = "Description";
+"start_timer_project_parameter_type" = "Project";
+"start_timer_intent_parameter_project" = "Project";

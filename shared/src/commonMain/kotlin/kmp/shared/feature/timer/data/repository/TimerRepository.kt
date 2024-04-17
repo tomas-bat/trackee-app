@@ -64,7 +64,4 @@ internal class TimerRepositoryImpl(
 
     override suspend fun readTimerSummaries(): Result<List<TimerSummary>> =
         timerSource.readTimerSummaries().map { list -> list.mapNotNull { it.toDomain() } }
-
-    override suspend fun startTimer(): Result<Unit> =
-        timerSource.startTimer()
 }
