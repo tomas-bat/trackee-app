@@ -47,28 +47,36 @@ internal class GetTimerEntriesUseCaseImpl(
             limit = params.limit,
             endAt = params.endAt
         )
-            .map { entries ->
-                val groups = entries
-                    .groupBy { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date }
-                    .toList()
-                    .map { pair ->
-                        TimerEntryGroup(
-                            date = pair.first,
-                            interval = if (pair.first == today) null else pair.second.sumOf { (it.endedAt - it.startedAt).inWholeSeconds },
-                            entries = pair.second.sortedBy { it.startedAt }
-                        )
-                    }
-                    .toMutableList()
-
-                if (params.startAfter == null && groups.firstOrNull { it.date == today } == null) {
-                    groups += TimerEntryGroup(
-                        date = today,
-                        interval = null,
-                        entries = emptyList()
+        .map { entries ->
+            val groups = entries
+                .data
+                .groupBy { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date }
+                .toList()
+                .map { pair ->
+                    TimerEntryGroup(
+                        date = pair.first,
+                        interval = if (pair.first == today) null else pair.second.sumOf { (it.endedAt - it.startedAt).inWholeSeconds },
+                        entries = pair.second.sortedBy { it.startedAt }
                     )
                 }
+                .toMutableList()
 
-                groups.toList().sortedBy { it.date }
+            val groupsCount = groups.count()
+
+            groups.forEachIndexed { index, group ->
+                group.isFullyLoaded = index != (groupsCount - 1) || entries.isLast
             }
+
+            if (params.startAfter == null && groups.firstOrNull { it.date == today } == null) {
+                groups += TimerEntryGroup(
+                    date = today,
+                    interval = null,
+                    entries = emptyList(),
+                    isFullyLoaded = true
+                )
+            }
+
+            groups.toList().sortedBy { it.date }
+        }
     }
 }

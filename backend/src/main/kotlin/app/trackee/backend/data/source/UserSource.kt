@@ -1,5 +1,6 @@
 package app.trackee.backend.data.source
 
+import app.trackee.backend.common.Page
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
@@ -18,7 +19,7 @@ internal interface UserSource {
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): List<FirestoreTimerEntry>
+    ): Page<FirestoreTimerEntry>
 
     suspend fun readProjectIds(uid: String): List<IdentifiableProject>
 

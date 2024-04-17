@@ -1,6 +1,7 @@
 package kmp.shared.feature.timer.data.source
 
 import kmp.shared.base.Result
+import kmp.shared.base.paging.PageDto
 import kmp.shared.feature.timer.infrastructure.model.*
 
 internal interface TimerSource {
@@ -8,13 +9,13 @@ internal interface TimerSource {
         startAfter: String?,
         limit: Int?,
         endAt: String?
-    ): Result<List<TimerEntryDto>>
+    ): Result<PageDto<TimerEntryDto>>
 
     suspend fun readEntryPreviews(
         startAfter: String?,
         limit: Int?,
         endAt: String?
-    ): Result<List<TimerEntryPreviewDto>>
+    ): Result<PageDto<TimerEntryPreviewDto>>
 
     suspend fun readProject(
         clientId: String,

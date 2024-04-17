@@ -46,7 +46,7 @@ fun Routing.userRoute() {
                         startAfter = startAfter?.toInstant(),
                         limit = limit?.toInt(),
                         endAt = endAt?.toInstant()
-                    ).map { it.toDto() }
+                    ).toDto()
 
                     call.respond(HttpStatusCode.OK, entryDtos)
                 }
@@ -78,7 +78,7 @@ fun Routing.userRoute() {
                         startAfter = startAfter?.toInstant(),
                         limit = limit?.toInt(),
                         endAt = endAt?.toInstant()
-                    ).map { it.toDto() }
+                    ).toDto()
 
                     call.respond(HttpStatusCode.OK, entryDtos)
                 }
@@ -105,7 +105,7 @@ fun Routing.userRoute() {
                         startAfter = startAfter?.toInstant(),
                         limit = limit?.toInt(),
                         endAt = endAt?.toInstant()
-                    ).map { it.toDto() }
+                    ).toDto()
 
                     call.respond(HttpStatusCode.OK, entryPreviewDtos)
                 }

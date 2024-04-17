@@ -5,5 +5,6 @@ import kotlinx.datetime.LocalDate
 data class TimerEntryGroup(
     val date: LocalDate,
     val interval: Long?,
-    val entries: List<TimerEntryPreview>
+    val entries: List<TimerEntryPreview>,
+    var isFullyLoaded: Boolean = false
 )

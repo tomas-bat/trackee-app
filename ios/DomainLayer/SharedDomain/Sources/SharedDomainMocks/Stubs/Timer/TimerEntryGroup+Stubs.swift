@@ -11,7 +11,8 @@ public extension TimerEntryGroup {
         TimerEntryGroup(
             date: Date.now.asLocalDate,
             interval: 5_000,
-            entries: .stub
+            entries: .stub,
+            isFullyLoaded: true
         )
     }
 }
@@ -22,27 +23,32 @@ public extension [TimerEntryGroup] {
             TimerEntryGroup(
                 date: Date.now.asLocalDate,
                 interval: 5_000,
-                entries: .stub
+                entries: .stub,
+                isFullyLoaded: true
             ),
             TimerEntryGroup(
                 date: Date(timeIntervalSinceNow: -90_000).asLocalDate,
                 interval: 5_000,
-                entries: .stub
+                entries: .stub,
+                isFullyLoaded: true
             ),
             TimerEntryGroup(
                 date: Date(timeIntervalSinceNow: -180_000).asLocalDate,
                 interval: 5_000,
-                entries: .stub
+                entries: .stub,
+                isFullyLoaded: true
             ),
             TimerEntryGroup(
                 date: Date(timeIntervalSinceNow: -270_000).asLocalDate,
                 interval: 5_000,
-                entries: .stub
+                entries: .stub,
+                isFullyLoaded: true
             ),
             TimerEntryGroup(
                 date: Date(timeIntervalSinceNow: -32_270_000).asLocalDate,
                 interval: 5_000,
-                entries: .stub
+                entries: .stub,
+                isFullyLoaded: true
             )
         ]
         .reversed()

@@ -1,6 +1,7 @@
 package kmp.shared.feature.timer.data.repository
 
 import kmp.shared.base.Result
+import kmp.shared.base.paging.Page
 import kmp.shared.base.util.extension.map
 import kmp.shared.feature.timer.data.source.TimerSource
 import kmp.shared.feature.timer.domain.model.*
@@ -16,23 +17,23 @@ internal class TimerRepositoryImpl(
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): Result<List<TimerEntry>> =
+    ): Result<Page<TimerEntry>> =
         timerSource.readEntries(
             startAfter = startAfter?.toString(),
             limit = limit,
             endAt = endAt?.toString()
-        ).map { list -> list.map { entry -> entry.toDomain() } }
+        ).map { it.toDomain() }
 
     override suspend fun readEntryPreviews(
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): Result<List<TimerEntryPreview>> =
+    ): Result<Page<TimerEntryPreview>> =
         timerSource.readEntryPreviews(
             startAfter = startAfter?.toString(),
             limit = limit,
             endAt = endAt?.toString()
-        ).map { list -> list.map { entry -> entry.toDomain() } }
+        ).map { it.toDomain() }
 
     override suspend fun readProject(clientId: String, projectId: String): Result<Project> =
         timerSource.readProject(clientId, projectId).map { it.toDomain() }

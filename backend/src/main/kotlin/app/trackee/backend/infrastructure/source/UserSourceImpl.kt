@@ -1,5 +1,6 @@
 package app.trackee.backend.infrastructure.source
 
+import app.trackee.backend.common.Page
 import app.trackee.backend.config.exceptions.ClientException
 import app.trackee.backend.config.exceptions.ProjectException
 import app.trackee.backend.config.exceptions.UserException
@@ -74,22 +75,33 @@ internal class UserSourceImpl : UserSource {
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): List<FirestoreTimerEntry> {
-        val snapshot = db
+    ): Page<FirestoreTimerEntry> {
+        val entriesCollection = db
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
             .document(uid)
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
             .orderBy(SourceConstants.Firestore.FieldName.STARTED_AT, Query.Direction.DESCENDING)
+
+        val snapshot = entriesCollection
             .startAfter(startAfter?.toTimestamp() ?: Timestamp.now())
             .endAt(endAt?.toTimestamp() ?: Timestamp.MIN_VALUE)
             .limit(limit ?: Int.MAX_VALUE)
             .get()
             .await()
 
+        val data = snapshot.documents.map { it.toObject(FirestoreTimerEntry::class.java) }
 
-        return snapshot.documents.map { document ->
-            document.toObject(FirestoreTimerEntry::class.java)
-        }
+        val remainingCount = entriesCollection
+            .startAfter(data.lastOrNull()?.startedAt ?: Timestamp.MIN_VALUE)
+            .count()
+            .get()
+            .await()
+            .count
+
+        return Page(
+            data = data,
+            isLast = remainingCount == 0.toLong()
+        )
     }
 
     override suspend fun readProjectIds(uid: String): List<IdentifiableProject> =

@@ -1,6 +1,7 @@
 package kmp.shared.feature.timer.domain.repository
 
 import kmp.shared.base.Result
+import kmp.shared.base.paging.Page
 import kmp.shared.feature.timer.domain.model.*
 import kotlinx.datetime.Instant
 
@@ -9,13 +10,13 @@ internal interface TimerRepository {
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): Result<List<TimerEntry>>
+    ): Result<Page<TimerEntry>>
 
     suspend fun readEntryPreviews(
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): Result<List<TimerEntryPreview>>
+    ): Result<Page<TimerEntryPreview>>
 
     suspend fun readProject(
         clientId: String,

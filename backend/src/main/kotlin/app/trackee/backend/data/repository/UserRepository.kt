@@ -1,5 +1,6 @@
 package app.trackee.backend.data.repository
 
+import app.trackee.backend.common.Page
 import app.trackee.backend.data.source.ClientSource
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.client.Client
@@ -35,8 +36,14 @@ internal class UserRepositoryImpl(
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): List<TimerEntry> =
-        source.readEntries(uid, startAfter, limit, endAt).map { it.toDomain() }
+    ): Page<TimerEntry> {
+        val page = source.readEntries(uid, startAfter, limit, endAt)
+
+        return Page(
+            data = page.data.map { it.toDomain() },
+            isLast = page.isLast
+        )
+    }
 
     override suspend fun readProjects(uid: String): List<Project> =
         source.readProjectIds(uid).map { project ->
@@ -77,19 +84,26 @@ internal class UserRepositoryImpl(
         startAfter: Instant?,
         limit: Int?,
         endAt: Instant?
-    ): List<TimerEntryPreview> =
-        source.readEntries(uid, startAfter, limit, endAt)
-            .map { it.toDomain() }
-            .map { entry ->
-                TimerEntryPreview(
-                    id = entry.id,
-                    project = clientSource.readProjectById(entry.clientId, entry.projectId).toDomain(),
-                    client = clientSource.readClientById(entry.clientId).toDomain(),
-                    description = entry.description,
-                    startedAt = entry.startedAt,
-                    endedAt = entry.endedAt
-                )
-            }
+    ): Page<TimerEntryPreview> {
+        val page = source.readEntries(uid, startAfter, limit, endAt)
+
+        return Page(
+            data = page.data
+                .map { it.toDomain() }
+                .map { entry ->
+                    TimerEntryPreview(
+                        id = entry.id,
+                        project = clientSource.readProjectById(entry.clientId, entry.projectId).toDomain(),
+                        client = clientSource.readClientById(entry.clientId).toDomain(),
+                        description = entry.description,
+                        startedAt = entry.startedAt,
+                        endedAt = entry.endedAt
+                    )
+                },
+            isLast = page.isLast
+        )
+    }
+
 
     override suspend fun createUser(uid: String): User =
         source.createUser(
@@ -139,7 +153,7 @@ internal class UserRepositoryImpl(
             startAfter = null,
             limit = null,
             endAt = weekStart.atStartOfDayIn(TimeZone.currentSystemDefault())
-        )
+        ).data
 
         val totalToday = entries
             .filter { it.startedAt.toLocalDateTime(TimeZone.currentSystemDefault()).date == today }

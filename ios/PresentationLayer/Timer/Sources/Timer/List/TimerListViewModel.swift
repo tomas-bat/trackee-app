@@ -191,7 +191,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 newGroups.append(TimerEntryGroup(
                     date: firstOfCurrent.date,
                     interval: interval,
-                    entries: lastOfNew.entries + firstOfCurrent.entries
+                    entries: lastOfNew.entries + firstOfCurrent.entries,
+                    isFullyLoaded: lastOfNew.isFullyLoaded
                 ))
                 
                 newGroups.append(contentsOf: currentGroups.dropFirst())

@@ -5,6 +5,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kmp.shared.base.Result
 import kmp.shared.base.error.util.runCatchingCommonNetworkExceptions
+import kmp.shared.base.paging.PageDto
 import kmp.shared.feature.timer.data.source.TimerSource
 import kmp.shared.feature.timer.infrastructure.model.*
 
@@ -15,7 +16,7 @@ internal class RemoteTimerSource(
         startAfter: String?,
         limit: Int?,
         endAt: String?
-    ): Result<List<TimerEntryDto>> =
+    ): Result<PageDto<TimerEntryDto>> =
         runCatchingCommonNetworkExceptions {
             val res = client.get("user/entries") {
                 url {
@@ -24,14 +25,14 @@ internal class RemoteTimerSource(
                     endAt?.let { parameters.append("endAt", it) }
                 }
             }
-            res.body<List<TimerEntryDto>>()
+            res.body<PageDto<TimerEntryDto>>()
         }
 
     override suspend fun readEntryPreviews(
         startAfter: String?,
         limit: Int?,
         endAt: String?
-    ): Result<List<TimerEntryPreviewDto>> =
+    ): Result<PageDto<TimerEntryPreviewDto>> =
         runCatchingCommonNetworkExceptions {
             val res = client.get("user/entries/previews") {
                 url {
@@ -40,7 +41,7 @@ internal class RemoteTimerSource(
                     endAt?.let { parameters.append("endAt", it) }
                 }
             }
-            res.body<List<TimerEntryPreviewDto>>()
+            res.body<PageDto<TimerEntryPreviewDto>>()
         }
 
     override suspend fun readProject(clientId: String, projectId: String): Result<ProjectDto> =
