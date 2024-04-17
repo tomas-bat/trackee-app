@@ -198,6 +198,9 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 newGroups.append(contentsOf: currentGroups.dropFirst())
             } else {
                 newGroups.append(contentsOf: fetchedGroups)
+                if let firstOfCurrent = currentGroups.first, !firstOfCurrent.isFullyLoaded {
+                    firstOfCurrent.isFullyLoaded = true
+                }
                 newGroups.append(contentsOf: currentGroups)
             }
             
@@ -205,7 +208,6 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.listData = .data(newGroups)
             
             state.canLoadMoreData = fetchedGroups.flatMap { $0.entries }.count == entryPagingLimit.int
-            
         } catch {
             state.listData = .error(error)
         }

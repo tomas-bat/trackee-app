@@ -24,6 +24,10 @@ interface GetTimerEntriesUseCase : UseCaseResult<GetTimerEntriesUseCase.Params, 
      *
      * Use `startAfter` and `limit` for regular paging usage. Use `endAt` to get all entries until an instant.
      * If all params are null, all entries will be fetched.
+     *
+     * If you use paging, you will have to handle overlapping groups manually. Also, if the first group
+     * of your already fetched data has `isFullyLoaded = false`, but no new entries of this group have been
+     * fetched for this group in the next page request, you should manually set `isFullyLoaded` to `true`.
      */
     data class Params(
         val startAfter: Instant? = null,
