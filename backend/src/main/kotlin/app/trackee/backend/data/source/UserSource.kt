@@ -39,4 +39,6 @@ internal interface UserSource {
     suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String)
 
     suspend fun startTimer(uid: String, body: StartTimerBody)
+
+    suspend fun stopTimer(uid: String)
 }

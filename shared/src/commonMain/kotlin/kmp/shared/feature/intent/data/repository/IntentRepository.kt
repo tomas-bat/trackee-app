@@ -10,4 +10,10 @@ internal class IntentRepositoryImpl(
 ) : IntentRepository {
     override suspend fun startTimer(body: StartTimerBody): Result<Unit> =
         source.startTimer(body)
+
+    override suspend fun stopTimer(): Result<Unit> =
+        source.stopTimer()
+
+    override suspend fun cancelTimer(): Result<Unit> =
+        source.cancelTimer()
 }

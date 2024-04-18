@@ -274,6 +274,19 @@ internal class UserSourceImpl : UserSource {
         }
     }
 
+    override suspend fun stopTimer(uid: String) {
+        db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .document(uid)
+            .update(
+                mapOf(
+                    SourceConstants.Firestore.FieldName.TIMER_DATA_STATUS to TimerStatus.Off.rawValue,
+                    SourceConstants.Firestore.FieldName.TIMER_DATA_STARTED_AT to null
+                )
+            )
+            .await()
+    }
+
     private suspend fun isProjectAssignedToUser(uid: String, clientId: String, projectId: String): Boolean {
         val userClient = db
             .collection(SourceConstants.Firestore.Collection.USERS)

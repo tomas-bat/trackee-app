@@ -1,6 +1,7 @@
 package app.trackee.backend.data.repository
 
 import app.trackee.backend.common.Page
+import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.data.source.ClientSource
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.client.Client
@@ -171,4 +172,28 @@ internal class UserRepositoryImpl(
 
     override suspend fun startTimer(uid: String, body: StartTimerBody) =
         source.startTimer(uid, body)
+
+    override suspend fun stopTimer(uid: String) =
+        source.stopTimer(uid)
+
+    override suspend fun createEntryFromTimer(uid: String) {
+        val timerData = readUserByUid(uid).timerData
+
+        if (timerData.status == TimerStatus.Off) return
+
+        if (timerData.startedAt == null) throw UserException.MissingStartDate(uid)
+
+        if (timerData.clientId == null || timerData.projectId == null)
+            throw UserException.MissingProject(uid)
+
+        val newEntry = NewTimerEntry(
+            clientId = timerData.clientId,
+            projectId = timerData.projectId,
+            description = timerData.description,
+            startedAt = timerData.startedAt,
+            endedAt = Clock.System.now()
+        )
+
+        createEntry(uid, newEntry)
+    }
 }

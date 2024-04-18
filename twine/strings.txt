@@ -983,6 +983,10 @@
 		cs = Tento projekt Vám nepatří. Vyberte jeden ze svých projektů.
 		en = This project does not belong to you. Pick one of your projects.
 		sk = Tento projekt Vám nepatrí. Vyberte jeden zo svojich projektov.
+	[error_cannot_stop_and_save_timer_missing_project]
+		cs = Nelze uložit záznam: Není vybrán projekt.
+		en = Cannot save entry: Project not selected.
+		sk = Nie je možné uložiť záznam: Nie je vybraný projekt.
 
 
 

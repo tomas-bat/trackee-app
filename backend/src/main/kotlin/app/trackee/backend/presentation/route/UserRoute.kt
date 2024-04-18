@@ -150,6 +150,21 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK)
                 }
+
+                put("/cancel") {
+                    val user = call.requireUserPrincipal().user
+                    userRepository.stopTimer(user.uid)
+
+                    call.respond(HttpStatusCode.OK)
+                }
+
+                post("/save_and_stop") {
+                    val user = call.requireUserPrincipal().user
+                    userRepository.createEntryFromTimer(user.uid)
+                    userRepository.stopTimer(user.uid)
+
+                    call.respond(HttpStatusCode.OK)
+                }
             }
 
             route("/projects") {

@@ -17,6 +17,7 @@ extension SharedDomain.KMPError: LocalizedError {
         // MARK: - BackendError
         case is BackendError.NotAuthorized: L10n.error_not_authorised
         case is BackendError.ProjectNotAssignedToUser: L10n.error_project_not_assigned_to_user
+        case is BackendError.MissingProject: L10n.error_cannot_stop_and_save_timer_missing_project
         // MARK: - CommonError
         case is CommonError.ServerNotReachable: L10n.error_server_not_available
         default:

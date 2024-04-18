@@ -17,7 +17,17 @@ sealed class BackendError(
     ) : BackendError(throwable, responseMessage)
 
     class ProjectNotAssignedToUser(
+        responseMessage: String? = null,
+        throwable: Throwable? = null
+    ) : BackendError(throwable, responseMessage)
+
+    class MissingProject(
+        responseMessage: String?,
         throwable: Throwable? = null,
-        responseMessage: String? = null
+    ) : BackendError(throwable, responseMessage)
+
+    class MissingStartDate(
+        responseMessage: String?,
+        throwable: Throwable? = null,
     ) : BackendError(throwable, responseMessage)
 }

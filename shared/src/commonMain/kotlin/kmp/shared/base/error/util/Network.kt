@@ -31,7 +31,11 @@ internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: 
             )
 
             "ProjectNotAssignedToUser" -> Result.Error(
-                BackendError.ProjectNotAssignedToUser(e.cause, e.message)
+                BackendError.ProjectNotAssignedToUser(e.message, e)
+            )
+
+            "MissingProject" -> Result.Error(
+                BackendError.MissingProject(e.message, e)
             )
 
             else -> Result.Error(

@@ -5,4 +5,8 @@ import kmp.shared.feature.intent.domain.model.StartTimerBody
 
 internal interface IntentRepository {
     suspend fun startTimer(body: StartTimerBody): Result<Unit>
+
+    suspend fun stopTimer(): Result<Unit>
+
+    suspend fun cancelTimer(): Result<Unit>
 }

@@ -58,4 +58,8 @@ interface UserRepository {
     suspend fun readTimerSummariesUseCase(uid: String): List<TimerSummary>
 
     suspend fun startTimer(uid: String, body: StartTimerBody)
+
+    suspend fun stopTimer(uid: String)
+
+    suspend fun createEntryFromTimer(uid: String)
 }

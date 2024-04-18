@@ -10,6 +10,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kmp.shared.base.util.extension.getOrNull
 import kmp.shared.common.provider.AppInfoProvider
 import kmp.shared.common.provider.AuthProvider
+import kmp.shared.configuration.domain.configuration
 import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
 import co.touchlab.kermit.Logger.Companion as KermitLogger
