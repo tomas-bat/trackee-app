@@ -15,4 +15,13 @@ sealed class UserException(
             append("does not exist")
         }
     )
+
+    class ProjectNotAssignedToUser(uid: String?, clientId: String?, projectId: String?): UserException(
+        publicMessage = buildString {
+            append("Project ")
+            if (clientId != null && projectId != null) append("(clientId=${clientId}, projectId=${projectId}) ")
+            append("is not assigned to user")
+            if (uid != null) append(" with uid=${uid})")
+        }
+    )
 }

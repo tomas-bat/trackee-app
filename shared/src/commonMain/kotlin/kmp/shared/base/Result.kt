@@ -12,3 +12,9 @@ sealed class Result<out T : Any> {
 open class ErrorResult(open var message: String? = null, open var throwable: Throwable? = null) {
     constructor(message: String?) : this(message, null)
 }
+
+internal val Throwable.asErrorResult
+    get() = ErrorResult(
+        message = this.message,
+        throwable = this
+    )

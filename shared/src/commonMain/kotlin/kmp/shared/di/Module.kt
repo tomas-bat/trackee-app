@@ -1,6 +1,5 @@
 package kmp.shared.di
 
-import kmp.shared.configuration.domain.Configuration
 import kmp.shared.feature.auth.authModule
 import kmp.shared.feature.intent.intentModule
 import kmp.shared.feature.profile.profileModule
@@ -37,7 +36,10 @@ private val sharedModules = listOf(
 
 private val commonModule = module {
     single {
-        NetworkClient.Ktor.getClient(Configuration.Alpha, get())
+        NetworkClient.Ktor.getClient(
+            get(),
+            get()
+        )
     }
 
 }

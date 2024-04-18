@@ -86,6 +86,9 @@
                         <FileRef
                            location = "group:AppleSignInProvider.kt">
                         </FileRef>
+                        <FileRef
+                           location = "group:AppInfoProvider.kt">
+                        </FileRef>
                      </Group>
                   </Group>
                   <Group
@@ -172,13 +175,34 @@
                                  location = "group:TimerEntryDto.kt">
                               </FileRef>
                               <FileRef
+                                 location = "group:NewTimerEntryDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerDataPreviewDto.kt">
+                              </FileRef>
+                              <FileRef
                                  location = "group:TimerDataDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerEntryPreviewDto.kt">
                               </FileRef>
                               <FileRef
                                  location = "group:ClientDto.kt">
                               </FileRef>
                               <FileRef
+                                 location = "group:TimerEntryPageDto.kt">
+                              </FileRef>
+                              <FileRef
                                  location = "group:ProjectDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerEntryPreviewPageDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerSummaryDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:ProjectPreviewDto.kt">
                               </FileRef>
                            </Group>
                         </Group>
@@ -214,6 +238,9 @@
                               location = "group:model"
                               name = "model">
                               <FileRef
+                                 location = "group:ProjectPreview.kt">
+                              </FileRef>
+                              <FileRef
                                  location = "group:TimerData.kt">
                               </FileRef>
                               <FileRef
@@ -227,6 +254,18 @@
                               </FileRef>
                               <FileRef
                                  location = "group:TimerSummary.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewTimerEntry.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerType.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerDataPreview.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:TimerEntryGroup.kt">
                               </FileRef>
                               <FileRef
                                  location = "group:TimerEntry.kt">
@@ -245,14 +284,29 @@
                                  location = "group:GetTimerSummariesUseCase.kt">
                               </FileRef>
                               <FileRef
+                                 location = "group:AddTimerEntryUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:DeleteTimerEntryUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GetProjectsUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:UpdateTimerDataUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GetTimerDataPreviewUseCase.kt">
+                              </FileRef>
+                              <FileRef
                                  location = "group:GetTimerEntriesUseCase.kt">
                               </FileRef>
                            </Group>
                         </Group>
                      </Group>
                      <Group
-                        location = "group:user"
-                        name = "user">
+                        location = "group:intent"
+                        name = "intent">
                         <FileRef
                            location = "group:module.kt">
                         </FileRef>
@@ -263,14 +317,14 @@
                               location = "group:source"
                               name = "source">
                               <FileRef
-                                 location = "group:RemoteUserSource.kt">
+                                 location = "group:RemoteIntentSourceImpl.kt">
                               </FileRef>
                            </Group>
                            <Group
                               location = "group:model"
                               name = "model">
                               <FileRef
-                                 location = "group:UserDto.kt">
+                                 location = "group:StartTimerBodyDto.kt">
                               </FileRef>
                            </Group>
                         </Group>
@@ -281,14 +335,14 @@
                               location = "group:repository"
                               name = "repository">
                               <FileRef
-                                 location = "group:UserRepository.kt">
+                                 location = "group:IntentRepository.kt">
                               </FileRef>
                            </Group>
                            <Group
                               location = "group:source"
                               name = "source">
                               <FileRef
-                                 location = "group:UserSource.kt">
+                                 location = "group:RemoteIntentSource.kt">
                               </FileRef>
                            </Group>
                         </Group>
@@ -299,12 +353,104 @@
                               location = "group:repository"
                               name = "repository">
                               <FileRef
-                                 location = "group:UserRepository.kt">
+                                 location = "group:IntentRepository.kt">
                               </FileRef>
                            </Group>
                            <Group
                               location = "group:model"
                               name = "model">
+                              <FileRef
+                                 location = "group:StartTimerBody.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:usecase"
+                              name = "usecase">
+                              <FileRef
+                                 location = "group:StartTimerUseCase.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                     </Group>
+                     <Group
+                        location = "group:profile"
+                        name = "profile">
+                        <FileRef
+                           location = "group:module.kt">
+                        </FileRef>
+                        <Group
+                           location = "group:infrastructure"
+                           name = "infrastructure">
+                           <Group
+                              location = "group:source"
+                              name = "source">
+                              <FileRef
+                                 location = "group:RemoteProfileSourceImpl.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:model"
+                              name = "model">
+                              <FileRef
+                                 location = "group:NewClientDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewProjectResponseDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewClientResponseDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:UserDto.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewProjectDto.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <Group
+                           location = "group:data"
+                           name = "data">
+                           <Group
+                              location = "group:repository"
+                              name = "repository">
+                              <FileRef
+                                 location = "group:ProfileRepository.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:source"
+                              name = "source">
+                              <FileRef
+                                 location = "group:RemoteProfileSource.kt">
+                              </FileRef>
+                           </Group>
+                        </Group>
+                        <Group
+                           location = "group:domain"
+                           name = "domain">
+                           <Group
+                              location = "group:repository"
+                              name = "repository">
+                              <FileRef
+                                 location = "group:ProfileRepository.kt">
+                              </FileRef>
+                           </Group>
+                           <Group
+                              location = "group:model"
+                              name = "model">
+                              <FileRef
+                                 location = "group:NewClientResponse.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewProject.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewClient.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:NewProjectResponse.kt">
+                              </FileRef>
                               <FileRef
                                  location = "group:User.kt">
                               </FileRef>
@@ -312,6 +458,36 @@
                            <Group
                               location = "group:usecase"
                               name = "usecase">
+                              <FileRef
+                                 location = "group:RemoveProjectUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:AddAndAssignClientUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GetClientUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GetClientsUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:UpdateClientUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:RemoveClientUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:DeleteUserUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:UpdateProjectUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:AddAndAssignProjectUseCase.kt">
+                              </FileRef>
+                              <FileRef
+                                 location = "group:GetProjectPreviewUseCase.kt">
+                              </FileRef>
                            </Group>
                         </Group>
                      </Group>
@@ -332,6 +508,13 @@
                               location = "group:Result.kt">
                            </FileRef>
                         </Group>
+                     </Group>
+                     <Group
+                        location = "group:paging"
+                        name = "paging">
+                        <FileRef
+                           location = "group:Page.kt">
+                        </FileRef>
                      </Group>
                      <Group
                         location = "group:usecase"
@@ -361,6 +544,9 @@
                            name = "domain">
                            <FileRef
                               location = "group:AuthError.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:ProfileError.kt">
                            </FileRef>
                            <FileRef
                               location = "group:TimerError.kt">

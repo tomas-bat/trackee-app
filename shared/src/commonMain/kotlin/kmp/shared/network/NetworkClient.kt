@@ -8,8 +8,8 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kmp.shared.base.util.extension.getOrNull
+import kmp.shared.common.provider.AppInfoProvider
 import kmp.shared.common.provider.AuthProvider
-import kmp.shared.configuration.domain.Configuration
 import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
 import co.touchlab.kermit.Logger.Companion as KermitLogger
@@ -23,7 +23,7 @@ private val globalJson = Json {
 object NetworkClient {
     object Ktor {
         fun getClient(
-            config: Configuration,
+            appInfoProvider: AppInfoProvider,
             authProvider: AuthProvider
         ) = HttpClient {
             followRedirects = false
@@ -44,7 +44,7 @@ object NetworkClient {
 
                 url(
                     scheme = URLProtocol.HTTPS.name,
-                    host = config.host
+                    host = appInfoProvider.environment.configuration.host
                 )
 
 //                url(

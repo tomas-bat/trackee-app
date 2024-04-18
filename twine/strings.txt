@@ -970,6 +970,20 @@
 		sk = Projekt
 		en = Project
 
+[[Errors]]
+	[error_server_not_available]
+		cs = Server je nedostupný
+		en = Server is unavailable
+		sk = Server je nedostupný
+	[error_not_authorised]
+		cs = Nejste přihlášeni.
+		en = You are not signed in.
+		sk = Nie ste prihlásený.
+	[error_project_not_assigned_to_user]
+		cs = Tento projekt Vám nepatří. Vyberte jeden ze svých projektů.
+		en = This project does not belong to you. Pick one of your projects.
+		sk = Tento projekt Vám nepatrí. Vyberte jeden zo svojich projektov.
+
 
 
 

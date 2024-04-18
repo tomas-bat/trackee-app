@@ -4,6 +4,7 @@
 //
 
 import Foundation
+import AppleSignInProvider
 
 public final class AppleSignInProviderMock: AppleSignInProvider {
     

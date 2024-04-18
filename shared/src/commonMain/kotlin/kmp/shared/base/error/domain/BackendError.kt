@@ -15,4 +15,9 @@ sealed class BackendError(
         responseMessage: String?,
         throwable: Throwable? = null,
     ) : BackendError(throwable, responseMessage)
+
+    class ProjectNotAssignedToUser(
+        throwable: Throwable? = null,
+        responseMessage: String? = null
+    ) : BackendError(throwable, responseMessage)
 }

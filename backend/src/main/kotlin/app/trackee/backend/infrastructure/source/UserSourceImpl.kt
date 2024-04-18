@@ -135,6 +135,14 @@ internal class UserSourceImpl : UserSource {
     }
 
     override suspend fun updateTimer(uid: String, timerData: FirestoreTimerData) {
+        timerData.clientId?.let { clientId ->
+            timerData.projectId?.let { projectId ->
+                if (!isProjectAssignedToUser(uid, clientId, projectId)) {
+                    throw UserException.ProjectNotAssignedToUser(uid, clientId, projectId)
+                }
+            }
+        }
+
         db
             .collection(SourceConstants.Firestore.Collection.USERS)
             .document(uid)
@@ -143,6 +151,10 @@ internal class UserSourceImpl : UserSource {
     }
 
     override suspend fun createEntry(uid: String, entry: NewTimerEntry) {
+        if (!isProjectAssignedToUser(uid, entry.clientId, entry.projectId)) {
+            throw UserException.ProjectNotAssignedToUser(uid, entry.clientId, entry.projectId)
+        }
+
         val entryUserRef = db
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
             .document(uid)
@@ -229,6 +241,14 @@ internal class UserSourceImpl : UserSource {
     }
 
     override suspend fun startTimer(uid: String, body: StartTimerBody) {
+        body.clientId?.let { clientId ->
+            body.projectId?.let { projectId ->
+                if (!isProjectAssignedToUser(uid, clientId, projectId)) {
+                    throw UserException.ProjectNotAssignedToUser(uid, clientId, projectId)
+                }
+            }
+        }
+
         val userRef = db
             .collection(SourceConstants.Firestore.Collection.USERS)
             .document(uid)
@@ -252,6 +272,20 @@ internal class UserSourceImpl : UserSource {
                 )
             ).await()
         }
+    }
+
+    private suspend fun isProjectAssignedToUser(uid: String, clientId: String, projectId: String): Boolean {
+        val userClient = db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.CLIENTS)
+            .document(clientId)
+            .get()
+            .await()
+
+        if (!userClient.exists()) return false
+
+        return userClient.toObject(FirestoreUserClient::class.java)?.projectIds?.contains(projectId) ?: false
     }
 }
 

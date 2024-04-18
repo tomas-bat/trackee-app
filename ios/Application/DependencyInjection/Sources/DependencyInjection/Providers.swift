@@ -15,10 +15,12 @@ import UserDefaultsProvider
 import Utilities
 import AppleSignInProvider
 import AuthProvider
+import AppInfoProvider
 
 public extension Container {
     var appleSignInProvider: Factory<AppleSignInProvider> { self { DefaultAppleSignInProvider(presentationAnchor: UIApplication.shared.delegate?.window) } }
     var authProvider: Factory<AuthProvider> { self { FirebaseAuthProvider() } }
+    var appInfoProvider: Factory<AppInfoProvider> { self { DefaultAppInfoProvider() } }
     
     var analyticsProvider: Factory<AnalyticsProvider> { self { FirebaseAnalyticsProvider() } }
     var keychainProvider: Factory<KeychainProvider> { self { SystemKeychainProvider() } }

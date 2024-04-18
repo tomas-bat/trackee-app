@@ -1,6 +1,7 @@
 package kmp.shared.di
 
 import io.ktor.client.engine.darwin.*
+import kmp.shared.common.provider.AppInfoProvider
 import kmp.shared.common.provider.AppleSignInProvider
 import kmp.shared.common.provider.AuthProvider
 import kmp.shared.system.Config
@@ -18,13 +19,15 @@ import org.koin.dsl.module
 fun initKoinIos(
     doOnStartup: () -> Unit,
     appleSignInProvider: AppleSignInProvider,
-    authProvider: AuthProvider
+    authProvider: AuthProvider,
+    appInfoProvider: AppInfoProvider
 ) = initKoin {
     modules(
         module {
             single { doOnStartup }
             single { appleSignInProvider }
             single { authProvider }
+            single { appInfoProvider }
         },
     )
 }

@@ -1,10 +1,13 @@
 package kmp.shared.base.error.util
 
+import io.ktor.client.call.*
 import io.ktor.client.plugins.*
-import io.ktor.http.*
+import kmp.shared.base.ErrorResult
 import kmp.shared.base.Result
+import kmp.shared.base.asErrorResult
 import kmp.shared.base.error.domain.BackendError
 import kmp.shared.base.error.domain.CommonError
+import kmp.shared.base.error.infrastructure.ErrorDto
 
 internal inline fun <R : Any> runCatchingAuthNetworkExceptions(block: () -> R): Result<R> =
     try {
@@ -12,24 +15,34 @@ internal inline fun <R : Any> runCatchingAuthNetworkExceptions(block: () -> R): 
     } catch (e: Throwable) {
         when (e::class.simpleName) { // Handle platform specific exceptions
             "UnknownHostException" -> Result.Error(CommonError.NoNetworkConnection(e))
-            else -> throw e // Rethrow exception when it's not matched
+            else -> Result.Error(e.asErrorResult)
         }
     }
 
-internal inline fun <R : Any> runCatchingCommonNetworkExceptions(block: () -> R): Result<R> =
+internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: () -> R): Result<R> =
     try {
         Result.Success(block())
-    } catch (e: ClientRequestException) {
-        when (e.response.status) {
-            HttpStatusCode.Unauthorized -> Result.Error(
+    } catch (e: ResponseException) {
+        val body = e.response.body<ErrorDto>()
+
+        when (body.type) {
+            "Unauthorized" -> Result.Error(
                 BackendError.NotAuthorized(e.response.toString(), e),
             )
 
-            else -> throw e
+            "ProjectNotAssignedToUser" -> Result.Error(
+                BackendError.ProjectNotAssignedToUser(e.cause, e.message)
+            )
+
+            else -> Result.Error(
+                ErrorResult(
+                    message = body.message,
+                    throwable = e
+                )
+            )
         }
     } catch (e: Throwable) {
-        when (e::class.simpleName) { // Handle platform specific exceptions
-            "UnknownHostException" -> Result.Error(CommonError.NoNetworkConnection(e))
-            else -> throw e // Rethrow exception when it's not matched
-        }
+        Result.Error(handlePlatformError(e))
     }
+
+internal expect fun handlePlatformError(throwable: Throwable): ErrorResult

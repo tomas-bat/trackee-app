@@ -10,6 +10,11 @@ import org.koin.ktor.plugin.Koin
 
 fun main(args: Array<String>) = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module() {
+    val env = environment.config
+        .property("project.environment")
+        .getString()
+
+    val isDebug = env != "prod"
 
     install(Koin) {
         modules(
@@ -22,5 +27,5 @@ fun Application.module() {
     configureSecurity()
     configureSerialization()
     //configureDatabases()
-    configureRouting()
+    configureRouting(isDebug)
 }

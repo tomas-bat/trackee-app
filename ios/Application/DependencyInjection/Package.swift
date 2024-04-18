@@ -36,7 +36,8 @@ let package = Package(
         .package(name: "AuthProvider", path: "../../DataLayer/Providers/AuthProvider"),
         .package(name: "PushNotificationsProvider", path: "../../DataLayer/Providers/PushNotificationsProvider"),
         .package(name: "RemoteConfigProvider", path: "../../DataLayer/Providers/RemoteConfigProvider"),
-        .package(name: "UserDefaultsProvider", path: "../../DataLayer/Providers/UserDefaultsProvider")
+        .package(name: "UserDefaultsProvider", path: "../../DataLayer/Providers/UserDefaultsProvider"),
+        .package(name: "AppInfoProvider", path: "../../DataLayer/Providers/AppInfoProvider"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -59,7 +60,8 @@ let package = Package(
                 .product(name: "RemoteConfigProvider", package: "RemoteConfigProvider"),
                 .product(name: "UserDefaultsProvider", package: "UserDefaultsProvider"),
                 .product(name: "AppleSignInProvider", package: "AppleSignInProvider"),
-                .product(name: "AuthProvider", package: "AuthProvider")
+                .product(name: "AuthProvider", package: "AuthProvider"),
+                .product(name: "AppInfoProvider", package: "AppInfoProvider")
             ]
         ),
         .target(
