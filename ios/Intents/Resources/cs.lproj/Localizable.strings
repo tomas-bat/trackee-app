@@ -11,3 +11,7 @@
 "start_timer_intent_parameter_description" = "Popis";
 "start_timer_project_parameter_type" = "Projekt";
 "start_timer_intent_parameter_project" = "Projekt";
+"cancel_timer_intent_title" = "Zrušit časovač";
+"cancel_timer_intent_description" = "Zruší běžící časovač. Pokud časovač neběží, nic se neprovede.";
+"stop_timer_intent_title" = "Zastavit časovač";
+"stop_timer_intent_description" = "Zastaví časovač a uloží nový záznam. Pokud časovač neběží, nic se neprovede. Vrátí chybu, pokud není vybrán projekt.";

@@ -37,3 +37,5 @@ public final class DeleteUserUseCaseMock: UseCaseResultNoParamsMock, DeleteUserU
 
 // MARK: - Intent
 public final class StartTimerUseCaseMock: UseCaseResultMock, StartTimerUseCase {}
+public final class CancelTimerUseCaseMock: UseCaseResultNoParamsMock, CancelTimerUseCase {}
+public final class StopTimerUseCaseMock: UseCaseResultNoParamsMock, StopTimerUseCase {}

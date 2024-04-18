@@ -969,6 +969,22 @@
 		cs = Projekt
 		sk = Projekt
 		en = Project
+	[cancel_timer_intent_title]
+		cs = Zrušit časovač
+		sk = Zrušiť časovač
+		en = Cancel timer
+	[cancel_timer_intent_description]
+		cs = Zruší běžící časovač. Pokud časovač neběží, nic se neprovede.
+		sk = Zruší bežiaci časovač. Pokiaľ časovač nebeží, nič sa nevykoná.
+		en = Cancels the current timer. If the timer is not running, it does nothing.
+	[stop_timer_intent_title]
+		cs = Zastavit časovač
+		sk = Zastaviť časovač
+		en = Stop timer
+	[stop_timer_intent_description]
+		cs = Zastaví časovač a uloží nový záznam. Pokud časovač neběží, nic se neprovede. Vrátí chybu, pokud není vybrán projekt.
+		sk = Zastaví časovač a uloží nový záznam. Pokiaľ časovač nebeží, nič sa nevykoná. Vráti chybu, pokiaľ nie je vybraný projekt.
+		en = Stops the current timer and saves the timer entry. If the timer is not running, it does nothing. Fails if no project is selected.
 
 [[Errors]]
 	[error_server_not_available]

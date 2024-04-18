@@ -105,6 +105,12 @@ public extension Container {
         startTimerUseCase.register {
             StartTimerUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        cancelTimerUseCase.register {
+            CancelTimerUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        stopTimerUseCase.register {
+            StopTimerUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

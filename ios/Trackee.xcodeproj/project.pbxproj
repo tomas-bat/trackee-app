@@ -39,6 +39,8 @@
 		E276573D2BCD183C001D6700 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E276573C2BCD183C001D6700 /* PrivacyInfo.xcprivacy */; };
 		E29FF7342B9B87540065B401 /* DataUtilities in Resources */ = {isa = PBXBuildFile; fileRef = E29FF7332B9B87540065B401 /* DataUtilities */; };
 		E2AAF9322BC978DF00F37ACB /* StartTimerIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AAF9312BC978DF00F37ACB /* StartTimerIntent.swift */; };
+		E2B0415D2BD17E1D00922B06 /* CancelTimerIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0415C2BD17E1D00922B06 /* CancelTimerIntent.swift */; };
+		E2B0415F2BD17FA300922B06 /* StopTimerIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2B0415E2BD17FA300922B06 /* StopTimerIntent.swift */; };
 		E2BFD1B72BCFD61800D02F12 /* ProjectPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2BFD1B62BCFD61800D02F12 /* ProjectPreview.swift */; };
 		E2BFD1BB2BD002C200D02F12 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = E2BFD1BD2BD002C200D02F12 /* Localizable.strings */; };
 		E2D928922BA4C4F400E730C7 /* ApplicationLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2D928912BA4C4F400E730C7 /* ApplicationLoadingView.swift */; };
@@ -131,6 +133,8 @@
 		E29FF7332B9B87540065B401 /* DataUtilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataUtilities; sourceTree = "<group>"; };
 		E2AAF9312BC978DF00F37ACB /* StartTimerIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartTimerIntent.swift; sourceTree = "<group>"; };
 		E2B0415B2BD1468200922B06 /* AppInfoProvider */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppInfoProvider; sourceTree = "<group>"; };
+		E2B0415C2BD17E1D00922B06 /* CancelTimerIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelTimerIntent.swift; sourceTree = "<group>"; };
+		E2B0415E2BD17FA300922B06 /* StopTimerIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopTimerIntent.swift; sourceTree = "<group>"; };
 		E2BFD1B62BCFD61800D02F12 /* ProjectPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectPreview.swift; sourceTree = "<group>"; };
 		E2BFD1BC2BD002C200D02F12 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E2BFD1BE2BD002C500D02F12 /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -381,6 +385,8 @@
 			isa = PBXGroup;
 			children = (
 				E2AAF9312BC978DF00F37ACB /* StartTimerIntent.swift */,
+				E2B0415C2BD17E1D00922B06 /* CancelTimerIntent.swift */,
+				E2B0415E2BD17FA300922B06 /* StopTimerIntent.swift */,
 			);
 			path = Intents;
 			sourceTree = "<group>";
@@ -647,6 +653,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E2B0415D2BD17E1D00922B06 /* CancelTimerIntent.swift in Sources */,
+				E2B0415F2BD17FA300922B06 /* StopTimerIntent.swift in Sources */,
 				E2D928922BA4C4F400E730C7 /* ApplicationLoadingView.swift in Sources */,
 				4508333428437BA500BC9460 /* MainFlowController.swift in Sources */,
 				E2BFD1B72BCFD61800D02F12 /* ProjectPreview.swift in Sources */,
@@ -715,7 +723,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -760,7 +768,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -803,7 +811,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -846,7 +854,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -889,7 +897,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -932,7 +940,7 @@
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -1041,7 +1049,7 @@
 				CODE_SIGN_ENTITLEMENTS = Application/Entitlements/Alpha.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				ENABLE_BITCODE = NO;
@@ -1138,7 +1146,7 @@
 				CODE_SIGN_ENTITLEMENTS = Application/Entitlements/Beta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				ENABLE_BITCODE = NO;
@@ -1229,7 +1237,7 @@
 				CODE_SIGN_ENTITLEMENTS = Application/Entitlements/Alpha.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				ENABLE_BITCODE = NO;
@@ -1321,7 +1329,7 @@
 				CODE_SIGN_ENTITLEMENTS = Application/Entitlements/Beta.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				ENABLE_BITCODE = NO;
@@ -1476,7 +1484,7 @@
 				CODE_SIGN_ENTITLEMENTS = Application/Entitlements/Prod.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				ENABLE_BITCODE = NO;
@@ -1510,7 +1518,7 @@
 				CODE_SIGN_ENTITLEMENTS = Application/Entitlements/Prod.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				ENABLE_BITCODE = NO;
@@ -1545,7 +1553,7 @@
 				CODE_SIGN_ENTITLEMENTS = Widget/Entitlements/Prod.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1579,7 +1587,7 @@
 				CODE_SIGN_ENTITLEMENTS = Widget/Entitlements/Beta.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1612,7 +1620,7 @@
 				CODE_SIGN_ENTITLEMENTS = Widget/Entitlements/Alpha.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1645,7 +1653,7 @@
 				CODE_SIGN_ENTITLEMENTS = Widget/Entitlements/Prod.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1679,7 +1687,7 @@
 				CODE_SIGN_ENTITLEMENTS = Widget/Entitlements/Beta.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;
@@ -1713,7 +1721,7 @@
 				CODE_SIGN_ENTITLEMENTS = Widget/Entitlements/Alpha.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2404171716;
+				CURRENT_PROJECT_VERSION = 2404181851;
 				DEVELOPMENT_TEAM = 7NDB9Z4G86;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Widget/Info.plist;

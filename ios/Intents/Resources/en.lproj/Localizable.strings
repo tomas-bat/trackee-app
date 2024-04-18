@@ -11,3 +11,7 @@
 "start_timer_intent_parameter_description" = "Description";
 "start_timer_project_parameter_type" = "Project";
 "start_timer_intent_parameter_project" = "Project";
+"cancel_timer_intent_title" = "Cancel timer";
+"cancel_timer_intent_description" = "Cancels the current timer. If the timer is not running, it does nothing.";
+"stop_timer_intent_title" = "Stop timer";
+"stop_timer_intent_description" = "Stops the current timer and saves the timer entry. If the timer is not running, it does nothing. Fails if no project is selected.";
