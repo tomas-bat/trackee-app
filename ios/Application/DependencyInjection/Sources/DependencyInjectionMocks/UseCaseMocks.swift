@@ -114,6 +114,23 @@ public extension Container {
         stopTimerUseCase.register {
             StopTimerUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        
+        // MARK: - Integrations
+        addIntegrationUseCase.register {
+            AddIntegrationUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        getIntegrationUseCase.register {
+            GetIntegrationUseCaseMock(executeReturnValue: ResultSuccess(data: Integration.stub()))
+        }
+        getIntegrationsUseCase.register {
+            GetIntegrationsUseCaseMock(executeReturnValue: ResultSuccess(data: [Integration].stub as NSArray))
+        }
+        updateIntegrationUseCase.register {
+            UpdateIntegrationUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        deleteIntegrationUseCase.register {
+            DeleteIntegrationUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

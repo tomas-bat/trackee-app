@@ -44,4 +44,11 @@ public extension Container {
     var startTimerUseCase: Factory<StartTimerUseCase> { self { self.kmp().get(StartTimerUseCase.self) } }
     var cancelTimerUseCase: Factory<CancelTimerUseCase> { self { self.kmp().get(CancelTimerUseCase.self) } }
     var stopTimerUseCase: Factory<StopTimerUseCase> { self { self.kmp().get(StopTimerUseCase.self) } }
+    
+    // MARK: - Integrations
+    var addIntegrationUseCase: Factory<AddIntegrationUseCase> { self { self.kmp().get(AddIntegrationUseCase.self) } }
+    var getIntegrationUseCase: Factory<GetIntegrationUseCase> { self { self.kmp().get(GetIntegrationUseCase.self) } }
+    var getIntegrationsUseCase: Factory<GetIntegrationsUseCase> { self { self.kmp().get(GetIntegrationsUseCase.self) } }
+    var updateIntegrationUseCase: Factory<UpdateIntegrationUseCase> { self { self.kmp().get(UpdateIntegrationUseCase.self) } }
+    var deleteIntegrationUseCase: Factory<DeleteIntegrationUseCase> { self { self.kmp().get(DeleteIntegrationUseCase.self) } }
 }

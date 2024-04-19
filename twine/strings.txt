@@ -317,6 +317,10 @@
 		cs = Časovač
 		en = Timer
 		sk = Časovač
+	[bottom_bar_integrations]
+		cs = Integrace
+		en = Integrations
+		sk = Integrácie
 	[bottom_bar_profile]
 		cs = Profil
 		en = Profile
@@ -1003,6 +1007,25 @@
 		cs = Nelze uložit záznam: Není vybrán projekt.
 		en = Cannot save entry: Project not selected.
 		sk = Nie je možné uložiť záznam: Nie je vybraný projekt.
+
+[[Integrations View]]
+	[integrations_view_title]
+		cs = Integrace
+		en = Integrations
+		sk = Integrácie
+	[integrations_view_clockify_section_title]
+		cs = Clockify
+		en = Clockify
+		sk = Clockify
+	[integrations_view_csv_section_title]
+		cs = CSV
+		en = CSV
+		sk = CSV
+	[integrations_view_empty_title]
+		cs = Nemáte nastavené žádné integrace.
+		en = You haven't created any integrations.
+		sk = Nemáte nastavené žiadne integrácie.
+
 
 
 

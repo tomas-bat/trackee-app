@@ -40,3 +40,10 @@ public final class GetUserEmailUseCaseMock: UseCaseResultNoParamsMock, GetUserEm
 public final class StartTimerUseCaseMock: UseCaseResultMock, StartTimerUseCase {}
 public final class CancelTimerUseCaseMock: UseCaseResultNoParamsMock, CancelTimerUseCase {}
 public final class StopTimerUseCaseMock: UseCaseResultNoParamsMock, StopTimerUseCase {}
+
+// MARK: - Integrations
+public final class AddIntegrationUseCaseMock: UseCaseResultMock, AddIntegrationUseCase {}
+public final class GetIntegrationUseCaseMock: UseCaseResultMock, GetIntegrationUseCase {}
+public final class GetIntegrationsUseCaseMock: UseCaseResultNoParamsMock, GetIntegrationsUseCase {}
+public final class UpdateIntegrationUseCaseMock: UseCaseResultMock, UpdateIntegrationUseCase {}
+public final class DeleteIntegrationUseCaseMock: UseCaseResultMock, DeleteIntegrationUseCase {}

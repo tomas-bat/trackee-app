@@ -3,14 +3,16 @@
 //  Copyright © 2019 Matee. All rights reserved.
 //
 
+import Integrations
 import Profile
 import SharedDomain
+import Timer
 import UIKit
 import UIToolkit
-import Timer
 
 enum MainTab: Int {
     case timer
+    case integrations
     case profile
 }
 
@@ -28,7 +30,7 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate, T
     
     override func setup() -> UIViewController {
         let main = UITabBarController()
-        main.viewControllers = [setupTimerTab(), setupProfileTab()]
+        main.viewControllers = [setupTimerTab(), setupIntegrationsTab(), setupProfileTab()]
         return main
     }
     
@@ -44,6 +46,19 @@ final class MainFlowController: FlowController, ProfileFlowControllerDelegate, T
         let rootVC = startChildFlow(timerFC)
         timerNC.viewControllers = [rootVC]
         return timerNC
+    }
+    
+    private func setupIntegrationsTab() -> UINavigationController {
+        let integrationsNC = BaseNavigationController()
+        integrationsNC.tabBarItem = UITabBarItem(
+            title: L10n.bottom_bar_integrations,
+            image: UIImage(systemSymbol: .point3ConnectedTrianglepathDotted),
+            tag: MainTab.integrations.rawValue
+        )
+        let integrationsFC = IntegrationsFlowController(navigationController: integrationsNC)
+        let integrationsRootVC = startChildFlow(integrationsFC)
+        integrationsNC.viewControllers = [integrationsRootVC]
+        return integrationsNC
     }
     
     private func setupProfileTab() -> UINavigationController {
