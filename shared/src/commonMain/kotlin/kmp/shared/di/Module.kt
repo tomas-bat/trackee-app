@@ -1,6 +1,7 @@
 package kmp.shared.di
 
 import kmp.shared.feature.auth.authModule
+import kmp.shared.feature.integration.integrationModule
 import kmp.shared.feature.intent.intentModule
 import kmp.shared.feature.profile.profileModule
 import kmp.shared.feature.timer.timerModule
@@ -31,7 +32,8 @@ private val sharedModules = listOf(
     authModule,
     timerModule,
     profileModule,
-    intentModule
+    intentModule,
+    integrationModule
 )
 
 private val commonModule = module {

@@ -16,18 +16,15 @@ internal class RemoteIntentSourceImpl(
             client.put("user/timer/start") {
                 setBody(body.toDto())
             }
-            Result.Success(Unit)
         }
 
     override suspend fun stopTimer(): Result<Unit> =
         runCatchingCommonNetworkExceptions {
             client.post("user/timer/save_and_stop")
-            Result.Success(Unit)
         }
 
     override suspend fun cancelTimer(): Result<Unit> =
         runCatchingCommonNetworkExceptions {
             client.put("user/timer/cancel")
-            Result.Success(Unit)
         }
 }
