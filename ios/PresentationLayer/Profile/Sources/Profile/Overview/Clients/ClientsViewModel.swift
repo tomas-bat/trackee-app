@@ -14,6 +14,10 @@ import SharedDomainMocks
 
 final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
     
+    // MARK: - Constants
+    
+    private let messageDelay: TimeInterval = 0.5
+    
     // MARK: - Dependencies
     
     private weak var flowController: FlowController?
@@ -49,6 +53,7 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     @Published private(set) var state = State()
+    @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
     
     // MARK: - Intent
     
@@ -132,5 +137,14 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
 extension ClientsViewModel: ClientDetailViewModelDelegate {
     func refreshClients() async {
         await fetchData()
+    }
+    
+    func didRemoveClient(named clientName: String) {
+        Task.delayed(byTimeInterval: messageDelay) { [weak self] in
+            self?.snackState.currentData?.dismiss()
+            self?.snackState.showSnackSync(.info(
+                message: "\(L10n.client_removed_snack_title_part_one) \(clientName) \(L10n.client_removed_snack_title_part_two)"
+            ))
+        }
     }
 }

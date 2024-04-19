@@ -79,6 +79,7 @@ struct ProjectsView: View {
                 set: { text in viewModel.onIntent(.updateSearchText(to: text)) }
             )
         )
+        .snack(viewModel.snackState)
         .lifecycle(viewModel)
     }
 }

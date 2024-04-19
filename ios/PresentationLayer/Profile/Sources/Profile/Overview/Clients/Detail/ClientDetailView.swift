@@ -84,6 +84,7 @@ struct ClientDetailView: View {
             )) { alertData in .init(alertData) }
         }
         .snack(viewModel.snackState)
+        .disabled(viewModel.state.saveLoading || viewModel.state.removeLoading)
         .lifecycle(viewModel)
     }
     

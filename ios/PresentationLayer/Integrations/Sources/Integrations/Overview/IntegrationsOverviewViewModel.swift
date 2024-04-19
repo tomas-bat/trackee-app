@@ -14,6 +14,10 @@ import SharedDomainMocks
 
 final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableObject {
     
+    // MARK: - Constants
+    
+    private let messageDelay: TimeInterval = 0.5
+    
     // MARK: - Dependencies
     
     @Injected(\.getIntegrationsUseCase) private var getIntegrationsUseCase
@@ -44,18 +48,27 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     
     struct State {
         var integrations: ViewData<[Integration]> = .loading(mock: .stub)
+        var isShowingTypes = false
     }
     
     // MARK: - Intent
     
     enum Intent {
         case retry
+        case addIntegration
+        case selectNewIntegrationType(IntegrationType)
+        case showIntegrationDetail(id: String)
+        case changeShowingTypes(to: Bool)
     }
     
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
             case .retry: await fetchData(showLoading: true)
+            case .addIntegration: addIntegration()
+            case let .showIntegrationDetail(id): showIntegrationDetail(integrationId: id)
+            case let .changeShowingTypes(isShowing): state.isShowingTypes = isShowing
+            case let .selectNewIntegrationType(type): selectNewIntegrationType(type)
             }
         })
     }
@@ -77,6 +90,41 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
             }
         } catch {
             state.integrations = .error(error)
+        }
+    }
+    
+    private func addIntegration() {
+        state.isShowingTypes = true
+    }
+    
+    private func showIntegrationDetail(integrationId: String) {
+        flowController?.handleFlow(IntegrationsFlow.overview(.showIntegrationDetail(
+            integrationId: integrationId,
+            delegate: self
+        )))
+    }
+    
+    private func selectNewIntegrationType(_ type: IntegrationType) {
+        flowController?.handleFlow(IntegrationsFlow.overview(.showNewIntegration(
+            integrationType: type,
+            delegate: self
+        )))
+    }
+}
+
+// MARK: IntegrationDetailViewModelDelegate
+
+extension IntegrationsOverviewViewModel: IntegrationDetailViewModelDelegate {
+    func didUpdateIntegration() async {
+        await fetchData(showLoading: false)
+    }
+    
+    func didDeleteIntegration(named integrationName: String) {
+        Task.delayed(byTimeInterval: messageDelay) { [weak self] in
+            self?.snackState.currentData?.dismiss()
+            self?.snackState.showSnackSync(.info(
+                message: "\(L10n.integration_view_removed_snack_title_part_one) \(integrationName) \(L10n.integration_view_removed_snack_title_part_two)"
+            ))
         }
     }
 }

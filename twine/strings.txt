@@ -847,6 +847,14 @@
 		cs = Klienti
 		en = Clients
 		sk = Klienti
+	[client_removed_snack_title_part_one]
+		cs = Klient
+		en = Client
+		sk = Klient
+	[client_removed_snack_title_part_two]
+		cs = byl smazán
+		en = has been removed
+		sk = bol zmazaný
 
 [[Client Detail View]]
 	[client_detail_new_client_title]
@@ -887,6 +895,14 @@
 		cs = Projekty
 		en = Projects
 		sk = Projekty
+	[project_removed_snack_title_part_one]
+		cs = Projekt
+		en = Project
+		sk = Projekt
+	[project_removed_snack_title_part_two]
+		cs = byl smazán
+		en = has been removed
+		sk = bol zmazaný
 
 [[Project Detail View]]
 	[project_detail_new_project_title]
@@ -1025,6 +1041,65 @@
 		cs = Nemáte nastavené žádné integrace.
 		en = You haven't created any integrations.
 		sk = Nemáte nastavené žiadne integrácie.
+	[integrations_view_select_type_dialog_title]
+		cs = Vyberte typ integrace
+		en = Choose an integration type
+		sk = Vyberte typ integrácie
+	[integration_view_removed_snack_title_part_one]
+		cs = Integrace
+		en = Integration
+		sk = Integrácia
+	[integration_view_removed_snack_title_part_two]
+		cs = byla smazána
+		en = has been removed
+		sk = bola zmazaná
+
+[[Integration Detail]]
+	[integration_detail_label_section_title]
+		cs = Název
+		en = Label
+		sk = Názov
+	[integration_detail_label_label]
+		cs = Název
+		en = Label
+		sk = Názov
+	[integration_detail_label_placeholder]
+		cs = Název vaší integrace
+		en = Názov vašej integrácie
+		sk = Your integration label
+	[integration_detail_export_section_title]
+		cs = Export
+		en = Export
+		sk = Export
+	[integration_detail_export_data_button_title]
+		cs = Exportovat data
+		en = Export data
+		sk = Exportovať dáta
+	[integration_detail_api_key_section_title]
+		cs = API
+		en = API
+		sk = API
+	[integration_detail_api_key_label]
+		cs = API klíč
+		en = API key
+		sk = API kľúč
+	[integration_detail_api_key_placeholder]
+		cs = Váš API klíč
+		en = Your API key
+		sk = Váš API kľúč
+	[integration_detail_api_key_hint]
+		cs = Abyste si mohli vytvořit integraci s Clockify, musíte zadat Váš API klíč. Můžete si ho vygenerovat v Clockify v nastavení profilu.
+		en = In order to create an integration with Clockify, you’ll have to enter your API key. You can generate this API key Clockify Profile settings.
+		sk = Aby ste si mohli vytvoriť integráciu s Clockify, musíte zadať Váš API kľúč. Môžete si ho vygenerovať v Clockify v nastavení profilu.
+	[integration_detail_remove_integration_button_title]
+		cs = Smazat integraci
+		en = Remove integration
+		sk = Zmazať integráciu
+	[integration_detail_name_too_short]
+		cs = Název integrace musí mít alespoň 2 znaky
+		en = Integration name must be at least 2 characters long
+		sk = Názov integrácie musí mať aspoň 2 znaky
+
 
 
 

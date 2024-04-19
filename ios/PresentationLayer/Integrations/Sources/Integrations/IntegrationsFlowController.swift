@@ -6,13 +6,33 @@
 import SwiftUI
 import UIKit
 import UIToolkit
+import KMPSharedDomain
 
 enum IntegrationsFlow: Flow, Equatable {
     case overview(Overview)
+    case detail(Detail)
     
     enum Overview: Equatable {
-        case showIntegrationDetail(integrationId: String)
-        case showNewIntegration
+        case showIntegrationDetail(
+            integrationId: String,
+            delegate: IntegrationDetailViewModelDelegate?
+        )
+        case showNewIntegration(
+            integrationType: IntegrationType,
+            delegate: IntegrationDetailViewModelDelegate?
+        )
+        
+        static func == (lhs: IntegrationsFlow.Overview, rhs: IntegrationsFlow.Overview) -> Bool {
+            switch (lhs, rhs) {
+            case let (.showIntegrationDetail(lhsId, _), .showIntegrationDetail(rhsId, _)): lhsId == rhsId
+            case let (.showNewIntegration(lhsType, _), .showNewIntegration(rhsType, _)): lhsType == rhsType
+            default: false
+            }
+        }
+    }
+    
+    enum Detail {
+        case pop
     }
 }
 
@@ -29,6 +49,7 @@ public final class IntegrationsFlowController: FlowController {
         guard let flow = flow as? IntegrationsFlow else { return }
         switch flow {
         case let .overview(flow): handleOverviewFlow(flow)
+        case let .detail(flow): handleDetailFlow(flow)
         }
     }
 }
@@ -37,16 +58,61 @@ public final class IntegrationsFlowController: FlowController {
 extension IntegrationsFlowController {
     func handleOverviewFlow(_ flow: IntegrationsFlow.Overview) {
         switch flow {
-        case let .showIntegrationDetail(integrationId): showIntegrationDetail(integrationId: integrationId)
-        case .showNewIntegration: showNewIntegration()
+        case let .showIntegrationDetail(integrationId, delegate): 
+            showIntegrationDetail(
+                integrationId: integrationId,
+                delegate: delegate
+            )
+        case let .showNewIntegration(integrationType, delegate): 
+            showNewIntegration(
+                integrationType: integrationType,
+                delegate: delegate
+            )
         }
     }
     
-    private func showIntegrationDetail(integrationId: String) {
-        
+    private func createIntegrationDetailView(
+        type: IntegrationDetailViewModel.`Type`,
+        delegate: IntegrationDetailViewModelDelegate?
+    ) -> UIViewController {
+        let vm = IntegrationDetailViewModel(
+            type: type,
+            flowController: self
+        )
+        vm.delegate = delegate
+        let view = IntegrationDetailView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        return vc
     }
     
-    private func showNewIntegration() {
-        
+    private func showIntegrationDetail(
+        integrationId: String,
+        delegate: IntegrationDetailViewModelDelegate?
+    ) {
+        let vc = createIntegrationDetailView(
+            type: .edit(integrationId: integrationId),
+            delegate: delegate
+        )
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showNewIntegration(
+        integrationType: IntegrationType,
+        delegate: IntegrationDetailViewModelDelegate?
+    ) {
+        let vc = createIntegrationDetailView(
+            type: .new(integrationType: integrationType),
+            delegate: delegate
+        )
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Detail flow
+extension IntegrationsFlowController {
+    func handleDetailFlow(_ flow: IntegrationsFlow.Detail) {
+        switch flow {
+        case .pop: pop()
+        }
     }
 }

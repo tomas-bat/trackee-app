@@ -14,6 +14,10 @@ import SharedDomainMocks
 
 final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
     
+    // MARK: - Constants
+    
+    private let messageDelay: TimeInterval = 0.5
+    
     // MARK: - Dependencies
     
     private weak var flowController: FlowController?
@@ -49,6 +53,7 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     @Published private(set) var state = State()
+    @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
     
     // MARK: - Intent
     
@@ -144,5 +149,14 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
 extension ProjectsViewModel: ProjectDetailViewModelDelegate {
     func refreshProjects() async {
         await fetchData()
+    }
+    
+    func didRemoveProject(named projectName: String) {
+        Task.delayed(byTimeInterval: messageDelay) { [weak self] in
+            self?.snackState.currentData?.dismiss()
+            self?.snackState.showSnackSync(.info(
+                message: "\(L10n.project_removed_snack_title_part_one) \(projectName) \(L10n.project_removed_snack_title_part_two)"
+            ))
+        }
     }
 }

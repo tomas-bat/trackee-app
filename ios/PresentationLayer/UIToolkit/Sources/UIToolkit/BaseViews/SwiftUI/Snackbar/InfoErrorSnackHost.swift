@@ -72,7 +72,7 @@ extension InfoErrorSnackVisuals {
     
     var backgroundColor: Color {
         switch self {
-        case .info: AppTheme.Colors.field
+        case .info: AppTheme.Colors.fieldFull
         case .error: AppTheme.Colors.destructive
         }
     }

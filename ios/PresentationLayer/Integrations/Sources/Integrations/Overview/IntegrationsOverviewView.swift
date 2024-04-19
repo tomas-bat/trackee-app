@@ -5,6 +5,7 @@
 
 import SwiftUI
 import UIToolkit
+import KMPSharedDomain
 
 struct IntegrationsOverviewView: View {
     
@@ -34,7 +35,7 @@ struct IntegrationsOverviewView: View {
                         let integration = integrations[idx]
                         
                         Button {
-                            
+                            viewModel.onIntent(.showIntegrationDetail(id: integration.id))
                         } label: {
                             HStack {
                                 integration.image
@@ -65,15 +66,49 @@ struct IntegrationsOverviewView: View {
                 .padding(padding)
             }
         }
+        .confirmationDialog(
+            L10n.integrations_view_select_type_dialog_title,
+            isPresented: isShowingTypes,
+            titleVisibility: .visible,
+            actions: dialogActions
+        )
         .animateContent(viewModel.state.integrations.isLoading)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .foregroundStyle(AppTheme.Colors.foreground)
         .scrollBounceBehavior(.basedOnSize)
         .navigationTitle(L10n.integrations_view_title)
         .toolbar(.visible)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    viewModel.onIntent(.addIntegration)
+                } label: {
+                    Image(systemSymbol: .plus)
+                }
+            }
+        }
         .snack(viewModel.snackState)
         .background(AppTheme.Colors.background)
         .lifecycle(viewModel)
+    }
+    
+    // MARK: - Private
+    
+    private var isShowingTypes: Binding<Bool> {
+        Binding<Bool>(
+            get: { viewModel.state.isShowingTypes },
+            set: { isShowing in viewModel.onIntent(.changeShowingTypes(to: isShowing)) }
+        )
+    }
+    
+    private func dialogActions() -> some View {
+        ForEach(IntegrationType.allCases.indices, id: \.self) { idx in
+            let type = IntegrationType.allCases[idx]
+            
+            Button(type.name) {
+                viewModel.onIntent(.selectNewIntegrationType(type))
+            }
+        }
     }
 }
 
@@ -87,9 +122,11 @@ import Utilities
     Environment.locale = .init(identifier: "cs")
     
     let vm = IntegrationsOverviewViewModel(flowController: nil)
-    return IntegrationsOverviewView(
-        viewModel: vm
-    )
+    return NavigationStack {
+        IntegrationsOverviewView(
+            viewModel: vm
+        )
+    }
 }
 
 #endif

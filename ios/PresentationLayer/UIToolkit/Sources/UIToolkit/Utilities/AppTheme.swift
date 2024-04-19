@@ -15,6 +15,7 @@ public enum AppTheme {
         public static let foregroundSecondary = Asset.Colors.foregroundSecondary.color
         
         public static let field = Asset.Colors.field.color
+        public static let fieldFull = Asset.Colors.fieldFull.color
         
         public static let background = Asset.Colors.background.color
         public static let contentBackground = Asset.Colors.contentBackground.color

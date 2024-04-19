@@ -12,6 +12,7 @@ import KMPSharedDomain
 
 protocol ProjectDetailViewModelDelegate: AnyObject {
     func refreshProjects() async
+    func didRemoveProject(named: String)
 }
 
 final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
@@ -224,6 +225,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             try await removeProjectUseCase.execute(params: params)
             
             await delegate?.refreshProjects()
+            delegate?.didRemoveProject(named: state.name)
             dismiss()
         } catch {
             snackState.currentData?.dismiss()

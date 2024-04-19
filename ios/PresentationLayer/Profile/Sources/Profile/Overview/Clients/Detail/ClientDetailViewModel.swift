@@ -12,6 +12,7 @@ import KMPSharedDomain
 
 protocol ClientDetailViewModelDelegate: AnyObject {
     func refreshClients() async
+    func didRemoveClient(named: String)
 }
 
 final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
@@ -179,6 +180,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             try await removeClientUseCase.execute(params: params)
             
             await delegate?.refreshClients()
+            delegate?.didRemoveClient(named: state.name)
             dismiss()
         } catch {
             snackState.currentData?.dismiss()

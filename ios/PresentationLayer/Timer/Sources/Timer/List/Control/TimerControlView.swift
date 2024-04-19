@@ -96,6 +96,7 @@ struct TimerControlView: View {
                 EmptyView()
             }
         }
+        .disabled(params.controlLoading || params.switchLoading || params.discardLoading)
     }
     
     // MARK: - Private
