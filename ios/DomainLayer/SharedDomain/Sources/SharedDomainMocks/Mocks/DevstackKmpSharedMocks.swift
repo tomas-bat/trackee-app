@@ -34,6 +34,7 @@ public final class GetProjectPreviewUseCaseMock: UseCaseResultMock, GetProjectPr
 public final class UpdateProjectUseCaseMock: UseCaseResultMock, UpdateProjectUseCase {}
 public final class RemoveProjectUseCaseMock: UseCaseResultMock, RemoveProjectUseCase {}
 public final class DeleteUserUseCaseMock: UseCaseResultNoParamsMock, DeleteUserUseCase {}
+public final class GetUserEmailUseCaseMock: UseCaseResultNoParamsMock, GetUserEmailUseCase {}
 
 // MARK: - Intent
 public final class StartTimerUseCaseMock: UseCaseResultMock, StartTimerUseCase {}

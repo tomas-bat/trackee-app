@@ -15,7 +15,8 @@ internal val profileModule = module {
 
     single {
         ProfileRepositoryImpl(
-            source = get()
+            source = get(),
+            auth = get()
         )
     } bind ProfileRepository::class
 
@@ -29,4 +30,5 @@ internal val profileModule = module {
     factoryOf(::UpdateProjectUseCaseImpl) bind UpdateProjectUseCase::class
     factoryOf(::RemoveProjectUseCaseImpl) bind RemoveProjectUseCase::class
     factoryOf(::DeleteUserUseCaseImpl) bind DeleteUserUseCase::class
+    factoryOf(::GetUserEmailUseCaseImpl) bind GetUserEmailUseCase::class
 }

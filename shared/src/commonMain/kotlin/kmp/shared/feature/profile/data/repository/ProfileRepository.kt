@@ -2,6 +2,7 @@ package kmp.shared.feature.profile.data.repository
 
 import kmp.shared.base.Result
 import kmp.shared.base.util.extension.map
+import kmp.shared.common.provider.AuthProvider
 import kmp.shared.feature.profile.data.source.RemoteProfileSource
 import kmp.shared.feature.profile.domain.model.NewClient
 import kmp.shared.feature.profile.domain.model.NewClientResponse
@@ -14,7 +15,8 @@ import kmp.shared.feature.timer.domain.model.ProjectPreview
 import kmp.shared.feature.timer.infrastructure.model.toDomain
 
 internal class ProfileRepositoryImpl(
-    private val source: RemoteProfileSource
+    private val source: RemoteProfileSource,
+    private val auth: AuthProvider
 ) : ProfileRepository {
     override suspend fun readClients(): Result<List<Client>> =
         source.readClients().map { list -> list.map { it.toDomain() } }
@@ -51,4 +53,7 @@ internal class ProfileRepositoryImpl(
 
     override suspend fun deleteUser(): Result<Unit> =
         source.deleteUser()
+
+    override suspend fun readUserEmail(): Result<String> =
+        auth.readUserEmail()
 }

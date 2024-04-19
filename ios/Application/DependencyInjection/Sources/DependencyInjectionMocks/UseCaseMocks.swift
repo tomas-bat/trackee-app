@@ -100,6 +100,9 @@ public extension Container {
         deleteUserUseCase.register {
             DeleteUserUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        getUserEmailUseCase.register {
+            GetUserEmailUseCaseMock(executeReturnValue: ResultSuccess(data: NSString(string: "user@domain.com")))
+        }
         
         // MARK: - Intent
         startTimerUseCase.register {

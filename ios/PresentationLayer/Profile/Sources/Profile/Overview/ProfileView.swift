@@ -11,6 +11,8 @@ struct ProfileView: View {
     // MARK: - Constants
     
     private let padding: CGFloat = 16
+    private let imageSize: CGFloat = 64
+    private let spacing: CGFloat = 16
     
     // MARK: - Stored properties
     
@@ -26,6 +28,25 @@ struct ProfileView: View {
     
     var body: some View {
         List {
+            switch viewModel.state.email {
+            case let .data(email), let .loading(email):
+                HStack(spacing: spacing) {
+                    Asset.Images.user.image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: imageSize, height: imageSize)
+                    
+                    Text(email)
+                        .font(AppTheme.Fonts.headline)
+                        .multilineTextAlignment(.leading)
+                        .skeleton(viewModel.state.email.isLoading)
+                }
+            case let .error(error):
+                ErrorView(error: error)
+            case .empty:
+                EmptyView()
+            }
+            
             Section(L10n.profile_view_projects) {
                 navigationButton(L10n.profile_view_clients) {
                     viewModel.onIntent(.showClients)

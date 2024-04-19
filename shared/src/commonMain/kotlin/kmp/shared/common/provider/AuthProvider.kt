@@ -26,4 +26,6 @@ interface AuthProvider {
     suspend fun readCurrentUserUid(): Result<String>
 
     suspend fun logout(): Result<Unit>
+
+    suspend fun readUserEmail(): Result<String>
 }

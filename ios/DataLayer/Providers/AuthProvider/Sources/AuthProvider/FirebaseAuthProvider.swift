@@ -110,4 +110,10 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
         }
     }
     
+    public func __readUserEmail() async -> Result<NSString> {
+        guard let email = Auth.auth().currentUser?.email else {
+            return ResultError(error: AuthError.NoCurrentUser())
+        }
+        return ResultSuccess(data: NSString(string: email))
+    }
 }

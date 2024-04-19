@@ -8,6 +8,8 @@ import Factory
 import SharedDomain
 import SwiftUI
 import UIToolkit
+import Utilities
+import KMPSharedDomain
 
 final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     
@@ -17,6 +19,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     @Injected(\.logoutUseCase) private var logoutUseCase
     @Injected(\.deleteUserUseCase) private var deleteUserUseCase
+    @Injected(\.getUserEmailUseCase) private var getUserEmailUseCase
     
     // MARK: - Init
 
@@ -29,6 +32,10 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     override func onAppear() {
         super.onAppear()
+        
+        executeTask(Task {
+            await fetchData(showLoading: !state.email.hasData)
+        })
     }
     
     // MARK: - State
@@ -37,6 +44,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
 
     struct State {
+        var email: ViewData<String> = .loading(mock: .randomString(length: 16))
         var deleteLoading = false
         var alertData: AlertData?
     }
@@ -63,6 +71,19 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     // MARK: - Private
+    
+    private func fetchData(showLoading: Bool) async {
+        if showLoading {
+            state.email = .loading(mock: .randomString(length: 16))
+        }
+        
+        do {
+            let email: String = try await getUserEmailUseCase.execute()
+            state.email = .data(email)
+        } catch {
+            state.email = .error(error)
+        }
+    }
     
     private func logout() async {
         do {

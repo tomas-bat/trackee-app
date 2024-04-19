@@ -33,4 +33,6 @@ internal interface ProfileRepository {
     suspend fun assignProjectToUser(clientId: String, projectId: String): Result<Unit>
 
     suspend fun deleteUser(): Result<Unit>
+
+    suspend fun readUserEmail(): Result<String>
 }
