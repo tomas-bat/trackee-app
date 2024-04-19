@@ -8,6 +8,7 @@ internal class SourceConstants {
                 const val ENTRIES = "entries"
                 const val CLIENTS = "clients"
                 const val PROJECTS = "projects"
+                const val INTEGRATIONS = "integrations"
             }
         }
 

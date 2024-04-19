@@ -1,16 +1,20 @@
 package app.trackee.backend
 
 import app.trackee.backend.data.repository.ClientRepositoryImpl
+import app.trackee.backend.data.repository.IntegrationRepositoryImpl
+import app.trackee.backend.data.repository.ProjectRepositoryImpl
 import app.trackee.backend.data.repository.UserRepositoryImpl
 import app.trackee.backend.data.source.ClientSource
+import app.trackee.backend.data.source.IntegrationSource
 import app.trackee.backend.data.source.ProjectSource
-import app.trackee.backend.infrastructure.source.ProjectSourceImpl
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.repository.ClientRepository
+import app.trackee.backend.domain.repository.IntegrationRepository
 import app.trackee.backend.domain.repository.ProjectRepository
-import app.trackee.backend.data.repository.ProjectRepositoryImpl
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.infrastructure.source.ClientSourceImpl
+import app.trackee.backend.infrastructure.source.IntegrationSourceImpl
+import app.trackee.backend.infrastructure.source.ProjectSourceImpl
 import app.trackee.backend.infrastructure.source.UserSourceImpl
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -34,6 +38,9 @@ internal fun mainBackendModule(isDebug: Boolean) = module(createdAtStart = true)
 
     singleOf(::ProjectSourceImpl) bind ProjectSource::class
     singleOf(::ProjectRepositoryImpl) bind ProjectRepository::class
+
+    singleOf(::IntegrationSourceImpl) bind IntegrationSource::class
+    singleOf(::IntegrationRepositoryImpl) bind IntegrationRepository::class
 }
 
 private fun buildHttpClient() = HttpClient(OkHttp) {

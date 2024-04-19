@@ -1,7 +1,8 @@
 package app.trackee.backend.plugins
 
 import app.trackee.backend.config.exceptions.BaseException
-import app.trackee.backend.domain.model.error.ErrorDto
+import app.trackee.backend.presentation.model.error.ErrorDto
+import app.trackee.backend.presentation.route.integrationRoute
 import app.trackee.backend.presentation.route.projectRoute
 import app.trackee.backend.presentation.route.user.clientRoute
 import app.trackee.backend.presentation.route.user.userRoute
@@ -44,6 +45,7 @@ fun Application.configureRouting(isDebug: Boolean) {
         userRoute()
         clientRoute()
         projectRoute()
+        integrationRoute()
     }
 }
 

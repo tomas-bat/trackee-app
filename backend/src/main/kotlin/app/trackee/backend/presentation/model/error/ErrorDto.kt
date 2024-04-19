@@ -1,4 +1,4 @@
-package app.trackee.backend.domain.model.error
+package app.trackee.backend.presentation.model.error
 
 import kotlinx.serialization.Serializable
 

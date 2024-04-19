@@ -54,11 +54,19 @@ internal class UserSourceImpl : UserSource {
 
         userEntriesRef.delete().await()
 
-        // Delete user
         val userRef = db
             .collection(SourceConstants.Firestore.Collection.USERS)
             .document(uid)
 
+        // Delete integrations
+        userRef
+            .collection(SourceConstants.Firestore.Collection.INTEGRATIONS)
+            .listDocuments()
+            .forEach { integrationRef ->
+                integrationRef.delete().await()
+            }
+
+        // Delete user client refs
         userRef
             .collection(SourceConstants.Firestore.Collection.CLIENTS)
             .listDocuments()
@@ -66,8 +74,10 @@ internal class UserSourceImpl : UserSource {
                 userClientRef.delete().await()
             }
 
+        // Delete user
         userRef.delete().await()
 
+        // Delete user from auth
         auth.deleteUser(uid)
     }
 
