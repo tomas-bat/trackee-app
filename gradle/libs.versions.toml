@@ -30,12 +30,14 @@ kotlinxImmutableCollections = "0.3.6"
 konsist = "0.13.0"
 junit = "4.13.2"
 skie = "0.6.2"
+kotlinx-io = "0.3.2"
 
 [libraries]
 # Kotlin
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-immutableCollections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxImmutableCollections" }
+kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 # Tools
 androidTools-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 # Coroutines

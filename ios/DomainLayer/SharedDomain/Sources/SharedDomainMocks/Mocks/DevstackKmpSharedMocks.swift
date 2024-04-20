@@ -47,3 +47,4 @@ public final class GetIntegrationUseCaseMock: UseCaseResultMock, GetIntegrationU
 public final class GetIntegrationsUseCaseMock: UseCaseResultNoParamsMock, GetIntegrationsUseCase {}
 public final class UpdateIntegrationUseCaseMock: UseCaseResultMock, UpdateIntegrationUseCase {}
 public final class DeleteIntegrationUseCaseMock: UseCaseResultMock, DeleteIntegrationUseCase {}
+public final class ExportToCsvUseCaseMock: UseCaseResultMock, ExportToCsvUseCase {}

@@ -63,6 +63,7 @@ class KmmLibraryConventionPlugin : Plugin<Project> {
                             implementation(libs.bundles.ktor.common)
                             implementation(libs.kermit)
                             implementation(libs.skie.annotations)
+                            implementation(libs.kotlinx.io)
                         }
                     }
 

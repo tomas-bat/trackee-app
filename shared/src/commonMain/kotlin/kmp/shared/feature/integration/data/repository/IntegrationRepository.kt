@@ -5,6 +5,7 @@ import kmp.shared.feature.integration.data.source.RemoteIntegrationSource
 import kmp.shared.feature.integration.domain.model.Integration
 import kmp.shared.feature.integration.domain.model.NewIntegration
 import kmp.shared.feature.integration.domain.repository.IntegrationRepository
+import kotlinx.datetime.Instant
 
 internal class IntegrationRepositoryImpl(
     private val source: RemoteIntegrationSource
@@ -23,4 +24,7 @@ internal class IntegrationRepositoryImpl(
 
     override suspend fun deleteIntegration(integrationId: String): Result<Unit> =
         source.deleteIntegration(integrationId)
+
+    override suspend fun exportToCsv(from: Instant?, to: Instant?): Result<String> =
+        source.exportToCsv(from.toString(), to.toString())
 }

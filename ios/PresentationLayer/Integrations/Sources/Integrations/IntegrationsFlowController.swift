@@ -11,6 +11,7 @@ import KMPSharedDomain
 enum IntegrationsFlow: Flow, Equatable {
     case overview(Overview)
     case detail(Detail)
+    case export(Export)
     
     enum Overview: Equatable {
         case showIntegrationDetail(
@@ -35,6 +36,10 @@ enum IntegrationsFlow: Flow, Equatable {
         case pop
         case showExport(integrationType: IntegrationType)
     }
+    
+    enum Export: Equatable {
+        case showExportedFileOptions(url: URL)
+    }
 }
 
 public final class IntegrationsFlowController: FlowController {
@@ -51,6 +56,7 @@ public final class IntegrationsFlowController: FlowController {
         switch flow {
         case let .overview(flow): handleOverviewFlow(flow)
         case let .detail(flow): handleDetailFlow(flow)
+        case let .export(flow): handleExportFlow(flow)
         }
     }
 }
@@ -126,5 +132,19 @@ extension IntegrationsFlowController {
         let view = IntegrationExportView(viewModel: vm)
         let vc = BaseHostingController(rootView: view)
         navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+// MARK: Export flow
+extension IntegrationsFlowController {
+    func handleExportFlow(_ flow: IntegrationsFlow.Export) {
+        switch flow {
+        case let .showExportedFileOptions(url): showExportedFileOptions(url: url)
+        }
+    }
+
+    private func showExportedFileOptions(url: URL) {
+        let vc = UIActivityViewController(activityItems: [url], applicationActivities: nil)
+        navigationController.present(vc, animated: true)
     }
 }

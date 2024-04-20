@@ -131,6 +131,9 @@ public extension Container {
         deleteIntegrationUseCase.register {
             DeleteIntegrationUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        exportToCsvUseCase.register {
+            ExportToCsvUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinByteArray(size: 10)))
+        }
     }
 }
 #endif

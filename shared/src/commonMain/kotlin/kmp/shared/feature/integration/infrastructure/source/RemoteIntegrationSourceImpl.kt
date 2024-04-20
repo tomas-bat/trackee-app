@@ -3,6 +3,7 @@ package kmp.shared.feature.integration.infrastructure.source
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import kmp.shared.base.Result
 import kmp.shared.base.error.util.runCatchingCommonNetworkExceptions
 import kmp.shared.feature.integration.data.source.RemoteIntegrationSource
@@ -46,4 +47,14 @@ internal class RemoteIntegrationSourceImpl(
             client.delete("integrations/${integrationId}")
         }
 
+    override suspend fun exportToCsv(from: String?, to: String?): Result<String> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.get("integrations/csv") {
+                url {
+                    from?.let { parameters.append("from", it) }
+                    to?.let { parameters.append("to", it) }
+                }
+            }
+            res.bodyAsText()
+        }
 }

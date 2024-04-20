@@ -18,6 +18,8 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     
     private weak var flowController: FlowController?
     
+    @Injected(\.exportToCsvUseCase) private var exportToCsvUseCase
+    
     // MARK: - Stored properties
     
     private let integrationType: IntegrationType
@@ -67,9 +69,17 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     // MARK: - Private
     
     private func export() async {
+        state.exportLoading = true
+        defer { state.exportLoading = false }
+        
         do {
             guard state.fromDate <= state.toDate else {
                 throw IntegrationError.invalidDateRange
+            }
+            
+            switch integrationType {
+            case .csv: try await exportCsv()
+            case .clockify: () 
             }
         } catch {
             handleError(error)
@@ -79,5 +89,19 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     private func handleError(_ error: Error) {
         snackState.currentData?.dismiss()
         snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+    }
+    
+    private func exportCsv() async throws {
+        let params = ExportToCsvUseCaseParams(
+            from: state.fromDate.asInstant,
+            to: state.toDate.asInstant
+        )
+        let csv: String = try await exportToCsvUseCase.execute(params: params)
+        
+        let url = FileManager.default.temporaryDirectory.appendingPathComponent("export.csv")
+        
+        try csv.write(to: url, atomically: true, encoding: .utf8)
+        
+        flowController?.handleFlow(IntegrationsFlow.export(.showExportedFileOptions(url: url)))
     }
 }

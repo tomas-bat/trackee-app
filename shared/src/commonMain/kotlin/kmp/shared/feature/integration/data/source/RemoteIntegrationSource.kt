@@ -15,4 +15,6 @@ internal interface RemoteIntegrationSource {
     suspend fun updateIntegration(integration: Integration): Result<Unit>
 
     suspend fun deleteIntegration(integrationId: String): Result<Unit>
+
+    suspend fun exportToCsv(from: String?, to: String?): Result<String>
 }

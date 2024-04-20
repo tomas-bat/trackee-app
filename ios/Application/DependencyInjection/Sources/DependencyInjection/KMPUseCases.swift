@@ -51,4 +51,5 @@ public extension Container {
     var getIntegrationsUseCase: Factory<GetIntegrationsUseCase> { self { self.kmp().get(GetIntegrationsUseCase.self) } }
     var updateIntegrationUseCase: Factory<UpdateIntegrationUseCase> { self { self.kmp().get(UpdateIntegrationUseCase.self) } }
     var deleteIntegrationUseCase: Factory<DeleteIntegrationUseCase> { self { self.kmp().get(DeleteIntegrationUseCase.self) } }
+    var exportToCsvUseCase: Factory<ExportToCsvUseCase> { self { self.kmp().get(ExportToCsvUseCase.self) } }
 }

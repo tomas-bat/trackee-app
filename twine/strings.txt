@@ -1125,5 +1125,9 @@
 		cs = Začátek musí být dříve než konec
 		en = Start date must precede the end date
 		sk = Začiatok musí byť skôr ako koniec
+	[export_view_cannot_save_file]
+		cs = Soubor se nepodařilo uložit
+		en = Could not save file
+		sk = Súbor sa nepodarilo uložiť
 
 

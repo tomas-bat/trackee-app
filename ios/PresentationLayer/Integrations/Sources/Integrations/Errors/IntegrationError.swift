@@ -12,6 +12,7 @@ extension IntegrationError: LocalizedError {
         switch self {
         case .nameTooShort: L10n.integration_detail_name_too_short
         case .invalidDateRange: L10n.export_view_invalid_date_range
+        case .couldNotSaveFile: L10n.export_view_cannot_save_file
         }
     }
 }
