@@ -31,8 +31,9 @@ enum IntegrationsFlow: Flow, Equatable {
         }
     }
     
-    enum Detail {
+    enum Detail: Equatable {
         case pop
+        case showExport(integrationType: IntegrationType)
     }
 }
 
@@ -113,6 +114,17 @@ extension IntegrationsFlowController {
     func handleDetailFlow(_ flow: IntegrationsFlow.Detail) {
         switch flow {
         case .pop: pop()
+        case let .showExport(integrationType): showExport(integrationType: integrationType)
         }
+    }
+    
+    private func showExport(integrationType: IntegrationType) {
+        let vm = IntegrationExportViewModel(
+            integrationType: integrationType,
+            flowController: self
+        )
+        let view = IntegrationExportView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        navigationController.pushViewController(vc, animated: true)
     }
 }

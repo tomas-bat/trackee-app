@@ -11,6 +11,7 @@ extension IntegrationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .nameTooShort: L10n.integration_detail_name_too_short
+        case .invalidDateRange: L10n.export_view_invalid_date_range
         }
     }
 }

@@ -1100,30 +1100,30 @@
 		en = Integration name must be at least 2 characters long
 		sk = Názov integrácie musí mať aspoň 2 znaky
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+[[Export View]]
+	[export_view_title]
+		cs = Exportovat data
+		en = Export data
+		sk = Exportovať dáta
+	[export_view_interval_section_title]
+		cs = Interval
+		en = Interval
+		sk = Interval
+	[export_view_from_label]
+		cs = Od
+		en = From
+		sk = Od
+	[export_view_to_label]
+		cs = Do
+		en = To
+		sk = Do
+	[export_view_export_button_title]
+		cs = Exportovat
+		en = Export
+		sk = Exportovať
+	[export_view_invalid_date_range]
+		cs = Začátek musí být dříve než konec
+		en = Start date must precede the end date
+		sk = Začiatok musí byť skôr ako koniec
 
 

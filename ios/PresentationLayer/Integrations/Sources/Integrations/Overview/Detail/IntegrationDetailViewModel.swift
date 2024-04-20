@@ -105,7 +105,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             switch intent {
             case let .changeLabel(label): state.label = label
             case .retry: await fetchData(showLoading: true)
-            case .onExportData: ()
+            case .onExportData: onExportData()
             case .save: await save()
             case let .changeApiKey(key): state.apiKey = key
             case .remove: await remove()
@@ -206,5 +206,10 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             }
         default: return
         }
+    }
+    
+    private func onExportData() {
+        guard let type = state.integrationType.data else { return }
+        flowController?.handleFlow(IntegrationsFlow.detail(.showExport(integrationType: type)))
     }
 }

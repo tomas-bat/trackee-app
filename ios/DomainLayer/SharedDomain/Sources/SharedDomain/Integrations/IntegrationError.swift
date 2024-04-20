@@ -7,4 +7,5 @@ import Foundation
 
 public enum IntegrationError: Error {
     case nameTooShort
+    case invalidDateRange
 }
