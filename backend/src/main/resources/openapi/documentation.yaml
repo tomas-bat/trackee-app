@@ -6,18 +6,849 @@ info:
 servers:
   - url: "http://0.0.0.0:8080"
 paths:
-  /:
+  /users/{uid}:
     get:
-      description: "Hello World!"
+      summary: "Get User Details by UID"
+      parameters:
+        - name: "uid"
+          in: "path"
+          description: "User ID"
+          required: true
+          schema:
+            type: "string"
       responses:
-        "200":
+        '200':
           description: "OK"
           content:
-            text/plain:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+    /entries:
+      get:
+        summary: "Get User Entries"
+        parameters:
+          - name: "uid"
+            in: "path"
+            description: "User ID"
+            required: true
+            schema:
+              type: "string"
+          - name: "startAfter"
+            in: "query"
+            description: "Start after timestamp"
+            schema:
+              type: "string"
+          - name: "limit"
+            in: "query"
+            description: "Limit of entries"
+            schema:
+              type: "integer"
+          - name: "endAt"
+            in: "query"
+            description: "End at timestamp"
+            schema:
+              type: "string"
+        responses:
+          '200':
+            description: "OK"
+            content:
+              application/json:
+                schema:
+                  type: "array"
+                  items:
+                    $ref: "#/components/schemas/TimerEntryDto"
+  /user:
+    get:
+      summary: "Get Current User Details"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserDto"
+    delete:
+      summary: "Delete Current User"
+      responses:
+        '200':
+          description: "OK"
+  /user/entries:
+    get:
+      summary: "Get Current User Entries"
+      parameters:
+        - name: "startAfter"
+          in: "query"
+          description: "Start after timestamp"
+          schema:
+            type: "string"
+        - name: "limit"
+          in: "query"
+          description: "Limit of entries"
+          schema:
+            type: "integer"
+        - name: "endAt"
+          in: "query"
+          description: "End at timestamp"
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/TimerEntryDto"
+    post:
+      summary: "Create New Timer Entry"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewTimerEntryDto"
+      responses:
+        '201':
+          description: "Created"
+  /user/entries/previews:
+    get:
+      summary: "Get Current User Entry Previews"
+      parameters:
+        - name: "startAfter"
+          in: "query"
+          description: "Start after timestamp"
+          schema:
+            type: "string"
+        - name: "limit"
+          in: "query"
+          description: "Limit of entries"
+          schema:
+            type: "integer"
+        - name: "endAt"
+          in: "query"
+          description: "End at timestamp"
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/TimerEntryPreviewDto"
+  /user/entries/{entryId}:
+    delete:
+      summary: "Delete User Entry by ID"
+      parameters:
+        - name: "entryId"
+          in: "path"
+          description: "Entry ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "OK"
+  /user/timer:
+    get:
+      summary: "Get User Timer Data"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimerDataDto"
+    put:
+      summary: "Update User Timer Data"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimerDataDto"
+      responses:
+        '202':
+          description: "Accepted"
+  /user/timer/preview:
+    get:
+      summary: "Get User Timer Preview"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TimerDataPreviewDto"
+  /user/timer/start:
+    put:
+      summary: "Start User Timer"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StartTimerBodyDto"
+      responses:
+        '200':
+          description: "OK"
+  /user/timer/cancel:
+    put:
+      summary: "Cancel User Timer"
+      responses:
+        '200':
+          description: "OK"
+  /user/timer/save_and_stop:
+    post:
+      summary: "Save and Stop User Timer"
+      responses:
+        '200':
+          description: "OK"
+  /user/projects:
+    get:
+      summary: "Get User Projects"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ProjectDto"
+    put:
+      summary: "Assign Project to User"
+      parameters:
+        - name: "clientId"
+          in: "query"
+          description: "Client ID"
+          required: true
+          schema:
+            type: "string"
+        - name: "projectId"
+          in: "query"
+          description: "Project ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "OK"
+  /user/clients:
+    get:
+      summary: "Get User Clients"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/ClientDto"
+    put:
+      summary: "Assign Client to User"
+      parameters:
+        - name: "clientId"
+          in: "query"
+          description: "Client ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        '200':
+          description: "OK"
+  /user/summaries:
+    get:
+      summary: "Get User Timer Summaries"
+      responses:
+        '200':
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/TimerSummaryDto"
+  /integrations:
+    get:
+      summary: "Get user's integrations"
+      security:
+        - BearerAuth: [ ]
+      responses:
+        '200':
+          description: "Successful response"
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items:
+                  $ref: "#/components/schemas/IntegrationDto"
+    post:
+      summary: "Add a new integration"
+      security:
+        - BearerAuth: [ ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewIntegrationDto"
+      responses:
+        '201':
+          description: "Integration added successfully"
+
+    /integrations/{integrationId}:
+      parameters:
+        - name: "integrationId"
+          in: "path"
+          required: true
+          schema:
+            type: "string"
+      get:
+        summary: "Get integration details"
+        security:
+          - BearerAuth: [ ]
+        responses:
+          '200':
+            description: "Successful response"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/IntegrationDto"
+      put:
+        summary: "Update integration"
+        security:
+          - BearerAuth: [ ]
+        parameters:
+          - name: "integrationId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IntegrationDto"
+        responses:
+          '200':
+            description: "Integration updated successfully"
+      delete:
+        summary: "Delete integration"
+        security:
+          - BearerAuth: [ ]
+        parameters:
+          - name: "integrationId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+        responses:
+          '200':
+            description: "Integration deleted successfully"
+
+    /integrations/csv:
+      get:
+        summary: "Export CSV of entry previews"
+        security:
+          - BearerAuth: [ ]
+        parameters:
+          - name: "from"
+            in: "query"
+            description: "Start date (exclusive) in ISO 8601 format"
+            required: false
+            schema:
+              type: "string"
+              format: "date-time"
+          - name: "to"
+            in: "query"
+            description: "End date (inclusive) in ISO 8601 format"
+            required: false
+            schema:
+              type: "string"
+              format: "date-time"
+        responses:
+          '200':
+            description: "CSV file generated successfully"
+            content:
+              text/csv:
+                schema:
+                  type: "string"
+                  format: "binary"
+    /projects:
+      post:
+        summary: "Create a new project"
+        security:
+          - BearerAuth: [ ]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewProjectDto"
+        responses:
+          '201':
+            description: "Project created successfully"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ProjectDto"
+      /projects/{projectId}:
+        parameters:
+          - name: "projectId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+        get:
+          summary: "Get project preview"
+          security:
+            - BearerAuth: [ ]
+          parameters:
+            - name: "clientId"
+              in: "query"
+              required: true
               schema:
                 type: "string"
-              examples:
-                Example#1:
-                  value: "Hello World!"
+          responses:
+            '200':
+              description: "Successful response"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ProjectDto"
+        put:
+          summary: "Update project"
+          security:
+            - BearerAuth: [ ]
+          parameters:
+            - name: "projectId"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+            - name: "originalClientId"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ProjectDto"
+          responses:
+            '200':
+              description: "Project updated successfully"
+        delete:
+          summary: "Delete project"
+          security:
+            - BearerAuth: [ ]
+          parameters:
+            - name: "projectId"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+            - name: "clientId"
+              in: "query"
+              required: true
+              schema:
+                type: "string"
+          responses:
+            '200':
+              description: "Project deleted successfully"
+    /clients:
+      post:
+        summary: "Create a new client"
+        security:
+          - BearerAuth: [ ]
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewClientDto"
+        responses:
+          '201':
+            description: "Client created successfully"
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ClientDto"
+
+      /clients/{clientId}:
+        parameters:
+          - name: "clientId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+        get:
+          summary: "Get client details"
+          security:
+            - BearerAuth: [ ]
+          responses:
+            '200':
+              description: "Successful response"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ClientDto"
+        put:
+          summary: "Update client"
+          security:
+            - BearerAuth: [ ]
+          parameters:
+            - name: "clientId"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+          requestBody:
+            required: true
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/ClientDto"
+          responses:
+            '200':
+              description: "Client updated successfully"
+        delete:
+          summary: "Delete client"
+          security:
+            - BearerAuth: [ ]
+          parameters:
+            - name: "clientId"
+              in: "path"
+              required: true
+              schema:
+                type: "string"
+          responses:
+            '200':
+              description: "Client deleted successfully"
+
+      /clients/{clientId}/projects:
+        parameters:
+          - name: "clientId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+        get:
+          summary: "Get projects for a client"
+          security:
+            - BearerAuth: [ ]
+          responses:
+            '200':
+              description: "Successful response"
+              content:
+                application/json:
+                  schema:
+                    type: "array"
+                    items:
+                      $ref: "#/components/schemas/ProjectDto"
+
+      /clients/{clientId}/projects/{projectId}:
+        parameters:
+          - name: "clientId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+          - name: "projectId"
+            in: "path"
+            required: true
+            schema:
+              type: "string"
+        get:
+          summary: "Get project details for a client"
+          security:
+            - BearerAuth: [ ]
+          responses:
+            '200':
+              description: "Successful response"
+              content:
+                application/json:
+                  schema:
+                    $ref: "#/components/schemas/ProjectDto"
+
 components:
   schemas:
+    UserDto:
+      type: object
+      properties:
+        uid:
+          type: string
+          description: "User ID"
+        timer_data:
+          $ref: "#/components/schemas/TimerDataDto"
+          nullable: true
+      required:
+        - uid
+    TimerEntryDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Timer Entry ID"
+        client_id:
+          type: string
+          description: "Client ID associated with the entry"
+        project_id:
+          type: string
+          description: "Project ID associated with the entry"
+        description:
+          type: string
+          nullable: true
+          description: "Description of the entry (optional)"
+        started_at:
+          type: string
+          format: date-time
+          description: "Start time of the entry"
+        ended_at:
+          type: string
+          format: date-time
+          description: "End time of the entry"
+      required:
+        - id
+        - client_id
+        - project_id
+        - started_at
+        - ended_at
+    TimerEntryPreviewDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Timer Entry ID"
+        project:
+          $ref: "#/components/schemas/ProjectDto"
+          description: "Project associated with the entry"
+        client:
+          $ref: "#/components/schemas/ClientDto"
+          description: "Client associated with the entry"
+        description:
+          type: string
+          nullable: true
+          description: "Description of the entry (optional)"
+        started_at:
+          type: string
+          format: date-time
+          description: "Start time of the entry"
+        ended_at:
+          type: string
+          format: date-time
+          description: "End time of the entry"
+      required:
+        - id
+        - project
+        - client
+        - started_at
+        - ended_at
+    NewTimerEntryDto:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: "Client ID associated with the new timer entry"
+        project_id:
+          type: string
+          description: "Project ID associated with the new timer entry"
+        description:
+          type: string
+          nullable: true
+          description: "Description of the new timer entry (optional)"
+        started_at:
+          type: string
+          format: date-time
+          description: "Start time of the new timer entry"
+        ended_at:
+          type: string
+          format: date-time
+          description: "End time of the new timer entry"
+      required:
+        - client_id
+        - project_id
+        - started_at
+        - ended_at
+    TimerDataDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "Status of the timer data"
+        client_id:
+          type: string
+          nullable: true
+          description: "Client ID associated with the timer data (optional)"
+        project_id:
+          type: string
+          nullable: true
+          description: "Project ID associated with the timer data (optional)"
+        description:
+          type: string
+          nullable: true
+          description: "Description of the timer data (optional)"
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: "Start time of the timer data (optional)"
+      required:
+        - status
+    TimerDataPreviewDto:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "Status of the timer data"
+        client:
+          $ref: "#/components/schemas/ClientDto"
+          nullable: true
+          description: "Client associated with the timer data (optional)"
+        project:
+          $ref: "#/components/schemas/ProjectDto"
+          nullable: true
+          description: "Project associated with the timer data (optional)"
+        description:
+          type: string
+          nullable: true
+          description: "Description of the timer data (optional)"
+        started_at:
+          type: string
+          format: date-time
+          nullable: true
+          description: "Start time of the timer data (optional)"
+      required:
+        - status
+    StartTimerBodyDto:
+      type: object
+      properties:
+        clientId:
+          type: string
+          nullable: true
+          description: "Client ID associated with starting the timer (optional)"
+        projectId:
+          type: string
+          nullable: true
+          description: "Project ID associated with starting the timer (optional)"
+        description:
+          type: string
+          nullable: true
+          description: "Description for the timer (optional)"
+      required: []
+    ProjectDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Project ID"
+        client_id:
+          type: string
+          description: "Client ID associated with the project"
+        type:
+          type: string
+          nullable: true
+          description: "Type of the project (optional)"
+        name:
+          type: string
+          description: "Name of the project"
+      required:
+        - id
+        - client_id
+        - name
+    ClientDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Client ID"
+        name:
+          type: string
+          description: "Name of the client"
+      required:
+        - id
+        - name
+    TimerSummaryDto:
+      type: object
+      properties:
+        component:
+          type: string
+          description: "Name of the timer component"
+        interval:
+          type: integer
+          description: "Interval (duration) associated with the timer component in milliseconds"
+      required:
+        - component
+        - interval
+    IntegrationDto:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Integration ID"
+        label:
+          type: string
+          description: "Label or name of the integration"
+        type:
+          type: string
+          description: "Type of the integration"
+        api_key:
+          type: string
+          nullable: true
+          description: "API key associated with the integration (optional)"
+      required:
+        - id
+        - label
+        - type
+    NewIntegrationDto:
+      type: object
+      properties:
+        label:
+          type: string
+          description: "Label or name of the new integration"
+        type:
+          type: string
+          description: "Type of the new integration"
+        api_key:
+          type: string
+          nullable: true
+          description: "API key associated with the new integration (optional)"
+      required:
+        - label
+        - type
+    NewProjectDto:
+      type: object
+      properties:
+        client_id:
+          type: string
+          description: "Client ID associated with the new project"
+        type:
+          type: string
+          nullable: true
+          description: "Type of the new project (optional)"
+        name:
+          type: string
+          description: "Name of the new project"
+      required:
+        - client_id
+        - name
+    NewClientDto:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the new client"
+      required:
+        - name
+
+
+
+
