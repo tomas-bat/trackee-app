@@ -19,5 +19,7 @@ interface IntegrationRepository {
 
     suspend fun readCsv(entries: List<TimerEntryPreview>): File
 
+    suspend fun deleteTempCsvFile(filename: String)
+
     suspend fun deleteTempCsvFiles()
 }

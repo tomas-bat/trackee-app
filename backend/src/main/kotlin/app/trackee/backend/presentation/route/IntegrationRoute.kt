@@ -85,7 +85,7 @@ fun Routing.integrationRoute() {
 
                     call.respondFile(csv)
 
-                    repository.deleteTempCsvFiles()
+                    repository.deleteTempCsvFile(csv.name)
                 }
             }
         }

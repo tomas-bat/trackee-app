@@ -64,6 +64,10 @@ internal class IntegrationRepositoryImpl(
         return csv
     }
 
+    override suspend fun deleteTempCsvFile(filename: String) {
+        Path("${csvPath}/${filename}").deleteIfExists()
+    }
+
     override suspend fun deleteTempCsvFiles() {
         Path(csvPath).listDirectoryEntries().forEach { file ->
             file.deleteIfExists()
