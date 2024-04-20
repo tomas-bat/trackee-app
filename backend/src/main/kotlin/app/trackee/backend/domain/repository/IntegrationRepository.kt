@@ -1,7 +1,9 @@
 package app.trackee.backend.domain.repository
 
+import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
+import java.io.File
 
 interface IntegrationRepository {
 
@@ -14,4 +16,8 @@ interface IntegrationRepository {
     suspend fun updateIntegration(uid: String, integration: Integration)
 
     suspend fun deleteIntegration(uid: String, integrationId: String)
+
+    suspend fun readCsv(entries: List<TimerEntryPreview>): File
+
+    suspend fun deleteTempCsvFiles()
 }
