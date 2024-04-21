@@ -48,42 +48,6 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AnalyticsToolkitTests"
-               BuildableName = "AnalyticsToolkitTests"
-               BlueprintName = "AnalyticsToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/AnalyticsToolkit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "AuthToolkitTests"
-               BuildableName = "AuthToolkitTests"
-               BlueprintName = "AuthToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/AnalyticsToolkit/AuthToolkit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "LocationToolkitTests"
-               BuildableName = "LocationToolkitTests"
-               BlueprintName = "LocationToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/LocationToolkit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "OnboardingTests"
                BuildableName = "OnboardingTests"
                BlueprintName = "OnboardingTests"
@@ -108,42 +72,6 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "PushNotificationsToolkitTests"
-               BuildableName = "PushNotificationsToolkitTests"
-               BlueprintName = "PushNotificationsToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/PushNotificationsToolkit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "RecipesTests"
-               BuildableName = "RecipesTests"
-               BlueprintName = "RecipesTests"
-               ReferencedContainer = "container:PresentationLayer/Recipes">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "RemoteConfigToolkitTests"
-               BuildableName = "RemoteConfigToolkitTests"
-               BlueprintName = "RemoteConfigToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/RemoteConfigToolkit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "SharedDomainTests"
                BuildableName = "SharedDomainTests"
                BlueprintName = "SharedDomainTests"
@@ -156,10 +84,10 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "UsersTests"
-               BuildableName = "UsersTests"
-               BlueprintName = "UsersTests"
-               ReferencedContainer = "container:PresentationLayer/Users">
+               BlueprintIdentifier = "IntegrationsTests"
+               BuildableName = "IntegrationsTests"
+               BlueprintName = "IntegrationsTests"
+               ReferencedContainer = "container:PresentationLayer/Integrations">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -168,22 +96,10 @@
             testExecutionOrdering = "random">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "UserToolkitTests"
-               BuildableName = "UserToolkitTests"
-               BlueprintName = "UserToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/UserToolkit">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO"
-            parallelizable = "YES"
-            testExecutionOrdering = "random">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "RocketToolkitTests"
-               BuildableName = "RocketToolkitTests"
-               BlueprintName = "RocketToolkitTests"
-               ReferencedContainer = "container:DataLayer/Toolkits/RocketToolkit">
+               BlueprintIdentifier = "TimerTests"
+               BuildableName = "TimerTests"
+               BlueprintName = "TimerTests"
+               ReferencedContainer = "container:PresentationLayer/Timer">
             </BuildableReference>
          </TestableReference>
       </Testables>

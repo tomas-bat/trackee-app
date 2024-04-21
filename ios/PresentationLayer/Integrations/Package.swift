@@ -40,6 +40,7 @@ let package = Package(
                 "Integrations",
                 .product(name: "SharedDomain", package: "SharedDomain"),
                 .product(name: "DependencyInjection", package: "DependencyInjection"),
+                .product(name: "Utilities", package: "Utilities"),
                 .product(name: "Factory", package: "Factory")
             ]
         ),

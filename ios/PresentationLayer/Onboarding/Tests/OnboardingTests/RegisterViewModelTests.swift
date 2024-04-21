@@ -15,20 +15,24 @@ import DependencyInjectionMocks
 import Utilities
 
 @MainActor
-final class LoginViewModelTests: XCTestCase {
+final class RegisterModelTests: XCTestCase {
     
     private let flowController = FlowControllerMock<OnboardingFlow>(
         navigationController: UINavigationController()
+    )
+    
+    private let registerUseCaseMock = RegisterUseCaseMock(
+        executeReturnValue: ResultSuccess(data: KotlinUnit())
     )
     
     private let loginWithCredentialsUseCaseMock = LoginWithCredentialsUseCaseMock(
         executeReturnValue: ResultSuccess(data: KotlinUnit())
     )
     
-    private func createViewModel() -> LoginViewModel {
-        Container.shared.loginWithCredentialsUseCase.register { self.loginWithCredentialsUseCaseMock }
+    private func createViewModel() -> RegisterViewModel {
+        Container.shared.registerUseCase.register { self.registerUseCaseMock }
         
-        return LoginViewModel(flowController: flowController)
+        return RegisterViewModel(flowController: flowController)
     }
     
     // MARK: - Tests
@@ -46,17 +50,30 @@ final class LoginViewModelTests: XCTestCase {
         XCTAssertEqual(vm.state.email, email)
     }
     
-    func testOnPasswordChange() async {
+    func testOnNewPasswordChange() async {
         // given
         let vm = createViewModel()
         let password = String.randomString()
         
         // when
-        vm.onIntent(.sync(.onPasswordChange(to: password)))
+        vm.onIntent(.sync(.onNewPasswordChange(to: password)))
         await vm.awaitAllTasks()
         
         // then
-        XCTAssertEqual(vm.state.password, password)
+        XCTAssertEqual(vm.state.newPassword, password)
+    }
+    
+    func testOnVerifyPasswordChange() async {
+        // given
+        let vm = createViewModel()
+        let password = String.randomString()
+        
+        // when
+        vm.onIntent(.sync(.onVerifyPasswordChange(to: password)))
+        await vm.awaitAllTasks()
+        
+        // then
+        XCTAssertEqual(vm.state.verifyPassword, password)
     }
     
     func testRegister() async {
@@ -64,22 +81,10 @@ final class LoginViewModelTests: XCTestCase {
         let vm = createViewModel()
         
         // when
-        vm.onIntent(.sync(.register))
+        vm.onIntent(.async(.register))
         await vm.awaitAllTasks()
         
         // then
-        XCTAssertEqual(flowController.handleFlowValue, .login(.showRegistration))
-    }
-    
-    func testLogin() async {
-        // given
-        let vm = createViewModel()
-        
-        // when
-        vm.onIntent(.async(.login))
-        await vm.awaitAllTasks()
-        
-        // then
-        XCTAssertEqual(flowController.handleFlowValue, .login(.dismiss))
+        XCTAssertEqual(flowController.handleFlowValue, .register(.dismiss))
     }
 }

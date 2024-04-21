@@ -23,7 +23,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         // .package(url: /* package url */, from: "1.0.0"),
-        .package(url: "https://github.com/Matejkob/swift-spyable", from: "0.1.0")
+        .package(url: "https://github.com/Matejkob/swift-spyable", from: "0.1.0"),
+        .package(path: "../Utilities")
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
@@ -32,7 +33,8 @@ let package = Package(
             name: "SharedDomain",
             dependencies: [
                 "KMPSharedDomain",
-                .product(name: "Spyable", package: "swift-spyable")
+                .product(name: "Spyable", package: "swift-spyable"),
+                .product(name: "Utilities", package: "Utilities")
             ],
             linkerSettings: [
                 .unsafeFlags(["-Xlinker", "-no_application_extension"])

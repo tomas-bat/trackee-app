@@ -9,6 +9,7 @@ internal actual fun handlePlatformError(throwable: Throwable): ErrorResult =
     if (throwable is DarwinHttpRequestException) {
         when (throwable.origin.code) {
             -1004L -> CommonError.ServerNotReachable(throwable)
+            -1005L -> CommonError.NoNetworkConnection(throwable)
             else -> throwable.asErrorResult
         }
     } else throwable.asErrorResult
