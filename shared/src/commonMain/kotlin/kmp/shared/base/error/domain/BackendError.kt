@@ -30,4 +30,14 @@ sealed class BackendError(
         responseMessage: String?,
         throwable: Throwable? = null,
     ) : BackendError(throwable, responseMessage)
+
+    class ProjectNotFound(
+        responseMessage: String? = null,
+        throwable: Throwable? = null
+    ) : BackendError(throwable, responseMessage)
+
+    class ClientNotFound(
+        responseMessage: String? = null,
+        throwable: Throwable? = null
+    ) : BackendError(throwable, responseMessage)
 }

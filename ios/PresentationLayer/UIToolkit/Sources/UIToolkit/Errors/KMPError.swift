@@ -14,10 +14,13 @@ extension SharedDomain.KMPError: LocalizedError {
         // MARK: - AuthError
         case is AuthError.EmptyField: L10n.register_view_fill_all_fields
         case is AuthError.PasswordsDontMatch: L10n.register_view_passwords_dont_match
+        case is AuthError.InvalidLoginCredentials: L10n.invalid_credentials
         // MARK: - BackendError
         case is BackendError.NotAuthorized: L10n.error_not_authorised
         case is BackendError.ProjectNotAssignedToUser: L10n.error_project_not_assigned_to_user
         case is BackendError.MissingProject: L10n.error_cannot_stop_and_save_timer_missing_project
+        case is BackendError.ClientNotFound: L10n.error_client_not_found
+        case is BackendError.ProjectNotFound: L10n.error_project_not_found
         // MARK: - CommonError
         case is CommonError.ServerNotReachable: L10n.error_server_not_available
         default:

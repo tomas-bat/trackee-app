@@ -38,6 +38,14 @@ internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: 
                 BackendError.MissingProject(e.message, e)
             )
 
+            "ProjectNotFound" -> Result.Error(
+                BackendError.ProjectNotFound(e.message, e)
+            )
+
+            "ClientNotFound" -> Result.Error(
+                BackendError.ClientNotFound(e.message, e)
+            )
+
             else -> Result.Error(
                 ErrorResult(
                     message = body.message,

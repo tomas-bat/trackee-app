@@ -379,6 +379,14 @@
 		cs = Při načítání se vyskytla chyba. Zkuste to prosím později.
 		en = Error occurred. Try again later.
 		sk = Pri načítaní sa vyskytla chyba. Skúste to prosím neskôr.
+	[error_client_not_found]
+		cs = Vybraný klient neexistuje
+		en = The selected client does not exist
+		sk = Vybraný klient neexistuje
+	[error_project_not_found]
+		cs = Vybraný projekt neexistuje
+		en = The selected project does not exist
+		sk = Vybraný projekt neexistuje
 
 [[General navigation]]
 	[done]

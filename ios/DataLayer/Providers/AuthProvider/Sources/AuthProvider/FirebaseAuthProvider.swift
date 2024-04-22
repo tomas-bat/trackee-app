@@ -81,7 +81,10 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
                 )
             )
         } catch {
-            return ResultError(error: ErrorResult(message: error.localizedDescription))
+            switch AuthErrorCode(_nsError: error as NSError).code {
+            case .wrongPassword, .invalidCredential: return ResultError(error: AuthError.InvalidLoginCredentials(throwable: nil))
+            default: return ResultError(error: ErrorResult(message: error.localizedDescription))
+            }
         }
     }
     
