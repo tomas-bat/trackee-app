@@ -56,7 +56,7 @@ object NetworkClient {
 
 //                url(
 //                    scheme = URLProtocol.HTTP.name,
-//                    host = "192.168.1.177",
+//                    host = "192.168.88.70",
 //                    port = 8080,
 //                )
             }
