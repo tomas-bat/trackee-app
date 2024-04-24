@@ -15,6 +15,8 @@ extension SharedDomain.KMPError: LocalizedError {
         case is AuthError.EmptyField: L10n.register_view_fill_all_fields
         case is AuthError.PasswordsDontMatch: L10n.register_view_passwords_dont_match
         case is AuthError.InvalidLoginCredentials: L10n.invalid_credentials
+        case is AuthError.InvalidEmail: L10n.invalid_email
+        case is AuthError.WeakPassword: L10n.weak_password
         // MARK: - BackendError
         case is BackendError.NotAuthorized: L10n.error_not_authorised
         case is BackendError.ProjectNotAssignedToUser: L10n.error_project_not_assigned_to_user

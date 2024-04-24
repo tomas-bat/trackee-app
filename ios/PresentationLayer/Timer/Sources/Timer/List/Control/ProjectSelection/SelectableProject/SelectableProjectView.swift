@@ -54,6 +54,7 @@ struct SelectableProjectView: View {
                         .foregroundStyle(AppTheme.Colors.foregroundSecondary)
                         .font(AppTheme.Fonts.headlineAdditional)
                 }
+                .multilineTextAlignment(.leading)
             }
             
             Spacer()

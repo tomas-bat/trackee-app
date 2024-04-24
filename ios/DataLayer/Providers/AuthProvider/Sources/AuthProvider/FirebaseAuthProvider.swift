@@ -63,7 +63,14 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
                 )
             )
         } catch {
-            return ResultError(error: ErrorResult(message: error.localizedDescription))
+            let errorResult = switch AuthErrorCode(_nsError: error as NSError).code {
+            case .invalidEmail: AuthError.InvalidEmail()
+            case .emailAlreadyInUse: AuthError.EmailAlreadyExist(throwable: nil)
+            case .weakPassword: AuthError.WeakPassword()
+            default: ErrorResult(message: error.localizedDescription)
+            }
+            
+            return ResultError(error: errorResult)
         }
     }
     
@@ -81,10 +88,12 @@ extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
                 )
             )
         } catch {
-            switch AuthErrorCode(_nsError: error as NSError).code {
-            case .wrongPassword, .invalidCredential: return ResultError(error: AuthError.InvalidLoginCredentials(throwable: nil))
-            default: return ResultError(error: ErrorResult(message: error.localizedDescription))
+            let errorResult = switch AuthErrorCode(_nsError: error as NSError).code {
+            case .wrongPassword, .invalidCredential: AuthError.InvalidLoginCredentials(throwable: nil)
+            default: ErrorResult(message: error.localizedDescription)
             }
+            
+            return ResultError(error: errorResult)
         }
     }
     

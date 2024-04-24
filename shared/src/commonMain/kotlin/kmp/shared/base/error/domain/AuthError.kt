@@ -13,6 +13,8 @@ sealed class AuthError(
     class PasswordsDontMatch : AuthError()
     class NoAccessToken : AuthError()
     class NoCurrentUser : AuthError()
+    class InvalidEmail: AuthError()
+    class WeakPassword: AuthError()
 
     class ProviderLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
         constructor() : this(null)

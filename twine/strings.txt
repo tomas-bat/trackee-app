@@ -15,6 +15,10 @@
 		cs = Hesla se neshodují
 		en = Passwords do not match
 		sk = Heslá sa nezhodujú
+	[weak_password]
+		cs = Heslo je příliš slabé
+		en = The password is too weak
+		sk = Heslo je príliš slabé
 	[loading]
 		cs = Načítání…
 		en = Loading…

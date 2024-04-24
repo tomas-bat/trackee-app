@@ -96,7 +96,7 @@ final class RegisterViewModel: BaseViewModel, ViewModel, ObservableObject {
             flowController?.handleFlow(OnboardingFlow.register(.dismiss))
         } catch {
             snackState.currentData?.dismiss()
-            snackState.showSnackSync(.info(message: error.localizedDescription))
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
 }
