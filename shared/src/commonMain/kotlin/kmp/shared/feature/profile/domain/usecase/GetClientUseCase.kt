@@ -10,7 +10,7 @@ import kmp.shared.feature.timer.domain.model.Client
  *
  * **Input**: GetClientUseCase.Params
  *
- * **Returns**: Unit
+ * **Returns**: Client
  */
 interface GetClientUseCase : UseCaseResult<GetClientUseCase.Params, Client> {
     /**

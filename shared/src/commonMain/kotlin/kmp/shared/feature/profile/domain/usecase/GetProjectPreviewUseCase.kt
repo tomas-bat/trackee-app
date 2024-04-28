@@ -10,7 +10,7 @@ import kmp.shared.feature.timer.domain.model.ProjectPreview
  *
  * **Input**: GetProjectPreviewUseCase.Params
  *
- * **Returns**: Unit
+ * **Returns**: ProjectPreview
  */
 interface GetProjectPreviewUseCase : UseCaseResult<GetProjectPreviewUseCase.Params, ProjectPreview> {
     /**

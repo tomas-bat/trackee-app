@@ -17,7 +17,7 @@ fun Application.configureSecurity() {
     authentication {
         firebase {
             firebase = firebaseAuth
-            mapPrincipal {userRecord ->
+            mapPrincipal { userRecord ->
                 userRecord.uid
 
                 val principal = try {
