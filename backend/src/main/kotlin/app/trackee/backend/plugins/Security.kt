@@ -18,17 +18,13 @@ fun Application.configureSecurity() {
         firebase {
             firebase = firebaseAuth
             mapPrincipal { userRecord ->
-                userRecord.uid
-
-                val principal = try {
+                try {
                     val user = userRepository.readUserByUid(userRecord.uid)
                     UserPrincipal(user)
                 } catch(e: UserException.UserNotFound) {
                     val user = userRepository.createUser(userRecord.uid)
                     UserPrincipal(user)
                 }
-
-                principal
             }
         }
     }
