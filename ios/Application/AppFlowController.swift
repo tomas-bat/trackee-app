@@ -14,6 +14,7 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
     // MARK: - Dependencies
     
     @Injected(\.isLoggedInUseCase) private var isLoggedInUseCase
+    @Injected(\.logoutUseCase) private var logoutUseCase
     
     // MARK: - Flow handling
     
@@ -73,18 +74,16 @@ final class AppFlowController: FlowController, MainFlowControllerDelegate, Onboa
     }
     
     public func handleLogout() {
-        guard let vc = navigationController.topViewController as? BaseViewController else { return }
-
-        let action = AlertData.Action(title: L10n.dialog_interceptor_button_title, style: .default, handler: {
+        Task {
             do {
-                // Perform logout and present login screen
-//                try self.logoutUseCase.execute()
-//                self.presentOnboarding(animated: true, completion: nil)
-            } catch {}
-        })
-
-        let alert = AlertData(title: L10n.dialog_interceptor_title, message: L10n.dialog_interceptor_text, primaryAction: action)
-        vc.handleAlertAction(.showAlert(alert))
+                try await logoutUseCase.execute()
+                self.presentOnboarding(
+                    message: L10n.dialog_interceptor_text,
+                    animated: true,
+                    completion: nil
+                )
+            }
+        }
     }
     
     private func setupAppearance() {

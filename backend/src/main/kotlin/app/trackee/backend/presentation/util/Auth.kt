@@ -6,4 +6,4 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 
 public fun ApplicationCall.requireUserPrincipal() =
-    principal<UserPrincipal>() ?: throw AuthException.Unauthorized
+    principal<UserPrincipal>() ?: throw AuthException.Unauthorized()

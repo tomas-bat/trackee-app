@@ -14,7 +14,7 @@ sealed class AuthException(
         debugMessage = "Invalid auth token header value. Message: ${exception.message}"
     )
 
-    object Unauthorized : AuthException(
+    class Unauthorized : AuthException(
         publicMessage = "Insufficient authorization",
         code = HttpStatusCode.Unauthorized
     )

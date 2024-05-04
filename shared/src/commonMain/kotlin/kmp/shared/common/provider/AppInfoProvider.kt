@@ -11,4 +11,6 @@ enum class AppFlavor {
 interface AppInfoProvider {
     val environment: AppEnvironment
     val flavor: AppFlavor
+
+    suspend fun logout()
 }

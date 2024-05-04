@@ -7,6 +7,7 @@
 import Atlantis
 #endif
 
+import AppInfoProvider
 import DependencyInjection
 import Factory
 import KeychainProvider
@@ -55,6 +56,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         // Init main flow controller and start the flow
         flowController = AppFlowController(navigationController: nc)
         flowController?.start()
+        
+        Container.shared.appInfoProvider.resolve().setLogoutHandlerDelegate(self)
         
         return true
     }
@@ -159,6 +162,12 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 
 extension AppDelegate: NetworkProviderDelegate {
     func didReceiveHttpUnauthorized() {
+        self.flowController?.handleLogout()
+    }
+}
+
+extension AppDelegate: LogoutHandlerDelegate {
+    func logout() async throws {
         self.flowController?.handleLogout()
     }
 }

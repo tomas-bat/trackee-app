@@ -5,4 +5,10 @@
 
 import Foundation
 
-public protocol AppInfoProvider {}
+public protocol LogoutHandlerDelegate: AnyObject {
+    func logout() async throws
+}
+
+public protocol AppInfoProvider {
+    func setLogoutHandlerDelegate(_ delegate: LogoutHandlerDelegate)
+}

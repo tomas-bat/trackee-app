@@ -9,6 +9,8 @@ import Utilities
 
 public final class DefaultAppInfoProvider: NSObject {
     
+    private weak var delegate: LogoutHandlerDelegate?
+    
     override public init() {
         super.init()
     }
@@ -30,5 +32,11 @@ extension DefaultAppInfoProvider: AppInfoProvider, KMPSharedDomain.AppInfoProvid
         }
     }
     
+    public func setLogoutHandlerDelegate(_ delegate: LogoutHandlerDelegate) {
+        self.delegate = delegate
+    }
     
+    public func __logout() async throws {
+        try await delegate?.logout()
+    }
 }

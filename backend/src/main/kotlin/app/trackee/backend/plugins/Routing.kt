@@ -35,7 +35,7 @@ fun Application.configureRouting(isDebug: Boolean) {
     }
     routing {
         get("/") {
-            call.respondText("Hello World!")
+            call.respondRedirect("openapi")
         }
         get("/.well-known/apple-app-site-association") {
             val url = this.javaClass.classLoader.getResource("apple-app-site-association")
@@ -49,7 +49,7 @@ fun Application.configureRouting(isDebug: Boolean) {
     }
 }
 
-private fun BaseException.toDto(isDebug: Boolean) = ErrorDto(
+fun BaseException.toDto(isDebug: Boolean) = ErrorDto(
     type = this::class.simpleName!!,
     message = publicMessage,
     params = params,

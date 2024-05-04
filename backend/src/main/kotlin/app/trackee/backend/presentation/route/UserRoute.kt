@@ -12,7 +12,6 @@ import app.trackee.backend.presentation.model.timer.toDomain
 import app.trackee.backend.presentation.model.timer.toDto
 import app.trackee.backend.presentation.model.user.toDto
 import app.trackee.backend.presentation.util.requireUserPrincipal
-import com.google.firebase.auth.FirebaseAuth
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -23,7 +22,6 @@ import kotlinx.datetime.toInstant
 import org.koin.ktor.ext.inject
 
 fun Routing.userRoute() {
-    val auth by inject<FirebaseAuth>()
     val userRepository by inject<UserRepository>()
 
     authenticate {

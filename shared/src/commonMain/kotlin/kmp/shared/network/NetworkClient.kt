@@ -56,7 +56,7 @@ object NetworkClient {
 
 //                url(
 //                    scheme = URLProtocol.HTTP.name,
-//                    host = "192.168.88.70",
+//                    host = "192.168.1.177",
 //                    port = 8080,
 //                )
             }
@@ -74,6 +74,16 @@ object NetworkClient {
                 logger = object : Logger {
                     override fun log(message: String) {
                         KermitLogger.d(tag = "Ktor") { message }
+                    }
+                }
+            }
+
+            HttpResponseValidator {
+                handleResponseExceptionWithRequest { exception, request ->
+                    val clientException = exception as? ClientRequestException ?: return@handleResponseExceptionWithRequest
+                    val exceptionResponse = clientException.response
+                    if (exceptionResponse.status == HttpStatusCode.Unauthorized) {
+                        appInfoProvider.logout()
                     }
                 }
             }

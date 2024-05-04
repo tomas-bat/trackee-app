@@ -16,7 +16,7 @@ class FirebaseAuthProvider(config: Config) : AuthenticationProvider(config) {
 
     override suspend fun onAuthenticate(context: AuthenticationContext) {
         val authHeader = context.call.request.parseAuthorizationHeader() as? HttpAuthHeader.Single
-            ?: throw AuthException.Unauthorized
+            ?: throw AuthException.Unauthorized()
 
         val token = try {
             firebase.verifyIdTokenAsync(authHeader.blob).await()
