@@ -8,10 +8,10 @@ import app.trackee.backend.presentation.route.user.clientRoute
 import app.trackee.backend.presentation.route.user.userRoute
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.http.content.*
 import io.ktor.server.plugins.statuspages.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.io.File
 
 fun Application.configureRouting(isDebug: Boolean) {
     install(StatusPages) {
@@ -37,11 +37,7 @@ fun Application.configureRouting(isDebug: Boolean) {
         get("/") {
             call.respondRedirect("openapi")
         }
-        get("/.well-known/apple-app-site-association") {
-            val url = this.javaClass.classLoader.getResource("apple-app-site-association")
-            val file = File(url.file)
-            call.respondFile(file)
-        }
+        staticResources(".well-known/apple-app-site-association", "apple-app-site-association")
         userRoute()
         clientRoute()
         projectRoute()
