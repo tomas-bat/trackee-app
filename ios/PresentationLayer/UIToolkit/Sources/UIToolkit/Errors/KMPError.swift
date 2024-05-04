@@ -17,6 +17,7 @@ extension SharedDomain.KMPError: LocalizedError {
         case is AuthError.InvalidLoginCredentials: L10n.invalid_credentials
         case is AuthError.InvalidEmail: L10n.invalid_email
         case is AuthError.WeakPassword: L10n.weak_password
+        case is AuthError.EmailAlreadyExist: L10n.error_email_already_exists
         // MARK: - BackendError
         case is BackendError.NotAuthorized: L10n.error_not_authorised
         case is BackendError.ProjectNotAssignedToUser: L10n.error_project_not_assigned_to_user

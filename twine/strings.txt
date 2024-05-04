@@ -392,6 +392,7 @@
 		en = The selected project does not exist
 		sk = Vybraný projekt neexistuje
 
+
 [[General navigation]]
 	[done]
 		cs = Hotovo
@@ -1035,6 +1036,10 @@
 		cs = Nelze uložit záznam: Není vybrán projekt.
 		en = Cannot save entry: Project not selected.
 		sk = Nie je možné uložiť záznam: Nie je vybraný projekt.
+	[error_email_already_exists]
+		cs = Účet s tímto e-mailem již existuje
+		en = An account with this e-mail already exsits
+		sk = Účet s týmto e-mailom už existuje
 
 [[Integrations View]]
 	[integrations_view_title]
