@@ -104,6 +104,14 @@ struct IntegrationDetailView: View {
                     L10n.integration_detail_export_data_button_title,
                     action: { viewModel.onIntent(.onExportData) }
                 )
+                
+                Toggle(
+                    L10n.export_view_auto_export_title,
+                    isOn: Binding<Bool>(
+                        get: { viewModel.state.autoExport },
+                        set: { value in viewModel.onIntent(.changeAutoExport(to: value)) }
+                    )
+                )
             }
             
             if viewModel.state.allowRemove {

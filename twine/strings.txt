@@ -1146,5 +1146,9 @@
 		cs = Soubor se nepodařilo uložit
 		en = Could not save file
 		sk = Súbor sa nepodarilo uložiť
+	[export_view_auto_export_title]
+		cs = Automaticky exportovat
+		en = Automatic export
+		sk = Automaticky exportovať
 
 

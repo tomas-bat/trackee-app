@@ -84,6 +84,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         var integrationType: ViewData<IntegrationType> = .loading(mock: .csv)
         var label = ""
         var apiKey: String?
+        var autoExport = false
         var saveLoading = false
         var removeLoading = false
         var allowRemove = false
@@ -98,6 +99,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         case save
         case changeApiKey(to: String)
         case remove
+        case changeAutoExport(to: Bool)
     }
     
     func onIntent(_ intent: Intent) {
@@ -109,6 +111,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             case .save: await save()
             case let .changeApiKey(key): state.apiKey = key
             case .remove: await remove()
+            case let .changeAutoExport(value): state.autoExport = value
             }
         })
     }
@@ -126,8 +129,8 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 case .csv: ()
                 case let .clockify(clockify):
                     state.apiKey = clockify.apiKey
+                    state.autoExport = clockify.autoExport
                 }
-                
                 
                 state.integrationType = .data(integration.type)
                 state.label = integration.label
@@ -162,7 +165,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                     id: integrationId,
                     label: state.label,
                     apiKey: state.apiKey,
-                    autoExport: false
+                    autoExport: state.autoExport
                 )
             }
             let params = UpdateIntegrationUseCaseParams(integration: integration)
@@ -182,7 +185,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 NewIntegration.Clockify(
                     label: state.label,
                     apiKey: state.apiKey,
-                    autoExport: false
+                    autoExport: state.autoExport
                 )
             }
             let params = AddIntegrationUseCaseParams(integration: integration)
