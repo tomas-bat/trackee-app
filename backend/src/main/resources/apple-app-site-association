@@ -7,5 +7,12 @@
                 "7NDB9Z4G86.cz.batektomas.trackee.beta"
             ]
         }
+    },
+    "webcredentials": {
+        "apps": [
+            "7NDB9Z4G86.cz.batektomas.trackee",
+            "7NDB9Z4G86.cz.batektomas.trackee.alpha",
+            "7NDB9Z4G86.cz.batektomas.trackee.beta"
+        ]
     }
 }

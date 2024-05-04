@@ -7,8 +7,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:trackee-app-production.up.railway.app</string>
-		<string>applinks:0.0.0.0:8080?mode=developer</string>
-		<string>applinks:192.168.88.41?mode=developer</string>
+		<string>webcredentials:trackee-app-production.up.railway.app</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
