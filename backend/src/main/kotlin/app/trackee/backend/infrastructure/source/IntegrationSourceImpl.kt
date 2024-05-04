@@ -5,9 +5,8 @@ import app.trackee.backend.config.util.await
 import app.trackee.backend.data.source.IntegrationSource
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
-import app.trackee.backend.infrastructure.model.integration.FirestoreIntegration
-import app.trackee.backend.infrastructure.model.integration.toDomain
 import app.trackee.backend.infrastructure.model.integration.toFirestore
+import app.trackee.backend.infrastructure.model.integration.toIntegration
 import com.google.firebase.cloud.FirestoreClient as GoogleFirestoreClient
 
 internal class IntegrationSourceImpl : IntegrationSource {
@@ -32,9 +31,7 @@ internal class IntegrationSourceImpl : IntegrationSource {
             .get()
             .await()
 
-        val integration = snapshot.toObject(FirestoreIntegration::class.java)?.toDomain(id = snapshot.id)
-
-        return integration ?: throw IntegrationException.IntegrationNotFound(uid, integrationId)
+        return snapshot.toIntegration()
     }
 
     override suspend fun readIntegrations(uid: String): List<Integration> =
@@ -47,8 +44,7 @@ internal class IntegrationSourceImpl : IntegrationSource {
                 integrationRef
                     .get()
                     .await()
-                    .toObject(FirestoreIntegration::class.java)
-                    ?.toDomain(id = integrationRef.id)
+                    .toIntegration()
             }
 
     override suspend fun updateIntegration(uid: String, integration: Integration) {

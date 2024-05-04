@@ -10,9 +10,16 @@ import UIToolkit
 
 extension Integration {
     var image: Image {
-        switch type {
+        switch onEnum(of: self) {
         case .clockify: Asset.Images.clockifyLogo.image
         case .csv: Image(systemSymbol: .tablecellsFill)
+        }
+    }
+    
+    var type: IntegrationType {
+        switch onEnum(of: self) {
+        case .csv: .csv
+        case .clockify: .clockify
         }
     }
 }

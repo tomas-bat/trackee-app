@@ -26,4 +26,13 @@ sealed class IntegrationException(
             if (uid != null) append(" (uid=$uid)")
         }
     )
+
+    class UnableToParseIntegration(uid: String?, integrationId: String?) : IntegrationException(
+        publicMessage = buildString {
+            append("Integration ")
+            if (integrationId != null) append("with ID=$integrationId ")
+            append("could not be parsed")
+            if (uid != null) append(" for user with uid=$uid")
+        }
+    )
 }

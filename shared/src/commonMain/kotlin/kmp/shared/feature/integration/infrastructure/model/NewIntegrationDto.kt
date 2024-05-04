@@ -1,25 +1,39 @@
 package kmp.shared.feature.integration.infrastructure.model
 
-import kmp.shared.feature.integration.domain.model.IntegrationType
 import kmp.shared.feature.integration.domain.model.NewIntegration
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NewIntegrationDto(
-    val label: String,
-    val type: String,
-    @SerialName("api_key") val apiKey: String?
+sealed class NewIntegrationDto  {
+    abstract val label: String
+
+    @Serializable
+    @SerialName("csv")
+    data class Csv(
+        override val label: String
+    ) : NewIntegrationDto()
+
+    @Serializable
+    @SerialName("clockify")
+    data class Clockify(
+        override val label: String,
+        @SerialName("api_key") val apiKey: String?,
+        @SerialName("auto_export") val autoExport: Boolean
+    ) : NewIntegrationDto()
+}
+
+internal fun NewIntegration.Csv.toDto() = NewIntegrationDto.Csv(
+    label = label
 )
 
-internal fun NewIntegrationDto.toDomain() = NewIntegration(
+internal fun NewIntegration.Clockify.toDto() = NewIntegrationDto.Clockify(
     label = label,
-    type = IntegrationType.entries.first { it.rawValue == type },
-    apiKey = apiKey
+    apiKey = apiKey,
+    autoExport = autoExport
 )
 
-internal fun NewIntegration.toDto() = NewIntegrationDto(
-    label = label,
-    type = type.rawValue,
-    apiKey = apiKey
-)
+internal fun NewIntegration.toDto() = when(this) {
+    is NewIntegration.Csv -> this.toDto()
+    is NewIntegration.Clockify -> this.toDto()
+}

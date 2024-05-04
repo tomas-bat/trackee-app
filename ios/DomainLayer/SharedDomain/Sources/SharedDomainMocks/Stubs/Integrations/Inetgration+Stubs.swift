@@ -8,11 +8,9 @@ import KMPSharedDomain
 
 public extension Integration {
     static func stub(id: String = UUID().uuidString) -> Integration {
-        Integration(
+        Integration.Csv(
             id: id,
-            label: "Lorem ipsum",
-            type: .csv,
-            apiKey: nil
+            label: "Lorem ipsum"
         )
     }
 }

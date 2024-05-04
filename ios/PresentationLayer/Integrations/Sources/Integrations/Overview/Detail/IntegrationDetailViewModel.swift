@@ -122,8 +122,14 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 let params = GetIntegrationUseCaseParams(integrationId: integrationId)
                 let integration: Integration = try await getIntegrationUseCase.execute(params: params)
                 
+                switch onEnum(of: integration) {
+                case .csv: ()
+                case let .clockify(clockify):
+                    state.apiKey = clockify.apiKey
+                }
+                
+                
                 state.integrationType = .data(integration.type)
-                state.apiKey = integration.apiKey
                 state.label = integration.label
             } catch {
                 state.integrationType = .error(error)
@@ -144,14 +150,22 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         switch type {
         case let .edit(integrationId):
             guard let type = state.integrationType.data else { return }
-            let params = UpdateIntegrationUseCaseParams(
-                integration: Integration(
+            
+            let integration: Integration = switch type {
+            case .csv:
+                Integration.Csv(
+                    id: integrationId,
+                    label: state.label
+                )
+            case .clockify:
+                Integration.Clockify(
                     id: integrationId,
                     label: state.label,
-                    type: type,
-                    apiKey: state.apiKey
+                    apiKey: state.apiKey,
+                    autoExport: false
                 )
-            )
+            }
+            let params = UpdateIntegrationUseCaseParams(integration: integration)
             
             do {
                 try await updateIntegrationUseCase.execute(params: params)
@@ -161,13 +175,18 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 handleError(error)
             }
         case let .new(integrationType):
-            let params = AddIntegrationUseCaseParams(
-                integration: NewIntegration(
+            let integration = switch integrationType {
+            case .csv:
+                NewIntegration.Csv(label: state.label)
+            case .clockify:
+                NewIntegration.Clockify(
                     label: state.label,
-                    type: integrationType,
-                    apiKey: state.apiKey
+                    apiKey: state.apiKey,
+                    autoExport: false
                 )
-            )
+            }
+            let params = AddIntegrationUseCaseParams(integration: integration)
+            
             do {
                 try await addIntegrationUseCase.execute(params: params)
                 await delegate?.didUpdateIntegration()

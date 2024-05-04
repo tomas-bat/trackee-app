@@ -1,8 +1,18 @@
 package kmp.shared.feature.integration.domain.model
 
-data class Integration(
-    val id: String,
-    val label: String,
-    val type: IntegrationType,
-    val apiKey: String?
-)
+sealed class Integration {
+    abstract val id: String
+    abstract val label: String
+
+    data class Csv(
+        override val id: String,
+        override val label: String
+    ) : Integration()
+
+    data class Clockify(
+        override val id: String,
+        override val label: String,
+        val apiKey: String?,
+        val autoExport: Boolean
+    ) : Integration()
+}
