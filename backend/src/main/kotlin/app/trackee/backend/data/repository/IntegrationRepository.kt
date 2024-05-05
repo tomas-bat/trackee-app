@@ -122,7 +122,8 @@ internal class IntegrationRepositoryImpl(
         readActiveClockifyAutoExports(uid).forEach { clockify ->
             createClockifyEntry(
                 apiKey = clockify.apiKey,
-                entry = entry
+                entry = entry,
+                workspaceName = clockify.workspaceName
             )
         }
     }
