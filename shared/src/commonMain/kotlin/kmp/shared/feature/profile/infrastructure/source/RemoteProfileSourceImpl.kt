@@ -2,6 +2,7 @@ package kmp.shared.feature.profile.infrastructure.source
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import kmp.shared.base.Result
 import kmp.shared.base.error.util.runCatchingCommonNetworkExceptions
@@ -56,7 +57,13 @@ internal class RemoteProfileSourceImpl(
 
     override suspend fun deleteClient(clientId: String): Result<Unit> =
         runCatchingCommonNetworkExceptions {
-            client.delete("/clients/${clientId}")
+            client.delete("/clients/${clientId}") {
+                timeout {
+                    socketTimeoutMillis = 60_000L
+                    requestTimeoutMillis = 60_000L
+                    connectTimeoutMillis = 60_000L
+                }
+            }
 
             Result.Success(Unit)
         }
@@ -108,8 +115,12 @@ internal class RemoteProfileSourceImpl(
                 url {
                     parameters.append("clientId", clientId)
                 }
+                timeout {
+                    socketTimeoutMillis = 60_000L
+                    requestTimeoutMillis = 60_000L
+                    connectTimeoutMillis = 60_000L
+                }
             }
-
             Result.Success(Unit)
         }
 
@@ -127,7 +138,13 @@ internal class RemoteProfileSourceImpl(
 
     override suspend fun deleteUser(): Result<Unit> =
         runCatchingCommonNetworkExceptions {
-            client.delete("/user")
+            client.delete("/user"){
+                timeout {
+                    socketTimeoutMillis = 60_000L
+                    requestTimeoutMillis = 60_000L
+                    connectTimeoutMillis = 60_000L
+                }
+            }
             Result.Success(Unit)
         }
 }

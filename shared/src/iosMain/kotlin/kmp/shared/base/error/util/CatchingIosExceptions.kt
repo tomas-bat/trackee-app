@@ -10,6 +10,7 @@ internal actual fun handlePlatformError(throwable: Throwable): ErrorResult =
         when (throwable.origin.code) {
             -1004L -> CommonError.ServerNotReachable(throwable)
             -1005L -> CommonError.NoNetworkConnection(throwable)
+            -1001L -> CommonError.Timeout(throwable)
             else -> throwable.asErrorResult
         }
     } else throwable.asErrorResult

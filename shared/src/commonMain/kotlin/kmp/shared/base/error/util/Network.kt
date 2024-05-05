@@ -40,7 +40,13 @@ internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: 
 
         Result.Error(error)
     } catch (e: Throwable) {
-        Result.Error(handlePlatformError(e))
+        val error = when (e::class.simpleName) {
+            "UnknownHostException" -> CommonError.NoNetworkConnection(e)
+            "HttpRequestTimeoutException", "ConnectTimeoutException", "SocketTimeoutException" -> CommonError.Timeout(e)
+            "CancellationException" -> CommonError.Cancelled(e)
+            else -> handlePlatformError(e)
+        }
+        Result.Error(error)
     }
 
 internal expect fun handlePlatformError(throwable: Throwable): ErrorResult

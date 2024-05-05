@@ -1044,6 +1044,10 @@
 		cs = Chybí čas začátku
 		en = Missing start date
 		sk = Chýba čas začiatku
+	[error_request_timeout]
+		cs = Čas požadavku vypršel
+		en = Request timeout has expired
+		sk = Čas požiadavky vypršal
 
 [[Integrations View]]
 	[integrations_view_title]

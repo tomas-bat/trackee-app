@@ -35,6 +35,8 @@ extension SharedDomain.KMPError: LocalizedError {
         
         // MARK: - CommonError
         case is CommonError.ServerNotReachable: return L10n.error_server_not_available
+        case is CommonError.Timeout: return L10n.error_request_timeout
+        case is CommonError.NoNetworkConnection: return L10n.error_no_internet_connection
         default:
             switch Environment.type {
             case .alpha, .beta: return kmpError.message

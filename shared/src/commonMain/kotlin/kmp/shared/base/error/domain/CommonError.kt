@@ -10,5 +10,10 @@ sealed class CommonError(throwable: Throwable? = null) : ErrorResult(throwable =
     class NoNetworkConnection(t: Throwable?) : CommonError(t)
 
     class ServerNotReachable(t: Throwable?) : CommonError(t)
+
+    class Timeout(t: Throwable?) : CommonError(t)
+
+    class Cancelled(t: Throwable?) : CommonError(t)
+
     object NoUserLoggedIn : CommonError()
 }
