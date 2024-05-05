@@ -2,6 +2,7 @@ package kmp.shared.feature.integration.data.source
 
 import kmp.shared.base.Result
 import kmp.shared.feature.integration.domain.model.Integration
+import kmp.shared.feature.integration.domain.model.NewClockifyExportRequest
 import kmp.shared.feature.integration.domain.model.NewIntegration
 
 internal interface RemoteIntegrationSource {
@@ -17,4 +18,6 @@ internal interface RemoteIntegrationSource {
     suspend fun deleteIntegration(integrationId: String): Result<Unit>
 
     suspend fun exportToCsv(from: String?, to: String?): Result<String>
+
+    suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit>
 }

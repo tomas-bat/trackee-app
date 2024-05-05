@@ -22,6 +22,7 @@ sealed class IntegrationDto  {
         override val id: String,
         override val label: String,
         @SerialName("api_key") val apiKey: String?,
+        @SerialName("workspace_name") val workspaceName: String?,
         @SerialName("auto_export") val autoExport: Boolean
     ) : IntegrationDto()
 }
@@ -40,6 +41,7 @@ internal fun Integration.Clockify.toDto() = IntegrationDto.Clockify(
     id = id,
     label = label,
     apiKey = apiKey,
+    workspaceName = workspaceName,
     autoExport = autoExport
 )
 
@@ -47,6 +49,7 @@ internal fun IntegrationDto.Clockify.toDomain() = Integration.Clockify(
     id = id,
     label = label,
     apiKey = apiKey,
+    workspaceName = workspaceName,
     autoExport = autoExport
 )
 

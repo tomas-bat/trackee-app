@@ -95,7 +95,7 @@ fun Routing.integrationRoute() {
                         repository.createClockifyEntry(
                             apiKey = body.apiKey,
                             entry = body.entry.toDomain(),
-                            workspaceId = body.workspaceId
+                            workspaceName = body.workspaceName
                         )
 
                         call.respond(HttpStatusCode.OK)
@@ -114,7 +114,7 @@ fun Routing.integrationRoute() {
                         repository.createClockifyEntry(
                             apiKey = body.apiKey,
                             entry = entry,
-                            workspaceId = body.workspaceId
+                            workspaceName = body.workspaceName
                         )
                     }
 

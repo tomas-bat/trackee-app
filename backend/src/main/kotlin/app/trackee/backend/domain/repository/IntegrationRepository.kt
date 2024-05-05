@@ -26,6 +26,6 @@ interface IntegrationRepository {
     suspend fun createClockifyEntry(
         apiKey: String,
         entry: TimerEntryPreview,
-        workspaceId: String? = null
+        workspaceName: String? = null
     )
 }

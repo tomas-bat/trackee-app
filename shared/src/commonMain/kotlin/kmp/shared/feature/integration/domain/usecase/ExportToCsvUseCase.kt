@@ -28,5 +28,4 @@ internal class ExportToCsvUseCaseImpl(
 ) : ExportToCsvUseCase {
     override suspend fun invoke(params: ExportToCsvUseCase.Params): Result<String> =
         repository.exportToCsv(params.from, params.to)
-
 }

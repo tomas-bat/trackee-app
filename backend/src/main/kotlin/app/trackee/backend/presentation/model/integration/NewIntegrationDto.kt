@@ -19,6 +19,7 @@ sealed class NewIntegrationDto  {
     data class Clockify(
         override val label: String,
         @SerialName("api_key") val apiKey: String?,
+        @SerialName("workspace_name") val workspaceName: String?,
         @SerialName("auto_export") val autoExport: Boolean
     ) : NewIntegrationDto()
 }
@@ -30,6 +31,7 @@ internal fun NewIntegrationDto.Csv.toDomain() = NewIntegration.Csv(
 internal fun NewIntegrationDto.Clockify.toDomain() = NewIntegration.Clockify(
     label = label,
     apiKey = apiKey,
+    workspaceName = workspaceName,
     autoExport = autoExport
 )
 

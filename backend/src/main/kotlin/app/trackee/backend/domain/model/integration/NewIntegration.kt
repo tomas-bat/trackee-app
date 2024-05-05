@@ -10,6 +10,7 @@ sealed class NewIntegration {
     data class Clockify(
         override val label: String,
         val apiKey: String?,
+        val workspaceName: String?,
         val autoExport: Boolean
     ) : NewIntegration()
 }

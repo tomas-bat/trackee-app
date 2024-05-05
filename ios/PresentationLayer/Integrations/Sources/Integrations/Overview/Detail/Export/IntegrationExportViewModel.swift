@@ -19,18 +19,25 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     private weak var flowController: FlowController?
     
     @Injected(\.exportToCsvUseCase) private var exportToCsvUseCase
+    @Injected(\.exportToClockifyUseCase) private var exportToClockifyUseCase
     
     // MARK: - Stored properties
     
     private let integrationType: IntegrationType
+    private let apiKey: String?
+    private let workspaceName: String?
     
     // MARK: - Init
     
     init(
         integrationType: IntegrationType,
+        apiKey: String?,
+        workspaceName: String?,
         flowController: FlowController? = nil
     ) {
         self.integrationType = integrationType
+        self.apiKey = apiKey
+        self.workspaceName = workspaceName
         self.flowController = flowController
     }
     
@@ -79,7 +86,7 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
             
             switch integrationType {
             case .csv: try await exportCsv()
-            case .clockify: () 
+            case .clockify: try await exportClockify()
             }
         } catch {
             handleError(error)
@@ -88,7 +95,13 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     
     private func handleError(_ error: Error) {
         snackState.currentData?.dismiss()
-        snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        snackState.showSnackSync(
+            .error(
+                message: error.localizedDescription,
+                actionLabel: nil,
+                duration: 5
+            )
+        )
     }
     
     private func exportCsv() async throws {
@@ -103,5 +116,22 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
         try csv.write(to: url, atomically: true, encoding: .utf8)
         
         flowController?.handleFlow(IntegrationsFlow.export(.showExportedFileOptions(url: url)))
+    }
+    
+    private func exportClockify() async throws {
+        guard let apiKey else { throw IntegrationError.missingApiKey }
+        
+        let params = ExportToClockifyUseCaseParams(
+            request: NewClockifyExportRequest(
+                apiKey: apiKey,
+                workspaceName: workspaceName,
+                from: state.fromDate.asInstant,
+                to: state.toDate.asInstant
+            )
+        )
+        try await exportToClockifyUseCase.execute(params: params)
+        
+        snackState.currentData?.dismiss()
+        snackState.showSnackSync(.info(message: L10n.export_view_success_title))
     }
 }

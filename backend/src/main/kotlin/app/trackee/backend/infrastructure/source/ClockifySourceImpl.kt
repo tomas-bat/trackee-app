@@ -21,10 +21,11 @@ internal class ClockifySourceImpl(
     private val apiKeyHeader = "x-api-key"
 
     override suspend fun readWorkspaces(apiKey: String): List<ClockifyWorkspace> =
-        client.get(urlWith("workspaces")) {
-            header(apiKeyHeader, apiKey)
-        }.body<List<RawClockifyWorkspace>>().map { it.toDomain() }
-
+        runHandlingClockifyExceptions {
+            client.get(urlWith("workspaces")) {
+                header(apiKeyHeader, apiKey)
+            }.body<List<RawClockifyWorkspace>>().map { it.toDomain() }
+        }
 
     override suspend fun readProjectByName(
         apiKey: String,
@@ -69,12 +70,12 @@ internal class ClockifySourceImpl(
                 is ClientRequestException -> {
                     val error = exception.response.body<RawClockifyError>()
                     throw when (error.code) {
-                        4003 -> ClockifyException.InvalidApiKey("Code: ${error.code}, message: ${error.message}")
-                        else -> ClockifyException.Unknown("Code: ${error.code}, message: ${error.message}")
+                        4003 -> ClockifyException.ClockifyInvalidApiKey("Code: ${error.code}, message: ${error.message}")
+                        else -> ClockifyException.ClockifyUnknownError("Code: ${error.code}, message: ${error.message}")
                     }
                 }
                 is BaseException -> throw exception
-                else -> throw ClockifyException.Unknown(exception.message)
+                else -> throw ClockifyException.ClockifyUnknownError(exception.message)
             }
         }
 }

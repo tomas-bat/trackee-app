@@ -19,6 +19,10 @@ data class FirestoreClockifyIntegration(
     @set:PropertyName("auto_export")
     var autoExport: Boolean = false,
 
+    @get:PropertyName("workspace_name")
+    @set:PropertyName("workspace_name")
+    var workspaceName: String? = null,
+
     @get:PropertyName("api_key")
     @set:PropertyName("api_key")
     var apiKey: String? = null
@@ -31,7 +35,8 @@ internal fun Integration.Csv.toFirestore() = FirestoreCsvIntegration(
 internal fun Integration.Clockify.toFirestore() = FirestoreClockifyIntegration(
     label = label,
     autoExport = autoExport,
-    apiKey = apiKey
+    apiKey = apiKey,
+    workspaceName = workspaceName
 )
 
 internal fun DocumentSnapshot.toIntegration(): Integration {
@@ -54,7 +59,8 @@ internal fun FirestoreClockifyIntegration.toDomain(id: String) = Integration.Clo
     id = id,
     label = label,
     autoExport = autoExport,
-    apiKey = apiKey
+    apiKey = apiKey,
+    workspaceName = workspaceName
 )
 
 internal fun NewIntegration.Csv.toFirestore() = FirestoreCsvIntegration(
@@ -64,7 +70,8 @@ internal fun NewIntegration.Csv.toFirestore() = FirestoreCsvIntegration(
 internal fun NewIntegration.Clockify.toFirestore() = FirestoreClockifyIntegration(
     label = label,
     autoExport = autoExport,
-    apiKey = apiKey
+    apiKey = apiKey,
+    workspaceName = workspaceName
 )
 
 internal fun Integration.toFirestore() = when (this) {

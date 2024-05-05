@@ -9,4 +9,5 @@ public enum IntegrationError: Error {
     case nameTooShort
     case invalidDateRange
     case couldNotSaveFile
+    case missingApiKey
 }

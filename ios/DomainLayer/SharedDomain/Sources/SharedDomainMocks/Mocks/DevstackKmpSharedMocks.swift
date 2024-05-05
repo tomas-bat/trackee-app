@@ -48,3 +48,4 @@ public final class GetIntegrationsUseCaseMock: UseCaseResultNoParamsMock, GetInt
 public final class UpdateIntegrationUseCaseMock: UseCaseResultMock, UpdateIntegrationUseCase {}
 public final class DeleteIntegrationUseCaseMock: UseCaseResultMock, DeleteIntegrationUseCase {}
 public final class ExportToCsvUseCaseMock: UseCaseResultMock, ExportToCsvUseCase {}
+public final class ExportToClockifyUseCaseMock: UseCaseResultMock, ExportToClockifyUseCase {}

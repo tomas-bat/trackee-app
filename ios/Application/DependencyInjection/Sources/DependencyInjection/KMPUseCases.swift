@@ -52,4 +52,5 @@ public extension Container {
     var updateIntegrationUseCase: Factory<UpdateIntegrationUseCase> { self { self.kmp().get(UpdateIntegrationUseCase.self) } }
     var deleteIntegrationUseCase: Factory<DeleteIntegrationUseCase> { self { self.kmp().get(DeleteIntegrationUseCase.self) } }
     var exportToCsvUseCase: Factory<ExportToCsvUseCase> { self { self.kmp().get(ExportToCsvUseCase.self) } }
+    var exportToClockifyUseCase: Factory<ExportToClockifyUseCase> { self { self.kmp().get(ExportToClockifyUseCase.self) } }
 }

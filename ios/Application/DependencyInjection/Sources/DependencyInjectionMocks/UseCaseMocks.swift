@@ -134,6 +134,9 @@ public extension Container {
         exportToCsvUseCase.register {
             ExportToCsvUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinByteArray(size: 10)))
         }
+        exportToClockifyUseCase.register {
+            ExportToClockifyUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
     }
 }
 #endif

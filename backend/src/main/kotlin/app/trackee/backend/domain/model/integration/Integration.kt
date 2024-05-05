@@ -13,6 +13,7 @@ sealed class Integration {
         override val id: String,
         override val label: String,
         val apiKey: String?,
+        val workspaceName: String?,
         val autoExport: Boolean
     ) : Integration()
 }

@@ -1040,6 +1040,10 @@
 		cs = Účet s tímto e-mailem již existuje
 		en = An account with this e-mail already exsits
 		sk = Účet s týmto e-mailom už existuje
+	[error_missing_start_date]
+		cs = Chybí čas začátku
+		en = Missing start date
+		sk = Chýba čas začiatku
 
 [[Integrations View]]
 	[integrations_view_title]
@@ -1105,9 +1109,9 @@
 		en = Your API key
 		sk = Váš API kľúč
 	[integration_detail_api_key_hint]
-		cs = Abyste si mohli vytvořit integraci s Clockify, musíte zadat Váš API klíč. Můžete si ho vygenerovat v Clockify v nastavení profilu.
+		cs = Abyste si mohli vytvořit integraci s Clockify, musíte zadat Váš API klíč. Můžete si ho vygenerovat v Clockify v nastavení profilu.
 		en = In order to create an integration with Clockify, you’ll have to enter your API key. You can generate this API key Clockify Profile settings.
-		sk = Aby ste si mohli vytvoriť integráciu s Clockify, musíte zadať Váš API kľúč. Môžete si ho vygenerovať v Clockify v nastavení profilu.
+		sk = Aby ste si mohli vytvoriť integráciu s Clockify, musíte zadať Váš API kľúč. Môžete si ho vygenerovať v Clockify v nastavení profilu.
 	[integration_detail_remove_integration_button_title]
 		cs = Smazat integraci
 		en = Remove integration
@@ -1116,6 +1120,26 @@
 		cs = Název integrace musí mít alespoň 2 znaky
 		en = Integration name must be at least 2 characters long
 		sk = Názov integrácie musí mať aspoň 2 znaky
+	[integration_detail_missing_api_key]
+		cs = Chybí API klíč
+		en = Missing API key
+		sk = Chýba API kľúč
+	[integration_detail_workspace_name_label]
+		cs = Workspace
+		en = Workspace
+		sk = Workspace
+	[integration_detail_workspace_name_placeholder]
+		cs = Název workspace
+		en = Workspace name
+		sk = Názov workspace
+	[integration_detail_clockify_section_title]
+		cs = Nastavení účtu
+		en = Account settings
+		sk = Nastavenie účtu
+	[integration_detail_workspace_hint]
+		cs = Zadejte název pro Workspace, do kterého chcete Vaše data exportovat. Pokud žádný nezadáte, exportují se do prního Workspace.
+		en = Enter the name of the Workspace you want to export your data to. If no name is given, the first Workspace will be used.
+		sk = Zadajte názov pre Workspace, do ktorého chcete Vaše dáta exportovať. Pokiaľ žiadny nezadáte, exportujú sa do prvého Workspace.
 
 [[Export View]]
 	[export_view_title]
@@ -1150,5 +1174,24 @@
 		cs = Automaticky exportovat
 		en = Automatic export
 		sk = Automaticky exportovať
-
+	[export_view_clockify_error_project_not_found]
+		cs = Clockify export selhal: Projekt %s nebyl nalezen
+		en = Clockify export failed: Project %s was not found
+		sk = Clockify export zlyhal: Projekt %s nebol nájdený
+	[export_view_clockify_error_workspace_not_found]
+		cs = Clockify export selhal: Workspace %s nebyl nalezen
+		en = Clockify export failed: Workspace %s was not found
+		sk = Clockify export zlyhal: Workspace %s nebol nájdený
+	[export_view_clockify_error_api_key]
+		cs = Clockify export selhal: Neplatný API klíč
+		en = Clockify export failed: Invalid API key
+		sk = Clockify export zlyhal: Neplatný API kľúč
+	[export_view_clockify_error]
+		cs = Clockify export selhal
+		en = Clockify export failed
+		sk = Clockify export selhal
+	[export_view_success_title]
+		cs = Záznamy byly exportovány
+		en = The entries have been exported
+		sk = Záznamy boli exportované
 

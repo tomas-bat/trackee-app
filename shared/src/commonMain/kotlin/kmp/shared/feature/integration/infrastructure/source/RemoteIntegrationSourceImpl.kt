@@ -8,6 +8,7 @@ import kmp.shared.base.Result
 import kmp.shared.base.error.util.runCatchingCommonNetworkExceptions
 import kmp.shared.feature.integration.data.source.RemoteIntegrationSource
 import kmp.shared.feature.integration.domain.model.Integration
+import kmp.shared.feature.integration.domain.model.NewClockifyExportRequest
 import kmp.shared.feature.integration.domain.model.NewIntegration
 import kmp.shared.feature.integration.infrastructure.model.IntegrationDto
 import kmp.shared.feature.integration.infrastructure.model.toDomain
@@ -56,5 +57,12 @@ internal class RemoteIntegrationSourceImpl(
                 }
             }
             res.bodyAsText()
+        }
+
+    override suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit> =
+        runCatchingCommonNetworkExceptions {
+            client.post("integrations/clockify") {
+                setBody(request.toDto())
+            }
         }
 }

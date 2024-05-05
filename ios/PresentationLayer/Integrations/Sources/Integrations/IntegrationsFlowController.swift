@@ -34,7 +34,11 @@ enum IntegrationsFlow: Flow, Equatable {
     
     enum Detail: Equatable {
         case pop
-        case showExport(integrationType: IntegrationType)
+        case showExport(
+            integrationType: IntegrationType,
+            apiKey: String?,
+            workspaceName: String?
+        )
     }
     
     enum Export: Equatable {
@@ -120,13 +124,24 @@ extension IntegrationsFlowController {
     func handleDetailFlow(_ flow: IntegrationsFlow.Detail) {
         switch flow {
         case .pop: pop()
-        case let .showExport(integrationType): showExport(integrationType: integrationType)
+        case let .showExport(integrationType, apiKey, workspaceName):
+            showExport(
+                integrationType: integrationType,
+                apiKey: apiKey,
+                workspaceName: workspaceName
+            )
         }
     }
     
-    private func showExport(integrationType: IntegrationType) {
+    private func showExport(
+        integrationType: IntegrationType,
+        apiKey: String?,
+        workspaceName: String?
+    ) {
         let vm = IntegrationExportViewModel(
             integrationType: integrationType,
+            apiKey: apiKey,
+            workspaceName: workspaceName,
             flowController: self
         )
         let view = IntegrationExportView(viewModel: vm)

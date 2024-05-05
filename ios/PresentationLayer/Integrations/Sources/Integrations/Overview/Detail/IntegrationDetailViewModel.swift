@@ -88,6 +88,8 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         var saveLoading = false
         var removeLoading = false
         var allowRemove = false
+        var workspaceName: String?
+        var alertData: AlertData?
     }
     
     // MARK: - Intent
@@ -100,6 +102,9 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         case changeApiKey(to: String)
         case remove
         case changeAutoExport(to: Bool)
+        case changeWorkspaceName(to: String)
+        case showInfoAlert(with: String)
+        case changeAlertData(to: AlertData?)
     }
     
     func onIntent(_ intent: Intent) {
@@ -109,9 +114,12 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             case .retry: await fetchData(showLoading: true)
             case .onExportData: onExportData()
             case .save: await save()
-            case let .changeApiKey(key): state.apiKey = key
+            case let .changeApiKey(key): state.apiKey = key.isEmpty ? nil : key
             case .remove: await remove()
             case let .changeAutoExport(value): state.autoExport = value
+            case let .changeWorkspaceName(name): state.workspaceName = name.isEmpty ? nil : name
+            case let .showInfoAlert(info): state.alertData = .init(title: info)
+            case let .changeAlertData(data): state.alertData = data
             }
         })
     }
@@ -129,6 +137,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 case .csv: ()
                 case let .clockify(clockify):
                     state.apiKey = clockify.apiKey
+                    state.workspaceName = clockify.workspaceName
                     state.autoExport = clockify.autoExport
                 }
                 
@@ -165,6 +174,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                     id: integrationId,
                     label: state.label,
                     apiKey: state.apiKey,
+                    workspaceName: state.workspaceName,
                     autoExport: state.autoExport
                 )
             }
@@ -185,6 +195,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 NewIntegration.Clockify(
                     label: state.label,
                     apiKey: state.apiKey,
+                    workspaceName: state.workspaceName,
                     autoExport: state.autoExport
                 )
             }
@@ -232,6 +243,14 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
     
     private func onExportData() {
         guard let type = state.integrationType.data else { return }
-        flowController?.handleFlow(IntegrationsFlow.detail(.showExport(integrationType: type)))
+        flowController?.handleFlow(
+            IntegrationsFlow.detail(
+                .showExport(
+                    integrationType: type,
+                    apiKey: state.apiKey,
+                    workspaceName: state.workspaceName
+                )
+            )
+        )
     }
 }

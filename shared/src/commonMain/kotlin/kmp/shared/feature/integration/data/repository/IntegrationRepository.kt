@@ -3,6 +3,7 @@ package kmp.shared.feature.integration.data.repository
 import kmp.shared.base.Result
 import kmp.shared.feature.integration.data.source.RemoteIntegrationSource
 import kmp.shared.feature.integration.domain.model.Integration
+import kmp.shared.feature.integration.domain.model.NewClockifyExportRequest
 import kmp.shared.feature.integration.domain.model.NewIntegration
 import kmp.shared.feature.integration.domain.repository.IntegrationRepository
 import kotlinx.datetime.Instant
@@ -27,4 +28,7 @@ internal class IntegrationRepositoryImpl(
 
     override suspend fun exportToCsv(from: Instant?, to: Instant?): Result<String> =
         source.exportToCsv(from.toString(), to.toString())
+
+    override suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit> =
+        source.exportToClockify(request)
 }

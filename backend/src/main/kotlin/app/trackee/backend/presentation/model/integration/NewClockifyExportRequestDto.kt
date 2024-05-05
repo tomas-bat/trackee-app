@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class NewClockifyExportRequestDto(
     @SerialName("api_key") val apiKey: String,
-    @SerialName("workspace_id") val workspaceId: String,
+    @SerialName("workspace_name") val workspaceName: String?,
     val from: String,
     val to: String
 )

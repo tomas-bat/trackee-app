@@ -25,4 +25,5 @@ internal val integrationModule = module {
     factoryOf(::UpdateIntegrationUseCaseImpl) bind UpdateIntegrationUseCase::class
     factoryOf(::DeleteIntegrationUseCaseImpl) bind DeleteIntegrationUseCase::class
     factoryOf(::ExportToCsvUseCaseImpl) bind ExportToCsvUseCase::class
+    factoryOf(::ExportToClockifyUseCaseImpl) bind ExportToClockifyUseCase::class
 }

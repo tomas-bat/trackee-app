@@ -1,5 +1,6 @@
 package app.trackee.backend.data.repository
 
+import app.trackee.backend.config.exceptions.ClockifyException
 import app.trackee.backend.data.source.ClockifySource
 import app.trackee.backend.data.source.IntegrationSource
 import app.trackee.backend.data.util.*
@@ -76,15 +77,18 @@ internal class IntegrationRepositoryImpl(
     override suspend fun createClockifyEntry(
         apiKey: String,
         entry: TimerEntryPreview,
-        workspaceId: String?
+        workspaceName: String?
     ) {
-        val workspaceId = workspaceId ?: clockify.readWorkspaces(apiKey).first().id
+        val workspaceId = clockify.readWorkspaces(apiKey).firstOrNull { it.name == workspaceName }?.id
+            ?: throw ClockifyException.ClockifyWorkspaceNotFound(workspaceName)
+
         val projectId = clockify.readProjectByName(
             apiKey = apiKey,
             workspaceId = workspaceId,
             projectName = entry.project.name,
             clientName = entry.client.name
         ).id
+
         val clockifyEntry = ClockifyTimeEntry(
             billable = true,
             description = entry.description ?: "",

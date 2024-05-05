@@ -2,6 +2,7 @@ package kmp.shared.feature.integration.domain.repository
 
 import kmp.shared.base.Result
 import kmp.shared.feature.integration.domain.model.Integration
+import kmp.shared.feature.integration.domain.model.NewClockifyExportRequest
 import kmp.shared.feature.integration.domain.model.NewIntegration
 import kotlinx.datetime.Instant
 
@@ -17,4 +18,6 @@ internal interface IntegrationRepository {
     suspend fun deleteIntegration(integrationId: String): Result<Unit>
 
     suspend fun exportToCsv(from: Instant?, to: Instant?): Result<String>
+
+    suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit>
 }

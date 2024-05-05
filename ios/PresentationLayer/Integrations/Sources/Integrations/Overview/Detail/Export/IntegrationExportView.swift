@@ -87,7 +87,9 @@ import Utilities
     Environment.locale = .init(identifier: "cs")
     
     let vm = IntegrationExportViewModel(
-        integrationType: .csv,
+        integrationType: .clockify,
+        apiKey: .randomString(),
+        workspaceName: .randomString(),
         flowController: nil
     )
     

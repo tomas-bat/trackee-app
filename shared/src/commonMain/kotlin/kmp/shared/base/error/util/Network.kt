@@ -25,34 +25,20 @@ internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: 
     } catch (e: ResponseException) {
         val body = e.response.body<ErrorDto>()
 
-        when (body.type) {
-            "Unauthorized" -> Result.Error(
-                BackendError.NotAuthorized(e.response.toString(), e),
-            )
-
-            "ProjectNotAssignedToUser" -> Result.Error(
-                BackendError.ProjectNotAssignedToUser(e.message, e)
-            )
-
-            "MissingProject" -> Result.Error(
-                BackendError.MissingProject(e.message, e)
-            )
-
-            "ProjectNotFound" -> Result.Error(
-                BackendError.ProjectNotFound(e.message, e)
-            )
-
-            "ClientNotFound" -> Result.Error(
-                BackendError.ClientNotFound(e.message, e)
-            )
-
-            else -> Result.Error(
-                ErrorResult(
-                    message = body.message,
-                    throwable = e
-                )
-            )
+        val error = when (body.type) {
+            "Unauthorized" -> BackendError.NotAuthorized(e.response.toString(), e)
+            "ProjectNotAssignedToUser" -> BackendError.ProjectNotAssignedToUser(body.message, e)
+            "MissingProject" -> BackendError.MissingProject(body.message, e)
+            "ProjectNotFound" -> BackendError.ProjectNotFound(body.message, e)
+            "ClientNotFound" -> BackendError.ClientNotFound(body.message, e)
+            "ClockifyProjectNotFound" -> BackendError.ClockifyProjectNotFound(body.message, e)
+            "ClockifyInvalidApiKey" -> BackendError.ClockifyInvalidApiKey(e)
+            "ClockifyUnknownError" -> BackendError.ClockifyUnknownError(e)
+            "ClockifyWorkspaceNotFound" -> BackendError.ClockifyWorkspaceNotFound(body.message, e)
+            else -> ErrorResult(message = body.message, throwable = e)
         }
+
+        Result.Error(error)
     } catch (e: Throwable) {
         Result.Error(handlePlatformError(e))
     }

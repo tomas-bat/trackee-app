@@ -58,6 +58,10 @@ struct IntegrationDetailView: View {
         .snack(viewModel.snackState)
         .background(AppTheme.Colors.background)
         .disabled(viewModel.state.saveLoading || viewModel.state.removeLoading)
+        .alert(item: Binding<AlertData?>(
+            get: { viewModel.state.alertData },
+            set: { data in viewModel.onIntent(.changeAlertData(to: data)) }
+        )) { data in .init(data) }
         .lifecycle(viewModel)
     }
     
@@ -84,19 +88,27 @@ struct IntegrationDetailView: View {
         List {
             titleSection
             
-            Section {
+            Section(L10n.integration_detail_clockify_section_title) {
                 fieldRow(
                     label: L10n.integration_detail_api_key_label,
                     placeholder: L10n.integration_detail_api_key_placeholder,
+                    secure: true,
+                    info: L10n.integration_detail_api_key_hint,
                     text: Binding<String>(
                         get: { viewModel.state.apiKey ?? "" },
                         set: { key in viewModel.onIntent(.changeApiKey(to: key)) }
                     )
                 )
-            } header: {
-                Text(L10n.integration_detail_api_key_section_title)
-            } footer: {
-                Text(L10n.integration_detail_api_key_hint)
+                
+                fieldRow(
+                    label: L10n.integration_detail_workspace_name_label,
+                    placeholder: L10n.integration_detail_workspace_name_placeholder,
+                    info: L10n.integration_detail_workspace_hint,
+                    text: Binding<String>(
+                        get: { viewModel.state.workspaceName ?? "" },
+                        set: { name in viewModel.onIntent(.changeWorkspaceName(to: name)) }
+                    )
+                )
             }
             
             Section(L10n.integration_detail_export_section_title) {
@@ -108,7 +120,7 @@ struct IntegrationDetailView: View {
                 Toggle(
                     L10n.export_view_auto_export_title,
                     isOn: Binding<Bool>(
-                        get: { viewModel.state.autoExport },
+                        get: { viewModel.state.autoExport },
                         set: { value in viewModel.onIntent(.changeAutoExport(to: value)) }
                     )
                 )
@@ -136,6 +148,8 @@ struct IntegrationDetailView: View {
     private func fieldRow(
         label: String,
         placeholder: String,
+        secure: Bool = false,
+        info: String? = nil,
         text: Binding<String>
     ) -> some View {
         HStack(spacing: 8) {
@@ -143,8 +157,21 @@ struct IntegrationDetailView: View {
                 
             Spacer()
             
-            TextField(placeholder, text: text)
-                .multilineTextAlignment(.trailing)
+            if secure {
+                SecureField(placeholder, text: text)
+                    .multilineTextAlignment(.trailing)
+            } else {
+                TextField(placeholder, text: text)
+                    .multilineTextAlignment(.trailing)
+            }
+            
+            if let info {
+                Button {
+                    viewModel.onIntent(.showInfoAlert(with: info))
+                } label: {
+                    Image(systemSymbol: .infoCircle)
+                }
+            }
         }
         .foregroundStyle(AppTheme.Colors.foreground)
     }

@@ -18,7 +18,7 @@ fun Application.configureRouting(isDebug: Boolean) {
         exception<BaseException> { call, baseException ->
             call.respond(
                 status = baseException.code,
-                message = baseException.toDto(isDebug)
+                baseException.toDto(isDebug)
             )
         }
 

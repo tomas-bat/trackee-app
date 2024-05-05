@@ -15,12 +15,16 @@ sealed class ClockifyException(
         }
     )
 
-    class InvalidApiKey(message: String? = null) : ClockifyException(
+    class ClockifyInvalidApiKey(message: String? = null) : ClockifyException(
         publicMessage = "Invalid API key",
         debugMessage = message
     )
 
-    class Unknown(message: String? = null) : ClockifyException(
-        debugMessage = message
+    class ClockifyUnknownError(message: String? = null) : ClockifyException(
+        publicMessage = message
+    )
+
+    class ClockifyWorkspaceNotFound(workspaceName: String? = null) : ClockifyException(
+        publicMessage = workspaceName
     )
 }
