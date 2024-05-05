@@ -38,4 +38,20 @@ sealed class UserException(
             if (uid != null) append(" for uid=${uid}")
         }
     )
+
+    class FailedToGetCreatedEntry(uid: String?) : UserException(
+        publicMessage = buildString {
+            append("Failed to get created entry")
+            if (uid != null) append(" for uid=${uid}")
+        }
+    )
+
+    class EntryNotFound(uid: String?, entryId: String?) : UserException(
+        publicMessage = buildString {
+            append("Entry ")
+            if (entryId != null) append("(entryId=$entryId) ")
+            if (uid != null) append("(uid=$uid) ")
+            append("not found")
+        }
+    )
 }

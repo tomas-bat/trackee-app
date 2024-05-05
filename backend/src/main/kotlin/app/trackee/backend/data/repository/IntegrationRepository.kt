@@ -7,6 +7,7 @@ import app.trackee.backend.data.util.*
 import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
 import app.trackee.backend.domain.model.clockify.ClockifyTimeEntryType
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
+import app.trackee.backend.domain.model.integration.ActiveClockifyAutoExport
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
 import app.trackee.backend.domain.repository.IntegrationRepository
@@ -103,5 +104,26 @@ internal class IntegrationRepositoryImpl(
         )
 
         clockify.createTimeEntry(apiKey, workspaceId, clockifyEntry)
+    }
+
+    override suspend fun readActiveClockifyAutoExports(uid: String): List<ActiveClockifyAutoExport> =
+        readIntegrations(uid)
+            .filterIsInstance<Integration.Clockify>()
+            .filter { it.autoExport }
+            .mapNotNull { integration ->
+                if (integration.apiKey == null || integration.workspaceName == null) return@mapNotNull null
+                ActiveClockifyAutoExport(
+                    apiKey = integration.apiKey,
+                    workspaceName = integration.workspaceName
+                )
+            }
+
+    override suspend fun createEntryForAutoExports(uid: String, entry: TimerEntryPreview) {
+        readActiveClockifyAutoExports(uid).forEach { clockify ->
+            createClockifyEntry(
+                apiKey = clockify.apiKey,
+                entry = entry
+            )
+        }
     }
 }

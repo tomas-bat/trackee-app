@@ -1,5 +1,6 @@
 package app.trackee.backend.presentation.route.user
 
+import app.trackee.backend.domain.repository.IntegrationRepository
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.presentation.model.client.toDto
 import app.trackee.backend.presentation.model.entry.NewTimerEntryDto
@@ -23,6 +24,7 @@ import org.koin.ktor.ext.inject
 
 fun Routing.userRoute() {
     val userRepository by inject<UserRepository>()
+    val integration by inject<IntegrationRepository>()
 
     authenticate {
         route("/users") {
@@ -84,10 +86,14 @@ fun Routing.userRoute() {
 
                 post<NewTimerEntryDto> { body ->
                     val user = call.requireUserPrincipal().user
-                    userRepository.createEntry(
+
+                    val entry = userRepository.createEntry(
                         uid = user.uid,
                         entry = body.toDomain()
                     )
+
+                    val entryPreview = userRepository.readEntryPreview(user.uid, entry.id)
+                    integration.createEntryForAutoExports(user.uid, entryPreview)
 
                     call.respond(HttpStatusCode.Created)
                 }
@@ -158,8 +164,13 @@ fun Routing.userRoute() {
 
                 post("/save_and_stop") {
                     val user = call.requireUserPrincipal().user
-                    userRepository.createEntryFromTimer(user.uid)
+                    val entry = userRepository.createEntryFromTimer(user.uid)
                     userRepository.stopTimer(user.uid)
+
+                    if (entry != null) {
+                        val entryPreview = userRepository.readEntryPreview(user.uid, entry.id)
+                        integration.createEntryForAutoExports(user.uid, entryPreview)
+                    }
 
                     call.respond(HttpStatusCode.OK)
                 }

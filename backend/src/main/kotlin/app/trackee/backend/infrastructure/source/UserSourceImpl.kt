@@ -8,12 +8,14 @@ import app.trackee.backend.config.util.await
 import app.trackee.backend.config.util.toTimestamp
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.entry.NewTimerEntry
+import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.timer.StartTimerBody
 import app.trackee.backend.domain.model.timer.TimerStatus
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.client.FirestoreUserClient
 import app.trackee.backend.infrastructure.model.entry.FirestoreEntryUser
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
+import app.trackee.backend.infrastructure.model.entry.toDomain
 import app.trackee.backend.infrastructure.model.entry.toFirestoreEntry
 import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
@@ -115,6 +117,17 @@ internal class UserSourceImpl : UserSource {
         )
     }
 
+    override suspend fun readEntry(uid: String, entryId: String): TimerEntry =
+        db
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(entryId)
+            .get()
+            .await()
+            .toObject(FirestoreTimerEntry::class.java)?.toDomain()
+                ?: throw UserException.EntryNotFound(uid, entryId)
+
     override suspend fun readProjectIds(uid: String): List<IdentifiableProject> =
         db
             .collection(SourceConstants.Firestore.Collection.USERS)
@@ -160,7 +173,7 @@ internal class UserSourceImpl : UserSource {
             .await()
     }
 
-    override suspend fun createEntry(uid: String, entry: NewTimerEntry) {
+    override suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry {
         if (!isProjectAssignedToUser(uid, entry.clientId, entry.projectId)) {
             throw UserException.ProjectNotAssignedToUser(uid, entry.clientId, entry.projectId)
         }
@@ -179,6 +192,9 @@ internal class UserSourceImpl : UserSource {
 
         val firestoreEntry = entry.toFirestoreEntry(id = docRef.id)
         docRef.set(firestoreEntry).await()
+
+        return docRef.get().await().toObject(FirestoreTimerEntry::class.java)?.toDomain()
+            ?: throw UserException.FailedToGetCreatedEntry(uid)
     }
 
     override suspend fun deleteEntry(uid: String, entryId: String) {

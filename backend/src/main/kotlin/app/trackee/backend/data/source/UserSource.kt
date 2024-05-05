@@ -2,6 +2,7 @@ package app.trackee.backend.data.source
 
 import app.trackee.backend.common.Page
 import app.trackee.backend.domain.model.entry.NewTimerEntry
+import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.timer.StartTimerBody
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
@@ -22,13 +23,15 @@ internal interface UserSource {
         endAt: Instant?
     ): Page<FirestoreTimerEntry>
 
+    suspend fun readEntry(uid: String, entryId: String): TimerEntry
+
     suspend fun readProjectIds(uid: String): List<IdentifiableProject>
 
     suspend fun createUser(user: User): FirestoreUser
 
     suspend fun updateTimer(uid: String, timerData: FirestoreTimerData)
 
-    suspend fun createEntry(uid: String, entry: NewTimerEntry)
+    suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry
 
     suspend fun deleteEntry(uid: String, entryId: String)
 

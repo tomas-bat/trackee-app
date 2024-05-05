@@ -41,11 +41,16 @@ interface UserRepository {
         endAt: Instant?
     ): Page<TimerEntryPreview>
 
+    suspend fun readEntryPreview(
+        uid: String,
+        entryId: String
+    ): TimerEntryPreview
+
     suspend fun createUser(uid: String): User
 
     suspend fun updateTimer(uid: String, timerData: TimerData)
 
-    suspend fun createEntry(uid: String, entry: NewTimerEntry)
+    suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry
 
     suspend fun deleteEntry(uid: String, entryId: String)
 
@@ -61,5 +66,5 @@ interface UserRepository {
 
     suspend fun stopTimer(uid: String)
 
-    suspend fun createEntryFromTimer(uid: String)
+    suspend fun createEntryFromTimer(uid: String): TimerEntry?
 }

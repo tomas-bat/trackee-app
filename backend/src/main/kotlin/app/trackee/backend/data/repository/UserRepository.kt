@@ -105,6 +105,17 @@ internal class UserRepositoryImpl(
         )
     }
 
+    override suspend fun readEntryPreview(uid: String, entryId: String): TimerEntryPreview {
+        val entry = source.readEntry(uid, entryId)
+        return TimerEntryPreview(
+            id = entry.id,
+            project = clientSource.readProjectById(entry.clientId, entry.projectId).toDomain(),
+            client = clientSource.readClientById(entry.clientId).toDomain(),
+            description = entry.description,
+            startedAt = entry.startedAt,
+            endedAt = entry.endedAt
+        )
+    }
 
     override suspend fun createUser(uid: String): User =
         source.createUser(
@@ -124,7 +135,7 @@ internal class UserRepositoryImpl(
         source.updateTimer(uid, timerData.toFirestore())
     }
 
-    override suspend fun createEntry(uid: String, entry: NewTimerEntry) =
+    override suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry =
         source.createEntry(uid, entry)
 
     override suspend fun deleteEntry(uid: String, entryId: String) =
@@ -176,10 +187,10 @@ internal class UserRepositoryImpl(
     override suspend fun stopTimer(uid: String) =
         source.stopTimer(uid)
 
-    override suspend fun createEntryFromTimer(uid: String) {
+    override suspend fun createEntryFromTimer(uid: String): TimerEntry? {
         val timerData = readUserByUid(uid).timerData
 
-        if (timerData.status == TimerStatus.Off) return
+        if (timerData.status == TimerStatus.Off) return null
 
         if (timerData.startedAt == null) throw UserException.MissingStartDate(uid)
 
@@ -194,6 +205,6 @@ internal class UserRepositoryImpl(
             endedAt = Clock.System.now()
         )
 
-        createEntry(uid, newEntry)
+        return createEntry(uid, newEntry)
     }
 }
