@@ -1,6 +1,7 @@
 package app.trackee.backend.presentation.model.entry
 
 import app.trackee.backend.domain.model.entry.TimerEntry
+import kotlinx.datetime.toInstant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -21,4 +22,13 @@ internal fun TimerEntry.toDto() = TimerEntryDto(
     description = description,
     startedAt = startedAt.toString(),
     endedAt = endedAt.toString()
+)
+
+internal fun TimerEntryDto.toDomain() = TimerEntry(
+    id = id,
+    clientId = clientId,
+    projectId = projectId,
+    description = description,
+    startedAt = startedAt.toInstant(),
+    endedAt = endedAt.toInstant()
 )

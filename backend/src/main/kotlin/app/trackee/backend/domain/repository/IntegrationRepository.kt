@@ -22,4 +22,10 @@ interface IntegrationRepository {
     suspend fun deleteTempCsvFile(filename: String)
 
     suspend fun deleteTempCsvFiles()
+
+    suspend fun createClockifyEntry(
+        apiKey: String,
+        entry: TimerEntryPreview,
+        workspaceId: String? = null
+    )
 }

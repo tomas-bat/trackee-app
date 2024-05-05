@@ -3,10 +3,8 @@ package app.trackee.backend.presentation.route
 import app.trackee.backend.config.exceptions.IntegrationException
 import app.trackee.backend.domain.repository.IntegrationRepository
 import app.trackee.backend.domain.repository.UserRepository
-import app.trackee.backend.presentation.model.integration.IntegrationDto
-import app.trackee.backend.presentation.model.integration.NewIntegrationDto
-import app.trackee.backend.presentation.model.integration.toDomain
-import app.trackee.backend.presentation.model.integration.toDto
+import app.trackee.backend.presentation.model.entry.toDomain
+import app.trackee.backend.presentation.model.integration.*
 import app.trackee.backend.presentation.util.requireUserPrincipal
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -86,6 +84,22 @@ fun Routing.integrationRoute() {
                     call.respondFile(csv)
 
                     repository.deleteTempCsvFile(csv.name)
+                }
+            }
+
+            route("/clockify") {
+                route("/entries") {
+                    post<NewClockifyEntryRequestDto> { body ->
+                        val user = call.requireUserPrincipal().user
+
+                        repository.createClockifyEntry(
+                            apiKey = body.apiKey,
+                            entry = body.entry.toDomain(),
+                            workspaceId = body.workspaceId
+                        )
+
+                        call.respond(HttpStatusCode.OK)
+                    }
                 }
             }
         }

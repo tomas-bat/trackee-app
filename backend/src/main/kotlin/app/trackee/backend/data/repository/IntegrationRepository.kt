@@ -1,11 +1,10 @@
 package app.trackee.backend.data.repository
 
+import app.trackee.backend.data.source.ClockifySource
 import app.trackee.backend.data.source.IntegrationSource
-import app.trackee.backend.data.source.UserSource
-import app.trackee.backend.data.util.asCsvDate
-import app.trackee.backend.data.util.asCsvTime
-import app.trackee.backend.data.util.durationDecimal
-import app.trackee.backend.data.util.durationHours
+import app.trackee.backend.data.util.*
+import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
+import app.trackee.backend.domain.model.clockify.ClockifyTimeEntryType
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
@@ -19,7 +18,7 @@ import kotlin.io.path.listDirectoryEntries
 
 internal class IntegrationRepositoryImpl(
     private val source: IntegrationSource,
-    private val userSource: UserSource
+    private val clockify: ClockifySource
 ) : IntegrationRepository {
 
     private val csvPath = "temp/csv"
@@ -72,5 +71,33 @@ internal class IntegrationRepositoryImpl(
         Path(csvPath).listDirectoryEntries().forEach { file ->
             file.deleteIfExists()
         }
+    }
+
+    override suspend fun createClockifyEntry(
+        apiKey: String,
+        entry: TimerEntryPreview,
+        workspaceId: String?
+    ) {
+        val workspaceId = workspaceId ?: clockify.readWorkspaces(apiKey).first().id
+        val projectId = clockify.readProjectByName(
+            apiKey = apiKey,
+            workspaceId = workspaceId,
+            projectName = entry.project.name,
+            clientName = entry.client.name
+        ).id
+        val clockifyEntry = ClockifyTimeEntry(
+            billable = true,
+            description = entry.description ?: "",
+            customAttributes = emptyList(),
+            customFields = emptyList(),
+            end = entry.endedAt.asClockifyDate,
+            projectId = projectId,
+            start = entry.startedAt.asClockifyDate,
+            tagIds = emptyList(),
+            taskId = "",
+            type = ClockifyTimeEntryType.Regular
+        )
+
+        clockify.createTimeEntry(apiKey, workspaceId, clockifyEntry)
     }
 }

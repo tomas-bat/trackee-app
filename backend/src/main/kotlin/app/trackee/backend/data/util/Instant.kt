@@ -26,6 +26,17 @@ val Instant.asCsvTime: String
         return this.toLocalDateTime(zone).toJavaLocalDateTime().format(formatter)
     }
 
+val Instant.asClockifyDate: String
+    get() {
+        val zone = TimeZone.UTC
+
+        val formatter = DateTimeFormatter
+            .ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+            .withZone(zone.toJavaZoneId())
+
+        return this.toLocalDateTime(zone).toJavaLocalDateTime().format(formatter)
+    }
+
 val TimerEntryPreview.durationHours: String
     get() {
         val duration = endedAt - startedAt
