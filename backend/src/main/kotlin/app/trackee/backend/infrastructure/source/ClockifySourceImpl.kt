@@ -1,5 +1,6 @@
 package app.trackee.backend.infrastructure.source
 
+import app.trackee.backend.config.exceptions.BaseException
 import app.trackee.backend.config.exceptions.ClockifyException
 import app.trackee.backend.data.source.ClockifySource
 import app.trackee.backend.domain.model.clockify.ClockifyProject
@@ -32,14 +33,16 @@ internal class ClockifySourceImpl(
         clientName: String
     ): ClockifyProject =
        runHandlingClockifyExceptions {
-            client.get(urlWith("workspaces/${workspaceId}/projects")) {
+            val projects = client.get(urlWith("workspaces/${workspaceId}/projects")) {
                 header(apiKeyHeader, apiKey)
                 url {
                     parameters.append("name", projectName)
                     parameters.append("strict-name-search", "false")
                 }
-            }.body<List<RawClockifyProject>>().map { it.toDomain() }.firstOrNull()
-                ?: throw ClockifyException.ProjectNotFound(null, projectName)
+            }.body<List<RawClockifyProject>>().map { it.toDomain() }
+
+            return projects.firstOrNull { it.clientName == clientName }
+                ?: throw ClockifyException.ClockifyProjectNotFound(null, projectName)
         }
 
     override suspend fun createTimeEntry(
@@ -62,12 +65,16 @@ internal class ClockifySourceImpl(
         try {
             block()
         } catch (e: Throwable) {
-            val exception = e as Exception
-            val clientException = exception as ClientRequestException
-            val error = clientException.response.body<RawClockifyError>()
-            throw when (error.code) {
-                4003 -> ClockifyException.InvalidApiKey("Code: ${error.code}, message: ${error.message}")
-                else -> ClockifyException.Unknown("Code: ${error.code}, message: ${error.message}")
+            when (val exception = e as Exception) {
+                is ClientRequestException -> {
+                    val error = exception.response.body<RawClockifyError>()
+                    throw when (error.code) {
+                        4003 -> ClockifyException.InvalidApiKey("Code: ${error.code}, message: ${error.message}")
+                        else -> ClockifyException.Unknown("Code: ${error.code}, message: ${error.message}")
+                    }
+                }
+                is BaseException -> throw exception
+                else -> throw ClockifyException.Unknown(exception.message)
             }
         }
 }

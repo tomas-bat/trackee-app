@@ -8,12 +8,10 @@ sealed class ClockifyException(
     code: HttpStatusCode = HttpStatusCode.BadRequest
 ) : BaseException(publicMessage, code, debugMessage) {
 
-    class ProjectNotFound(projectId: String?, projectName: String?) : ClockifyException(
+    class ClockifyProjectNotFound(projectId: String?, projectName: String?) : ClockifyException(
         publicMessage = buildString {
-            append("Project ")
-            if (projectName != null) append("$projectName ")
-            if (projectId != null) append("id=$projectId ")
-            append("was not found")
+            if (projectName != null) append(projectName)
+            if (projectId != null) append(" ($projectId)")
         }
     )
 

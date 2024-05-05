@@ -101,6 +101,25 @@ fun Routing.integrationRoute() {
                         call.respond(HttpStatusCode.OK)
                     }
                 }
+
+                post<NewClockifyExportRequestDto> { body ->
+                    val user = call.requireUserPrincipal().user
+                    val entries = userRepository.readEntryPreviews(
+                        uid = user.uid,
+                        startAfter = body.to.toInstant(),
+                        limit = null,
+                        endAt = body.from.toInstant()
+                    ).data
+                    for (entry in entries) {
+                        repository.createClockifyEntry(
+                            apiKey = body.apiKey,
+                            entry = entry,
+                            workspaceId = body.workspaceId
+                        )
+                    }
+
+                    call.respond(HttpStatusCode.OK)
+                }
             }
         }
     }
