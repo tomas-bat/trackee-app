@@ -275,6 +275,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 await fetchData(showLoading: false)
             }
         } catch {
+            await fetchData(showLoading: false) // In case data is invalidated
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
             startFormatTimer() // In case something failed and the timer is still running
@@ -323,7 +324,21 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 endedAt: endedAt.asInstant
             )
         )
-        try await addTimerEntryUseCase.execute(params: params)
+        
+        // Clockify export errors are not fatal
+        do {
+            try await addTimerEntryUseCase.execute(params: params)
+        } catch {
+            guard error.isClockifyExportError else { throw error }
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(
+                .error(
+                    message: error.localizedDescription,
+                    actionLabel: nil,
+                    duration: 4
+                )
+            )
+        }
     }
     
     private func onSwitchClick() async {
