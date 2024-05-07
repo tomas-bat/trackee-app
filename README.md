@@ -38,6 +38,10 @@ The iOS app is available via public testing on the following link: https://testf
 > [!CAUTION]
 > When using the app via the Railway backend server, request times take very long because of long distances between the backend server instance and the database. Local backend deployment speeds up the user experience significantly.
 
+- In order to build and run the backend application locally, you can run `./gradlew backend:run`
+- In order to build and run the iOS appliaction locally, navigate to the `ios` directory via `cd ios`, run the setup script via `scripts/setup.sh` and then you should be able to build the project via Xcode. Updates to signing & certificates setting may be needed.
+- To make the client app connect to a custom backend URL, update the `NetworkClient.kt` file in the KMP shared module, comment out the lines specifying the Railway server URL and uncomment the lines specifying the local/custom URL. Rebuild the shared module (e.g. via `scripts/build-kmp.sh` in the `ios` directory) and re-build the iOS app to reflect the KMP module change.
+
 # Architecture
 
 Clean (common modules) + MVVM (platform-specific modules) architecture is used for its testability and ease of _modularization_. Code is divided into several layers:
