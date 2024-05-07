@@ -16,7 +16,8 @@ Trackee allows creating and managing users, clients and projects, supports track
 
 ### User, client and project management
 
-<img width=240px alt="Tracker" src="other/images/profile.png"> <img width=240px alt="History" src=other/images/project-detail.png> <img width=240px alt="Project selection" src=other/images/clients.png>
+<img width=240px alt="Profile" src="other/images/profile.png"> <img width=240px alt="Project Detail" src=other/images/project-detail.png> <img width=240px alt="Project list" src=other/images/project-list.png>
 
+### Integration
 
-
+<img width=240px alt="Shortcuts" src="other/images/shortcuts.png"> <img width=240px alt="Shortcut Parameters" src=other/images/shortcut-params.png> <img width=240px alt="Automations" src=other/images/aautomations.png>
