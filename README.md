@@ -12,6 +12,6 @@ Trackee allows creating and managing users, clients and projects, supports track
 
 ### Basic time tracking
 
-<img width=300px alt="Tracker" src="other/images/tracker.png"> <img width=300px alt="History" src=other/images/history.png>
+<img width=240px alt="Tracker" src="other/images/tracker.png"> <img width=240px alt="History" src=other/images/history.png> <img width=240px alt="Project selection" src=other/images/project-selection.png>
 
 
