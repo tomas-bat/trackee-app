@@ -1,43 +1,8 @@
-# Matee iOS DevStack
-- Historical development prior monorepo can be seen in the [devstack-ios-app](https://github.com/MateeDevs/devstack-ios-app) repo
-
-## Documents
-- **APIDoc:** [Postmanerator](https://devstack-server-production.up.railway.app/apidoc.html)
-- **Specification:** FIXME
-- **Graphics:** FIXME
-- **Assets**: FIXME
-
-## ALPHA
-
-### Configuration
-- **BundleID:** cz.matee.devstack.alpha
-- **API endpoint:** FIXME
-
-### Test accounts
-FIXME
-
-## BETA
-
-### Configuration
-- **BundleID:** cz.matee.devstack.beta
-- **API endpoint:** FIXME
-
-### Test accounts
-FIXME
-
-## PRODUCTION
-
-### Configuration
-- **BundleID:** cz.matee.devstack
-- **API endpoint:** FIXME
-
-### Test accounts
-FIXME
+# Trackee iOS app
 
 ## Dependencies
 - All code dependencies and tools are managed via [Swift Package Manager](https://swift.org/package-manager/)
 - You can use the `scripts/setup.sh` for quick setup of all required tools
-- There is also `scripts/rename.sh` for quick renaming from DevStack to YourProject
 
 ## Kotlin Multiplatform
 - Part of the application is based on Kotlin Multiplatform
