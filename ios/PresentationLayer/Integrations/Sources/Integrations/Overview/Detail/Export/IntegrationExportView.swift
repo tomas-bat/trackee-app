@@ -25,39 +25,39 @@ struct IntegrationExportView: View {
     // MARK: - Body
     
     var body: some View {
-            List {
-                Section(L10n.export_view_interval_section_title) {
-                    DatePicker(
-                        L10n.export_view_from_label,
-                        selection: fromDate,
-                        displayedComponents: datePickerDisplayedComponents
-                    )
-                    
-                    DatePicker(
-                        L10n.export_view_to_label,
-                        selection: toDate,
-                        displayedComponents: datePickerDisplayedComponents
-                    )
-                }
+        List {
+            Section(L10n.export_view_interval_section_title) {
+                DatePicker(
+                    L10n.export_view_from_label,
+                    selection: fromDate,
+                    displayedComponents: datePickerDisplayedComponents
+                )
+                
+                DatePicker(
+                    L10n.export_view_to_label,
+                    selection: toDate,
+                    displayedComponents: datePickerDisplayedComponents
+                )
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .foregroundStyle(AppTheme.Colors.foreground)
-            .scrollBounceBehavior(.basedOnSize)
-            .navigationTitle(L10n.export_view_title)
-            .toolbar(.visible)
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(L10n.export_view_export_button_title) {
-                        viewModel.onIntent(.export)
-                    }
-                    .buttonStyle(.loading)
-                    .environment(\.isLoading, viewModel.state.exportLoading)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .foregroundStyle(AppTheme.Colors.foreground)
+        .scrollBounceBehavior(.basedOnSize)
+        .navigationTitle(L10n.export_view_title)
+        .toolbar(.visible)
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(L10n.export_view_export_button_title) {
+                    viewModel.onIntent(.export)
                 }
+                .buttonStyle(.loading)
+                .environment(\.isLoading, viewModel.state.exportLoading)
             }
-            .snack(viewModel.snackState)
-            .background(AppTheme.Colors.background)
-            .disabled(viewModel.state.exportLoading)
-            .lifecycle(viewModel)
+        }
+        .snack(viewModel.snackState)
+        .background(AppTheme.Colors.background)
+        .disabled(viewModel.state.exportLoading)
+        .lifecycle(viewModel)
     }
     
     // MARK: - Private

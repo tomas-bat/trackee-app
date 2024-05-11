@@ -10,7 +10,8 @@ public extension Integration {
     static func stub(id: String = UUID().uuidString) -> Integration {
         Integration.Csv(
             id: id,
-            label: "Lorem ipsum"
+            label: "Lorem ipsum",
+            selectedProjects: .stub
         )
     }
 }

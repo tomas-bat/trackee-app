@@ -191,6 +191,10 @@
 		cs = Uložit
 		en = Save
 		sk = Uložiť
+	[select_label]
+		cs = Vybrat
+		en = Select
+		sk = Vybrať
 	[empty_text]
 		cs = 
 		en = 
@@ -1144,6 +1148,10 @@
 		cs = Zadejte název pro Workspace, do kterého chcete Vaše data exportovat. Pokud žádný nezadáte, exportují se do prního Workspace.
 		en = Enter the name of the Workspace you want to export your data to. If no name is given, the first Workspace will be used.
 		sk = Zadajte názov pre Workspace, do ktorého chcete Vaše dáta exportovať. Pokiaľ žiadny nezadáte, exportujú sa do prvého Workspace.
+	[integration_detail_selected_projects]
+		cs = Vybrané projekty
+		en = Selected projects
+		sk = Vybrané projekty
 
 [[Export View]]
 	[export_view_title]
@@ -1198,4 +1206,6 @@
 		cs = Záznamy byly exportovány
 		en = The entries have been exported
 		sk = Záznamy boli exportované
+
+
 

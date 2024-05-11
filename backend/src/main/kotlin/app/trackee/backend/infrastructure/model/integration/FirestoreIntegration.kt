@@ -3,15 +3,22 @@ package app.trackee.backend.infrastructure.model.integration
 import app.trackee.backend.config.exceptions.IntegrationException
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
+import app.trackee.backend.infrastructure.model.project.FirestoreIdentifiableProject
+import app.trackee.backend.infrastructure.model.project.toDomain
+import app.trackee.backend.infrastructure.model.project.toFirestore
 import com.google.cloud.firestore.DocumentSnapshot
 import com.google.cloud.firestore.annotation.PropertyName
 
-data class FirestoreCsvIntegration(
+internal data class FirestoreCsvIntegration(
     val type: String = "csv",
-    val label: String = ""
+    val label: String = "",
+
+    @get:PropertyName("selected_projects")
+    @set:PropertyName("selected_projects")
+    var selectedProjects: List<FirestoreIdentifiableProject> = emptyList()
 )
 
-data class FirestoreClockifyIntegration(
+internal data class FirestoreClockifyIntegration(
     val type: String = "clockify",
     val label: String = "",
 
@@ -25,18 +32,24 @@ data class FirestoreClockifyIntegration(
 
     @get:PropertyName("api_key")
     @set:PropertyName("api_key")
-    var apiKey: String? = null
+    var apiKey: String? = null,
+
+    @get:PropertyName("selected_projects")
+    @set:PropertyName("selected_projects")
+    var selectedProjects: List<FirestoreIdentifiableProject> = emptyList()
 )
 
 internal fun Integration.Csv.toFirestore() = FirestoreCsvIntegration(
-    label = label
+    label = label,
+    selectedProjects = selectedProjects.map { it.toFirestore() }
 )
 
 internal fun Integration.Clockify.toFirestore() = FirestoreClockifyIntegration(
     label = label,
     autoExport = autoExport,
     apiKey = apiKey,
-    workspaceName = workspaceName
+    workspaceName = workspaceName,
+    selectedProjects = selectedProjects.map { it.toFirestore() }
 )
 
 internal fun DocumentSnapshot.toIntegration(): Integration {
@@ -52,7 +65,8 @@ internal fun DocumentSnapshot.toIntegration(): Integration {
 
 internal fun FirestoreCsvIntegration.toDomain(id: String) = Integration.Csv(
     id = id,
-    label = label
+    label = label,
+    selectedProjects = selectedProjects.map { it.toDomain() }
 )
 
 internal fun FirestoreClockifyIntegration.toDomain(id: String) = Integration.Clockify(
@@ -60,18 +74,21 @@ internal fun FirestoreClockifyIntegration.toDomain(id: String) = Integration.Clo
     label = label,
     autoExport = autoExport,
     apiKey = apiKey,
-    workspaceName = workspaceName
+    workspaceName = workspaceName,
+    selectedProjects = selectedProjects.map { it.toDomain() }
 )
 
 internal fun NewIntegration.Csv.toFirestore() = FirestoreCsvIntegration(
-    label = label
+    label = label,
+    selectedProjects = selectedProjects.map { it.toFirestore() }
 )
 
 internal fun NewIntegration.Clockify.toFirestore() = FirestoreClockifyIntegration(
     label = label,
     autoExport = autoExport,
     apiKey = apiKey,
-    workspaceName = workspaceName
+    workspaceName = workspaceName,
+    selectedProjects = selectedProjects.map { it.toFirestore() }
 )
 
 internal fun Integration.toFirestore() = when (this) {

@@ -10,6 +10,8 @@ struct IntegrationDetailView: View {
     
     // MARK: - Constants
     
+    private let progressViewPadding: CGFloat = 8
+    
     // MARK: - Stored properties
     
     @ObservedObject private var viewModel: IntegrationDetailViewModel
@@ -76,6 +78,14 @@ struct IntegrationDetailView: View {
                     L10n.integration_detail_export_data_button_title,
                     action: { viewModel.onIntent(.onExportData) }
                 )
+                
+                navigationButton(
+                    L10n.integration_detail_selected_projects,
+                    count: viewModel.state.selectedProjects.count,
+                    countLoading: viewModel.state.selectedProjectsLoading,
+                    action: { viewModel.onIntent(.showSelectedProjects) }
+                )
+                .disabled(viewModel.state.selectedProjectsLoading)
             }
             
             if viewModel.state.allowRemove {
@@ -116,6 +126,14 @@ struct IntegrationDetailView: View {
                     L10n.integration_detail_export_data_button_title,
                     action: { viewModel.onIntent(.onExportData) }
                 )
+                
+                navigationButton(
+                    L10n.integration_detail_selected_projects,
+                    count: viewModel.state.selectedProjects.count,
+                    countLoading: viewModel.state.selectedProjectsLoading,
+                    action: { viewModel.onIntent(.showSelectedProjects) }
+                )
+                .disabled(viewModel.state.selectedProjectsLoading)
                 
                 Toggle(
                     L10n.export_view_auto_export_title,
@@ -178,6 +196,8 @@ struct IntegrationDetailView: View {
     
     private func navigationButton(
         _ text: String,
+        count: Int? = nil,
+        countLoading: Bool = false,
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
@@ -185,6 +205,14 @@ struct IntegrationDetailView: View {
                 Text(text)
                 
                 Spacer()
+                
+                if countLoading {
+                    ProgressView()
+                        .padding(.horizontal, progressViewPadding)
+                } else if let count {
+                    Text("\(count)")
+                        .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+                }
                 
                 Image(systemSymbol: .chevronRight)
             }

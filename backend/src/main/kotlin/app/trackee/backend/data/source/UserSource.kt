@@ -3,10 +3,10 @@ package app.trackee.backend.data.source
 import app.trackee.backend.common.Page
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
+import app.trackee.backend.domain.model.project.IdentifiableProject
 import app.trackee.backend.domain.model.timer.StartTimerBody
 import app.trackee.backend.domain.model.user.User
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
-import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import kotlinx.datetime.Instant

@@ -9,6 +9,7 @@ import app.trackee.backend.config.util.toTimestamp
 import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.domain.model.entry.NewTimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntry
+import app.trackee.backend.domain.model.project.IdentifiableProject
 import app.trackee.backend.domain.model.timer.StartTimerBody
 import app.trackee.backend.domain.model.timer.TimerStatus
 import app.trackee.backend.domain.model.user.User
@@ -17,7 +18,6 @@ import app.trackee.backend.infrastructure.model.entry.FirestoreEntryUser
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
 import app.trackee.backend.infrastructure.model.entry.toDomain
 import app.trackee.backend.infrastructure.model.entry.toFirestoreEntry
-import app.trackee.backend.infrastructure.model.project.IdentifiableProject
 import app.trackee.backend.infrastructure.model.timer.FirestoreTimerData
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
 import app.trackee.backend.infrastructure.model.user.toFirestore
@@ -137,7 +137,7 @@ internal class UserSourceImpl : UserSource {
             .await()
             .map { snapshot ->
                 snapshot.toObject(FirestoreUserClient::class.java).projectIds.map { projectId ->
-                    IdentifiableProject(snapshot.id, projectId)
+                    IdentifiableProject(projectId, snapshot.id)
                 }
             }
             .flatten()

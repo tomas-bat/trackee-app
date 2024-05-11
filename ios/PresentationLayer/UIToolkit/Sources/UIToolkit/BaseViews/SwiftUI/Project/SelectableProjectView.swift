@@ -6,9 +6,8 @@
 import Foundation
 import SwiftUI
 import KMPSharedDomain
-import UIToolkit
 
-struct SelectableProjectView: View {
+public struct SelectableProjectView: View {
     
     // MARK: - Constants
     
@@ -24,7 +23,7 @@ struct SelectableProjectView: View {
     
     // MARK: - Init
     
-    init(
+    public init(
         project: ProjectPreview,
         isSelected: Bool
     ) {
@@ -34,7 +33,7 @@ struct SelectableProjectView: View {
     
     // MARK: - Body
     
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .center, spacing: spacing) {
             HStack(alignment: .top, spacing: spacing) {
                 if let type = project.type {

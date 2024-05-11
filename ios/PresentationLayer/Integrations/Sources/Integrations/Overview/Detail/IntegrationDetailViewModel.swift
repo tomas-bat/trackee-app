@@ -39,12 +39,15 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
     @Injected(\.updateIntegrationUseCase) private var updateIntegrationUseCase
     @Injected(\.addIntegrationUseCase) private var addIntegrationUseCase
     @Injected(\.deleteIntegrationUseCase) private var deleteIntegrationUseCase
+    @Injected(\.getProjectsUseCase) private var getProjectsUseCase
     
     // MARK: - Stored properties
     
     weak var delegate: IntegrationDetailViewModelDelegate?
     
     private let type: `Type`
+    
+    private var hasLoadedData = false
     
     // MARK: - Init
     
@@ -70,9 +73,12 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
     override func onAppear() {
         super.onAppear()
         
-        executeTask(Task {
-            await fetchData(showLoading: type.isEdit && !state.integrationType.hasData)
-        })
+        if !hasLoadedData {
+            executeTask(Task {
+                await fetchData(showLoading: type.isEdit && !state.integrationType.hasData)
+                hasLoadedData = true
+            })
+        }
     }
     
     // MARK: - State
@@ -84,10 +90,12 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         var integrationType: ViewData<IntegrationType> = .loading(mock: .csv)
         var label = ""
         var apiKey: String?
+        var selectedProjects: [IdentifiableProject] = []
         var autoExport = false
         var saveLoading = false
         var removeLoading = false
         var allowRemove = false
+        var selectedProjectsLoading = false
         var workspaceName: String?
         var alertData: AlertData?
     }
@@ -105,6 +113,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         case changeWorkspaceName(to: String)
         case showInfoAlert(with: String)
         case changeAlertData(to: AlertData?)
+        case showSelectedProjects
     }
     
     func onIntent(_ intent: Intent) {
@@ -113,13 +122,14 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             case let .changeLabel(label): state.label = label
             case .retry: await fetchData(showLoading: true)
             case .onExportData: onExportData()
-            case .save: await save()
+            case .save: await handleErrors { try await save() }
             case let .changeApiKey(key): state.apiKey = key.isEmpty ? nil : key
             case .remove: await remove()
             case let .changeAutoExport(value): state.autoExport = value
             case let .changeWorkspaceName(name): state.workspaceName = name.isEmpty ? nil : name
             case let .showInfoAlert(info): state.alertData = .init(title: info)
             case let .changeAlertData(data): state.alertData = data
+            case .showSelectedProjects: showSelectedProjects()
             }
         })
     }
@@ -143,17 +153,25 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 
                 state.integrationType = .data(integration.type)
                 state.label = integration.label
+                state.selectedProjects = integration.selectedProjects
             } catch {
                 state.integrationType = .error(error)
             }
-        default: ()
+        case .new:
+            // Automatically select all projects on creation
+            state.selectedProjectsLoading = true
+            defer { state.selectedProjectsLoading = false }
+            await handleErrors {
+                try await Task.sleep(for: .seconds(3))
+                let allProjects: [ProjectPreview] = try await getProjectsUseCase.execute()
+                state.selectedProjects = allProjects.map { $0.asIdentifiableProject }
+            }
         }
     }
     
-    private func save() async {
+    private func save() async throws {
         guard state.label.count > 1 else {
-            handleError(IntegrationError.nameTooShort)
-            return
+            throw IntegrationError.nameTooShort
         }
         
         state.saveLoading = true
@@ -167,12 +185,14 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             case .csv:
                 Integration.Csv(
                     id: integrationId,
-                    label: state.label
+                    label: state.label,
+                    selectedProjects: state.selectedProjects
                 )
             case .clockify:
                 Integration.Clockify(
                     id: integrationId,
                     label: state.label,
+                    selectedProjects: state.selectedProjects,
                     apiKey: state.apiKey,
                     workspaceName: state.workspaceName,
                     autoExport: state.autoExport
@@ -180,20 +200,22 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             }
             let params = UpdateIntegrationUseCaseParams(integration: integration)
             
-            do {
+            await handleErrors {
                 try await updateIntegrationUseCase.execute(params: params)
                 await delegate?.didUpdateIntegration()
                 pop()
-            } catch {
-                handleError(error)
             }
         case let .new(integrationType):
             let integration = switch integrationType {
             case .csv:
-                NewIntegration.Csv(label: state.label)
+                NewIntegration.Csv(
+                    label: state.label,
+                    selectedProjects: state.selectedProjects
+                )
             case .clockify:
                 NewIntegration.Clockify(
                     label: state.label,
+                    selectedProjects: state.selectedProjects,
                     apiKey: state.apiKey,
                     workspaceName: state.workspaceName,
                     autoExport: state.autoExport
@@ -201,19 +223,21 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             }
             let params = AddIntegrationUseCaseParams(integration: integration)
             
-            do {
+            await handleErrors {
                 try await addIntegrationUseCase.execute(params: params)
                 await delegate?.didUpdateIntegration()
                 pop()
-            } catch {
-                handleError(error)
             }
         }
     }
     
-    private func handleError(_ error: Error) {
-        snackState.currentData?.dismiss()
-        snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+    private func handleErrors(block: () async throws -> Void) async {
+        do {
+            try await block()
+        } catch {
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
     }
     
     private func pop() {
@@ -252,5 +276,18 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 )
             )
         )
+    }
+    
+    private func showSelectedProjects() {
+        flowController?.handleFlow(IntegrationsFlow.detail(.showSelectedProjects(
+            with: state.selectedProjects,
+            delegate: self
+        )))
+    }
+}
+
+extension IntegrationDetailViewModel: SelectedProjectsViewModelDelegate {
+    func didConfirmSelection(with projects: [IdentifiableProject]) {
+        state.selectedProjects = projects
     }
 }

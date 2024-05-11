@@ -1,14 +1,13 @@
 //
-//  Created by Tomáš Batěk on 02.04.2024
+//  Created by Tomáš Batěk on 11.05.2024
 //  Copyright © 2024 Matee. All rights reserved.
 //
 
-import Foundation
 import SwiftUI
-import KMPSharedDomain
 import UIToolkit
+import KMPSharedDomain
 
-struct ClientSelectionView: View {
+struct SelectedProjectsView: View {
     
     // MARK: - Constants
     
@@ -17,11 +16,11 @@ struct ClientSelectionView: View {
     
     // MARK: - Stored properties
     
-    @ObservedObject private var viewModel: ClientSelectionViewModel
+    @ObservedObject private var viewModel: SelectedProjectsViewModel
     
     // MARK: - Init
     
-    init(viewModel: ClientSelectionViewModel) {
+    init(viewModel: SelectedProjectsViewModel) {
         self.viewModel = viewModel
     }
     
@@ -29,28 +28,30 @@ struct ClientSelectionView: View {
     
     var body: some View {
         Group {
-            switch viewModel.state.clients {
-            case let .data(clients), let .loading(clients):
+            switch viewModel.state.projects {
+            case let .data(projects), let .loading(projects):
                 ScrollView {
                     LazyVStack(spacing: spacing) {
-                        ForEach(0..<clients.count, id: \.self) { idx in
-                            let client = clients[idx]
+                        ForEach(0..<projects.count, id: \.self) { idx in
+                            let project = projects[idx]
                             
                             Button {
-                                viewModel.onIntent(.selectClient(id: client.id))
+                                viewModel.onIntent(.selectProject(
+                                    clientId: project.client.id,
+                                    projectId: project.id
+                                ))
                             } label: {
-                                SelectableClientView(
-                                    client: client,
-                                    isSelected: client.id == viewModel.state.selectedClientId
+                                SelectableProjectView(
+                                    project: project,
+                                    isSelected: viewModel.state.selectedProjects.contains(project.asIdentifiableProject)
                                 )
-                                .skeleton(viewModel.state.clients.isLoading)
+                                .skeleton(viewModel.state.projects.isLoading)
                             }
                         }
                     }
-                    .animateContent(viewModel.state.clients.isLoading)
+                    .animateContent(viewModel.state.projects.isLoading)
                     .padding(padding)
                 }
-                .scrollBounceBehavior(.basedOnSize)
             case let .error(error):
                 ErrorView(error: error) {
                     viewModel.onIntent(.retry)
@@ -63,12 +64,12 @@ struct ClientSelectionView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppTheme.Colors.background)
-        .navigationTitle(L10n.client_selection_view_title)
+        .navigationTitle(L10n.integration_detail_selected_projects)
         .toolbar(.visible)
         .toolbarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button(L10n.save_label) {
+                Button(L10n.select_label) {
                     viewModel.onIntent(.save)
                 }
             }
@@ -79,30 +80,35 @@ struct ClientSelectionView: View {
                 set: { text in viewModel.onIntent(.updateSearchText(to: text)) }
             )
         )
+        .snack(viewModel.snackState)
         .lifecycle(viewModel)
     }
     
     // MARK: - Private
     
-    private func localizedEmptyReason(for reason: ViewData<[Client]>.EmptyReason) -> String {
+    private func localizedEmptyReason(for reason: ViewData<[ProjectPreview]>.EmptyReason) -> String {
         switch reason {
-        case .noData: L10n.client_selection_view_no_clients
+        case .noData: L10n.project_selection_view_no_projects
         case .search: L10n.empty_results
         }
     }
 }
 
 #if DEBUG
-import Factory
 import DependencyInjectionMocks
+import Factory
 import Utilities
 
 #Preview {
-    Environment.locale = .init(identifier: "cs")
     Container.shared.registerUseCaseMocks()
+    Environment.locale = .init(identifier: "cs")
     
-    let vm = ClientSelectionViewModel()
-    return ClientSelectionView(viewModel: vm)
+    let vm = SelectedProjectsViewModel(
+        selectedProjects: .stub
+    )
+    
+    return NavigationStack {
+        SelectedProjectsView(viewModel: vm)
+    }
 }
-
 #endif

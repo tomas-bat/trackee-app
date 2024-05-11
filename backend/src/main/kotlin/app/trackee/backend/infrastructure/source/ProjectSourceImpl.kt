@@ -7,7 +7,9 @@ import app.trackee.backend.domain.model.project.NewProject
 import app.trackee.backend.domain.model.project.NewProjectResponse
 import app.trackee.backend.infrastructure.model.client.FirestoreUserClient
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
+import app.trackee.backend.infrastructure.model.integration.toIntegration
 import app.trackee.backend.infrastructure.model.project.FirestoreClientProject
+import app.trackee.backend.infrastructure.model.project.FirestoreIdentifiableProject
 import app.trackee.backend.infrastructure.model.project.FirestoreProject
 import app.trackee.backend.infrastructure.model.project.toFirestore
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
@@ -139,6 +141,33 @@ internal class ProjectSourceImpl : ProjectSource {
                         }
                     }
                 }
+
+            // Update integrations
+            db
+                .collection(SourceConstants.Firestore.Collection.USERS)
+                .listDocuments()
+                .forEach { userRef ->
+                    userRef
+                        .collection(SourceConstants.Firestore.Collection.INTEGRATIONS)
+                        .listDocuments()
+                        .forEach { integrationRef ->
+                            val integration = integrationRef.get().await().toIntegration()
+                            integration.selectedProjects.forEach { identifiableProject ->
+                                if (identifiableProject.clientId == originalClientId && identifiableProject.projectId == project.id) {
+                                    // Remove old project
+                                    integrationRef.update(
+                                        SourceConstants.Firestore.FieldName.SELECTED_PROJECTS,
+                                        FieldValue.arrayRemove(identifiableProject.toFirestore())
+                                    ).await()
+                                    // Add updated project
+                                    integrationRef.update(
+                                        SourceConstants.Firestore.FieldName.SELECTED_PROJECTS,
+                                        FieldValue.arrayUnion(FirestoreIdentifiableProject(project.clientId, project.id))
+                                    ).await()
+                                }
+                            }
+                        }
+                }
         } else {
             ref.set(project).await()
         }
@@ -191,6 +220,27 @@ internal class ProjectSourceImpl : ProjectSource {
                         entryRef
                             .delete()
                             .await()
+                    }
+            }
+
+        // Delete integrations of this project
+        db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .listDocuments()
+            .forEach { userRef ->
+                userRef
+                    .collection(SourceConstants.Firestore.Collection.INTEGRATIONS)
+                    .listDocuments()
+                    .forEach { integrationRef ->
+                        val integration = integrationRef.get().await().toIntegration()
+                        integration.selectedProjects.forEach { identifiableProject ->
+                            if (identifiableProject.clientId == clientId && identifiableProject.projectId == projectId) {
+                                integrationRef.update(
+                                    SourceConstants.Firestore.FieldName.SELECTED_PROJECTS,
+                                    FieldValue.arrayRemove(identifiableProject.toFirestore())
+                                )
+                            }
+                        }
                     }
             }
 

@@ -39,6 +39,21 @@ enum IntegrationsFlow: Flow, Equatable {
             apiKey: String?,
             workspaceName: String?
         )
+        case showSelectedProjects(
+            with: [IdentifiableProject],
+            delegate: SelectedProjectsViewModelDelegate?
+        )
+        
+        static func == (lhs: IntegrationsFlow.Detail, rhs: IntegrationsFlow.Detail) -> Bool {
+            switch (lhs, rhs) {
+            case (.pop, .pop): true
+            case let (.showExport(lhsType, lhsKey, lhsName), .showExport(rhsType, rhsKey, rhsName)):
+                lhsType == rhsType && lhsKey == rhsKey && lhsName == rhsName
+            case let (.showSelectedProjects(lhsProjects, _), .showSelectedProjects(rhsProjects, _)):
+                lhsProjects == rhsProjects
+            default: false
+            }
+        }
     }
     
     enum Export: Equatable {
@@ -130,6 +145,8 @@ extension IntegrationsFlowController {
                 apiKey: apiKey,
                 workspaceName: workspaceName
             )
+        case let .showSelectedProjects(projects, delegate):
+            showSelectedProjects(with: projects, delegate: delegate)
         }
     }
     
@@ -145,6 +162,20 @@ extension IntegrationsFlowController {
             flowController: self
         )
         let view = IntegrationExportView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showSelectedProjects(
+        with projects: [IdentifiableProject],
+        delegate: SelectedProjectsViewModelDelegate?
+    ) {
+        let vm = SelectedProjectsViewModel(
+            selectedProjects: projects,
+            flowController: self
+        )
+        vm.delegate = delegate
+        let view = SelectedProjectsView(viewModel: vm)
         let vc = BaseHostingController(rootView: view)
         navigationController.pushViewController(vc, animated: true)
     }

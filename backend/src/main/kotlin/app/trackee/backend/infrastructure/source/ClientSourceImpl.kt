@@ -8,8 +8,11 @@ import app.trackee.backend.domain.model.client.NewClientResponse
 import app.trackee.backend.infrastructure.model.client.FirestoreClient
 import app.trackee.backend.infrastructure.model.client.toFirestore
 import app.trackee.backend.infrastructure.model.entry.FirestoreTimerEntry
+import app.trackee.backend.infrastructure.model.integration.toIntegration
 import app.trackee.backend.infrastructure.model.project.FirestoreProject
+import app.trackee.backend.infrastructure.model.project.toFirestore
 import app.trackee.backend.infrastructure.model.user.FirestoreUser
+import com.google.cloud.firestore.FieldValue
 import com.google.firebase.cloud.FirestoreClient as GoogleFirestoreClient
 
 internal class ClientSourceImpl : ClientSource {
@@ -138,6 +141,27 @@ internal class ClientSourceImpl : ClientSource {
                         entryRef
                             .delete()
                             .await()
+                    }
+            }
+
+        // Delete integrations of this client
+        db
+            .collection(SourceConstants.Firestore.Collection.USERS)
+            .listDocuments()
+            .forEach { userRef ->
+                userRef
+                    .collection(SourceConstants.Firestore.Collection.INTEGRATIONS)
+                    .listDocuments()
+                    .forEach { integrationRef ->
+                        val integration = integrationRef.get().await().toIntegration()
+                        integration.selectedProjects.forEach { identifiableProject ->
+                            if (identifiableProject.clientId == clientId) {
+                                integrationRef.update(
+                                    SourceConstants.Firestore.FieldName.SELECTED_PROJECTS,
+                                    FieldValue.arrayRemove(identifiableProject.toFirestore())
+                                )
+                            }
+                        }
                     }
             }
 
