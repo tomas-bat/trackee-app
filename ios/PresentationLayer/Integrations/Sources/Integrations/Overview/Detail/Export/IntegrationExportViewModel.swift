@@ -23,6 +23,7 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     
     // MARK: - Stored properties
     
+    private let integrationId: String
     private let integrationType: IntegrationType
     private let apiKey: String?
     private let workspaceName: String?
@@ -30,11 +31,13 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     // MARK: - Init
     
     init(
+        integrationId: String,
         integrationType: IntegrationType,
         apiKey: String?,
         workspaceName: String?,
         flowController: FlowController? = nil
     ) {
+        self.integrationId = integrationId
         self.integrationType = integrationType
         self.apiKey = apiKey
         self.workspaceName = workspaceName
@@ -106,6 +109,7 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
     
     private func exportCsv() async throws {
         let params = ExportToCsvUseCaseParams(
+            integrationId: integrationId,
             from: state.fromDate.asInstant,
             to: state.toDate.asInstant
         )
@@ -122,6 +126,7 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
         guard let apiKey else { throw IntegrationError.missingApiKey }
         
         let params = ExportToClockifyUseCaseParams(
+            integrationId: integrationId,
             request: NewClockifyExportRequest(
                 apiKey: apiKey,
                 workspaceName: workspaceName,

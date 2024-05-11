@@ -26,9 +26,15 @@ internal class IntegrationRepositoryImpl(
     override suspend fun deleteIntegration(integrationId: String): Result<Unit> =
         source.deleteIntegration(integrationId)
 
-    override suspend fun exportToCsv(from: Instant?, to: Instant?): Result<String> =
-        source.exportToCsv(from.toString(), to.toString())
+    override suspend fun exportToCsv(
+        integrationId: String,
+        from: Instant?, to: Instant?
+    ): Result<String> =
+        source.exportToCsv(integrationId, from.toString(), to.toString())
 
-    override suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit> =
-        source.exportToClockify(request)
+    override suspend fun exportToClockify(
+        integrationId: String,
+        request: NewClockifyExportRequest
+    ): Result<Unit> =
+        source.exportToClockify(integrationId, request)
 }

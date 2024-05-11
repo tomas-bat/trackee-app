@@ -48,9 +48,13 @@ internal class RemoteIntegrationSourceImpl(
             client.delete("integrations/${integrationId}")
         }
 
-    override suspend fun exportToCsv(from: String?, to: String?): Result<String> =
+    override suspend fun exportToCsv(
+        integrationId: String,
+        from: String?,
+        to: String?
+    ): Result<String> =
         runCatchingCommonNetworkExceptions {
-            val res = client.get("integrations/csv") {
+            val res = client.get("integrations/${integrationId}/export/csv") {
                 url {
                     from?.let { parameters.append("from", it) }
                     to?.let { parameters.append("to", it) }
@@ -59,9 +63,12 @@ internal class RemoteIntegrationSourceImpl(
             res.bodyAsText()
         }
 
-    override suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit> =
+    override suspend fun exportToClockify(
+        integrationId: String,
+        request: NewClockifyExportRequest
+    ): Result<Unit> =
         runCatchingCommonNetworkExceptions {
-            client.post("integrations/clockify") {
+            client.post("integrations/${integrationId}/export/clockify") {
                 setBody(request.toDto())
             }
         }

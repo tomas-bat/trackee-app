@@ -1,6 +1,7 @@
 package app.trackee.backend.presentation.route
 
 import app.trackee.backend.config.exceptions.IntegrationException
+import app.trackee.backend.domain.model.project.IdentifiableProject
 import app.trackee.backend.domain.repository.IntegrationRepository
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.presentation.model.entry.toDomain
@@ -50,6 +51,74 @@ fun Routing.integrationRoute() {
 
                     call.respond(HttpStatusCode.OK)
                 }
+
+                route("/export") {
+                    get("/csv") {
+                        val user = call.requireUserPrincipal().user
+                        val integrationId: String by call.parameters
+                        val from = call.request.queryParameters["from"]
+                        val to = call.request.queryParameters["to"]
+
+                        val integration = repository.readIntegration(user.uid, integrationId)
+                        val entries = userRepository.readEntryPreviews(
+                            uid = user.uid,
+                            startAfter = to?.toInstant(),
+                            limit = null,
+                            endAt = from?.toInstant()
+                        ).data.filter { entry ->
+                            integration.selectedProjects.contains(
+                                IdentifiableProject(entry.project.id, entry.client.id)
+                            )
+                        }
+
+                        val csv = repository.readCsv(entries.reversed())
+
+                        call.respondFile(csv)
+
+                        repository.deleteTempCsvFile(csv.name)
+                    }
+
+                    route("/clockify") {
+                        route("/entries") {
+                            post<NewClockifyEntryRequestDto> { body ->
+                                repository.createClockifyEntry(
+                                    apiKey = body.apiKey,
+                                    entry = body.entry.toDomain(),
+                                    workspaceName = body.workspaceName
+                                )
+
+                                call.respond(HttpStatusCode.OK)
+                            }
+                        }
+
+                        post<NewClockifyExportRequestDto> { body ->
+                            val user = call.requireUserPrincipal().user
+                            val integrationId: String by call.parameters
+
+                            val integration = repository.readIntegration(user.uid, integrationId)
+                            val entries = userRepository.readEntryPreviews(
+                                uid = user.uid,
+                                startAfter = body.to.toInstant(),
+                                limit = null,
+                                endAt = body.from.toInstant()
+                            ).data.filter { entry ->
+                                integration.selectedProjects.contains(
+                                    IdentifiableProject(entry.project.id, entry.client.id)
+                                )
+                            }
+
+                            for (entry in entries) {
+                                repository.createClockifyEntry(
+                                    apiKey = body.apiKey,
+                                    entry = entry,
+                                    workspaceName = body.workspaceName
+                                )
+                            }
+
+                            call.respond(HttpStatusCode.OK)
+                        }
+                    }
+                }
             }
 
             get {
@@ -65,61 +134,6 @@ fun Routing.integrationRoute() {
                 repository.createIntegration(user.uid, body.toDomain())
 
                 call.respond(HttpStatusCode.Created)
-            }
-
-            route("/csv") {
-                get {
-                    val user = call.requireUserPrincipal().user
-                    val from = call.request.queryParameters["from"]
-                    val to = call.request.queryParameters["to"]
-
-                    val entries = userRepository.readEntryPreviews(
-                        uid = user.uid,
-                        startAfter = to?.toInstant(),
-                        limit = null,
-                        endAt = from?.toInstant()
-                    ).data
-                    val csv = repository.readCsv(entries.reversed())
-
-                    call.respondFile(csv)
-
-                    repository.deleteTempCsvFile(csv.name)
-                }
-            }
-
-            route("/clockify") {
-                route("/entries") {
-                    post<NewClockifyEntryRequestDto> { body ->
-                        val user = call.requireUserPrincipal().user
-
-                        repository.createClockifyEntry(
-                            apiKey = body.apiKey,
-                            entry = body.entry.toDomain(),
-                            workspaceName = body.workspaceName
-                        )
-
-                        call.respond(HttpStatusCode.OK)
-                    }
-                }
-
-                post<NewClockifyExportRequestDto> { body ->
-                    val user = call.requireUserPrincipal().user
-                    val entries = userRepository.readEntryPreviews(
-                        uid = user.uid,
-                        startAfter = body.to.toInstant(),
-                        limit = null,
-                        endAt = body.from.toInstant()
-                    ).data
-                    for (entry in entries) {
-                        repository.createClockifyEntry(
-                            apiKey = body.apiKey,
-                            entry = entry,
-                            workspaceName = body.workspaceName
-                        )
-                    }
-
-                    call.respond(HttpStatusCode.OK)
-                }
             }
         }
     }

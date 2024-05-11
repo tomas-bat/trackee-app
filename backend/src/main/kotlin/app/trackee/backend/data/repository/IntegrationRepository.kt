@@ -7,9 +7,9 @@ import app.trackee.backend.data.util.*
 import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
 import app.trackee.backend.domain.model.clockify.ClockifyTimeEntryType
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
-import app.trackee.backend.domain.model.integration.ActiveClockifyAutoExport
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
+import app.trackee.backend.domain.model.project.IdentifiableProject
 import app.trackee.backend.domain.repository.IntegrationRepository
 import java.io.File
 import java.util.*
@@ -106,25 +106,20 @@ internal class IntegrationRepositoryImpl(
         clockify.createTimeEntry(apiKey, workspaceId, clockifyEntry)
     }
 
-    override suspend fun readActiveClockifyAutoExports(uid: String): List<ActiveClockifyAutoExport> =
+    override suspend fun readActiveClockifyAutoExportIntegrations(uid: String): List<Integration.Clockify> =
         readIntegrations(uid)
             .filterIsInstance<Integration.Clockify>()
-            .filter { it.autoExport }
-            .mapNotNull { integration ->
-                if (integration.apiKey == null || integration.workspaceName == null) return@mapNotNull null
-                ActiveClockifyAutoExport(
-                    apiKey = integration.apiKey,
-                    workspaceName = integration.workspaceName
-                )
-            }
+            .filter { it.autoExport && it.apiKey != null && it.workspaceName != null }
 
     override suspend fun createEntryForAutoExports(uid: String, entry: TimerEntryPreview) {
-        readActiveClockifyAutoExports(uid).forEach { clockify ->
-            createClockifyEntry(
-                apiKey = clockify.apiKey,
-                entry = entry,
-                workspaceName = clockify.workspaceName
-            )
-        }
+        readActiveClockifyAutoExportIntegrations(uid)
+            .filter { it.selectedProjects.contains(IdentifiableProject(entry.project.id, entry.client.id)) }
+            .forEach { clockify ->
+                createClockifyEntry(
+                    apiKey = clockify.apiKey ?: "",
+                    entry = entry,
+                    workspaceName = clockify.workspaceName ?: ""
+                )
+            }
     }
 }

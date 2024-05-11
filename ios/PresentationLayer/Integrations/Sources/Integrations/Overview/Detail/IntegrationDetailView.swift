@@ -73,11 +73,13 @@ struct IntegrationDetailView: View {
         List {
             titleSection
             
-            Section(L10n.integration_detail_export_section_title) {
-                navigationButton(
-                    L10n.integration_detail_export_data_button_title,
-                    action: { viewModel.onIntent(.onExportData) }
-                )
+            Section {
+                if viewModel.state.allowExport {
+                    navigationButton(
+                        L10n.integration_detail_export_data_button_title,
+                        action: { viewModel.onIntent(.onExportData) }
+                    )
+                }
                 
                 navigationButton(
                     L10n.integration_detail_selected_projects,
@@ -86,6 +88,10 @@ struct IntegrationDetailView: View {
                     action: { viewModel.onIntent(.showSelectedProjects) }
                 )
                 .disabled(viewModel.state.selectedProjectsLoading)
+            } header: {
+                Text(L10n.integration_detail_export_section_title)
+            } footer: {
+                Text(L10n.integration_detail_export_info)
             }
             
             if viewModel.state.allowRemove {
@@ -121,11 +127,13 @@ struct IntegrationDetailView: View {
                 )
             }
             
-            Section(L10n.integration_detail_export_section_title) {
-                navigationButton(
-                    L10n.integration_detail_export_data_button_title,
-                    action: { viewModel.onIntent(.onExportData) }
-                )
+            Section {
+                if viewModel.state.allowExport {
+                    navigationButton(
+                        L10n.integration_detail_export_data_button_title,
+                        action: { viewModel.onIntent(.onExportData) }
+                    )
+                }
                 
                 navigationButton(
                     L10n.integration_detail_selected_projects,
@@ -142,6 +150,10 @@ struct IntegrationDetailView: View {
                         set: { value in viewModel.onIntent(.changeAutoExport(to: value)) }
                     )
                 )
+            } header: {
+                Text(L10n.integration_detail_export_section_title)
+            } footer: {
+                Text(L10n.integration_detail_export_info)
             }
             
             if viewModel.state.allowRemove {

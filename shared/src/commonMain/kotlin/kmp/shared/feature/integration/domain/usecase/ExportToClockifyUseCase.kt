@@ -14,9 +14,11 @@ import kmp.shared.feature.integration.domain.repository.IntegrationRepository
  */
 interface ExportToClockifyUseCase : UseCaseResult<ExportToClockifyUseCase.Params, Unit> {
     /**
+     * @param integrationId Identifier of the integration.
      * @param request The export request parameters.
      */
     data class Params(
+        val integrationId: String,
         val request: NewClockifyExportRequest
     )
 }
@@ -25,5 +27,5 @@ internal class ExportToClockifyUseCaseImpl(
     private val repository: IntegrationRepository
 ) : ExportToClockifyUseCase {
     override suspend fun invoke(params: ExportToClockifyUseCase.Params): Result<Unit> =
-        repository.exportToClockify(params.request)
+        repository.exportToClockify(params.integrationId, params.request)
 }

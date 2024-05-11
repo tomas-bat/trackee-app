@@ -17,7 +17,7 @@ internal interface RemoteIntegrationSource {
 
     suspend fun deleteIntegration(integrationId: String): Result<Unit>
 
-    suspend fun exportToCsv(from: String?, to: String?): Result<String>
+    suspend fun exportToCsv(integrationId: String, from: String?, to: String?): Result<String>
 
-    suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit>
+    suspend fun exportToClockify(integrationId: String, request: NewClockifyExportRequest): Result<Unit>
 }

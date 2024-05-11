@@ -17,7 +17,14 @@ internal interface IntegrationRepository {
 
     suspend fun deleteIntegration(integrationId: String): Result<Unit>
 
-    suspend fun exportToCsv(from: Instant?, to: Instant?): Result<String>
+    suspend fun exportToCsv(
+        integrationId: String,
+        from: Instant?,
+        to: Instant?
+    ): Result<String>
 
-    suspend fun exportToClockify(request: NewClockifyExportRequest): Result<Unit>
+    suspend fun exportToClockify(
+        integrationId: String,
+        request: NewClockifyExportRequest
+    ): Result<Unit>
 }

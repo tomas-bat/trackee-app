@@ -1152,6 +1152,14 @@
 		cs = Vybrané projekty
 		en = Selected projects
 		sk = Vybrané projekty
+	[integration_detail_export_info]
+		cs = Pro export vybraných projektů je nutné integraci nejdříve uložit.
+		en = You have to save the integration in order to export entries of selected projects.
+		sk = Pre export vybraných projektov je nutné integráciu najskôr uložiť.
+	[integration_detail_saved_label]
+		cs = Integrace byla uložena
+		en = Integration has been saved
+		sk = Integrácia bola uložená
 
 [[Export View]]
 	[export_view_title]

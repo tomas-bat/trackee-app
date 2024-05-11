@@ -65,6 +65,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             state.allowRemove = false
         case .edit:
             state.allowRemove = true
+            state.allowExport = true
         }
     }
     
@@ -95,6 +96,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
         var saveLoading = false
         var removeLoading = false
         var allowRemove = false
+        var allowExport = false
         var selectedProjectsLoading = false
         var workspaceName: String?
         var alertData: AlertData?
@@ -203,7 +205,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             await handleErrors {
                 try await updateIntegrationUseCase.execute(params: params)
                 await delegate?.didUpdateIntegration()
-                pop()
+                snackState.showSnackSync(.info(message: L10n.integration_detail_saved_label))
             }
         case let .new(integrationType):
             let integration = switch integrationType {
@@ -226,7 +228,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             await handleErrors {
                 try await addIntegrationUseCase.execute(params: params)
                 await delegate?.didUpdateIntegration()
-                pop()
+                snackState.showSnackSync(.info(message: L10n.integration_detail_saved_label))
             }
         }
     }
@@ -267,15 +269,22 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
     
     private func onExportData() {
         guard let type = state.integrationType.data else { return }
-        flowController?.handleFlow(
-            IntegrationsFlow.detail(
-                .showExport(
-                    integrationType: type,
-                    apiKey: state.apiKey,
-                    workspaceName: state.workspaceName
+        
+        switch self.type {
+        case let .edit(integrationId):
+            flowController?.handleFlow(
+                IntegrationsFlow.detail(
+                    .showExport(
+                        integrationId: integrationId,
+                        integrationType: type,
+                        apiKey: state.apiKey,
+                        workspaceName: state.workspaceName
+                    )
                 )
             )
-        )
+        default: return
+        }
+        
     }
     
     private func showSelectedProjects() {

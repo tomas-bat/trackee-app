@@ -35,6 +35,7 @@ enum IntegrationsFlow: Flow, Equatable {
     enum Detail: Equatable {
         case pop
         case showExport(
+            integrationId: String,
             integrationType: IntegrationType,
             apiKey: String?,
             workspaceName: String?
@@ -47,8 +48,8 @@ enum IntegrationsFlow: Flow, Equatable {
         static func == (lhs: IntegrationsFlow.Detail, rhs: IntegrationsFlow.Detail) -> Bool {
             switch (lhs, rhs) {
             case (.pop, .pop): true
-            case let (.showExport(lhsType, lhsKey, lhsName), .showExport(rhsType, rhsKey, rhsName)):
-                lhsType == rhsType && lhsKey == rhsKey && lhsName == rhsName
+            case let (.showExport(lhsId, lhsType, lhsKey, lhsName), .showExport(rhsId, rhsType, rhsKey, rhsName)):
+                lhsId == rhsId && lhsType == rhsType && lhsKey == rhsKey && lhsName == rhsName
             case let (.showSelectedProjects(lhsProjects, _), .showSelectedProjects(rhsProjects, _)):
                 lhsProjects == rhsProjects
             default: false
@@ -139,8 +140,9 @@ extension IntegrationsFlowController {
     func handleDetailFlow(_ flow: IntegrationsFlow.Detail) {
         switch flow {
         case .pop: pop()
-        case let .showExport(integrationType, apiKey, workspaceName):
+        case let .showExport(id, integrationType, apiKey, workspaceName):
             showExport(
+                integrationId: id,
                 integrationType: integrationType,
                 apiKey: apiKey,
                 workspaceName: workspaceName
@@ -151,11 +153,13 @@ extension IntegrationsFlowController {
     }
     
     private func showExport(
+        integrationId: String,
         integrationType: IntegrationType,
         apiKey: String?,
         workspaceName: String?
     ) {
         let vm = IntegrationExportViewModel(
+            integrationId: integrationId,
             integrationType: integrationType,
             apiKey: apiKey,
             workspaceName: workspaceName,

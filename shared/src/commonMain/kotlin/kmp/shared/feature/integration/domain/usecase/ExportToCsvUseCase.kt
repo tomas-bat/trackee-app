@@ -14,10 +14,12 @@ import kotlinx.datetime.Instant
  */
 interface ExportToCsvUseCase : UseCaseResult<ExportToCsvUseCase.Params, String> {
     /**
+     * @param integrationId Identifier of the integration.
      * @param from Date from which the entries should be exported.
      * @param to Date until which the entries should be exported.
      */
     data class Params(
+        val integrationId: String,
         val from: Instant?,
         val to: Instant
     )
@@ -27,5 +29,5 @@ internal class ExportToCsvUseCaseImpl(
     private val repository: IntegrationRepository
 ) : ExportToCsvUseCase {
     override suspend fun invoke(params: ExportToCsvUseCase.Params): Result<String> =
-        repository.exportToCsv(params.from, params.to)
+        repository.exportToCsv(params.integrationId, params.from, params.to)
 }
