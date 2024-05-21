@@ -8,7 +8,7 @@ Trackee allows creating and managing users, clients and projects, supports track
 > This project contains projects for a Kotlin Multiplatform shared library, an iOS app and a ktor server.
 
 > [!NOTE]
-> The backend app is currently deployed on [Railway](https://railway.app) on `trackee-app-production.up.railway.app`
+> The backend app is currently deployed on [Railway](https://railway.app) on [https://trackee-app-production.up.railway.app](https://trackee-app-production.up.railway.app)
 
 - Frontend apps template: https://github.com/MateeDevs/devstack-native-app
 - Backend app template: https://start.ktor.io
@@ -36,7 +36,10 @@ The app also allows basic integration. Timer control can be controlled via the [
 The iOS app is available via public testing on the following link: https://testflight.apple.com/join/cTRdRkBc
 
 > [!CAUTION]
-> When using the app via the Railway backend server, request times take very long because of long distances between the backend server instance and the database. Local backend deployment speeds up the user experience significantly.
+> Firebase credentials are needed for a sucessful build & deployment of the backend app.
+
+> [!IMPORTANT]
+> The Testflight iOS app is connected to the [Railway backend app](https://trackee-app-production.up.railway.app). The backend app and the Firestore database are deployed in Oregon, USA. If you're furhter away from that location and you run the backend server locally, you may encounter longer request times due to a long distance between the backend server and the database server.
 
 - In order to build and run the backend application locally, you can run `./gradlew backend:run`
 - In order to build and run the iOS appliaction locally, navigate to the `ios` directory via `cd ios`, run the setup script via `scripts/setup.sh` and then you should be able to build the project via Xcode. Updates to signing & certificates setting may be needed.
@@ -53,9 +56,6 @@ Clean (common modules) + MVVM (platform-specific modules) architecture is used f
 ## Backend
 
 The backend modules manages a [Ktor](https://ktor.io) server which handles all communication with the client. Backend uses [Cloud Firestore](https://firebase.google.com/products/firestore) for data storage.
-
-> [!IMPORTANT]
-> Firebase credentials are needed for a sucessful build & deployment of the backend app.
 
 ## Shared
 
