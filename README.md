@@ -17,7 +17,7 @@ Trackee allows creating and managing users, clients and projects, supports track
 
 <img width=240px alt="Tracker" src="other/images/tracker.png"> <img width=240px alt="History" src=other/images/history.png> <img width=240px alt="Project selection" src=other/images/project-selection.png>
 
-The app supports basic features needed for tracking and managing timer entries. Timer entries belong to a specific project, whcich belongs to a specific client. Timer entries can also contain a description.
+The app supports basic features needed for tracking and managing timer entries. Timer entries belong to a specific project, which belongs to a specific client. Timer entries can also contain a description.
 
 ### User, client and project management
 
