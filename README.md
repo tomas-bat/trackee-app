@@ -41,6 +41,9 @@ The iOS app is available via public testing on the following link: https://testf
 > [!IMPORTANT]
 > The Testflight iOS app is connected to the [Railway backend app](https://trackee-app-production.up.railway.app). The backend app and the Firestore database are deployed in Oregon, USA. If you're furhter away from that location and you run the backend server locally, you may encounter longer request times due to a long distance between the backend server and the database server.
 
+> [!IMPORTANT]
+> The [Railway backend app](https://trackee-app-production.up.railway.app) has sleeping enabled. If the server isn't used for a while, you may encounter delays and temporary errors due to the service being unavailable.
+
 - In order to build and run the backend application locally, you can run `./gradlew backend:run`
 - In order to build and run the iOS appliaction locally, navigate to the `ios` directory via `cd ios`, run the setup script via `scripts/setup.sh` and then you should be able to build the project via Xcode. Updates to signing & certificates setting may be needed.
 - To make the client app connect to a custom backend URL, update the `NetworkClient.kt` file in the KMP shared module, comment out the lines specifying the Railway server URL and uncomment the lines specifying the local/custom URL. Rebuild the shared module (e.g. via `scripts/build-kmp.sh` in the `ios` directory) and re-build the iOS app to reflect the KMP module change.
