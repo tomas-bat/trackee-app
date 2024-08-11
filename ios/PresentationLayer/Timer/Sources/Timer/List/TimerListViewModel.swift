@@ -11,6 +11,7 @@ import UIToolkit
 import Utilities
 import KMPSharedDomain
 import SharedDomainMocks
+import UniformTypeIdentifiers
 
 final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     
@@ -112,6 +113,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onDescriptionChange(String?)
         case onDescriptionSubmit
         case onEntryDelete(id: String)
+        case onEntryContinue(id: String)
+        case onEntryCopyDescription(id: String)
         case onFetchMore
     }
     
@@ -128,6 +131,8 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .onDescriptionChange(description): onDescriptionChange(description)
             case .onDescriptionSubmit: await updateTimerData()
             case let .onEntryDelete(id): await onEntryDelete(id: id)
+            case let .onEntryContinue(id): await onEntryContinue(id: id)
+            case let .onEntryCopyDescription(id): onEntryCopyDescription(id: id)
             case .onFetchMore: await fetchMoreEntries()
             }
         })
@@ -523,7 +528,55 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
+    
+    private func onEntryContinue(id: String) async {
+        state.controlLoading = true
+        defer { state.controlLoading = false }
+        
+        guard let entry = state.listData.data?
+                .flatMap({ $0.entries })
+                .first(where: { $0.id == id }),
+              let timerData = state.timerData.data
+        else { return }
+        
+        state.timerData = .data(
+            TimerDataPreview(
+                copy: timerData,
+                client: entry.client,
+                project: entry.project,
+                description: entry.description_
+            )
+        )
+        
+        switch (timerData.type, timerData.status) {
+        case (.timer, .off):
+            await onStartChange(Date.now, skipUpdate: true)
+            await onEndChange(nil, skipUpdate: true)
+            changeTimerStatus(to: .active)
+            startFormatTimer()
+        default: ()
+        }
+        
+        await updateTimerData()
+    }
+    
+    private func onEntryCopyDescription(id: String) {
+        guard let description = state.listData.data?
+                .flatMap({ $0.entries })
+                .first(where: { $0.id == id })?
+                .description_
+        else { return }
+        
+        UIPasteboard.general.setValue(
+            description,
+            forPasteboardType: UTType.plainText.identifier
+        )
+        
+        snackState.currentData?.dismiss()
+        snackState.showSnackSync(.info(message: L10n.timer_view_entry_description_copied_to_clipboard))
+    }
 }
+
 
 // MARK: - ProjectSelectionViewModelDelegate
 

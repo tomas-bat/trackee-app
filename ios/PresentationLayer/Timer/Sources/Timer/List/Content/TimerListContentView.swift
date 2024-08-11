@@ -26,6 +26,8 @@ struct TimerListContentView: View {
     private let groups: [TimerEntryGroup]
     private let timerControlParams: TimerControlView.Params
     private let onEntryDelete: (String) -> Void
+    private let onEntryContinue: (String) -> Void
+    private let onEntryCopyDescription: (String) -> Void
     private let deletingEntryId: String?
     private let isLoading: Bool
     private let canLoadMoreData: Bool
@@ -42,6 +44,8 @@ struct TimerListContentView: View {
         isFetchingMore: Bool,
         deletingEntryId: String?,
         onEntryDelete: @escaping (String) -> Void,
+        onEntryContinue: @escaping (String) -> Void,
+        onEntryCopyDescription: @escaping (String) -> Void,
         onFetchMore: @escaping () -> Void
     ) {
         self.groups = groups
@@ -51,6 +55,8 @@ struct TimerListContentView: View {
         self.isFetchingMore = isFetchingMore
         self.deletingEntryId = deletingEntryId
         self.onEntryDelete = onEntryDelete
+        self.onEntryContinue = onEntryContinue
+        self.onEntryCopyDescription = onEntryCopyDescription
         self.onFetchMore = onFetchMore
     }
     
@@ -98,7 +104,9 @@ struct TimerListContentView: View {
                                     timerEntry: entry,
                                     deleteLoading: deletingEntryId == entry.id,
                                     canDelete: deletingEntryId == nil,
-                                    onDelete: { onEntryDelete(entry.id) }
+                                    onDelete: { onEntryDelete(entry.id) },
+                                    onContinue: { onEntryContinue(entry.id) },
+                                    onCopyDescription: { onEntryCopyDescription(entry.id) }
                                 )
                                 .skeleton(isLoading)
                             }
@@ -162,6 +170,8 @@ import DependencyInjectionMocks
         isFetchingMore: false,
         deletingEntryId: nil,
         onEntryDelete: { _ in },
+        onEntryContinue: { _ in },
+        onEntryCopyDescription: { _ in },
         onFetchMore: {}
     )
     .background(

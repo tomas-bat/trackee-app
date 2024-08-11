@@ -7,6 +7,7 @@ import SwiftUI
 import KMPSharedDomain
 import UIToolkit
 import SharedDomain
+import SFSafeSymbols
 
 struct TimerEntryView: View {
     
@@ -28,6 +29,8 @@ struct TimerEntryView: View {
     private let headerLineLimit: Int? = 1
     private let typeImageOffset: CGFloat = 2
     private let colorCircleSize: CGFloat = 10
+    private let entryMenuSize: CGFloat = 24
+    private let entryMenuOffset: CGFloat = -16
     
     // MARK: - Stored properties
     
@@ -35,6 +38,8 @@ struct TimerEntryView: View {
     private let deleteLoading: Bool
     private let canDelete: Bool
     private let onDelete: () -> Void
+    private let onContinue: () -> Void
+    private let onCopyDescription: () -> Void
     
     @State private var dragOffset: CGFloat = .zero
     @State private var isAfterThreshold = false
@@ -59,12 +64,16 @@ struct TimerEntryView: View {
         timerEntry: TimerEntryPreview,
         deleteLoading: Bool,
         canDelete: Bool,
-        onDelete: @escaping () -> Void
+        onDelete: @escaping () -> Void,
+        onContinue: @escaping () -> Void,
+        onCopyDescription: @escaping () -> Void
     ) {
         self.timerEntry = timerEntry
         self.deleteLoading = deleteLoading
         self.canDelete = canDelete
         self.onDelete = onDelete
+        self.onContinue = onContinue
+        self.onCopyDescription = onCopyDescription
     }
     
     // MARK: - Body
@@ -94,6 +103,10 @@ struct TimerEntryView: View {
                         )
                     }
                 }
+                
+                Spacer()
+             
+                menu
             }
             
             if let description = timerEntry.description_ {
@@ -194,6 +207,42 @@ struct TimerEntryView: View {
         .offset(x: dragOffset / trashOffsetDenominator)
     }
     
+    private var menu: some View {
+        Menu {
+            menuButton(
+                title: L10n.timer_view_continue_entry,
+                symbol: .playFill,
+                action: onContinue
+            )
+            
+            menuButton(
+                title: L10n.timer_view_copy_entry_description,
+                symbol: .docOnDoc,
+                action: onCopyDescription
+            )
+        } label: {
+            Asset.Images.entryOptions.image
+                .resizable()
+                .frame(width: entryMenuSize, height: entryMenuSize)
+        }
+        .frame(height: .zero) // Menu has weird layout
+        .offset(y: entryMenuOffset)
+    }
+    
+    private func menuButton(
+        title: String,
+        symbol: SFSymbol,
+        action: @escaping () -> Void
+    ) -> some View {
+        Button(action: action) {
+            HStack {
+                Text(title)
+                
+                Image(systemSymbol: symbol)
+            }
+        }
+    }
+    
     @MainActor 
     private func onGestureChange(_ gesture: DragGesture.Value) {
         guard canDelete, !deleteLoading else { return }
@@ -280,7 +329,9 @@ struct TimeEntryPreviewView: View {
                     _ = Task.delayed(byTimeInterval: 2) {
                         isLoading = false
                     }
-                }
+                },
+                onContinue: {},
+                onCopyDescription: {}
             )
             
             TimerEntryView(
@@ -299,8 +350,9 @@ struct TimeEntryPreviewView: View {
                 ),
                 deleteLoading: isLoading,
                 canDelete: true,
-                onDelete: {
-                }
+                onDelete: {},
+                onContinue: {},
+                onCopyDescription: {}
             )
         }
     }

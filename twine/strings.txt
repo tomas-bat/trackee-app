@@ -786,6 +786,23 @@
 		cs = Není vybrán projekt
 		en = Project not selected
 		sk = Nie je vybraný projekt
+	[timer_view_edit_entry]
+		cs = Upravit
+		en = Edit
+		sk = Upraviť
+	[timer_view_continue_entry]
+		cs = Pokračovat
+		en = Continue
+		sk = Pokračovať
+	[timer_view_copy_entry_description]
+		cs = Zkopírovat popis
+		en = Copy description
+		sk = Skopírovať popis
+	[timer_view_entry_description_copied_to_clipboard]
+		cs = Popis byl zkopírován do schránky
+		en = Description has been copied to clipboard
+		sk = Popis bol skopírovaný do schránky
+
 
 [[Project Selection View]]
 	[project_selection_view_title]

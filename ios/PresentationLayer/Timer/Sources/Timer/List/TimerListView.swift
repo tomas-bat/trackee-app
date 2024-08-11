@@ -53,6 +53,8 @@ struct TimerListView: View {
                     isFetchingMore: viewModel.state.isFetchingMore,
                     deletingEntryId: viewModel.state.deletingEntryId,
                     onEntryDelete: { id in viewModel.onIntent(.onEntryDelete(id: id)) },
+                    onEntryContinue: { id in viewModel.onIntent(.onEntryContinue(id: id)) },
+                    onEntryCopyDescription: { id in viewModel.onIntent(.onEntryCopyDescription(id: id)) },
                     onFetchMore: { viewModel.onIntent(.onFetchMore) }
                 )
             case let .error(error):
