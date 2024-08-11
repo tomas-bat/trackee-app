@@ -26,7 +26,8 @@ internal class ProjectRepositoryImpl(
             id = project.id,
             client = clientSource.readClientById(clientId).toDomain(),
             type = project.type,
-            name = project.name
+            name = project.name,
+            color = project.color
         )
     }
 

@@ -12,7 +12,8 @@ extension ProjectPreview: Identifiable {
             id: id,
             clientId: client.id,
             type: type,
-            name: name
+            name: name,
+            color: color
         )
     }
 }

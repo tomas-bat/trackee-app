@@ -57,7 +57,8 @@ internal class UserRepositoryImpl(
                 id = project.id,
                 client = clientSource.readClientById(project.clientId).toDomain(),
                 type = project.type,
-                name = project.name
+                name = project.name,
+                color = project.color
             )
         }
 

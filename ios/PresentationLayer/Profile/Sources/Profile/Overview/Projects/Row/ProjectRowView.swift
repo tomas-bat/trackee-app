@@ -16,6 +16,8 @@ struct ProjectRowView: View {
     private let cornerRadius: CGFloat = 8
     private let spacing: CGFloat = 4
     private let imageSize: CGFloat = 17
+    private let colorCircleSize: CGFloat = 10
+    private let typeImageOffset: CGFloat = 2
     
     // MARK: - Stored properties
     
@@ -37,19 +39,27 @@ struct ProjectRowView: View {
     var body: some View {
         Button(action: onClick) {
             HStack(alignment: .center, spacing: spacing) {
-                HStack(alignment: .top, spacing: spacing) {
+                HStack(alignment: .firstTextBaseline, spacing: spacing) {
                     if let type = project.type {
                         VStack {
                             type.image
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: imageSize, height: imageSize)
+                                .offset(y: typeImageOffset)
                         }
                     }
                     
                     VStack(alignment: .leading, spacing: spacing) {
-                        Text(project.name)
-                            .font(AppTheme.Fonts.headline)
+                        HStack(alignment: .firstTextBaseline, spacing: spacing) {
+                            Text(project.name)
+                                .font(AppTheme.Fonts.headline)
+                         
+                            if let color = project.color {
+                                color.circle
+                                    .frame(width: colorCircleSize, height: colorCircleSize)
+                            }
+                        }
                         
                         Text(project.client.name)
                             .foregroundStyle(AppTheme.Colors.foregroundSecondary)

@@ -7,12 +7,17 @@ import Foundation
 import KMPSharedDomain
 
 public extension TimerEntryPreview {
-    static func stub(id: String = UUID().uuidString) -> TimerEntryPreview {
+    static func stub(
+        id: String = UUID().uuidString,
+        description: String = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        project: Project = .stub(),
+        client: Client = .stub()
+    ) -> TimerEntryPreview {
         TimerEntryPreview(
             id: id,
-            project: .stub(),
-            client: .stub(),
-            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. \(id)",
+            project: project,
+            client: client,
+            description: description,
             startedAt: Date(timeIntervalSinceNow: -200_000).asInstant,
             endedAt: Date.now.asInstant
         )

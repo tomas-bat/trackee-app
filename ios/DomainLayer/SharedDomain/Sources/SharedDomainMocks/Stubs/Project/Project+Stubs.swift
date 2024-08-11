@@ -12,7 +12,8 @@ public extension Project {
             id: id,
             clientId: "client_\(id)",
             type: .work,
-            name: "Lorem ipsum project"
+            name: "Lorem ipsum project",
+            color: ProjectColor.allCases.randomElement()
         )
     }
 }

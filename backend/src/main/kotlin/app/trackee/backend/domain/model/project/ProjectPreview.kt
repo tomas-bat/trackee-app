@@ -6,5 +6,6 @@ data class ProjectPreview(
     val id: String,
     val client: Client,
     val type: ProjectType?,
-    val name: String
+    val name: String,
+    val color: ProjectColor?
 )

@@ -15,6 +15,8 @@ public struct SelectableProjectView: View {
     private let imageSize: CGFloat = 17
     private let padding: CGFloat = 16
     private let cornerRadius: CGFloat = 8
+    private let colorCircleSize: CGFloat = 10
+    private let typeImageOffset: CGFloat = 2
     
     // MARK: - Stored properties
     
@@ -35,19 +37,27 @@ public struct SelectableProjectView: View {
     
     public var body: some View {
         HStack(alignment: .center, spacing: spacing) {
-            HStack(alignment: .top, spacing: spacing) {
+            HStack(alignment: .firstTextBaseline, spacing: spacing) {
                 if let type = project.type {
                     VStack {
                         type.image
                             .resizable()
                             .scaledToFit()
                             .frame(width: imageSize, height: imageSize)
+                            .offset(y: typeImageOffset)
                     }
                 }
                 
                 VStack(alignment: .leading, spacing: spacing) {
-                    Text(project.name)
-                        .font(AppTheme.Fonts.headline)
+                    HStack(alignment: .firstTextBaseline, spacing: spacing) {
+                        Text(project.name)
+                            .font(AppTheme.Fonts.headline)
+                        
+                        if let color = project.color {
+                            color.circle
+                                .frame(width: colorCircleSize, height: colorCircleSize)
+                        }
+                    }
                     
                     Text(project.client.name)
                         .foregroundStyle(AppTheme.Colors.foregroundSecondary)
@@ -91,7 +101,8 @@ import SharedDomainMocks
                     name: "Interestingly longly named unintersting company"
                 ),
                 type: .school,
-                name: "Unexpectedly significantly named extravagant experience"
+                name: "Unexpectedly significantly named extravagant experience",
+                color: ProjectColor.allCases.randomElement()
             ),
             isSelected: true
         )

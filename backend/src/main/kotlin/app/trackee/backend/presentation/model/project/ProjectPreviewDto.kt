@@ -10,7 +10,8 @@ internal data class ProjectPreviewDto(
     val id: String,
     val client: ClientDto,
     val type: String?,
-    val name: String
+    val name: String,
+    val color: String?
 )
 
 internal fun ProjectPreview.toDto(): ProjectPreviewDto =
@@ -18,5 +19,6 @@ internal fun ProjectPreview.toDto(): ProjectPreviewDto =
         id = id,
         client = client.toDto(),
         type = type?.rawValue,
-        name = name
+        name = name,
+        color = color?.rawValue
     )

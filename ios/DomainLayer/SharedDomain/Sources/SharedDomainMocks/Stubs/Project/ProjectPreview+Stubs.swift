@@ -12,7 +12,8 @@ public extension ProjectPreview {
             id: id,
             client: .stub(),
             type: .work,
-            name: "Lorem ipsum project"
+            name: "Lorem ipsum project",
+            color: ProjectColor.allCases.randomElement()
         )
     }
 }

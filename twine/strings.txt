@@ -954,6 +954,14 @@
 		cs = Žádný
 		en = None
 		sk = Žiadny
+	[project_detail_view_color_label]
+		cs = Barva
+		en = Color
+		sk = Farba
+	[project_detail_view_color_none]
+		cs = Žádná
+		en = None
+		sk = Žiadna
 	[project_detail_remove_project]
 		cs = Smazat projekt
 		en = Remove project
@@ -1214,6 +1222,32 @@
 		cs = Záznamy byly exportovány
 		en = The entries have been exported
 		sk = Záznamy boli exportované
+
+[[Project Colors]]
+	[project_color_red]
+		cs = Červená
+		en = Red
+		sk = Červená
+	[project_color_green]
+		cs = Zelená
+		en = Green
+		sk = Zelená
+	[project_color_blue]
+		cs = Modrá
+		en = Blue
+		sk = Modrá
+	[project_color_yellow]
+		cs = Žlutá
+		en = Yellow
+		sk = Žltá
+	[project_color_pink]
+		cs = Růžová
+		en = Pink
+		sk = Ružová
+	[project_color_black]
+		cs = Černá
+		en = Black
+		sk = Čierna
 
 
 

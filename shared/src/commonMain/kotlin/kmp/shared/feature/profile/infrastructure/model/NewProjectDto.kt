@@ -8,11 +8,13 @@ import kotlinx.serialization.Serializable
 internal data class NewProjectDto(
     @SerialName("client_id") val clientId: String,
     val type: String?,
-    val name: String
+    val name: String,
+    val color: String?
 )
 
 internal fun NewProject.toDto() = NewProjectDto(
     clientId = clientId,
     type = type?.rawValue,
-    name = name
+    name = name,
+    color = color?.rawValue
 )

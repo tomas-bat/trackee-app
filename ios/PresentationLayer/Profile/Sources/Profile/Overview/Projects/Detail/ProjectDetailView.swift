@@ -16,6 +16,7 @@ struct ProjectDetailView: View {
     private let spacing: CGFloat = 8
     private let labelMinWidth: CGFloat = 80
     private let imageSize: CGFloat = 17
+    private let colorCircleSize: CGFloat = 6
     
     // MARK: - Stored properties
     
@@ -44,6 +45,8 @@ struct ProjectDetailView: View {
                 )
                 
                 typeRow
+                
+                colorRow
             }
             
             if !viewModel.state.isCreating {
@@ -153,6 +156,30 @@ struct ProjectDetailView: View {
                         .frame(width: imageSize, height: imageSize)
                 }
                 .tag(type as ProjectType?)
+            }
+        }
+    }
+    
+    private var colorRow: some View {
+        Picker(
+            L10n.project_detail_view_color_label,
+            selection: Binding<ProjectColor?>(
+                get: { viewModel.state.projectColor },
+                set: { color in viewModel.onIntent(.changeProjectColor(to: color)) }
+            )
+        ) {
+            Text(L10n.project_detail_view_color_none)
+                .tag(nil as ProjectColor?)
+            
+            ForEach(ProjectColor.allCases) { color in
+                HStack(spacing: spacing) {
+                    Text(color.text)
+                    
+                    color.image
+                        .resizable()
+                        .frame(width: colorCircleSize, height: colorCircleSize)
+                }
+                .tag(color as ProjectColor?)
             }
         }
     }

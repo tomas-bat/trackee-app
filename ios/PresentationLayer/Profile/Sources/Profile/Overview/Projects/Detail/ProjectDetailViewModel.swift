@@ -72,6 +72,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         var name = ""
         var client: Client?
         var projectType: ProjectType?
+        var projectColor: ProjectColor?
         var isLoading = true
         var saveLoading = false
         var removeLoading = false
@@ -87,6 +88,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         case changeName(to: String)
         case selectClient
         case changeProjectType(to: ProjectType?)
+        case changeProjectColor(to: ProjectColor?)
         case remove
         case cancel
         case save
@@ -99,6 +101,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .changeName(name): state.name = name
             case .selectClient: selectClient()
             case let .changeProjectType(type): state.projectType = type
+            case let .changeProjectColor(color): state.projectColor = color
             case .remove: showRemoveAlert()
             case .cancel: dismiss()
             case .save: await save()
@@ -125,6 +128,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
                 state.name = project.name
                 state.client = project.client
                 state.projectType = project.type
+                state.projectColor = project.color
             }
                 
             didFetch = true
@@ -157,7 +161,8 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
                     id: editingProjectId,
                     clientId: validatedData.clientId,
                     type: state.projectType,
-                    name: state.name
+                    name: state.name,
+                    color: state.projectColor
                 )
                 let params = UpdateProjectUseCaseParams(
                     originalClientId: editingClientId,
@@ -168,7 +173,8 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
                 let project = NewProject(
                     clientId: validatedData.clientId,
                     type: state.projectType,
-                    name: state.name
+                    name: state.name,
+                    color: state.projectColor
                 )
                 let params = AddAndAssignProjectUseCaseParams(project: project)
                 try await addAndAssignProjectUseCase.execute(params: params)

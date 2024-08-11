@@ -25,6 +25,9 @@ struct TimerEntryView: View {
     private let deleteTreshold: CGFloat = -100
     private let trashStrokeWidth: CGFloat = 4
     private let trashOffsetDenominator: CGFloat = 3
+    private let headerLineLimit: Int? = 1
+    private let typeImageOffset: CGFloat = 2
+    private let colorCircleSize: CGFloat = 10
     
     // MARK: - Stored properties
     
@@ -36,6 +39,19 @@ struct TimerEntryView: View {
     @State private var dragOffset: CGFloat = .zero
     @State private var isAfterThreshold = false
     @State private var fixTask: Task<Void, Error>?
+    @State private var isTruncated = false
+    
+    @State private var clientTruncated = false {
+        didSet {
+            isTruncated = clientTruncated || projectTruncated
+        }
+    }
+    
+    @State private var projectTruncated = false {
+        didSet {
+            isTruncated = clientTruncated || projectTruncated
+        }
+    }
     
     // MARK: - Init
     
@@ -55,21 +71,28 @@ struct TimerEntryView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: spacing) {
-            HStack(alignment: .top, spacing: headerHorizontalSpacing) {
+            HStack(alignment: .firstTextBaseline, spacing: headerHorizontalSpacing) {
                 if let type = timerEntry.project.type {
                     type.image
                         .resizable()
                         .scaledToFit()
                         .frame(width: imageSize, height: imageSize)
+                        .offset(y: typeImageOffset)
                 }
                 
-                VStack(alignment: .leading, spacing: headerVerticalSpacing) {
-                    Text(timerEntry.project.name)
-                        .font(AppTheme.Fonts.headline)
+                ZStack(alignment: .topLeading) {
+                    horizontalProjectOverview(
+                        client: timerEntry.client,
+                        project: timerEntry.project
+                    )
+                    .opacity(isTruncated ? 0 : 1)
                     
-                    Text(timerEntry.client.name)
-                        .font(AppTheme.Fonts.headlineAdditional)
-                        .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+                    if isTruncated {
+                        verticalProjectOverview(
+                            client: timerEntry.client,
+                            project: timerEntry.project
+                        )
+                    }
                 }
             }
             
@@ -196,6 +219,49 @@ struct TimerEntryView: View {
             }
         }
     }
+    
+    private func verticalProjectOverview(client: Client, project: Project) -> some View {
+        VStack(alignment: .leading, spacing: headerVerticalSpacing) {
+            HStack(alignment: .firstTextBaseline, spacing: headerHorizontalSpacing) {
+                Text(project.name)
+                    .font(AppTheme.Fonts.headline)
+                
+                if let color = timerEntry.project.color {
+                    color.circle
+                        .frame(width: colorCircleSize, height: colorCircleSize)
+                }
+            }
+            
+            Text(client.name)
+                .font(AppTheme.Fonts.headlineAdditional)
+                .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+        }
+        .lineLimit(nil)
+    }
+    
+    private func horizontalProjectOverview(client: Client, project: Project) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: headerHorizontalSpacing) {
+            TruncableText(
+                text: Text(project.name),
+                lineLimit: headerLineLimit,
+                isTruncatedUpdate: { projectTruncated = $0 }
+            )
+            .font(AppTheme.Fonts.headline)
+            
+            TruncableText(
+                text: Text(client.name),
+                lineLimit: headerLineLimit,
+                isTruncatedUpdate: { clientTruncated = $0 }
+            )
+            .font(AppTheme.Fonts.headlineAdditional)
+            .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+            
+            if let color = project.color {
+                color.circle
+                    .frame(width: colorCircleSize, height: colorCircleSize)
+            }
+        }
+    }
 }
 
 #if DEBUG
@@ -204,17 +270,39 @@ struct TimeEntryPreviewView: View {
     @State var isLoading = false
     
     var body: some View {
-        TimerEntryView(
-            timerEntry: .stub(),
-            deleteLoading: isLoading,
-            canDelete: true,
-            onDelete: {
-                isLoading = true
-                _ = Task.delayed(byTimeInterval: 2) {
-                    isLoading = false
+        VStack(spacing: 8) {
+            TimerEntryView(
+                timerEntry: .stub(),
+                deleteLoading: isLoading,
+                canDelete: true,
+                onDelete: {
+                    isLoading = true
+                    _ = Task.delayed(byTimeInterval: 2) {
+                        isLoading = false
+                    }
                 }
-            }
-        )
+            )
+            
+            TimerEntryView(
+                timerEntry: .stub(
+                    project: Project(
+                        id: .randomString(),
+                        clientId: .randomString(),
+                        type: .work,
+                        name: "Unitersting extravagant projectelus mongeus",
+                        color: .blue
+                    ),
+                    client: Client(
+                        id: .randomString(),
+                        name: "Unextraordinary individual company"
+                    )
+                ),
+                deleteLoading: isLoading,
+                canDelete: true,
+                onDelete: {
+                }
+            )
+        }
     }
 }
 #Preview {

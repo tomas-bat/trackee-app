@@ -38,8 +38,8 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         super.init()
         
         if Utilities.Environment.type == .alpha, Utilities.Environment.flavor == .debug {
-            state.email = "tomas.batek@matee.cz"
-            state.password = "Sygbos-tyfxih-7xydra"
+            state.email = "testaccount@domain.com"
+            state.password = "wajfak-gyzgi8-tyzHix"
         }
     }
     

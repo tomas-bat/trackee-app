@@ -45,6 +45,8 @@ struct TimerControlView: View {
     private let expandedSelectorLineLimit: Int? = nil
     private let overviewSpacing: CGFloat = 4
     private let chevronPadding: CGFloat = 4
+    private let typeImageOffset: CGFloat = 2
+    private let colorCircleSize: CGFloat = 10
     
     // MARK: - Stored properties
     
@@ -111,12 +113,13 @@ struct TimerControlView: View {
     
     private func projectSelector(data: TimerDataPreview) -> some View {
         Button(action: params.onProjectClick) {
-            HStack(alignment: .top, spacing: selectorHorizontalSpacing) {
+            HStack(alignment: .firstTextBaseline, spacing: selectorHorizontalSpacing) {
                 if let type = data.project?.type {
                     type.image
                         .resizable()
                         .scaledToFit()
                         .frame(width: imageSize, height: imageSize)
+                        .offset(y: typeImageOffset)
                 }
                 
                 if let project = data.project, let client = data.client {
@@ -144,11 +147,17 @@ struct TimerControlView: View {
     
     private func verticalProjectOverview(client: Client, project: Project) -> some View {
         VStack(alignment: .leading, spacing: overviewSpacing) {
-            HStack(alignment: .top, spacing: selectorHorizontalSpacing) {
+            HStack(alignment: .firstTextBaseline, spacing: selectorHorizontalSpacing) {
                 Text(project.name)
                     .font(AppTheme.Fonts.headline)
                 
+                if let color = project.color {
+                    color.circle
+                        .frame(width: colorCircleSize, height: colorCircleSize)
+                }
+                
                 chevron
+                    .offset(y: typeImageOffset)
             }
             
             Text(client.name)
@@ -159,7 +168,7 @@ struct TimerControlView: View {
     }
     
     private func horizontalProjectOverview(client: Client, project: Project) -> some View {
-        HStack(spacing: selectorHorizontalSpacing) {
+        HStack(alignment: .firstTextBaseline, spacing: selectorHorizontalSpacing) {
             TruncableText(
                 text: Text(project.name),
                 lineLimit: selectorLineLimit,
@@ -175,7 +184,13 @@ struct TimerControlView: View {
             .font(AppTheme.Fonts.headlineAdditional)
             .foregroundStyle(AppTheme.Colors.foregroundSecondary)
             
+            if let color = project.color {
+                color.circle
+                    .frame(width: colorCircleSize, height: colorCircleSize)
+            }
+            
             chevron
+                .offset(y: typeImageOffset)
         }
     }
     
@@ -339,7 +354,8 @@ struct TimerControlView_Previews: PreviewProvider {
                             id: UUID().uuidString,
                             clientId: UUID().uuidString,
                             type: .work,
-                            name: "Dolor sit amet des uvales projecteles verimal"
+                            name: "Dolor sit amet des uvales projecteles verimal",
+                            color: ProjectColor.allCases.randomElement()
                         ),
                         description: "Vestibulum at iaculis risus. Donec facilisis non elit ut dignissim. Maecenas lobortis cursus fringilla.",
                         startedAt: Date(timeIntervalSinceNow: -5_000).asInstant

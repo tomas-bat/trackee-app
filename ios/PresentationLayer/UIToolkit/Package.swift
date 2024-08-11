@@ -30,6 +30,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Utilities", package: "Utilities"),
                 .product(name: "SharedDomain", package: "SharedDomain"),
+                .product(name: "SharedDomainMocks", package: "SharedDomain"),
                 .product(name: "SFSafeSymbols", package: "SFSafeSymbols")
             ],
             exclude: [
