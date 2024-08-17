@@ -32,11 +32,11 @@ internal data class FirestoreTimerEntry(
 
     @get:PropertyName("clockify_id")
     @set:PropertyName("clockify_id")
-    var clockifyId: String?,
+    var clockifyId: String? = null,
 
     @get:PropertyName("clockify_workspace_id")
     @set:PropertyName("clockify_workspace_id")
-    var clockifyWorkspaceId: String?
+    var clockifyWorkspaceId: String? = null
 )
 
 internal fun FirestoreTimerEntry.toDomain() = TimerEntry(
