@@ -849,6 +849,28 @@
 		en = Start date must precede the current date
 		sk = Začiatok musí byť skôr ako teraz
 
+[[Timer Entry Detail View]]
+	[timer_entry_detail_view_title]
+		cs = Úprava záznamu
+		en = Edit entry
+		sk = Úprava záznamu
+	[timer_entry_detail_view_start_time_label]
+		cs = Začátek
+		en = Start time
+		sk = Začiatok
+	[timer_entry_detail_view_end_time_label]
+		cs = Konec
+		en = End time
+		sk = Koniec
+	[timer_entry_detail_view_duration_label]
+		cs = Délka
+		en = Duration
+		sk = Dĺžka
+	[timer_entry_detail_view_description_label]
+		cs = Popis
+		en = Description
+		sk = Popis
+
 [[Profile View]]
 	[profile_view_title]
 		cs = Profil

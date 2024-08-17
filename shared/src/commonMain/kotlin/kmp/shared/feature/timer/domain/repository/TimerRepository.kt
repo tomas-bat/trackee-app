@@ -6,6 +6,10 @@ import kmp.shared.feature.timer.domain.model.*
 import kotlinx.datetime.Instant
 
 internal interface TimerRepository {
+    suspend fun readEntry(
+        entryId: String
+    ): Result<TimerEntryPreview>
+
     suspend fun readEntries(
         startAfter: Instant?,
         limit: Int?,

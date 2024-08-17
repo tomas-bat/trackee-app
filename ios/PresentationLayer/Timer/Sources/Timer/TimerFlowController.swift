@@ -30,6 +30,10 @@ enum TimerFlow: Flow, Equatable {
             delegate: StartTimeSelectionViewModelDelegate?
         )
         
+        case showDetail(
+            entryId: String
+        )
+        
         static func == (lhs: TimerFlow.List, rhs: TimerFlow.List) -> Bool {
             switch (lhs, rhs) {
             case (.showProjectSelection, .showProjectSelection): true
@@ -100,6 +104,7 @@ extension TimerFlowController {
                 initialStart: initialStart,
                 delegate: delegate
             )
+        case let .showDetail(entryId): ()
         }
     }
     

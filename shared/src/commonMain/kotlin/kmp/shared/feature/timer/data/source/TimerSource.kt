@@ -5,6 +5,10 @@ import kmp.shared.base.paging.PageDto
 import kmp.shared.feature.timer.infrastructure.model.*
 
 internal interface TimerSource {
+    suspend fun readEntry(
+        entryId: String
+    ): Result<TimerEntryPreviewDto>
+
     suspend fun readEntries(
         startAfter: String?,
         limit: Int?,

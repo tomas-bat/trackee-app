@@ -13,6 +13,9 @@ import kotlinx.datetime.Instant
 internal class TimerRepositoryImpl(
     private val timerSource: TimerSource
 ) : TimerRepository {
+    override suspend fun readEntry(entryId: String): Result<TimerEntryPreview> =
+        timerSource.readEntry(entryId).map { it.toDomain() }
+
     override suspend fun readEntries(
         startAfter: Instant?,
         limit: Int?,

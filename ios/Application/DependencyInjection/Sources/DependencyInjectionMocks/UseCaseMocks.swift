@@ -37,6 +37,13 @@ public extension Container {
         }
         
         // MARK: - Timer
+        getTimerEntryUseCase.register {
+            GetTimerEntryUseCaseMock(
+                executeReturnValue: ResultSuccess(
+                    data: TimerEntryPreview.stub()
+                )
+            )
+        }
         getTimerEntriesUseCase.register {
             GetTimerEntriesUseCaseMock(
                 executeReturnValue: ResultSuccess(

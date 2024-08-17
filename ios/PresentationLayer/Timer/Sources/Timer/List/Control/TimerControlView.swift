@@ -47,6 +47,7 @@ struct TimerControlView: View {
     private let chevronPadding: CGFloat = 4
     private let typeImageOffset: CGFloat = 2
     private let colorCircleSize: CGFloat = 10
+    private let textFieldLineRange = 1...4
     
     // MARK: - Stored properties
     
@@ -200,12 +201,14 @@ struct TimerControlView: View {
             text: Binding<String>(
                 get: { data.description_ ?? "" },
                 set: { description in params.onDescriptionChange(description) }
-            )
+            ),
+            axis: .vertical
         )
         .onSubmit {
             params.onDescriptionSubmit()
         }
         .textFieldStyle(.info)
+        .lineLimit(textFieldLineRange)
         .font(AppTheme.Fonts.body)
         .submitLabel(.done)
     }

@@ -118,6 +118,15 @@ fun Routing.userRoute() {
                 }
 
                 route("/{entryId}") {
+                    get("/preview") {
+                        val user = call.requireUserPrincipal().user
+                        val entryId: String by call.parameters
+
+                        val entry = userRepository.readEntryPreview(user.uid, entryId)
+
+                        call.respond(HttpStatusCode.OK, entry.toDto())
+                    }
+
                     put<TimerEntryDto> { body ->
                         val user = call.requireUserPrincipal().user
                         val entryId: String by call.parameters
