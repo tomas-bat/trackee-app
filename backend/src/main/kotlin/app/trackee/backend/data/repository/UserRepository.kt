@@ -46,6 +46,9 @@ internal class UserRepositoryImpl(
         )
     }
 
+    override suspend fun readEntryById(uid: String, entryId: String): TimerEntry =
+        source.readEntry(uid, entryId)
+
     override suspend fun readProjects(uid: String): List<Project> =
         source.readProjectIds(uid).map { project ->
             clientSource.readProjectById(project.clientId, project.projectId).toDomain()
@@ -99,7 +102,9 @@ internal class UserRepositoryImpl(
                         client = clientSource.readClientById(entry.clientId).toDomain(),
                         description = entry.description,
                         startedAt = entry.startedAt,
-                        endedAt = entry.endedAt
+                        endedAt = entry.endedAt,
+                        clockifyEntryId = entry.clockifyEntryId,
+                        clockifyWorkspaceId = entry.clockifyWorkspaceId
                     )
                 },
             isLast = page.isLast
@@ -114,7 +119,9 @@ internal class UserRepositoryImpl(
             client = clientSource.readClientById(entry.clientId).toDomain(),
             description = entry.description,
             startedAt = entry.startedAt,
-            endedAt = entry.endedAt
+            endedAt = entry.endedAt,
+            clockifyEntryId = entry.clockifyEntryId,
+            clockifyWorkspaceId = entry.clockifyWorkspaceId
         )
     }
 
@@ -138,6 +145,17 @@ internal class UserRepositoryImpl(
 
     override suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry =
         source.createEntry(uid, entry)
+
+    override suspend fun updateEntry(uid: String, entry: TimerEntry): TimerEntry =
+        source.updateEntry(uid, entry)
+
+    override suspend fun addClockifyDataToEntry(
+        uid: String,
+        entryId: String,
+        clockifyEntryId: String,
+        clockifyWorkspaceId: String
+    ) =
+        source.addClockifyDataToEntry(uid, entryId, clockifyEntryId, clockifyWorkspaceId)
 
     override suspend fun deleteEntry(uid: String, entryId: String) =
         source.deleteEntry(uid, entryId)

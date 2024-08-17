@@ -10,5 +10,18 @@ data class TimerEntryPreview(
     val client: Client,
     val description: String?,
     val startedAt: Instant,
-    val endedAt: Instant
+    val endedAt: Instant,
+    val clockifyEntryId: String?,
+    val clockifyWorkspaceId: String?
+)
+
+fun TimerEntryPreview.toTimerEntry(): TimerEntry = TimerEntry(
+    id = id,
+    clientId = client.id,
+    projectId = project.id,
+    description = description,
+    startedAt = startedAt,
+    endedAt = endedAt,
+    clockifyEntryId = clockifyEntryId,
+    clockifyWorkspaceId = clockifyWorkspaceId
 )

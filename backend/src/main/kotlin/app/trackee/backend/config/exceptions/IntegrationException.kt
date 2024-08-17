@@ -35,4 +35,25 @@ sealed class IntegrationException(
             if (uid != null) append(" for user with uid=$uid")
         }
     )
+
+    class MissingClockifyEntryId(entryId: String?) : IntegrationException(
+        publicMessage = buildString {
+            append("Missing clockify ID")
+            if (entryId != null) append(" for entry with id=$entryId")
+        }
+    )
+
+    class MissingClockifyWorkspaceId(entryId: String?) : IntegrationException(
+        publicMessage = buildString {
+            append("Missing clockify workspace ID")
+            if (entryId != null) append(" for entry with id=$entryId")
+        }
+    )
+
+    class UnableToInferApiKey(entryId: String?) : IntegrationException(
+        publicMessage = buildString {
+            append("Unable to infer API key")
+            if (entryId != null) append(" for entry with id=$entryId")
+        }
+    )
 }

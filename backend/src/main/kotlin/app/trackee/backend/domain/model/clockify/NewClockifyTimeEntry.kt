@@ -1,7 +1,6 @@
 package app.trackee.backend.domain.model.clockify
 
-data class ClockifyTimeEntry(
-    val id: String,
+data class NewClockifyTimeEntry(
     val billable: Boolean,
     val description: String,
     val customAttributes: List<ClockifyCreateCustomAttributeRequest>,

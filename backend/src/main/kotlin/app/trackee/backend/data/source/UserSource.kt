@@ -33,6 +33,15 @@ internal interface UserSource {
 
     suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry
 
+    suspend fun updateEntry(uid: String, entry: TimerEntry): TimerEntry
+
+    suspend fun addClockifyDataToEntry(
+        uid: String,
+        entryId: String,
+        clockifyEntryId: String,
+        clockifyWorkspaceId: String
+    )
+
     suspend fun deleteEntry(uid: String, entryId: String)
 
     suspend fun readClientIds(uid: String): List<String>

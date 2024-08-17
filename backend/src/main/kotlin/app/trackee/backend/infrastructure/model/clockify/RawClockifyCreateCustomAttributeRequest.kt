@@ -15,3 +15,9 @@ internal fun ClockifyCreateCustomAttributeRequest.toRaw() = RawClockifyCreateCus
     namespace = namespace,
     value = value
 )
+
+internal fun RawClockifyCreateCustomAttributeRequest.toDomain() = ClockifyCreateCustomAttributeRequest(
+    name = name,
+    namespace = namespace,
+    value = value
+)

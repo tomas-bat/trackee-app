@@ -3,9 +3,7 @@ package app.trackee.backend.infrastructure.source
 import app.trackee.backend.config.exceptions.BaseException
 import app.trackee.backend.config.exceptions.ClockifyException
 import app.trackee.backend.data.source.ClockifySource
-import app.trackee.backend.domain.model.clockify.ClockifyProject
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
-import app.trackee.backend.domain.model.clockify.ClockifyWorkspace
+import app.trackee.backend.domain.model.clockify.*
 import app.trackee.backend.infrastructure.model.clockify.*
 import io.ktor.client.*
 import io.ktor.client.call.*
@@ -49,15 +47,43 @@ internal class ClockifySourceImpl(
     override suspend fun createTimeEntry(
         apiKey: String,
         workspaceId: String,
-        entry: ClockifyTimeEntry
-    ) = runHandlingClockifyExceptions {
+        entry: NewClockifyTimeEntry
+    ): ClockifyCreateTimeEntryResponse = runHandlingClockifyExceptions {
         client.post(urlWith("workspaces/${workspaceId}/time-entries")) {
             contentType(ContentType.Application.Json)
             header(apiKeyHeader, apiKey)
             setBody(entry.toRaw())
-        }
-        Unit
+        }.body<RawClockifyCreateTimeEntryResponse>().toDomain()
     }
+
+    override suspend fun updateTimeEntry(
+        apiKey: String,
+        workspaceId: String,
+        entry: ClockifyTimeEntry
+    ): ClockifyTimeEntry = runHandlingClockifyExceptions {
+        client.put(urlWith("workspaces/${workspaceId}/time-entries/${entry.id}")) {
+            contentType(ContentType.Application.Json)
+            header(apiKeyHeader, apiKey)
+            setBody(entry.toRaw())
+        }.body<RawClockifyTimeEntry>().toDomain()
+    }
+
+    override suspend fun removeTimeEntry(apiKey: String, workspaceId: String, clockifyEntryId: String) =
+        runHandlingClockifyExceptions {
+            client.delete(urlWith("workspaces/${workspaceId}/time-entries/${clockifyEntryId}")) {
+                contentType(ContentType.Application.Json)
+                header(apiKeyHeader, apiKey)
+            }
+            return@runHandlingClockifyExceptions
+        }
+
+    override suspend fun readWorkspace(apiKey: String, workspaceId: String): ClockifyWorkspace =
+        runHandlingClockifyExceptions {
+            client.get(urlWith("workspaces/${workspaceId}")) {
+                contentType(ContentType.Application.Json)
+                header(apiKeyHeader, apiKey)
+            }.body<RawClockifyWorkspace>().toDomain()
+        }
 
     private fun urlWith(endpoint: String): String =
         "${apiUrl}/${endpoint}"

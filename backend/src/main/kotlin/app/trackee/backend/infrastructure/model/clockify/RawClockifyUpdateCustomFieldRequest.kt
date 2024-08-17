@@ -16,3 +16,9 @@ internal fun ClockifyUpdateCustomFieldRequest.toRaw() = RawClockifyUpdateCustomF
     sourceType = sourceType,
     value = value
 )
+
+internal fun RawClockifyUpdateCustomFieldRequest.toDomain() = ClockifyUpdateCustomFieldRequest(
+    customFieldId = customFieldId,
+    sourceType = sourceType,
+    value = value
+)

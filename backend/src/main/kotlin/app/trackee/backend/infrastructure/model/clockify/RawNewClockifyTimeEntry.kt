@@ -1,12 +1,10 @@
 package app.trackee.backend.infrastructure.model.clockify
 
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntryType
+import app.trackee.backend.domain.model.clockify.NewClockifyTimeEntry
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RawClockifyTimeEntry(
-    val id: String,
+data class RawNewClockifyTimeEntry(
     val billable: Boolean,
     val description: String,
     val customAttributes: List<RawClockifyCreateCustomAttributeRequest>,
@@ -19,8 +17,7 @@ data class RawClockifyTimeEntry(
     val type: String
 )
 
-internal fun ClockifyTimeEntry.toRaw() = RawClockifyTimeEntry(
-    id = id,
+internal fun NewClockifyTimeEntry.toRaw() = RawNewClockifyTimeEntry(
     billable = billable,
     description = description,
     customAttributes = customAttributes.map { it.toRaw() },
@@ -31,18 +28,4 @@ internal fun ClockifyTimeEntry.toRaw() = RawClockifyTimeEntry(
     tagIds = tagIds,
     taskId = taskId,
     type = type.rawValue
-)
-
-internal fun RawClockifyTimeEntry.toDomain() = ClockifyTimeEntry(
-    id = id,
-    billable = billable,
-    description = description,
-    customAttributes = customAttributes.map { it.toDomain() },
-    customFields = customFields.map { it.toDomain() },
-    end = end,
-    projectId = projectId,
-    start = start,
-    tagIds = tagIds,
-    taskId = taskId,
-    type = ClockifyTimeEntryType.entries.first { it.rawValue == type }
 )

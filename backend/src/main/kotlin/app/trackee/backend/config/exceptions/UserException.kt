@@ -46,12 +46,29 @@ sealed class UserException(
         }
     )
 
+    class FailedToGetUpdatedEntry(entryId: String?, uid: String?) : UserException(
+        publicMessage = buildString {
+            append("Failed to get updated entry")
+            if (entryId != null) append(" with entryId=$entryId")
+            if (uid != null) append(" for uid=${uid}")
+        }
+    )
+
     class EntryNotFound(uid: String?, entryId: String?) : UserException(
         publicMessage = buildString {
             append("Entry ")
             if (entryId != null) append("(entryId=$entryId) ")
             if (uid != null) append("(uid=$uid) ")
             append("not found")
+        }
+    )
+
+    class EntryIdMismatch(uid: String?, entryId: String?, bodyId: String?) : UserException(
+        publicMessage = buildString {
+            append("Entry ID mismatch")
+            if (uid != null) append(", uid=$uid")
+            if (entryId != null) append(", entryId=$entryId")
+            if (bodyId != null) append(", bodyId=$bodyId")
         }
     )
 }

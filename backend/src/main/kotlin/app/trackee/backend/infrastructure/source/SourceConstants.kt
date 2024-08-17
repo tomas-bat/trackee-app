@@ -24,6 +24,8 @@ internal class SourceConstants {
                 const val TIMER_DATA_DESCRIPTION = "timer_data.description"
                 const val CLIENT_ID = "client_id"
                 const val SELECTED_PROJECTS = "selected_projects"
+                const val CLOCKIFY_ENTRY_ID = "clockify_entry_id"
+                const val CLOCKIFY_WORKSPACE_ID = "clockify_workspace_id"
             }
         }
     }

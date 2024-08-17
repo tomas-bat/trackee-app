@@ -1,9 +1,11 @@
 package app.trackee.backend.presentation.route.user
 
+import app.trackee.backend.config.exceptions.UserException
 import app.trackee.backend.domain.repository.IntegrationRepository
 import app.trackee.backend.domain.repository.UserRepository
 import app.trackee.backend.presentation.model.client.toDto
 import app.trackee.backend.presentation.model.entry.NewTimerEntryDto
+import app.trackee.backend.presentation.model.entry.TimerEntryDto
 import app.trackee.backend.presentation.model.entry.toDomain
 import app.trackee.backend.presentation.model.entry.toDto
 import app.trackee.backend.presentation.model.project.toDto
@@ -116,10 +118,34 @@ fun Routing.userRoute() {
                 }
 
                 route("/{entryId}") {
+                    put<TimerEntryDto> { body ->
+                        val user = call.requireUserPrincipal().user
+                        val entryId: String by call.parameters
+
+                        if (entryId != body.id) throw UserException.EntryIdMismatch(user.uid, entryId, body.id)
+
+                        val entry = userRepository.updateEntry(user.uid, body.toDomain())
+
+                        if (entry.clockifyEntryId != null && entry.clockifyWorkspaceId != null) {
+                            val entryPreview = userRepository.readEntryPreview(user.uid, entryId)
+                            val apiKey = integration.inferClockifyApiKey(user.uid, entry)
+                            integration.updateClockifyEntry(apiKey, entryPreview)
+                        }
+
+                        call.respond(HttpStatusCode.OK)
+                    }
+
                     delete {
                         val user = call.requireUserPrincipal().user
                         val entryId: String by call.parameters
+
+                        val entry = userRepository.readEntryById(user.uid, entryId)
                         userRepository.deleteEntry(user.uid, entryId)
+
+                        if (entry.clockifyEntryId != null && entry.clockifyWorkspaceId != null) {
+                            val apiKey = integration.inferClockifyApiKey(user.uid, entry)
+                            integration.removeClockifyEntry(apiKey, entry.clockifyWorkspaceId, entry.clockifyEntryId)
+                        }
 
                         call.respond(HttpStatusCode.OK)
                     }

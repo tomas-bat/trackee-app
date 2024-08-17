@@ -1,11 +1,12 @@
 package app.trackee.backend.data.repository
 
 import app.trackee.backend.config.exceptions.ClockifyException
+import app.trackee.backend.config.exceptions.IntegrationException
 import app.trackee.backend.data.source.ClockifySource
 import app.trackee.backend.data.source.IntegrationSource
 import app.trackee.backend.data.util.*
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntryType
+import app.trackee.backend.domain.model.clockify.*
+import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
 import app.trackee.backend.domain.model.integration.Integration
 import app.trackee.backend.domain.model.integration.NewIntegration
@@ -79,7 +80,7 @@ internal class IntegrationRepositoryImpl(
         apiKey: String,
         entry: TimerEntryPreview,
         workspaceName: String?
-    ) {
+    ): ClockifyCreateTimeEntryResult {
         val workspaceId = clockify.readWorkspaces(apiKey).firstOrNull { it.name == workspaceName }?.id
             ?: throw ClockifyException.ClockifyWorkspaceNotFound(workspaceName)
 
@@ -90,7 +91,7 @@ internal class IntegrationRepositoryImpl(
             clientName = entry.client.name
         ).id
 
-        val clockifyEntry = ClockifyTimeEntry(
+        val clockifyEntry = NewClockifyTimeEntry(
             billable = true,
             description = entry.description ?: "",
             customAttributes = emptyList(),
@@ -103,8 +104,54 @@ internal class IntegrationRepositoryImpl(
             type = ClockifyTimeEntryType.Regular
         )
 
-        clockify.createTimeEntry(apiKey, workspaceId, clockifyEntry)
+        return ClockifyCreateTimeEntryResult(
+            response = clockify.createTimeEntry(apiKey, workspaceId, clockifyEntry),
+            workspaceId = workspaceId
+        )
     }
+
+    override suspend fun updateClockifyEntry(
+        apiKey: String,
+        entry: TimerEntryPreview
+    ): ClockifyTimeEntry {
+        val projectId = clockify.readProjectByName(
+            apiKey = apiKey,
+            workspaceId = entry.clockifyWorkspaceId ?: throw IntegrationException.MissingClockifyWorkspaceId(entry.id),
+            projectName = entry.project.name,
+            clientName = entry.client.name
+        ).id
+
+        val clockifyEntry = ClockifyTimeEntry(
+            id = entry.clockifyEntryId ?: throw IntegrationException.MissingClockifyEntryId(entry.id),
+            billable = true,
+            description = entry.description ?: "",
+            customAttributes = emptyList(),
+            customFields = emptyList(),
+            end = entry.endedAt.asClockifyDate,
+            projectId = projectId,
+            start = entry.startedAt.asClockifyDate,
+            tagIds = emptyList(),
+            taskId = "",
+            type = ClockifyTimeEntryType.Regular
+        )
+
+        return clockify.updateTimeEntry(
+            apiKey = apiKey,
+            workspaceId = entry.clockifyWorkspaceId,
+            entry = clockifyEntry
+        )
+    }
+
+    override suspend fun removeClockifyEntry(
+        apiKey: String,
+        clockifyWorkspaceId: String,
+        clockifyEntryId: String,
+    ) =
+        clockify.removeTimeEntry(apiKey, clockifyWorkspaceId, clockifyEntryId)
+
+    override suspend fun readClockifyWorkspace(apiKey: String, workspaceId: String): ClockifyWorkspace =
+        clockify.readWorkspace(apiKey, workspaceId)
+
 
     override suspend fun readActiveClockifyAutoExportIntegrations(uid: String): List<Integration.Clockify> =
         readIntegrations(uid)
@@ -122,4 +169,23 @@ internal class IntegrationRepositoryImpl(
                 )
             }
     }
+
+    override suspend fun inferClockifyApiKey(
+        uid: String,
+        entry: TimerEntry
+    ): String =
+        readActiveClockifyAutoExportIntegrations(uid)
+            .firstOrNull { autoExport ->
+                try {
+                    if (autoExport.apiKey == null || entry.clockifyWorkspaceId == null) return@firstOrNull false
+                    readClockifyWorkspace(
+                        apiKey = autoExport.apiKey,
+                        workspaceId = entry.clockifyWorkspaceId
+                    )
+                    return@firstOrNull true
+                } catch (e: Exception) {
+                    return@firstOrNull false
+                }
+            }
+            ?.apiKey ?: throw IntegrationException.UnableToInferApiKey(entry.id)
 }

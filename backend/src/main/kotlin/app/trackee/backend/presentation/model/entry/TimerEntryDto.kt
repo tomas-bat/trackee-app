@@ -12,7 +12,9 @@ internal data class TimerEntryDto(
     @SerialName("project_id") val projectId: String,
     val description: String?,
     @SerialName("started_at") val startedAt: String,
-    @SerialName("ended_at") val endedAt: String
+    @SerialName("ended_at") val endedAt: String,
+    @SerialName("clockify_id") val clockifyId: String?,
+    @SerialName("clockify_workspace_id") val clockifyWorkspaceId: String?
 )
 
 internal fun TimerEntry.toDto() = TimerEntryDto(
@@ -21,7 +23,9 @@ internal fun TimerEntry.toDto() = TimerEntryDto(
     projectId = projectId,
     description = description,
     startedAt = startedAt.toString(),
-    endedAt = endedAt.toString()
+    endedAt = endedAt.toString(),
+    clockifyId = clockifyEntryId,
+    clockifyWorkspaceId = clockifyWorkspaceId
 )
 
 internal fun TimerEntryDto.toDomain() = TimerEntry(
@@ -30,5 +34,7 @@ internal fun TimerEntryDto.toDomain() = TimerEntry(
     projectId = projectId,
     description = description,
     startedAt = startedAt.toInstant(),
-    endedAt = endedAt.toInstant()
+    endedAt = endedAt.toInstant(),
+    clockifyEntryId = clockifyId,
+    clockifyWorkspaceId = clockifyWorkspaceId
 )

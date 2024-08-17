@@ -8,7 +8,9 @@ data class TimerEntry(
     val projectId: String,
     val description: String?,
     val startedAt: Instant,
-    val endedAt: Instant
+    val endedAt: Instant,
+    val clockifyEntryId: String?,
+    val clockifyWorkspaceId: String?
 )
 
 fun TimerEntry.length() = endedAt - startedAt

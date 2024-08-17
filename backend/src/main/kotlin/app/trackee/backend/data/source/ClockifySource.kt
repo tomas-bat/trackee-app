@@ -1,8 +1,6 @@
 package app.trackee.backend.data.source
 
-import app.trackee.backend.domain.model.clockify.ClockifyProject
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
-import app.trackee.backend.domain.model.clockify.ClockifyWorkspace
+import app.trackee.backend.domain.model.clockify.*
 
 internal interface ClockifySource {
     suspend fun readWorkspaces(apiKey: String): List<ClockifyWorkspace>
@@ -17,6 +15,23 @@ internal interface ClockifySource {
     suspend fun createTimeEntry(
         apiKey: String,
         workspaceId: String,
+        entry: NewClockifyTimeEntry
+    ): ClockifyCreateTimeEntryResponse
+
+    suspend fun updateTimeEntry(
+        apiKey: String,
+        workspaceId: String,
         entry: ClockifyTimeEntry
+    ): ClockifyTimeEntry
+
+    suspend fun removeTimeEntry(
+        apiKey: String,
+        workspaceId: String,
+        clockifyEntryId: String
     )
+
+    suspend fun readWorkspace(
+        apiKey: String,
+        workspaceId: String
+    ): ClockifyWorkspace
 }

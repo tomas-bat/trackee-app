@@ -26,6 +26,8 @@ interface UserRepository {
         endAt: Instant?
     ): Page<TimerEntry>
 
+    suspend fun readEntryById(uid: String, entryId: String): TimerEntry
+
     suspend fun readProjects(uid: String): List<Project>
 
     suspend fun readProjectPreviews(uid: String): List<ProjectPreview>
@@ -51,6 +53,15 @@ interface UserRepository {
     suspend fun updateTimer(uid: String, timerData: TimerData)
 
     suspend fun createEntry(uid: String, entry: NewTimerEntry): TimerEntry
+
+    suspend fun updateEntry(uid: String, entry: TimerEntry): TimerEntry
+
+    suspend fun addClockifyDataToEntry(
+        uid: String,
+        entryId: String,
+        clockifyEntryId: String,
+        clockifyWorkspaceId: String
+    )
 
     suspend fun deleteEntry(uid: String, entryId: String)
 

@@ -197,6 +197,46 @@ internal class UserSourceImpl : UserSource {
             ?: throw UserException.FailedToGetCreatedEntry(uid)
     }
 
+    override suspend fun updateEntry(uid: String, entry: TimerEntry): TimerEntry {
+        if (!isProjectAssignedToUser(uid, entry.clientId, entry.projectId))
+            throw UserException.ProjectNotAssignedToUser(uid, entry.clientId, entry.projectId)
+
+        val entryRef = db
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(entry.id)
+
+        if (!entryRef.get().await().exists())
+            throw UserException.EntryNotFound(uid, entry.id)
+
+        entryRef.set(entry.toFirestoreEntry()).await()
+
+        return entryRef.get().await().toObject(FirestoreTimerEntry::class.java)?.toDomain()
+            ?: throw UserException.FailedToGetUpdatedEntry(entry.id, uid)
+    }
+
+    override suspend fun addClockifyDataToEntry(
+        uid: String,
+        entryId: String,
+        clockifyEntryId: String,
+        clockifyWorkspaceId: String
+    ) {
+        val ref = db
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(uid)
+            .collection(SourceConstants.Firestore.Collection.ENTRIES)
+            .document(entryId)
+
+        ref
+            .update(SourceConstants.Firestore.FieldName.CLOCKIFY_ENTRY_ID, clockifyEntryId)
+            .await()
+
+        ref
+            .update(SourceConstants.Firestore.FieldName.CLOCKIFY_WORKSPACE_ID, clockifyWorkspaceId)
+            .await()
+    }
+
     override suspend fun deleteEntry(uid: String, entryId: String) {
         db
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
