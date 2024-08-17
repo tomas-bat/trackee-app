@@ -19,7 +19,9 @@ public extension TimerEntryPreview {
             client: client,
             description: description,
             startedAt: Date(timeIntervalSinceNow: -200_000).asInstant,
-            endedAt: Date.now.asInstant
+            endedAt: Date.now.asInstant,
+            clockifyEntryId: "clockify_entry_\(id)",
+            clockifyWorkspaceId: "clockify_workspace_id"
         )
     }
 }

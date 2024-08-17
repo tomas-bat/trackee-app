@@ -31,6 +31,7 @@ struct TimerEntryView: View {
     private let colorCircleSize: CGFloat = 10
     private let entryMenuSize: CGFloat = 24
     private let entryMenuOffset: CGFloat = -16
+    private let markImageSize: CGFloat = 16
     
     // MARK: - Stored properties
     
@@ -114,7 +115,7 @@ struct TimerEntryView: View {
                     .font(AppTheme.Fonts.body)
             }
             
-            HStack {
+            HStack(spacing: spacing) {
                 HStack(alignment: .top, spacing: timeIntervalStackSpacing) {
                     Text(timerEntryInterval.localizedRange.time)
                     
@@ -122,6 +123,12 @@ struct TimerEntryView: View {
                         Text(extra)
                             .font(AppTheme.Fonts.index)
                     }
+                }
+                
+                if timerEntry.hasClockifyConnection {
+                    Asset.Images.clockifyLogo.image
+                        .resizable()
+                        .frame(width: markImageSize, height: markImageSize)
                 }
                 
                 Spacer()

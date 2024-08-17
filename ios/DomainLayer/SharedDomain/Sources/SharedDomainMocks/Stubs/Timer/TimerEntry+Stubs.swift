@@ -15,8 +15,8 @@ public extension TimerEntry {
             description: "Lorem ipsum dolor sit amet",
             startedAt: Date(timeIntervalSinceNow: -20_000).asInstant,
             endedAt: Date.now.asInstant,
-            clockifyEntryId: nil,
-            clockifyWorkspaceId: nil
+            clockifyEntryId: "clockify_entry_\(id)",
+            clockifyWorkspaceId: "clockify_workspace_id"
         )
     }
 }

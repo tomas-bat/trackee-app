@@ -802,7 +802,10 @@
 		cs = Popis byl zkopírován do schránky
 		en = Description has been copied to clipboard
 		sk = Popis bol skopírovaný do schránky
-
+	[timer_view_connected_to_clockify]
+		cs = Propojeno s Clockify
+		en = Connected to Clockify
+		sk = Prepojené s Clockify
 
 [[Project Selection View]]
 	[project_selection_view_title]

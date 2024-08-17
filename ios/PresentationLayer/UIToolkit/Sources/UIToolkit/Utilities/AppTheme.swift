@@ -29,6 +29,8 @@ public enum AppTheme {
 
         public static let index: Font = UIFont.preferredFont(forTextStyle: .footnote, weight: .regular, size: 10)
         
+        public static let detail: Font = UIFont.preferredFont(forTextStyle: .footnote, weight: .regular, size: 11)
+        
         public static let body: Font = UIFont.preferredFont(forTextStyle: .body, weight: .regular, size: 13)
         
         public static let headline: Font = UIFont.preferredFont(forTextStyle: .headline, weight: .semibold, size: 14)

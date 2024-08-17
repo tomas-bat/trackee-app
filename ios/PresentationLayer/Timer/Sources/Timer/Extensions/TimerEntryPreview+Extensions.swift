@@ -6,4 +6,8 @@
 import Foundation
 import KMPSharedDomain
 
-extension TimerEntryPreview: Identifiable {}
+extension TimerEntryPreview: Identifiable {
+    var hasClockifyConnection: Bool {
+        clockifyEntryId != nil && clockifyWorkspaceId != nil
+    }
+}

@@ -8,5 +8,7 @@ data class TimerEntryPreview(
     val client: Client,
     val description: String?,
     val startedAt: Instant,
-    val endedAt: Instant
+    val endedAt: Instant,
+    val clockifyEntryId: String?,
+    val clockifyWorkspaceId: String?
 )
