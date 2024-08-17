@@ -84,16 +84,10 @@ fun Routing.integrationRoute() {
                                 val user = call.requireUserPrincipal().user
 
                                 val result = repository.createClockifyEntry(
+                                    uid = user.uid,
                                     apiKey = body.apiKey,
                                     entry = body.entry.toDomain(),
                                     workspaceName = body.workspaceName
-                                )
-
-                                userRepository.addClockifyDataToEntry(
-                                    uid = user.uid,
-                                    entryId = body.entry.id,
-                                    clockifyEntryId = result.response.id,
-                                    clockifyWorkspaceId = result.workspaceId
                                 )
 
                                 call.respond(HttpStatusCode.OK)
@@ -118,6 +112,7 @@ fun Routing.integrationRoute() {
 
                             for (entry in entries) {
                                 repository.createClockifyEntry(
+                                    uid = user.uid,
                                     apiKey = body.apiKey,
                                     entry = entry,
                                     workspaceName = body.workspaceName

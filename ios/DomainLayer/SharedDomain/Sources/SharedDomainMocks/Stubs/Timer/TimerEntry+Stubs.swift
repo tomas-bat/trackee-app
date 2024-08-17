@@ -14,7 +14,9 @@ public extension TimerEntry {
             projectId: "project_\(id)",
             description: "Lorem ipsum dolor sit amet",
             startedAt: Date(timeIntervalSinceNow: -20_000).asInstant,
-            endedAt: Date.now.asInstant
+            endedAt: Date.now.asInstant,
+            clockifyEntryId: nil,
+            clockifyWorkspaceId: nil
         )
     }
 }

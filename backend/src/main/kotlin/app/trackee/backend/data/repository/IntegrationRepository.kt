@@ -4,6 +4,7 @@ import app.trackee.backend.config.exceptions.ClockifyException
 import app.trackee.backend.config.exceptions.IntegrationException
 import app.trackee.backend.data.source.ClockifySource
 import app.trackee.backend.data.source.IntegrationSource
+import app.trackee.backend.data.source.UserSource
 import app.trackee.backend.data.util.*
 import app.trackee.backend.domain.model.clockify.*
 import app.trackee.backend.domain.model.entry.TimerEntry
@@ -21,7 +22,8 @@ import kotlin.io.path.listDirectoryEntries
 
 internal class IntegrationRepositoryImpl(
     private val source: IntegrationSource,
-    private val clockify: ClockifySource
+    private val clockify: ClockifySource,
+    private val user: UserSource
 ) : IntegrationRepository {
 
     private val csvPath = "temp/csv"
@@ -77,6 +79,7 @@ internal class IntegrationRepositoryImpl(
     }
 
     override suspend fun createClockifyEntry(
+        uid: String,
         apiKey: String,
         entry: TimerEntryPreview,
         workspaceName: String?
@@ -104,10 +107,14 @@ internal class IntegrationRepositoryImpl(
             type = ClockifyTimeEntryType.Regular
         )
 
-        return ClockifyCreateTimeEntryResult(
+        val result = ClockifyCreateTimeEntryResult(
             response = clockify.createTimeEntry(apiKey, workspaceId, clockifyEntry),
             workspaceId = workspaceId
         )
+
+        user.addClockifyDataToEntry(uid, entry.id, result.response.id, workspaceId)
+
+        return result
     }
 
     override suspend fun updateClockifyEntry(
@@ -163,6 +170,7 @@ internal class IntegrationRepositoryImpl(
             .filter { it.selectedProjects.contains(IdentifiableProject(entry.project.id, entry.client.id)) }
             .forEach { clockify ->
                 createClockifyEntry(
+                    uid = uid,
                     apiKey = clockify.apiKey ?: "",
                     entry = entry,
                     workspaceName = clockify.workspaceName ?: ""

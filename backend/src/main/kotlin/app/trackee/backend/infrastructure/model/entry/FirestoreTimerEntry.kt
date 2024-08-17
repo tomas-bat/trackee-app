@@ -30,9 +30,9 @@ internal data class FirestoreTimerEntry(
     @set:PropertyName("ended_at")
     var endedAt: Timestamp = Timestamp.now(),
 
-    @get:PropertyName("clockify_id")
-    @set:PropertyName("clockify_id")
-    var clockifyId: String? = null,
+    @get:PropertyName("clockify_entry_id")
+    @set:PropertyName("clockify_entry_id")
+    var clockifyEntryId: String? = null,
 
     @get:PropertyName("clockify_workspace_id")
     @set:PropertyName("clockify_workspace_id")
@@ -46,7 +46,7 @@ internal fun FirestoreTimerEntry.toDomain() = TimerEntry(
     description = description,
     startedAt = startedAt.toDate().toInstant().toKotlinInstant(),
     endedAt = endedAt.toDate().toInstant().toKotlinInstant(),
-    clockifyEntryId = clockifyId,
+    clockifyEntryId = clockifyEntryId,
     clockifyWorkspaceId = clockifyWorkspaceId
 )
 
@@ -57,7 +57,7 @@ internal fun NewTimerEntry.toFirestoreEntry(id: String) = FirestoreTimerEntry(
     projectId = projectId,
     startedAt = startedAt.toTimestamp(),
     endedAt = endedAt.toTimestamp(),
-    clockifyId = null,
+    clockifyEntryId = null,
     clockifyWorkspaceId = null
 )
 
@@ -68,6 +68,6 @@ internal fun TimerEntry.toFirestoreEntry() = FirestoreTimerEntry(
     projectId = projectId,
     startedAt = startedAt.toTimestamp(),
     endedAt = endedAt.toTimestamp(),
-    clockifyId = clockifyEntryId,
+    clockifyEntryId = clockifyEntryId,
     clockifyWorkspaceId = clockifyWorkspaceId
 )

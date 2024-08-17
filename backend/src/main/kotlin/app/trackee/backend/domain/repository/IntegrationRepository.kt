@@ -28,6 +28,7 @@ interface IntegrationRepository {
     suspend fun deleteTempCsvFiles()
 
     suspend fun createClockifyEntry(
+        uid: String,
         apiKey: String,
         entry: TimerEntryPreview,
         workspaceName: String? = null
