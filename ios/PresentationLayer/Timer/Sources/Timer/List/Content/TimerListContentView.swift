@@ -129,6 +129,7 @@ struct TimerListContentView: View {
             }
             .defaultScrollAnchor(.bottom)
             .scrollBounceBehavior(.basedOnSize)
+            .environment(\.geometry, geometry)
         }
     }
     

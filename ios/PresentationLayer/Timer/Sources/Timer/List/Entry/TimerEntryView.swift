@@ -60,6 +60,8 @@ struct TimerEntryView: View {
         }
     }
     
+    @Environment(\.geometry) private var geometry
+    
     // MARK: - Init
     
     init(
@@ -160,7 +162,12 @@ struct TimerEntryView: View {
                 .onEnded(onGestureEnd)
         )
         .onChange(of: deleteLoading) {
-            if !deleteLoading {
+            fixTask?.cancel()
+            if deleteLoading {
+                withAnimation {
+                    dragOffset = -(4.0 / 3.0) * (geometry?.size.width ?? 0)
+                }
+            } else {
                 withAnimation {
                     dragOffset = 0
                 }
@@ -219,23 +226,34 @@ struct TimerEntryView: View {
     
     private var menu: some View {
         Menu {
-            menuButton(
-                title: L10n.timer_view_continue_entry,
-                symbol: .playFill,
-                action: onContinue
-            )
+            Section {
+                menuButton(
+                    title: L10n.timer_view_continue_entry,
+                    symbol: .playFill,
+                    action: onContinue
+                )
+                
+                menuButton(
+                    title: L10n.timer_view_copy_entry_description,
+                    symbol: .docOnDoc,
+                    action: onCopyDescription
+                )
+                
+                menuButton(
+                    title: L10n.timer_view_entry_edit,
+                    symbol: .pencil,
+                    action: onEdit
+                )
+            }
             
-            menuButton(
-                title: L10n.timer_view_copy_entry_description,
-                symbol: .docOnDoc,
-                action: onCopyDescription
-            )
-            
-            menuButton(
-                title: L10n.timer_view_entry_edit,
-                symbol: .pencil,
-                action: onEdit
-            )
+            Section {
+                menuButton(
+                    title: L10n.timer_view_entry_delete,
+                    symbol: .trash,
+                    role: .destructive,
+                    action: onDelete
+                )
+            }
         } label: {
             Asset.Images.entryOptions.image
                 .resizable()
@@ -248,9 +266,10 @@ struct TimerEntryView: View {
     private func menuButton(
         title: String,
         symbol: SFSymbol,
+        role: ButtonRole? = nil,
         action: @escaping () -> Void
     ) -> some View {
-        Button(action: action) {
+        Button(role: role, action: action) {
             HStack {
                 Text(title)
                 

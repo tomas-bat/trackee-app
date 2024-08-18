@@ -83,6 +83,10 @@ struct TimerListView: View {
                 }
             }
         }
+        .alert(item: Binding<AlertData?>(
+            get: { viewModel.state.alertData },
+            set: { data in viewModel.onIntent(.changeAlertData(to: data)) }
+        )) { data in .init(data) }
         .snack(viewModel.snackState)
         .lifecycle(viewModel)
     }

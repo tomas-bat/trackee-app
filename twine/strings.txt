@@ -814,6 +814,14 @@
 		cs = Smazat
 		en = Delete
 		sk = Zmazať
+	[timer_view_delete_entry_alert_title]
+		cs = Smazat záznam?
+		en = Delete entry?
+		sk = Zmazať záznam?
+	[timer_view_delete_entry_alert_description]
+		cs = Tuto operaci nelze vrátit.
+		en = This operation cannot be undone.
+		sk = Túto operáciu nie je možné vrátiť.
 
 [[Project Selection View]]
 	[project_selection_view_title]

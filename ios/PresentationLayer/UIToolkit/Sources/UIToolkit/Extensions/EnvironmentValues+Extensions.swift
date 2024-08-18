@@ -11,4 +11,9 @@ public extension EnvironmentValues {
         get { self[LoadingKey.self] }
         set { self[LoadingKey.self] = newValue }
     }
+    
+    var geometry: GeometryProxy? {
+        get { self[GeometryKey.self] }
+        set { self[GeometryKey.self] = newValue }
+    }
 }

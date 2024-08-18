@@ -93,6 +93,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         var formattedInterval: TimerEntryInterval?
         var deletingEntryId: String?
         var canLoadMoreData = true
+        var alertData: AlertData?
         
         var controlLoading = false
         var switchLoading = false
@@ -117,6 +118,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onEntryCopyDescription(id: String)
         case onEntryEdit(id: String)
         case onFetchMore
+        case changeAlertData(to: AlertData?)
     }
     
     func onIntent(_ intent: Intent) {
@@ -131,11 +133,12 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .onTimeEditClick: onTimeEditClick()
             case let .onDescriptionChange(description): onDescriptionChange(description)
             case .onDescriptionSubmit: await updateTimerData()
-            case let .onEntryDelete(id): await onEntryDelete(id: id)
+            case let .onEntryDelete(id): onEntryDelete(id: id)
             case let .onEntryContinue(id): await onEntryContinue(id: id)
             case let .onEntryCopyDescription(id): onEntryCopyDescription(id: id)
             case let .onEntryEdit(id): onEntryEdit(id: id)
             case .onFetchMore: await fetchMoreEntries()
+            case let .changeAlertData(data): state.alertData = data
             }
         })
     }
@@ -517,9 +520,31 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
     }
     
-    private func onEntryDelete(id: String) async {
+    private func onEntryDelete(id: String) {
+        state.alertData = AlertData(
+            title: L10n.timer_view_delete_entry_alert_title,
+            message: L10n.timer_view_delete_entry_alert_description,
+            primaryAction: AlertData.Action(
+                title: L10n.timer_view_entry_delete,
+                style: .destruction,
+                handler: { [weak self] in
+                    self?.executeTask(Task {
+                        await self?.deleteEntry(id: id)
+                    })
+                }
+            ),
+            secondaryAction: AlertData.Action(
+                title: L10n.cancel,
+                style: .cancel
+            )
+        )
+    }
+    
+    private func deleteEntry(id: String) async {
         state.deletingEntryId = id
-        defer { state.deletingEntryId = nil }
+        defer {
+            state.deletingEntryId = nil
+        }
         
         do {
             let params = DeleteTimerEntryUseCaseParams(entryId: id)
@@ -527,7 +552,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             await fetchData(showLoading: false)
         } catch {
             snackState.currentData?.dismiss()
-            await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
     
