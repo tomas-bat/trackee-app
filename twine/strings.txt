@@ -806,6 +806,14 @@
 		cs = Propojeno s Clockify
 		en = Connected to Clockify
 		sk = Prepojené s Clockify
+	[timer_view_entry_edit]
+		cs = Upravit
+		en = Edit
+		sk = Upraviť
+	[timer_view_entry_delete]
+		cs = Smazat
+		en = Delete
+		sk = Zmazať
 
 [[Project Selection View]]
 	[project_selection_view_title]
@@ -870,6 +878,10 @@
 		cs = Popis
 		en = Description
 		sk = Popis
+	[timer_entry_detail_view_clockify_cannot_edit_project]
+		cs = Tento záznam je propojen s Clockify, proto nemůžete upravit projekt.
+		en = This entry is connected with Clockify, therefore you cannot edit the projet.
+		sk = Tento záznam je prepojený s Clockify, preto nemôžete upraviť projekt.
 
 [[Profile View]]
 	[profile_view_title]

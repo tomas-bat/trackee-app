@@ -28,6 +28,7 @@ struct TimerListContentView: View {
     private let onEntryDelete: (String) -> Void
     private let onEntryContinue: (String) -> Void
     private let onEntryCopyDescription: (String) -> Void
+    private let onEntryEdit: (String) -> Void
     private let deletingEntryId: String?
     private let isLoading: Bool
     private let canLoadMoreData: Bool
@@ -46,6 +47,7 @@ struct TimerListContentView: View {
         onEntryDelete: @escaping (String) -> Void,
         onEntryContinue: @escaping (String) -> Void,
         onEntryCopyDescription: @escaping (String) -> Void,
+        onEntryEdit: @escaping (String) -> Void,
         onFetchMore: @escaping () -> Void
     ) {
         self.groups = groups
@@ -57,6 +59,7 @@ struct TimerListContentView: View {
         self.onEntryDelete = onEntryDelete
         self.onEntryContinue = onEntryContinue
         self.onEntryCopyDescription = onEntryCopyDescription
+        self.onEntryEdit = onEntryEdit
         self.onFetchMore = onFetchMore
     }
     
@@ -106,7 +109,8 @@ struct TimerListContentView: View {
                                     canDelete: deletingEntryId == nil,
                                     onDelete: { onEntryDelete(entry.id) },
                                     onContinue: { onEntryContinue(entry.id) },
-                                    onCopyDescription: { onEntryCopyDescription(entry.id) }
+                                    onCopyDescription: { onEntryCopyDescription(entry.id) },
+                                    onEdit: { onEntryEdit(entry.id) }
                                 )
                                 .skeleton(isLoading)
                             }
@@ -172,6 +176,7 @@ import DependencyInjectionMocks
         onEntryDelete: { _ in },
         onEntryContinue: { _ in },
         onEntryCopyDescription: { _ in },
+        onEntryEdit: { _ in },
         onFetchMore: {}
     )
     .background(

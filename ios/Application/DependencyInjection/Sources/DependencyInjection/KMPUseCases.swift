@@ -21,6 +21,7 @@ public extension Container {
     // MARK: - Timer
     var getTimerEntryUseCase: Factory<GetTimerEntryUseCase> { self { self.kmp().get(GetTimerEntryUseCase.self) } }
     var getTimerEntriesUseCase: Factory<GetTimerEntriesUseCase> { self { self.kmp().get(GetTimerEntriesUseCase.self) } }
+    var updateTimerEntryUseCase: Factory<UpdateTimerEntryUseCase> { self { self.kmp().get(UpdateTimerEntryUseCase.self) } }
     var getTimerSummariesUseCase: Factory<GetTimerSummariesUseCase> { self { self.kmp().get(GetTimerSummariesUseCase.self) } }
     var getTimerDataPreviewUseCase: Factory<GetTimerDataPreviewUseCase> { self { self.kmp().get(GetTimerDataPreviewUseCase.self) } }
     var getProjectsUseCase: Factory<GetProjectsUseCase> { self { self.kmp().get(GetProjectsUseCase.self) } }

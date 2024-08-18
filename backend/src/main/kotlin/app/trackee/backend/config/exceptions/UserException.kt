@@ -71,4 +71,12 @@ sealed class UserException(
             if (bodyId != null) append(", bodyId=$bodyId")
         }
     )
+
+    class IntegratedEntryCannotChangeProject(uid: String?, entryId: String?) : UserException(
+        publicMessage = buildString {
+            append("Integrated timer entry cannot change project")
+            if (uid != null) append(", uid=$uid")
+            if (entryId != null) append(", entryId=$entryId")
+        }
+    )
 }

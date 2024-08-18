@@ -115,6 +115,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         case onEntryDelete(id: String)
         case onEntryContinue(id: String)
         case onEntryCopyDescription(id: String)
+        case onEntryEdit(id: String)
         case onFetchMore
     }
     
@@ -133,6 +134,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .onEntryDelete(id): await onEntryDelete(id: id)
             case let .onEntryContinue(id): await onEntryContinue(id: id)
             case let .onEntryCopyDescription(id): onEntryCopyDescription(id: id)
+            case let .onEntryEdit(id): onEntryEdit(id: id)
             case .onFetchMore: await fetchMoreEntries()
             }
         })
@@ -575,6 +577,13 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         snackState.currentData?.dismiss()
         snackState.showSnackSync(.info(message: L10n.timer_view_entry_description_copied_to_clipboard))
     }
+    
+    private func onEntryEdit(id: String) {
+        flowController?.handleFlow(TimerFlow.list(.showDetail(
+            entryId: id,
+            delegate: self
+        )))
+    }
 }
 
 
@@ -607,5 +616,13 @@ extension TimerListViewModel: StartTimeSelectionViewModelDelegate {
             await onStartChange(start)
             startFormatTimer()
         })
+    }
+}
+
+// MARK: - TimerEntryDetailViewModelDelegate
+
+extension TimerListViewModel: TimerEntryDetailFlowControllerDelegate {
+    func didUpdateEntry() async {
+        await fetchData(showLoading: false)
     }
 }

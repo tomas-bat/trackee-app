@@ -31,7 +31,8 @@ enum TimerFlow: Flow, Equatable {
         )
         
         case showDetail(
-            entryId: String
+            entryId: String,
+            delegate: TimerEntryDetailFlowControllerDelegate?
         )
         
         static func == (lhs: TimerFlow.List, rhs: TimerFlow.List) -> Bool {
@@ -39,12 +40,14 @@ enum TimerFlow: Flow, Equatable {
             case (.showProjectSelection, .showProjectSelection): true
             case (.showTimeSelection, .showTimeSelection): true
             case (.showStartTimeSelection, .showStartTimeSelection): true
+            case (.showDetail, .showDetail): true
             default: false
             }
         }
     }
     
     enum ProjectSelection: Equatable {
+        case pop
         case dismiss
     }
     
@@ -104,7 +107,11 @@ extension TimerFlowController {
                 initialStart: initialStart,
                 delegate: delegate
             )
-        case let .showDetail(entryId): ()
+        case let .showDetail(entryId, delegate):
+            showDetail(
+                entryId: entryId,
+                delegate: delegate
+            )
         }
     }
     
@@ -114,6 +121,7 @@ extension TimerFlowController {
     ) {
         let vm = ProjectSelectionViewModel(
             selectedProjectId: selectedProjectId,
+            isEmbedded: false,
             flowController: self
         )
         vm.delegate = delegate
@@ -154,6 +162,22 @@ extension TimerFlowController {
         
         navigationController.present(vc, animated: true)
     }
+    
+    private func showDetail(
+        entryId: String,
+        delegate: TimerEntryDetailFlowControllerDelegate?
+    ) {
+        let nc = BaseNavigationController()
+        let fc = TimerEntryDetailFlowController(
+            entryId: entryId,
+            navigationController: nc
+        )
+        fc.delegate = delegate
+        let rootVc = startChildFlow(fc)
+        nc.viewControllers = [rootVc]
+        
+        navigationController.present(nc, animated: true)
+    }
 }
 
 // MARK: - ProjectSelection flow
@@ -161,6 +185,7 @@ extension TimerFlowController {
 extension TimerFlowController {
     func handleProjectSelectionFlow(_ flow: TimerFlow.ProjectSelection) {
         switch flow {
+        case .pop: pop()
         case .dismiss: navigationController.dismiss(animated: true)
         }
     }

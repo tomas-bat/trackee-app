@@ -41,6 +41,7 @@ struct TimerEntryView: View {
     private let onDelete: () -> Void
     private let onContinue: () -> Void
     private let onCopyDescription: () -> Void
+    private let onEdit: () -> Void
     
     @State private var dragOffset: CGFloat = .zero
     @State private var isAfterThreshold = false
@@ -67,7 +68,8 @@ struct TimerEntryView: View {
         canDelete: Bool,
         onDelete: @escaping () -> Void,
         onContinue: @escaping () -> Void,
-        onCopyDescription: @escaping () -> Void
+        onCopyDescription: @escaping () -> Void,
+        onEdit: @escaping () -> Void
     ) {
         self.timerEntry = timerEntry
         self.deleteLoading = deleteLoading
@@ -75,6 +77,7 @@ struct TimerEntryView: View {
         self.onDelete = onDelete
         self.onContinue = onContinue
         self.onCopyDescription = onCopyDescription
+        self.onEdit = onEdit
     }
     
     // MARK: - Body
@@ -227,6 +230,12 @@ struct TimerEntryView: View {
                 symbol: .docOnDoc,
                 action: onCopyDescription
             )
+            
+            menuButton(
+                title: L10n.timer_view_entry_edit,
+                symbol: .pencil,
+                action: onEdit
+            )
         } label: {
             Asset.Images.entryOptions.image
                 .resizable()
@@ -338,7 +347,8 @@ struct TimeEntryPreviewView: View {
                     }
                 },
                 onContinue: {},
-                onCopyDescription: {}
+                onCopyDescription: {},
+                onEdit: {}
             )
             
             TimerEntryView(
@@ -359,7 +369,8 @@ struct TimeEntryPreviewView: View {
                 canDelete: true,
                 onDelete: {},
                 onContinue: {},
-                onCopyDescription: {}
+                onCopyDescription: {},
+                onEdit: {}
             )
         }
     }

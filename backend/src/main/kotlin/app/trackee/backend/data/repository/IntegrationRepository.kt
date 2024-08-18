@@ -120,7 +120,7 @@ internal class IntegrationRepositoryImpl(
     override suspend fun updateClockifyEntry(
         apiKey: String,
         entry: TimerEntryPreview
-    ): ClockifyTimeEntry {
+    ): ClockifyUpdateTimeEntryResponse {
         val projectId = clockify.readProjectByName(
             apiKey = apiKey,
             workspaceId = entry.clockifyWorkspaceId ?: throw IntegrationException.MissingClockifyWorkspaceId(entry.id),

@@ -207,8 +207,16 @@ internal class UserSourceImpl : UserSource {
             .collection(SourceConstants.Firestore.Collection.ENTRIES)
             .document(entry.id)
 
-        if (!entryRef.get().await().exists())
+        val oldEntry = entryRef.get().await()
+
+        if (!oldEntry.exists())
             throw UserException.EntryNotFound(uid, entry.id)
+
+        oldEntry.toObject(FirestoreTimerEntry::class.java)?.let { oldEntry ->
+            if (oldEntry.clockifyEntryId != null
+                && (oldEntry.projectId != entry.projectId || oldEntry.clientId != entry.clientId ))
+                throw UserException.IntegratedEntryCannotChangeProject(uid, entry.id)
+        }
 
         entryRef.set(entry.toFirestoreEntry()).await()
 

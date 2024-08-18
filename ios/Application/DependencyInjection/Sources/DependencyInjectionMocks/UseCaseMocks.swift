@@ -51,6 +51,13 @@ public extension Container {
                 )
             )
         }
+        updateTimerEntryUseCase.register {
+            UpdateTimerEntryUseCaseMock(
+                executeReturnValue: ResultSuccess(
+                    data: TimerEntry.stub()
+                )
+            )
+        }
         getTimerSummariesUseCase.register {
             GetTimerSummariesUseCaseMock(
                 executeReturnValue: ResultSuccess(data: [TimerSummary].stub as NSArray)

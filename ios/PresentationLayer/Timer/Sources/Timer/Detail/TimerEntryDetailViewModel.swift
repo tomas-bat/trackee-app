@@ -12,6 +12,10 @@ import Utilities
 import KMPSharedDomain
 import SharedDomainMocks
 
+protocol TimerEntryDetailViewModelDelegate: AnyObject {
+    func didUpdateEntry() async
+}
+
 final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Dependencies
@@ -20,10 +24,13 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
     
     @Injected(\.getTimerEntryUseCase) private var getTimerEntryUseCase
     @Injected(\.getProjectPreviewUseCase) private var getProjectPreviewUseCase
+    @Injected(\.updateTimerEntryUseCase) private var updateTimerEntryUseCase
     
     // MARK: - Stored properties
     
     private let entryId: String
+    
+    weak var delegate: TimerEntryDetailViewModelDelegate?
     
     // MARK: - Init
     
@@ -62,6 +69,9 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
         var startDate = Date.now
         var endDate = Date.now
         var description = ""
+        var selectedProjectId: String?
+        var saveLoading = false
+        var canEditProject = false
     }
     
     // MARK: - Intent
@@ -82,12 +92,12 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
             switch intent {
             case .retry: await fetch()
             case .retryProject: await fetchProject()
-            case .selectProject: ()
+            case .selectProject: selectProject()
             case let .setStartDate(date): setStartDate(to: date)
             case let .setEndDate(date): setEndDate(to: date)
             case let .changeDescription(description): state.description = description
-            case .save: ()
-            case .cancel: ()
+            case .save: await save()
+            case .cancel: flowController?.handleFlow(TimerEntryDetailFlow.dismiss)
             }
         })
     }
@@ -110,6 +120,9 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
             state.entry = .data(entry)
             state.startDate = entry.startedAt.asDate
             state.endDate = entry.endedAt.asDate
+            state.selectedProjectId = entry.project.id
+            state.description = entry.description_ ?? ""
+            state.canEditProject = !entry.hasClockifyConnection
         } catch {
             state.entry = .error(error)
         }
@@ -139,5 +152,51 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
     
     private func setEndDate(to date: Date) {
         state.endDate = date
+    }
+    
+    private func selectProject() {
+        flowController?.handleFlow(TimerEntryDetailFlow.showProjectSelection(
+            selectedProjectId: state.selectedProjectId,
+            delegate: self
+        ))
+    }
+    
+    private func save() async {
+        guard let entry = state.entry.data,
+              let project = state.project.data
+        else { return }
+        
+        state.saveLoading = true
+        defer { state.saveLoading = false }
+        
+        do {
+            let entry = TimerEntry(
+                id: entry.id,
+                clientId: project.client.id,
+                projectId: project.id,
+                description: state.description.isEmpty ? nil : state.description,
+                startedAt: state.startDate.asInstant,
+                endedAt: state.endDate.asInstant,
+                clockifyEntryId: entry.clockifyEntryId,
+                clockifyWorkspaceId: entry.clockifyWorkspaceId
+            )
+            let params = UpdateTimerEntryUseCaseParams(entry: entry)
+            let _: TimerEntry = try await updateTimerEntryUseCase.execute(params: params)
+            
+            await delegate?.didUpdateEntry()
+            flowController?.handleFlow(TimerEntryDetailFlow.dismiss)
+        } catch {
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+}
+
+// MARK: - ProjectSelectionViewModelDelegate
+
+extension TimerEntryDetailViewModel: ProjectSelectionViewModelDelegate {
+    func didSelectProject(_ project: ProjectPreview) {
+        state.project = .data(project)
+        state.selectedProjectId = project.id
     }
 }

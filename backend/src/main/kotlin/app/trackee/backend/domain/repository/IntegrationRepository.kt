@@ -1,7 +1,7 @@
 package app.trackee.backend.domain.repository
 
 import app.trackee.backend.domain.model.clockify.ClockifyCreateTimeEntryResult
-import app.trackee.backend.domain.model.clockify.ClockifyTimeEntry
+import app.trackee.backend.domain.model.clockify.ClockifyUpdateTimeEntryResponse
 import app.trackee.backend.domain.model.clockify.ClockifyWorkspace
 import app.trackee.backend.domain.model.entry.TimerEntry
 import app.trackee.backend.domain.model.entry.TimerEntryPreview
@@ -37,7 +37,7 @@ interface IntegrationRepository {
     suspend fun updateClockifyEntry(
         apiKey: String,
         entry: TimerEntryPreview
-    ): ClockifyTimeEntry
+    ): ClockifyUpdateTimeEntryResponse
 
     suspend fun removeClockifyEntry(
         apiKey: String,

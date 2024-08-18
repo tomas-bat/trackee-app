@@ -18,11 +18,17 @@ internal interface ClockifySource {
         entry: NewClockifyTimeEntry
     ): ClockifyCreateTimeEntryResponse
 
+    suspend fun readTimeEntry(
+        apiKey: String,
+        workspaceId: String,
+        entryId: String
+    ): ClockifyTimeEntry
+
     suspend fun updateTimeEntry(
         apiKey: String,
         workspaceId: String,
         entry: ClockifyTimeEntry
-    ): ClockifyTimeEntry
+    ): ClockifyUpdateTimeEntryResponse
 
     suspend fun removeTimeEntry(
         apiKey: String,

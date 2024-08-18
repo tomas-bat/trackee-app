@@ -21,6 +21,10 @@ internal interface TimerSource {
         endAt: String?
     ): Result<PageDto<TimerEntryPreviewDto>>
 
+    suspend fun updateEntry(
+        entry: TimerEntryDto
+    ): Result<TimerEntryDto>
+
     suspend fun readProject(
         clientId: String,
         projectId: String

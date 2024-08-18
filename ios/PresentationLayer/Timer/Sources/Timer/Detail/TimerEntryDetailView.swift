@@ -17,6 +17,8 @@ struct TimerEntryDetailView: View {
     private let cornerRadius: CGFloat = 8
     private let extraPadding: CGFloat = 8
     private let textFieldLineRange = 3...10
+    private let integrationLogoSize: CGFloat = 16
+    private let disabledOpacity: CGFloat = 0.5
     
     // MARK: - Stored properties
     
@@ -36,9 +38,12 @@ struct TimerEntryDetailView: View {
             case let .data(entry), let .loading(entry):
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: spacing) {
-                        projectView
+                        projectView(for: entry)
                         
-                        timeView(for: entry)
+                        timeView(
+                            for: entry,
+                            isLoading: viewModel.state.entry.isLoading
+                        )
                         
                         descriptionView
                     }
@@ -57,6 +62,7 @@ struct TimerEntryDetailView: View {
         .foregroundStyle(AppTheme.Colors.foreground)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animateContent(viewModel.state.entry.isLoading)
+        .animateContent(viewModel.state.project.isLoading)
         .navigationTitle(L10n.timer_entry_detail_view_title)
         .toolbar(.visible)
         .toolbar {
@@ -64,6 +70,8 @@ struct TimerEntryDetailView: View {
                 Button(L10n.save_label) {
                     viewModel.onIntent(.save)
                 }
+                .buttonStyle(.loading)
+                .environment(\.isLoading, viewModel.state.saveLoading)
             }
             
             ToolbarItem(placement: .cancellationAction) {
@@ -72,6 +80,7 @@ struct TimerEntryDetailView: View {
                 }
             }
         }
+        .disabled(viewModel.state.saveLoading)
         .interactiveDismissDisabled()
         .toolbarTitleDisplayMode(.inline)
         .background(AppTheme.Colors.background)
@@ -81,21 +90,37 @@ struct TimerEntryDetailView: View {
     
     // MARK: - Private
     
-    @ViewBuilder
-    private var projectView: some View {
-        Button {
-            viewModel.onIntent(.selectProject)
-        } label: {
-            switch viewModel.state.project {
-            case let .data(project), let .loading(mock: project):
-                TimerEntryProjectView(project: project)
-                    .skeleton(viewModel.state.project.isLoading)
-            case let .error(error):
-                ErrorView(
-                    error: error,
-                    onRetryTap: { viewModel.onIntent(.retryProject) }
-                )
-            case .empty: EmptyView()
+    private func projectView(for entry: TimerEntryPreview) -> some View {
+        VStack(alignment: .leading, spacing: spacing) {
+            Button {
+                viewModel.onIntent(.selectProject)
+            } label: {
+                switch viewModel.state.project {
+                case let .data(project), let .loading(mock: project):
+                    TimerEntryProjectView(project: project)
+                        .skeleton(viewModel.state.project.isLoading)
+                case let .error(error):
+                    ErrorView(
+                        error: error,
+                        onRetryTap: { viewModel.onIntent(.retryProject) }
+                    )
+                case .empty: EmptyView()
+                }
+            }
+            .disabled(!viewModel.state.canEditProject)
+            .opacity(viewModel.state.canEditProject ? 1 : disabledOpacity)
+            
+            if entry.hasClockifyConnection {
+                HStack(alignment: .center, spacing: spacing) {
+                    Asset.Images.clockifyLogo.image
+                        .resizable()
+                        .frame(width: integrationLogoSize, height: integrationLogoSize)
+                    
+                    Text(L10n.timer_entry_detail_view_clockify_cannot_edit_project)
+                        .font(AppTheme.Fonts.detail)
+                        .italic()
+                }
+                .padding(.horizontal, extraPadding)
             }
         }
     }
@@ -109,10 +134,14 @@ struct TimerEntryDetailView: View {
         )
     }
     
-    private func timeView(for entry: TimerEntryPreview) -> some View {
+    private func timeView(
+        for entry: TimerEntryPreview,
+        isLoading: Bool
+    ) -> some View {
         VStack(spacing: spacing) {
             timeRow(
                 label: L10n.timer_entry_detail_view_start_time_label,
+                isLoading: isLoading,
                 date: Binding<Date>(
                     get: { viewModel.state.startDate },
                     set: { date in viewModel.onIntent(.setStartDate(to: date)) }
@@ -122,6 +151,7 @@ struct TimerEntryDetailView: View {
             
             timeRow(
                 label: L10n.timer_entry_detail_view_end_time_label,
+                isLoading: isLoading,
                 date: Binding<Date>(
                     get: { viewModel.state.endDate },
                     set: { date in viewModel.onIntent(.setEndDate(to: date)) }
@@ -147,18 +177,24 @@ struct TimerEntryDetailView: View {
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
     }
     
-    private func timeRow(label: String, date: Binding<Date>) -> some View {
+    private func timeRow(
+        label: String,
+        isLoading: Bool,
+        date: Binding<Date>
+    ) -> some View {
         HStack(spacing: spacing) {
             Text(label)
                 .font(AppTheme.Fonts.headline)
             
             Spacer()
             
-            DatePicker(
-                "",
-                selection: date,
-                displayedComponents: [.date, .hourAndMinute]
-            )
+            if !isLoading {
+                DatePicker(
+                    "",
+                    selection: date,
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+            }
         }
     }
     

@@ -139,9 +139,13 @@ fun Routing.userRoute() {
                             val entryPreview = userRepository.readEntryPreview(user.uid, entryId)
                             val apiKey = integration.inferClockifyApiKey(user.uid, entry)
                             integration.updateClockifyEntry(apiKey, entryPreview)
+                        } else {
+                            // Project might have been changed to integrated project
+                            val entryPreview = userRepository.readEntryPreview(user.uid, entryId)
+                            integration.createEntryForAutoExports(user.uid, entryPreview)
                         }
 
-                        call.respond(HttpStatusCode.OK)
+                        call.respond(HttpStatusCode.OK, entry.toDto())
                     }
 
                     delete {

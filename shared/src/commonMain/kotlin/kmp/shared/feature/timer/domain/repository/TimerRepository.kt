@@ -22,6 +22,10 @@ internal interface TimerRepository {
         endAt: Instant?
     ): Result<Page<TimerEntryPreview>>
 
+    suspend fun updateEntry(
+        entry: TimerEntry
+    ): Result<TimerEntry>
+
     suspend fun readProject(
         clientId: String,
         projectId: String

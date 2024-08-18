@@ -38,6 +38,9 @@ internal class TimerRepositoryImpl(
             endAt = endAt?.toString()
         ).map { it.toDomain() }
 
+    override suspend fun updateEntry(entry: TimerEntry): Result<TimerEntry> =
+        timerSource.updateEntry(entry.toDto()).map { it.toDomain() }
+
     override suspend fun readProject(clientId: String, projectId: String): Result<Project> =
         timerSource.readProject(clientId, projectId).map { it.toDomain() }
 

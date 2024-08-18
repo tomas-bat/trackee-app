@@ -34,12 +34,14 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     
     init(
         selectedProjectId: String? = nil,
+        isEmbedded: Bool,
         flowController: FlowController? = nil
     ) {
         self.flowController = flowController
         super.init()
         
         state.selectedProjectId = selectedProjectId
+        state.isEmbedded = isEmbedded
     }
     
     // MARK: - Lifecycle
@@ -56,6 +58,7 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         var searchText: String = ""
         var viewData: ViewData<[ProjectPreview]> = .loading(mock: .stub)
         var selectedProjectId: String?
+        var isEmbedded = false
     }
     
     @Published private(set) var state = State()
@@ -109,7 +112,11 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         ) else { return }
         
         delegate?.didSelectProject(project)
-        dismiss()
+        if state.isEmbedded {
+            flowController?.handleFlow(TimerFlow.projectSelection(.pop))
+        } else {
+            dismiss()
+        }
     }
     
     private func dismiss() {

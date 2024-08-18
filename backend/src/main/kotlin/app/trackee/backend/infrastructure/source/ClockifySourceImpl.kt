@@ -56,16 +56,27 @@ internal class ClockifySourceImpl(
         }.body<RawClockifyCreateTimeEntryResponse>().toDomain()
     }
 
+    override suspend fun readTimeEntry(
+        apiKey: String,
+        workspaceId: String,
+        entryId: String
+    ): ClockifyTimeEntry = runHandlingClockifyExceptions {
+        client.get(urlWith("workspaces/${workspaceId}/time-entries/${entryId}")) {
+            contentType(ContentType.Application.Json)
+            header(apiKeyHeader, apiKey)
+        }.body<RawClockifyTimeEntry>().toDomain()
+    }
+
     override suspend fun updateTimeEntry(
         apiKey: String,
         workspaceId: String,
         entry: ClockifyTimeEntry
-    ): ClockifyTimeEntry = runHandlingClockifyExceptions {
+    ): ClockifyUpdateTimeEntryResponse = runHandlingClockifyExceptions {
         client.put(urlWith("workspaces/${workspaceId}/time-entries/${entry.id}")) {
             contentType(ContentType.Application.Json)
             header(apiKeyHeader, apiKey)
             setBody(entry.toRaw())
-        }.body<RawClockifyTimeEntry>().toDomain()
+        }.body<RawClockifyUpdateTimeEntryResponse>().toDomain()
     }
 
     override suspend fun removeTimeEntry(apiKey: String, workspaceId: String, clockifyEntryId: String) =

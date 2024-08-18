@@ -49,6 +49,13 @@ internal class RemoteTimerSource(
             res.body<PageDto<TimerEntryPreviewDto>>()
         }
 
+    override suspend fun updateEntry(entry: TimerEntryDto): Result<TimerEntryDto> =
+        runCatchingCommonNetworkExceptions {
+            client.put("user/entries/${entry.id}") {
+                setBody(entry)
+            }.body<TimerEntryDto>()
+        }
+
     override suspend fun readProject(clientId: String, projectId: String): Result<ProjectDto> =
         runCatchingCommonNetworkExceptions {
             val res = client.get("clients/${clientId}/projects/${projectId}")
