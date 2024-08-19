@@ -7,6 +7,7 @@ import SharedDomain
 import SwiftUI
 import UIToolkit
 import KMPSharedDomain
+import Utilities
 
 struct TimerEntryDetailView: View {
     
