@@ -77,29 +77,43 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
     // MARK: - Intent
     
     enum Intent {
-        case retry
-        case retryProject
-        case selectProject
-        case setStartDate(to: Date)
-        case setEndDate(to: Date)
-        case changeDescription(to: String)
-        case save
-        case cancel
+        enum Sync {
+            case selectProject
+            case setStartDate(to: Date)
+            case setEndDate(to: Date)
+            case changeDescription(to: String)
+            case cancel
+        }
+        
+        enum Async {
+            case retry
+            case retryProject
+            case save
+        }
+        
+        case sync(Sync)
+        case async(Async)
     }
     
     func onIntent(_ intent: Intent) {
-        executeTask(Task {
+        switch intent {
+        case let .sync(intent):
             switch intent {
-            case .retry: await fetch()
-            case .retryProject: await fetchProject()
             case .selectProject: selectProject()
             case let .setStartDate(date): setStartDate(to: date)
             case let .setEndDate(date): setEndDate(to: date)
             case let .changeDescription(description): state.description = description
-            case .save: await save()
             case .cancel: flowController?.handleFlow(TimerEntryDetailFlow.dismiss)
             }
-        })
+        case let .async(intent):
+            executeTask(Task {
+                switch intent {
+                case .retry: await fetch()
+                case .retryProject: await fetchProject()
+                case .save: await save()
+                }
+            })
+        }
     }
     
     // MARK: - Private

@@ -104,43 +104,57 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Intent
     
     enum Intent {
-        case tryAgain
-        case onProjectClick
-        case onControlClick
-        case onSwitchClick
-        case onDeleteClick
-        case onStartEditClick
-        case onTimeEditClick
-        case onDescriptionChange(String?)
-        case onDescriptionSubmit
-        case onEntryDelete(id: String)
-        case onEntryContinue(id: String)
-        case onEntryCopyDescription(id: String)
-        case onEntryEdit(id: String)
-        case onFetchMore
-        case changeAlertData(to: AlertData?)
+        enum Sync {
+            case onProjectClick
+            case onStartEditClick
+            case onTimeEditClick
+            case onDescriptionChange(String?)
+            case onEntryDelete(id: String)
+            case onEntryCopyDescription(id: String)
+            case onEntryEdit(id: String)
+            case changeAlertData(to: AlertData?)
+        }
+        
+        enum Async {
+            case tryAgain
+            case onControlClick
+            case onSwitchClick
+            case onDeleteClick
+            case onDescriptionSubmit
+            case onEntryContinue(id: String)
+            case onFetchMore
+        }
+        
+        case sync(Sync)
+        case async(Async)
     }
     
     func onIntent(_ intent: Intent) {
-        executeTask(Task {
+        switch intent {
+        case let .sync(intent):
             switch intent {
-            case .tryAgain: await fetchData()
             case .onProjectClick: onProjectClick()
-            case .onControlClick: await onControlClick()
-            case .onSwitchClick: await onSwitchClick()
-            case .onDeleteClick: await discardTimer()
             case .onStartEditClick: onStartEditClick()
             case .onTimeEditClick: onTimeEditClick()
             case let .onDescriptionChange(description): onDescriptionChange(description)
-            case .onDescriptionSubmit: await updateTimerData()
             case let .onEntryDelete(id): onEntryDelete(id: id)
-            case let .onEntryContinue(id): await onEntryContinue(id: id)
             case let .onEntryCopyDescription(id): onEntryCopyDescription(id: id)
             case let .onEntryEdit(id): onEntryEdit(id: id)
-            case .onFetchMore: await fetchMoreEntries()
             case let .changeAlertData(data): state.alertData = data
             }
-        })
+        case let .async(intent):
+            executeTask(Task {
+                switch intent {
+                case .tryAgain: await fetchData()
+                case .onControlClick: await onControlClick()
+                case .onSwitchClick: await onSwitchClick()
+                case .onDeleteClick: await discardTimer()
+                case .onDescriptionSubmit: await updateTimerData()
+                case let .onEntryContinue(id): await onEntryContinue(id: id)
+                case .onFetchMore: await fetchMoreEntries()
+                }
+            })
+        }
     }
     
     // MARK: - Private

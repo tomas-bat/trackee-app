@@ -39,29 +39,31 @@ struct TimerListView: View {
                         controlLoading: viewModel.state.controlLoading,
                         switchLoading: viewModel.state.switchLoading,
                         discardLoading: viewModel.state.discardLoading,
-                        onProjectClick: { viewModel.onIntent(.onProjectClick) },
-                        onControlClick: { viewModel.onIntent(.onControlClick) },
-                        onSwitchClick: { viewModel.onIntent(.onSwitchClick) },
-                        onDeleteClick: { viewModel.onIntent(.onDeleteClick) },
-                        onStartEditClick: { viewModel.onIntent(.onStartEditClick) },
-                        onTimeEditClick: { viewModel.onIntent(.onTimeEditClick) },
-                        onDescriptionSubmit: { viewModel.onIntent(.onDescriptionSubmit) },
-                        onDescriptionChange: { description in viewModel.onIntent(.onDescriptionChange(description)) }
+                        onProjectClick: { viewModel.onIntent(.sync(.onProjectClick)) },
+                        onControlClick: { viewModel.onIntent(.async(.onControlClick)) },
+                        onSwitchClick: { viewModel.onIntent(.async(.onSwitchClick)) },
+                        onDeleteClick: { viewModel.onIntent(.async(.onDeleteClick)) },
+                        onStartEditClick: { viewModel.onIntent(.sync(.onStartEditClick)) },
+                        onTimeEditClick: { viewModel.onIntent(.sync(.onTimeEditClick)) },
+                        onDescriptionSubmit: { viewModel.onIntent(.async(.onDescriptionSubmit)) },
+                        onDescriptionChange: { description in
+                            viewModel.onIntent(.sync(.onDescriptionChange(description)))
+                        }
                     ),
                     isLoading: viewModel.state.listData.isLoading,
                     canLoadMoreData: viewModel.state.canLoadMoreData,
                     isFetchingMore: viewModel.state.isFetchingMore,
                     deletingEntryId: viewModel.state.deletingEntryId,
-                    onEntryDelete: { id in viewModel.onIntent(.onEntryDelete(id: id)) },
-                    onEntryContinue: { id in viewModel.onIntent(.onEntryContinue(id: id)) },
-                    onEntryCopyDescription: { id in viewModel.onIntent(.onEntryCopyDescription(id: id)) },
-                    onEntryEdit: { id in viewModel.onIntent(.onEntryEdit(id: id)) },
-                    onFetchMore: { viewModel.onIntent(.onFetchMore) }
+                    onEntryDelete: { id in viewModel.onIntent(.sync(.onEntryDelete(id: id))) },
+                    onEntryContinue: { id in viewModel.onIntent(.async(.onEntryContinue(id: id))) },
+                    onEntryCopyDescription: { id in viewModel.onIntent(.sync(.onEntryCopyDescription(id: id))) },
+                    onEntryEdit: { id in viewModel.onIntent(.sync(.onEntryEdit(id: id))) },
+                    onFetchMore: { viewModel.onIntent(.async(.onFetchMore)) }
                 )
             case let .error(error):
                 ErrorView(
                     error: error,
-                    onRetryTap: { viewModel.onIntent(.tryAgain) }
+                    onRetryTap: { viewModel.onIntent(.async(.tryAgain)) }
                 )
                 .padding(padding)
             case .empty:
@@ -85,7 +87,7 @@ struct TimerListView: View {
         }
         .alert(item: Binding<AlertData?>(
             get: { viewModel.state.alertData },
-            set: { data in viewModel.onIntent(.changeAlertData(to: data)) }
+            set: { data in viewModel.onIntent(.sync(.changeAlertData(to: data))) }
         )) { data in .init(data) }
         .snack(viewModel.snackState)
         .lifecycle(viewModel)

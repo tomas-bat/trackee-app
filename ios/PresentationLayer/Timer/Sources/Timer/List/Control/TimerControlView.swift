@@ -54,6 +54,7 @@ struct TimerControlView: View {
     private let params: Params
     
     @State private var isTruncated = false
+    @FocusState private var textFieldFocused: Bool
     
     @State private var clientTruncated = false {
         didSet {
@@ -200,7 +201,14 @@ struct TimerControlView: View {
             L10n.timer_control_add_description_placeholder,
             text: Binding<String>(
                 get: { data.description_ ?? "" },
-                set: { description in params.onDescriptionChange(description) }
+                set: { description in
+                    if description == (data.description_ ?? "") + "\n" {
+                        params.onDescriptionSubmit()
+                        textFieldFocused = false
+                    } else {
+                        params.onDescriptionChange(description)
+                    }
+                }
             ),
             axis: .vertical
         )
@@ -208,6 +216,7 @@ struct TimerControlView: View {
             params.onDescriptionSubmit()
         }
         .textFieldStyle(.info)
+        .focused($textFieldFocused)
         .lineLimit(textFieldLineRange)
         .font(AppTheme.Fonts.body)
         .submitLabel(.done)

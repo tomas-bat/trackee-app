@@ -25,6 +25,8 @@ struct TimerEntryDetailView: View {
     
     @ObservedObject private var viewModel: TimerEntryDetailViewModel
     
+    @FocusState private var textFieldFocused: Bool
+    
     // MARK: - Init
     
     init(viewModel: TimerEntryDetailViewModel) {
@@ -54,7 +56,7 @@ struct TimerEntryDetailView: View {
             case let .error(error):
                 ErrorView(
                     error: error,
-                    onRetryTap: { viewModel.onIntent(.retry) }
+                    onRetryTap: { viewModel.onIntent(.async(.retry)) }
                 )
                 .padding(padding)
             case .empty: EmptyView()
@@ -69,7 +71,7 @@ struct TimerEntryDetailView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(L10n.save_label) {
-                    viewModel.onIntent(.save)
+                    viewModel.onIntent(.async(.save))
                 }
                 .buttonStyle(.loading)
                 .environment(\.isLoading, viewModel.state.saveLoading)
@@ -77,7 +79,7 @@ struct TimerEntryDetailView: View {
             
             ToolbarItem(placement: .cancellationAction) {
                 Button(L10n.cancel) {
-                    viewModel.onIntent(.cancel)
+                    viewModel.onIntent(.sync(.cancel))
                 }
             }
         }
@@ -94,7 +96,7 @@ struct TimerEntryDetailView: View {
     private func projectView(for entry: TimerEntryPreview) -> some View {
         VStack(alignment: .leading, spacing: spacing) {
             Button {
-                viewModel.onIntent(.selectProject)
+                viewModel.onIntent(.sync(.selectProject))
             } label: {
                 switch viewModel.state.project {
                 case let .data(project), let .loading(mock: project):
@@ -103,7 +105,7 @@ struct TimerEntryDetailView: View {
                 case let .error(error):
                     ErrorView(
                         error: error,
-                        onRetryTap: { viewModel.onIntent(.retryProject) }
+                        onRetryTap: { viewModel.onIntent(.async(.retryProject)) }
                     )
                 case .empty: EmptyView()
                 }
@@ -145,7 +147,7 @@ struct TimerEntryDetailView: View {
                 isLoading: isLoading,
                 date: Binding<Date>(
                     get: { viewModel.state.startDate },
-                    set: { date in viewModel.onIntent(.setStartDate(to: date)) }
+                    set: { date in viewModel.onIntent(.sync(.setStartDate(to: date))) }
                 )
             )
             .padding(.leading, extraPadding)
@@ -155,7 +157,7 @@ struct TimerEntryDetailView: View {
                 isLoading: isLoading,
                 date: Binding<Date>(
                     get: { viewModel.state.endDate },
-                    set: { date in viewModel.onIntent(.setEndDate(to: date)) }
+                    set: { date in viewModel.onIntent(.sync(.setEndDate(to: date))) }
                 )
             )
             .padding(.leading, extraPadding)
@@ -208,12 +210,19 @@ struct TimerEntryDetailView: View {
                 L10n.timer_control_add_description_placeholder,
                 text: Binding<String>(
                     get: { viewModel.state.description },
-                    set: { description in viewModel.onIntent(.changeDescription(to: description)) }
+                    set: { description in
+                        if description == viewModel.state.description + "\n" {
+                            textFieldFocused = false
+                        } else {
+                            viewModel.onIntent(.sync(.changeDescription(to: description)))
+                        }
+                    }
                 ),
                 axis: .vertical
             )
             .lineLimit(textFieldLineRange)
             .textFieldStyle(.info)
+            .focused($textFieldFocused)
             .font(AppTheme.Fonts.body)
             .submitLabel(.done)
         }
