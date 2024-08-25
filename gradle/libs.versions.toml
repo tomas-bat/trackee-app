@@ -29,7 +29,7 @@ ktLintRules = "0.3.0"
 kotlinxImmutableCollections = "0.3.6"
 konsist = "0.13.0"
 junit = "4.13.2"
-skie = "0.6.2"
+skie = "0.8.4"
 kotlinx-io = "0.3.2"
 
 [libraries]

@@ -128,7 +128,7 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
             state.entry = .loading(mock: .stub())
         }
         
-        do {
+        await execute {
             let params = GetTimerEntryUseCaseParams(entryId: entryId)
             let entry: TimerEntryPreview = try await getTimerEntryUseCase.execute(params: params)
             state.entry = .data(entry)
@@ -137,7 +137,7 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
             state.selectedProjectId = entry.project.id
             state.description = entry.description_ ?? ""
             state.canEditProject = !entry.hasClockifyConnection
-        } catch {
+        } onError: { error in
             state.entry = .error(error)
         }
     }
@@ -148,14 +148,14 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
         if !state.project.hasData {
             state.project = .loading(mock: .stub())
         }
-        do {
+        await execute {
             let params = GetProjectPreviewUseCaseParams(
                 clientId: data.client.id,
                 projectId: data.project.id
             )
             let project: ProjectPreview = try await getProjectPreviewUseCase.execute(params: params)
             state.project = .data(project)
-        } catch {
+        } onError: { error in
             state.project = .error(error)
         }
     }
@@ -183,7 +183,7 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
         state.saveLoading = true
         defer { state.saveLoading = false }
         
-        do {
+        await execute {
             let entry = TimerEntry(
                 id: entry.id,
                 clientId: project.client.id,
@@ -199,7 +199,7 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
             
             await delegate?.didUpdateEntry()
             flowController?.handleFlow(TimerEntryDetailFlow.dismiss)
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

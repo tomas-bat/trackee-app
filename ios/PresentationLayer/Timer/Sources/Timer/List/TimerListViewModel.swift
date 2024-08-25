@@ -178,12 +178,12 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     private func fetchEntries() async {
-        do {
+        await execute {
             let params = GetTimerEntriesUseCaseParams(limit: entryPagingLimit)
             let groups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute(params: params)
             state.listData = .data(groups)
             state.canLoadMoreData = groups.flatMap { $0.entries }.count == entryPagingLimit.int
-        } catch {
+        } onError: { error in
             state.listData = .error(error)
         }
     }
@@ -195,7 +195,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.isFetchingMore = true
         defer { state.isFetchingMore = false }
         
-        do {
+        await execute {
             let params = GetTimerEntriesUseCaseParams(startAfter: firstEntryStart, limit: entryPagingLimit)
             let fetchedGroups: [TimerEntryGroup] = try await getTimerEntriesUseCase.execute(params: params)
             
@@ -232,13 +232,13 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.listData = .data(newGroups)
             
             state.canLoadMoreData = fetchedGroups.flatMap { $0.entries }.count == entryPagingLimit.int
-        } catch {
+        } onError: { error in
             state.listData = .error(error)
         }
     }
     
     private func fetchSummaries() async {
-        do {
+        await execute {
             let summaries: [TimerSummary] = try await getTimerSummariesUseCase.execute()
             let viewObjects = summaries.map { summary in
                 if state.timerData.data?.status == .active,
@@ -251,18 +251,18 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             }
             
             state.summaryViewData = .data(viewObjects)
-        } catch {
+        } onError: { _ in
             state.summaryViewData = .empty(.noData)
         }
     }
     
     private func fetchTimer() async {
-        do {
+        await execute {
             let timer: TimerDataPreview = try await getTimerDataPreviewUseCase.execute()
             state.timerData = .data(timer)
             
             startFormatTimer()
-        } catch {
+        } onError: { _ in
             state.timerData = .empty(.noData)
         }
     }
@@ -273,7 +273,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.controlLoading = true
         defer { state.controlLoading = false }
         
-        do {
+        await execute {
             switch (data.type, data.status) {
             case (.timer, .off):
                 await onStartChange(Date.now, skipUpdate: true)
@@ -298,7 +298,7 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
                 try await saveNewEntry(with: data, endedAt: end)
                 await fetchData(showLoading: false)
             }
-        } catch {
+        } onError: { error in
             await fetchData(showLoading: false) // In case data is invalidated
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
@@ -525,10 +525,10 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
     private func updateTimerData() async {
         guard let rawTimerData = state.timerData.data?.rawTimerData else { return }
         
-        do {
+        await execute {
             let params = UpdateTimerDataUseCaseParams(timerData: rawTimerData)
             try await updateTimerDataUseCase.execute(params: params)
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             await snackState.showSnack(.error(message: error.localizedDescription, actionLabel: nil))
         }
@@ -560,11 +560,11 @@ final class TimerListViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.deletingEntryId = nil
         }
         
-        do {
+        await execute {
             let params = DeleteTimerEntryUseCaseParams(entryId: id)
             try await deleteTimerEntryUseCase.execute(params: params)
             await fetchData(showLoading: false)
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

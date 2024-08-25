@@ -141,7 +141,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
     private func fetchData(showLoading: Bool) async {
         switch type {
         case let .edit(integrationId):
-            do {
+            await execute {
                 let params = GetIntegrationUseCaseParams(integrationId: integrationId)
                 let integration: Integration = try await getIntegrationUseCase.execute(params: params)
                 
@@ -156,7 +156,7 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
                 state.integrationType = .data(integration.type)
                 state.label = integration.label
                 state.selectedProjects = integration.selectedProjects
-            } catch {
+            } onError: { error in
                 state.integrationType = .error(error)
             }
         case .new:
@@ -252,14 +252,14 @@ final class IntegrationDetailViewModel: BaseViewModel, ViewModel, ObservableObje
             state.removeLoading = true
             defer { state.removeLoading = false }
             
-            do {
+            await execute {
                 let params = DeleteIntegrationUseCaseParams(integrationId: integrationId)
                 try await deleteIntegrationUseCase.execute(params: params)
                 
                 await delegate?.didUpdateIntegration()
                 delegate?.didDeleteIntegration(named: state.label)
                 pop()
-            } catch {
+            } onError: { error in
                 snackState.currentData?.dismiss()
                 snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
             }

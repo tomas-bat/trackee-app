@@ -52,125 +52,37 @@ public extension UseCaseFlowResult {
 
 public extension UseCaseResult {
     func execute<In: Any, Out>(params: In) async throws -> Out {
-        let jobWrapper: JobWrapper = JobWrapper()
-        return try await withTaskCancellationHandler(
-            operation: {
-                try await withCheckedThrowingContinuation { continuation in
-                    
-                    let coroutineJob = SwiftCoroutinesKt.subscribe(
-                        self,
-                        params: params,
-                        onSuccess: { result in
-                            guard result is ResultSuccess else {
-                                let error = (result as! ResultError).error.asError
-                                continuation.resume(throwing: error)
-                                return
-                            }
-                            let value: Out = (result as! ResultSuccess).data as! Out
-                            continuation.resume(returning: value)
-                            return
-                        },
-                        onThrow: { kotlinThrowable in
-                            continuation.resume(throwing: kotlinThrowable.asError)
-                        })
-                    jobWrapper.setJob(coroutineJob)
-                }
-            },
-            onCancel: {[jobWrapper] in
-                jobWrapper.job?.cancel(cause: nil)
-            }
-        )
+        let result = try await invoke(params: params)
+        switch onEnum(of: result) {
+        case let .success(success): return success.data as! Out
+        case let .error(error): throw error.error.asError
+        }
     }
     
     func execute<In: Any>(params: In) async throws {
-        let jobWrapper: JobWrapper = JobWrapper()
-        return try await withTaskCancellationHandler(
-            operation: {
-                try await withCheckedThrowingContinuation { continuation in
-                    
-                    let coroutineJob = SwiftCoroutinesKt.subscribe(
-                        self,
-                        params: params,
-                        onSuccess: { result in
-                            guard result is ResultSuccess else {
-                                let error = (result as! ResultError).error.asError
-                                continuation.resume(throwing: error)
-                                return
-                            }
-                            continuation.resume()
-                            return
-                        },
-                        onThrow: { kotlinThrowable in
-                            continuation.resume(throwing: kotlinThrowable.asError)
-                        })
-                    jobWrapper.setJob(coroutineJob)
-                }
-            },
-            onCancel: {[jobWrapper] in
-                jobWrapper.job?.cancel(cause: nil)
-            }
-        )
+        let result = try await invoke(params: params)
+        switch onEnum(of: result) {
+        case let .success(success): return success.data as! Void
+        case let .error(error): throw error.error.asError
+        }
     }
 }
 
 public extension UseCaseResultNoParams {
     func execute<Out>() async throws -> Out {
-        let jobWrapper: JobWrapper = JobWrapper()
-        return try await withTaskCancellationHandler(
-            operation: {
-                try await withCheckedThrowingContinuation { continuation in
-                    
-                    let coroutineJob = SwiftCoroutinesKt.subscribe(
-                        self,
-                        onSuccess: { result in
-                            guard result is ResultSuccess else {
-                                let error = (result as! ResultError).error.asError
-                                continuation.resume(throwing: error)
-                                return
-                            }
-                            let value: Out = (result as! ResultSuccess).data as! Out
-                            continuation.resume(returning: value)
-                            return
-                        },
-                        onThrow: { kotlinThrowable in
-                            continuation.resume(throwing: kotlinThrowable.asError)
-                        })
-                    jobWrapper.setJob(coroutineJob)
-                }
-            },
-            onCancel: {[jobWrapper] in
-                jobWrapper.job?.cancel(cause: nil)
-            }
-        )
+        let result = try await invoke()
+        switch onEnum(of: result) {
+        case let .success(success): return success.data as! Out
+        case let .error(error): throw error.error.asError
+        }
     }
     
     // Void returining UC
     func execute() async throws {
-        let jobWrapper: JobWrapper = JobWrapper()
-        return try await withTaskCancellationHandler(
-            operation: {
-                try await withCheckedThrowingContinuation { continuation in
-                    
-                    let coroutineJob = SwiftCoroutinesKt.subscribe(
-                        self,
-                        onSuccess: { result in
-                            guard result is ResultSuccess else {
-                                let error = (result as! ResultError).error.asError
-                                continuation.resume(throwing: error)
-                                return
-                            }
-                            continuation.resume()
-                            return
-                        },
-                        onThrow: { kotlinThrowable in
-                            continuation.resume(throwing: kotlinThrowable.asError)
-                        })
-                    jobWrapper.setJob(coroutineJob)
-                }
-            },
-            onCancel: {[jobWrapper] in
-                jobWrapper.job?.cancel(cause: nil)
-            }
-        )
+        let result = try await invoke()
+        switch onEnum(of: result) {
+        case let .success(success): return success.data as! Void
+        case let .error(error): throw error.error.asError
+        }
     }
 }

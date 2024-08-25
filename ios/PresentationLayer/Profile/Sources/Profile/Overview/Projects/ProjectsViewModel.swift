@@ -84,10 +84,10 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
         
         state.searchText = ""
         
-        do {
+        await execute {
             projects = try await getProjectsUseCase.execute()
             filterProjects()
-        } catch {
+        } onError: { error in
             state.projects = .error(error)
         }
     }

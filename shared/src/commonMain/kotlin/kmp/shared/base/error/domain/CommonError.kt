@@ -12,8 +12,8 @@ sealed class CommonError(throwable: Throwable? = null) : ErrorResult(throwable =
     class ServerNotReachable(t: Throwable?) : CommonError(t)
 
     class Timeout(t: Throwable?) : CommonError(t)
-
-    class Cancelled(t: Throwable?) : CommonError(t)
-
+    
     object NoUserLoggedIn : CommonError()
+
+    class Unknown(t: Throwable?) : CommonError(t)
 }

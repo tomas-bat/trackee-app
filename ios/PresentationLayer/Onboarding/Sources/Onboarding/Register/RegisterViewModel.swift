@@ -84,7 +84,7 @@ final class RegisterViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.isLoading = true
         defer { state.isLoading = false }
         
-        do {
+        await execute {
             let params = RegisterUseCaseParams(
                 username: state.email,
                 newPassword: state.newPassword,
@@ -94,7 +94,7 @@ final class RegisterViewModel: BaseViewModel, ViewModel, ObservableObject {
             try await registerUseCase.execute(params: params)
             
             flowController?.handleFlow(OnboardingFlow.register(.dismiss))
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

@@ -395,6 +395,22 @@
 		cs = Vybraný projekt neexistuje
 		en = The selected project does not exist
 		sk = Vybraný projekt neexistuje
+	[error_service_unavailable]
+		cs = Server je uspaný nebo nedostupný, zkuste to znovu.
+		en = The server is sleeping or unavailable, try again.
+		sk = Server je uspaný nebo nedostupný, zkuste to znovu.
+	[error_cancelled]
+		cs = Požadavek byl zrušen.
+		en = The request was cancelled.
+		sk = Požiadavka bola zrušená.
+	[error_no_access_token]
+		cs = Chybí přístupový token. Přihlašte se znovu.
+		en = No access token. Sign in again.
+		sk = Chýba prístupový token. Prihláste sa znova.
+	[error_no_current_user]
+		cs = Nepodařilo se načíst data o uživateli. Přihlašte se znovu.
+		en = Could not get info about the user. Sign in again.
+		sk = Nepodarilo sa načítať dáta o užívateľovi. Prihláste sa znova.
 
 
 [[General navigation]]

@@ -80,7 +80,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
             state.integrations = .loading(mock: .stub)
         }
         
-        do {
+        await execute {
             let integrations: [Integration] = try await getIntegrationsUseCase.execute()
             
             if integrations.isEmpty {
@@ -88,7 +88,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
             } else {
                 state.integrations = .data(integrations)
             }
-        } catch {
+        } onError: { error in
             state.integrations = .error(error)
         }
     }

@@ -1,7 +1,10 @@
 package kmp.shared
 
 import kmp.shared.base.Result
-import kmp.shared.base.usecase.*
+import kmp.shared.base.usecase.UseCaseFlow
+import kmp.shared.base.usecase.UseCaseFlowNoParams
+import kmp.shared.base.usecase.UseCaseFlowResult
+import kmp.shared.base.usecase.UseCaseFlowResultNoParams
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlin.coroutines.CoroutineContext
@@ -10,44 +13,6 @@ val iosDefaultScope: CoroutineScope = object : CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = SupervisorJob() + Dispatchers.Default
 }
-
-
-sealed class SuspendWrapperParent<Params, Out>(
-    private val suspender: suspend (Params?) -> Out,
-) {
-
-    fun subscribe(
-        params: Params? = null,
-        onSuccess: (item: Out) -> Unit,
-        onThrow: (error: Throwable) -> Unit,
-    ): Job =
-        iosDefaultScope.launch {
-            try {
-                onSuccess(suspender(params))
-            } catch (error: Throwable) {
-                onThrow(error)
-            }
-        }
-}
-
-class SuspendWrapper<Params : Any, Out : Any>(suspender: suspend (Params?) -> Out) :
-    SuspendWrapperParent<Params, Out>(suspender)
-
-fun <Params : Any, Out : Any> UseCaseResult<Params, Out>.subscribe(
-    params: Params,
-    onSuccess: (item: Result<Out>) -> Unit,
-    onThrow: (error: Throwable) -> Unit,
-): Job =
-    SuspendWrapper<Params, Result<Out>> { invoke(params) }.subscribe(params, onSuccess, onThrow)
-
-fun <Params : Any, Out : Any> UseCaseResultNoParams<Out>.subscribe(
-    onSuccess: (item: Result<Out>) -> Unit,
-    onThrow: (error: Throwable) -> Unit,
-): Job =
-    SuspendWrapper<Params, Result<Out>> { invoke() }.subscribe(
-        onSuccess = onSuccess,
-        onThrow = onThrow,
-    )
 
 sealed class FlowWrapperParent<Params, T>(private val suspender: suspend (Params?) -> Flow<T>) {
 

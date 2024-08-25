@@ -49,7 +49,7 @@ import KMPSharedDomain
 
 #Preview {
     ErrorView(
-        error: AuthError.CredentialLoginFailed().asError
+        error: AuthError.EmptyField().asError
     )
 }
 #endif

@@ -93,10 +93,10 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         
         state.searchText = ""
                 
-        do {
+        await execute {
             projects = try await getProjectsUseCase.execute()
             filterProjects()
-        } catch {
+        } onError: { error in
             state.viewData = .error(error)
         }
     }

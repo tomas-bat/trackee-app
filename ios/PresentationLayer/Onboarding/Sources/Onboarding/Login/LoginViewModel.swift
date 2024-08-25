@@ -115,7 +115,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.isLoading = true
         defer { state.isLoading = false }
         
-        do {
+        await execute {
             let params = LoginWithCredentialsUseCaseParams(
                 username: state.email,
                 password: state.password
@@ -124,7 +124,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
             try await loginWithCredentialsUseCase.execute(params: params)
             
             flowController?.handleFlow(OnboardingFlow.login(.dismiss))
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(
                 .error(

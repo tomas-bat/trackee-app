@@ -101,7 +101,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
         defer { state.isLoading = false }
         
-        do {
+        await execute {
             if let editingClientId {
                 let params = GetClientUseCaseParams(clientId: editingClientId)
                 let client: Client = try await getClientUseCase.execute(params: params)
@@ -109,7 +109,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             }
                 
             didFetch = true
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
@@ -123,7 +123,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.saveLoading = true
         defer { state.saveLoading = false }
         
-        do {
+        await execute {
             try validate()
             
             if let editingClientId {
@@ -141,7 +141,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             
             await delegate?.refreshClients()
             dismiss()
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
@@ -175,14 +175,14 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.removeLoading = true
         defer { state.removeLoading = false }
         
-        do {
+        await execute {
             let params = RemoveClientUseCaseParams(clientId: editingClientId)
             try await removeClientUseCase.execute(params: params)
             
             await delegate?.refreshClients()
             delegate?.didRemoveClient(named: state.name)
             dismiss()
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

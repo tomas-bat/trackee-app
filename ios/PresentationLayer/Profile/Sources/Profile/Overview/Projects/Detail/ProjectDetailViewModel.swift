@@ -118,7 +118,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
         defer { state.isLoading = false }
         
-        do {
+        await execute {
             if let editingProjectId, let editingClientId {
                 let params = GetProjectPreviewUseCaseParams(
                     clientId: editingClientId,
@@ -132,7 +132,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             }
                 
             didFetch = true
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
@@ -153,7 +153,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.saveLoading = true
         defer { state.saveLoading = false }
         
-        do {
+        await execute {
             let validatedData = try validate()
             
             if let editingProjectId, let editingClientId {
@@ -182,7 +182,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             
             await delegate?.refreshProjects()
             dismiss()
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
@@ -223,7 +223,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.removeLoading = true
         defer { state.removeLoading = false }
         
-        do {
+        await execute {
             let params = RemoveProjectUseCaseParams(
                 clientId: editingClientId,
                 projectId: editingProjectId
@@ -233,7 +233,7 @@ final class ProjectDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
             await delegate?.refreshProjects()
             delegate?.didRemoveProject(named: state.name)
             dismiss()
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

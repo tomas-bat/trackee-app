@@ -77,21 +77,21 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
             state.email = .loading(mock: .randomString(length: 16))
         }
         
-        do {
+        await execute {
             let email: String = try await getUserEmailUseCase.execute()
             state.email = .data(email)
-        } catch {
+        } onError: { error in
             state.email = .error(error)
         }
     }
     
     private func logout() async {
-        do {
+        await execute {
             try await logoutUseCase.execute()
             flowController?.handleFlow(ProfileFlow.overview(
                 .presentOnboarding(message: L10n.login_view_logged_out_info)
             ))
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(
                 .error(
@@ -125,13 +125,13 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.deleteLoading = true
         defer { state.deleteLoading = false }
         
-        do {
+        await execute {
             try await deleteUserUseCase.execute()
             try await logoutUseCase.execute()
             flowController?.handleFlow(ProfileFlow.overview(
                 .presentOnboarding(message: L10n.login_view_account_deleted_info)
             ))
-        } catch {
+        } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }

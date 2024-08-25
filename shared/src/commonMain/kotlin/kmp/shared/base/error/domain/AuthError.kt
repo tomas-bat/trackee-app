@@ -15,12 +15,4 @@ sealed class AuthError(
     class NoCurrentUser : AuthError()
     class InvalidEmail: AuthError()
     class WeakPassword: AuthError()
-
-    class ProviderLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
-        constructor() : this(null)
-    }
-
-    class CredentialLoginFailed(throwable: Throwable? = null) : AuthError(null, throwable) {
-        constructor() : this(null)
-    }
 }

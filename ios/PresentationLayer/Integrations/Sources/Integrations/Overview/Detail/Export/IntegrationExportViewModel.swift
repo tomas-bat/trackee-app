@@ -82,7 +82,7 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
         state.exportLoading = true
         defer { state.exportLoading = false }
         
-        do {
+        await execute {
             guard state.fromDate <= state.toDate else {
                 throw IntegrationError.invalidDateRange
             }
@@ -91,7 +91,7 @@ final class IntegrationExportViewModel: BaseViewModel, ViewModel, ObservableObje
             case .csv: try await exportCsv()
             case .clockify: try await exportClockify()
             }
-        } catch {
+        } onError: { error in
             handleError(error)
         }
     }

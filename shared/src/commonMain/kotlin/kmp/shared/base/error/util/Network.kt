@@ -2,6 +2,7 @@ package kmp.shared.base.error.util
 
 import io.ktor.client.call.*
 import io.ktor.client.plugins.*
+import io.ktor.http.*
 import kmp.shared.base.ErrorResult
 import kmp.shared.base.Result
 import kmp.shared.base.asErrorResult
@@ -19,11 +20,19 @@ internal inline fun <R : Any> runCatchingAuthNetworkExceptions(block: () -> R): 
         }
     }
 
-internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: () -> R): Result<R> =
-    try {
+internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: () -> R): Result<R> {
+    return try {
         Result.Success(block())
     } catch (e: ResponseException) {
-        val body = e.response.body<ErrorDto>()
+        val body = try {
+            e.response.body<ErrorDto>()
+        } catch (t: NoTransformationFoundException) {
+            val error = when (e.response.status) {
+                HttpStatusCode.ServiceUnavailable -> BackendError.ServiceUnavailable(throwable = e)
+                else -> CommonError.Unknown(e)
+            }
+            return Result.Error(error)
+        }
 
         val error = when (body.type) {
             "Unauthorized" -> BackendError.NotAuthorized(e.response.toString(), e)
@@ -43,10 +52,10 @@ internal suspend inline fun <R : Any> runCatchingCommonNetworkExceptions(block: 
         val error = when (e::class.simpleName) {
             "UnknownHostException" -> CommonError.NoNetworkConnection(e)
             "HttpRequestTimeoutException", "ConnectTimeoutException", "SocketTimeoutException" -> CommonError.Timeout(e)
-            "CancellationException" -> CommonError.Cancelled(e)
             else -> handlePlatformError(e)
         }
         Result.Error(error)
     }
+}
 
 internal expect fun handlePlatformError(throwable: Throwable): ErrorResult

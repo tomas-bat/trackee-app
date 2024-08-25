@@ -58,4 +58,9 @@ sealed class BackendError(
         val workspaceName: String? = null,
         override var throwable: Throwable? = null
     ) : BackendError(throwable, workspaceName)
+
+    class ServiceUnavailable(
+        responseMessage: String? = null,
+        throwable: Throwable? = null
+    ) : BackendError(throwable, responseMessage)
 }

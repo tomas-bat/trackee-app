@@ -84,10 +84,10 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
         
         state.searchText = ""
         
-        do {
+        await execute {
             clients = try await getClientsUseCase.execute()
             filterClients()
-        } catch {
+        } onError: { error in
             state.clients = .error(error)
         }
     }
