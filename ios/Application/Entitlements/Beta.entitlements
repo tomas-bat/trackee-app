@@ -6,8 +6,8 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:trackee-app-production.up.railway.app</string>
-		<string>webcredentials:trackee-app-production.up.railway.app</string>
+		<string>applinks:api.trackee.app</string>
+		<string>webcredentials:api.trackee.app</string>
 	</array>
 	<key>com.apple.security.application-groups</key>
 	<array>
