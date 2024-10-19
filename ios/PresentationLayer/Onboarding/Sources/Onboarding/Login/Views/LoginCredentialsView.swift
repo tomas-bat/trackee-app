@@ -22,6 +22,7 @@ struct LoginCredentialsView: View {
     // MARK: - Stored properties
     
     private let onLoginTap: () -> Void
+    private let onAppleTap: () -> Void
     
     @Binding private var email: String
     @Binding private var password: String
@@ -35,11 +36,13 @@ struct LoginCredentialsView: View {
     init(
         email: Binding<String>,
         password: Binding<String>,
-        onLoginTap: @escaping () -> Void
+        onLoginTap: @escaping () -> Void,
+        onAppleTap: @escaping () -> Void
     ) {
         self._email = email
         self._password = password
         self.onLoginTap = onLoginTap
+        self.onAppleTap = onAppleTap
     }
     
     // MARK: - Body
@@ -78,11 +81,19 @@ struct LoginCredentialsView: View {
                 .textContentType(.password)
             }
             
-            Button(
-                L10n.login_view_login_with_credentials_button_title,
-                action: onLoginTap
-            )
-            .buttonStyle(.primary)
+            VStack(spacing: fieldSpacing) {
+                Button(
+                    L10n.login_view_login_with_credentials_button_title,
+                    action: onLoginTap
+                )
+                .buttonStyle(.primary)
+             
+                Button(
+                    L10n.login_view_sign_in_with_apple,
+                    action: onAppleTap
+                )
+                .buttonStyle(.signInWithApple)
+            }
         }
         .autocorrectionDisabled()
         .textInputAutocapitalization(.never)
@@ -99,7 +110,8 @@ struct LoginCredentialsView_Previews: PreviewProvider {
             LoginCredentialsView(
                 email: $email,
                 password: $password,
-                onLoginTap: {}
+                onLoginTap: {},
+                onAppleTap: {}
             )
         }
     }

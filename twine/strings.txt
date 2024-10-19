@@ -738,6 +738,10 @@
 		cs = Váš účet byl smazán
 		en = Your account has been deleted
 		sk = Váš účet bol zmazaný
+	[login_view_sign_in_with_apple]
+		cs = Přihlásit se přes Apple
+		en = Sign in with Apple
+		sk = Prihlásiť sa cez Apple
 
 [[Register View]]
 	[register_view_navigation_title]

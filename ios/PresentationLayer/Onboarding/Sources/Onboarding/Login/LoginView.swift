@@ -52,6 +52,9 @@ struct LoginView: View {
                 ),
                 onLoginTap: {
                     viewModel.onIntent(.async(.login))
+                },
+                onAppleTap: {
+                    viewModel.onIntent(.sync(.signInWithApple))
                 }
             )
             

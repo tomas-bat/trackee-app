@@ -39,3 +39,13 @@ public extension ButtonStyle where Self == FetchMoreButtonStyle {
         .init()
     }
 }
+
+public extension ButtonStyle where Self == SignInWithAppleButtonStyle {
+    static func signInWithApple(expanded: Bool = true) -> Self {
+        .init(expanded: expanded)
+    }
+    
+    static var signInWithApple: Self {
+        .init()
+    }
+}

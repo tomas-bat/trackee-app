@@ -22,6 +22,9 @@ public enum AppTheme {
         
         public static let destructive = Asset.Colors.destructive.color
         public static let onDestructive = Asset.Colors.onDestructive.color
+        
+        public static let appleButtonBackground = Asset.Colors.appleButtonBackground.color
+        public static let appleButtonForeground = Asset.Colors.appleButtonForeground.color
     }
     
     /// Defines all the fonts used in the app in a semantic way

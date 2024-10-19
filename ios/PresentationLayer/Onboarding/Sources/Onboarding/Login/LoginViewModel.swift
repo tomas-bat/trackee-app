@@ -81,6 +81,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
             case onEmailChange(to: String)
             case onPasswordChange(to: String)
             case register
+            case signInWithApple
         }
         
         enum Async {
@@ -95,6 +96,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .onEmailChange(email): state.email = email
             case let .onPasswordChange(password): state.password = password
             case .register: register()
+            case .signInWithApple: signInWithApple()
             }
         case let .async(asyncIntent):
             executeTask(Task {
@@ -137,5 +139,9 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     private func register() {
         flowController?.handleFlow(OnboardingFlow.login(.showRegistration))
+    }
+    
+    private func signInWithApple() {
+        
     }
 }
