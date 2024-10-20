@@ -19,4 +19,5 @@ internal val authModule = module {
     factoryOf(::RegisterUseCaseImpl) bind RegisterUseCase::class
     factoryOf(::IsLoggedInUseCaseImpl) bind IsLoggedInUseCase::class
     factoryOf(::LogoutUseCaseImpl) bind LogoutUseCase::class
+    factoryOf(::LoginWithProviderUseCaseImpl) bind LoginWithProviderUseCase::class
 }

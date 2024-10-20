@@ -4,6 +4,7 @@ import kmp.shared.base.Result
 import kmp.shared.common.provider.AppleSignInProvider
 import kmp.shared.common.provider.AuthProvider
 import kmp.shared.feature.auth.domain.model.ExternalLoginType
+import kmp.shared.feature.auth.domain.model.ExternalLoginType.Apple
 import kmp.shared.feature.auth.domain.model.LoginResponse
 import kmp.shared.feature.auth.domain.repository.AuthRepository
 
@@ -17,7 +18,7 @@ internal class AuthRepositoryImpl(
         retryIfCancelled: Boolean
     ): Result<LoginResponse> {
         val providerCredential = when (providerType) {
-            ExternalLoginType.Apple -> appleSignInProvider.readAppleCredential()
+            Apple -> appleSignInProvider.readAppleCredential()
         }
 
         return authProvider.signIn(

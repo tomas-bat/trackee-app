@@ -21,6 +21,8 @@ struct LoginCredentialsView: View {
     
     // MARK: - Stored properties
     
+    private let credentialsLoading: Bool
+    private let appleLoading: Bool
     private let onLoginTap: () -> Void
     private let onAppleTap: () -> Void
     
@@ -34,11 +36,15 @@ struct LoginCredentialsView: View {
     // MARK: - Init
     
     init(
+        credentialsLoading: Bool,
+        appleLoading: Bool,
         email: Binding<String>,
         password: Binding<String>,
         onLoginTap: @escaping () -> Void,
         onAppleTap: @escaping () -> Void
     ) {
+        self.credentialsLoading = credentialsLoading
+        self.appleLoading = appleLoading
         self._email = email
         self._password = password
         self.onLoginTap = onLoginTap
@@ -87,12 +93,14 @@ struct LoginCredentialsView: View {
                     action: onLoginTap
                 )
                 .buttonStyle(.primary)
+                .environment(\.isLoading, credentialsLoading)
              
                 Button(
                     L10n.login_view_sign_in_with_apple,
                     action: onAppleTap
                 )
                 .buttonStyle(.signInWithApple)
+                .environment(\.isLoading, appleLoading)
             }
         }
         .autocorrectionDisabled()
@@ -108,6 +116,8 @@ struct LoginCredentialsView_Previews: PreviewProvider {
         
         var body: some View {
             LoginCredentialsView(
+                credentialsLoading: false,
+                appleLoading: false,
                 email: $email,
                 password: $password,
                 onLoginTap: {},

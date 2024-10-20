@@ -22,6 +22,7 @@ extension SharedDomain.KMPError: LocalizedError {
             case .emailAlreadyExist: return L10n.error_email_already_exists
             case .noAccessToken: return L10n.error_no_access_token
             case .noCurrentUser: return L10n.error_no_current_user
+            case let .externalError(error): return L10n.login_view_external_error(error.message ?? "")
             }
             
         // MARK: - BackendError

@@ -17,6 +17,7 @@ public extension Container {
     var registerUseCase: Factory<RegisterUseCase> { self { self.kmp().get(RegisterUseCase.self) } }
     var isLoggedInUseCase: Factory<IsLoggedInUseCase> { self { self.kmp().get(IsLoggedInUseCase.self) } }
     var logoutUseCase: Factory<LogoutUseCase> { self { self.kmp().get(LogoutUseCase.self) } }
+    var loginWithProviderUseCase: Factory<LoginWithProviderUseCase> { self { self.kmp().get(LoginWithProviderUseCase.self) } }
     
     // MARK: - Timer
     var getTimerEntryUseCase: Factory<GetTimerEntryUseCase> { self { self.kmp().get(GetTimerEntryUseCase.self) } }

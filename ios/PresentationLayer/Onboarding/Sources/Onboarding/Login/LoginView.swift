@@ -42,6 +42,8 @@ struct LoginView: View {
             
             // Credentials
             LoginCredentialsView(
+                credentialsLoading: viewModel.state.credentialsLoginLoading,
+                appleLoading: viewModel.state.appleLoginLoading,
                 email: Binding<String>(
                     get: { viewModel.state.email },
                     set: { email in viewModel.onIntent(.sync(.onEmailChange(to: email))) }
@@ -54,7 +56,7 @@ struct LoginView: View {
                     viewModel.onIntent(.async(.login))
                 },
                 onAppleTap: {
-                    viewModel.onIntent(.sync(.signInWithApple))
+                    viewModel.onIntent(.async(.signInWithApple))
                 }
             )
             
@@ -70,7 +72,6 @@ struct LoginView: View {
         .background(AppTheme.Colors.background)
         .snack(viewModel.snackState)
         .toolbar(.hidden)
-        .environment(\.isLoading, viewModel.state.isLoading)
         .lifecycle(viewModel)
     }
 }

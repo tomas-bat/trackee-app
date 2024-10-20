@@ -22,6 +22,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     private weak var flowController: FlowController?
     
     @Injected(\.loginWithCredentialsUseCase) private var loginWithCredentialsUseCase
+    @Injected(\.loginWithProviderUseCase) private var loginWithProviderUseCase
     
     // MARK: - Stored properties
     
@@ -67,7 +68,8 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         var email = ""
         var password = ""
         
-        var isLoading = false
+        var credentialsLoginLoading = false
+        var appleLoginLoading = false
         
         var alert: AlertData?
     }
@@ -81,11 +83,11 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
             case onEmailChange(to: String)
             case onPasswordChange(to: String)
             case register
-            case signInWithApple
         }
         
         enum Async {
             case login
+            case signInWithApple
         }
     }
 
@@ -96,12 +98,12 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .onEmailChange(email): state.email = email
             case let .onPasswordChange(password): state.password = password
             case .register: register()
-            case .signInWithApple: signInWithApple()
             }
         case let .async(asyncIntent):
             executeTask(Task {
                 switch asyncIntent {
                 case .login: await loginWithCredentials()
+                case .signInWithApple: await signInWithApple()
                 }
             })
         }
@@ -114,8 +116,8 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     private func loginWithCredentials() async {
-        state.isLoading = true
-        defer { state.isLoading = false }
+        state.credentialsLoginLoading = true
+        defer { state.credentialsLoginLoading = false }
         
         await execute {
             let params = LoginWithCredentialsUseCaseParams(
@@ -141,7 +143,25 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         flowController?.handleFlow(OnboardingFlow.login(.showRegistration))
     }
     
-    private func signInWithApple() {
+    private func signInWithApple() async {
+        state.appleLoginLoading = true
+        defer { state.appleLoginLoading = false }
         
+        do {
+            let params = LoginWithProviderUseCaseParams(
+                type: .apple
+            )
+            try await loginWithProviderUseCase.execute(params: params)
+            
+            flowController?.handleFlow(OnboardingFlow.login(.dismiss))
+        } catch {
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(
+                .error(
+                    message: error.localizedDescription,
+                    actionLabel: nil
+                )
+            )
+        }
     }
 }

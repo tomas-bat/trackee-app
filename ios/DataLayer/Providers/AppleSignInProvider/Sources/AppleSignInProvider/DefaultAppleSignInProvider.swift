@@ -77,8 +77,7 @@ extension DefaultAppleSignInProvider: ASAuthorizationControllerDelegate,
         controller: ASAuthorizationController,
         didCompleteWithError error: Error
     ) {
-        print("Apple Authorization Error: \(error)")
-//        appleAuthContinuation?.resume(throwing: AuthError.login(.externalAuthError))
+        appleAuthContinuation?.resume(throwing: error)
         appleAuthContinuation = nil
     }
 }

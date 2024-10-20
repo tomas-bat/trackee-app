@@ -742,6 +742,10 @@
 		cs = Přihlásit se přes Apple
 		en = Sign in with Apple
 		sk = Prihlásiť sa cez Apple
+	[login_view_external_error]
+		cs = Nepodařilo se přihlásit pomocí externího poskytovatele. %s
+		en = Failed to sign in with an external provider. %s
+		sk = Nepodarilo sa prihlásiť pomocou externého poskytovateľa. %s
 
 [[Register View]]
 	[register_view_navigation_title]
