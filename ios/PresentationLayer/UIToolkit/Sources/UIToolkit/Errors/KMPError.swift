@@ -23,6 +23,7 @@ extension SharedDomain.KMPError: LocalizedError {
             case .noAccessToken: return L10n.error_no_access_token
             case .noCurrentUser: return L10n.error_no_current_user
             case let .externalError(error): return L10n.login_view_external_error(error.message ?? "")
+            case .externalFlowCancelled: return L10n.error_cancelled
             }
             
         // MARK: - BackendError

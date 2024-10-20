@@ -17,8 +17,13 @@ internal class AuthRepositoryImpl(
         providerType: ExternalLoginType,
         retryIfCancelled: Boolean
     ): Result<LoginResponse> {
-        val providerCredential = when (providerType) {
+        val providerCredentialResult = when (providerType) {
             Apple -> appleSignInProvider.readAppleCredential()
+        }
+
+        val providerCredential = when (providerCredentialResult) {
+            is Result.Success -> providerCredentialResult.data
+            is Result.Error -> return Result.Error(providerCredentialResult.error)
         }
 
         return authProvider.signIn(

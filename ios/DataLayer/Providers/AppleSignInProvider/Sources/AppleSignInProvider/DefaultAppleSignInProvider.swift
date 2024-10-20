@@ -22,7 +22,7 @@ public final class DefaultAppleSignInProvider: NSObject {
 }
 
 extension DefaultAppleSignInProvider: AppleSignInProvider, KMPSharedDomain.AppleSignInProvider {
-    public func __readAppleCredential() async throws -> ExternalProviderCredential {
+    public func __readAppleCredential() async throws -> Result<ExternalProviderCredential> {
         let rawNonce = CryptoUtility.randomNonceString()
         let hashedNonce = CryptoUtility.sha256(rawNonce)
         
@@ -35,19 +35,32 @@ extension DefaultAppleSignInProvider: AppleSignInProvider, KMPSharedDomain.Apple
         authorizationController.delegate = self
         authorizationController.presentationContextProvider = self
         
-        let idToken = try await withCheckedThrowingContinuation({ [weak self] (continuation: AppleAuthContinuation) in
-            guard let self else { return }
+        do {
+            let idToken = try await withCheckedThrowingContinuation({ [weak self] (continuation: AppleAuthContinuation) in
+                guard let self else { return }
+                
+                appleAuthContinuation = continuation
+                authorizationController.performRequests()
+            })
             
-            appleAuthContinuation = continuation
-            authorizationController.performRequests()
-        })
-        
-        return ExternalProviderCredential(
-            idToken: idToken,
-            accessToken: nil,
-            rawNonce: rawNonce,
-            hashedNonce: hashedNonce
-        )
+            return ResultSuccess(data: ExternalProviderCredential(
+                idToken: idToken,
+                accessToken: nil,
+                rawNonce: rawNonce,
+                hashedNonce: hashedNonce
+            ))
+        } catch {
+            let fallbackError = ResultError<ExternalProviderCredential>(error: AuthError.ExternalError(message: nil))
+            
+            guard let authError = error as? ASAuthorizationError else {
+                return fallbackError
+            }
+            
+            switch authError.code {
+            case .canceled: return ResultError(error: AuthError.ExternalFlowCancelled())
+            default: return fallbackError
+            }
+        }
     }
 }
 

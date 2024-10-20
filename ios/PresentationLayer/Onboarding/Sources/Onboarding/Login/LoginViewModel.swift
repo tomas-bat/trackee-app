@@ -147,14 +147,16 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         state.appleLoginLoading = true
         defer { state.appleLoginLoading = false }
         
-        do {
+        await execute {
             let params = LoginWithProviderUseCaseParams(
                 type: .apple
             )
             try await loginWithProviderUseCase.execute(params: params)
             
             flowController?.handleFlow(OnboardingFlow.login(.dismiss))
-        } catch {
+        } onError: { error in
+            if error.kmpErrorResult is AuthError.ExternalFlowCancelled { return }
+            
             snackState.currentData?.dismiss()
             snackState.showSnackSync(
                 .error(

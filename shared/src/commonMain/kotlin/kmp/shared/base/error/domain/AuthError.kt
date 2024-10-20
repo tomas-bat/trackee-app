@@ -16,4 +16,5 @@ sealed class AuthError(
     class InvalidEmail: AuthError()
     class WeakPassword: AuthError()
     class ExternalError(message: String? = null) : AuthError(message = message)
+    class ExternalFlowCancelled : AuthError()
 }
