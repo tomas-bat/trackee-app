@@ -9,9 +9,6 @@ import SharedDomain
 
 public extension Container {
     
-    // MARK: - Koin
-    private var kmp: Factory<KMPDependency> { self { KMPKoinDependency() }.singleton }
-    
     // MARK: - Auth
     var loginWithCredentialsUseCase: Factory<LoginWithCredentialsUseCase> { self { self.kmp().get(LoginWithCredentialsUseCase.self) } }
     var registerUseCase: Factory<RegisterUseCase> { self { self.kmp().get(RegisterUseCase.self) } }

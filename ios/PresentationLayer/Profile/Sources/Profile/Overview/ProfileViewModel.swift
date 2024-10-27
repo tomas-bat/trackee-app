@@ -46,6 +46,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     struct State {
         var email: ViewData<String> = .loading(mock: .randomString(length: 16))
         var deleteLoading = false
+        var logoutLoading = false
         var alertData: AlertData?
     }
     
@@ -86,6 +87,9 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     private func logout() async {
+        state.logoutLoading = true
+        defer { state.logoutLoading = false }
+        
         await execute {
             try await logoutUseCase.execute()
             flowController?.handleFlow(ProfileFlow.overview(

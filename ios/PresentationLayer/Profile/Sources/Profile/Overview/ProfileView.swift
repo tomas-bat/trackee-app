@@ -73,6 +73,7 @@ struct ProfileView: View {
             Button(L10n.profile_view_logout_button_title) {
                 viewModel.onIntent(.logout)
             }
+            .environment(\.isLoading, viewModel.state.logoutLoading)
             .buttonStyle(.primary)
             .padding(padding)
         }

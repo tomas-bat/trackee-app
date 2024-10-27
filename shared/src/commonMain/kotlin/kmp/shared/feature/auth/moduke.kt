@@ -11,7 +11,8 @@ internal val authModule = module {
     single {
         AuthRepositoryImpl(
             appleSignInProvider = get(),
-            authProvider = get()
+            authProvider = get(),
+            inAppPurchaseProvider = get()
         )
     } bind AuthRepository::class
 
