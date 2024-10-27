@@ -51,3 +51,6 @@ public final class UpdateIntegrationUseCaseMock: UseCaseResultMock, UpdateIntegr
 public final class DeleteIntegrationUseCaseMock: UseCaseResultMock, DeleteIntegrationUseCase {}
 public final class ExportToCsvUseCaseMock: UseCaseResultMock, ExportToCsvUseCase {}
 public final class ExportToClockifyUseCaseMock: UseCaseResultMock, ExportToClockifyUseCase {}
+
+// MARK: - Purchases
+public final class GetHasFullAccessUseCaseMock: UseCaseResultNoParamsMock, GetHasFullAccessUseCase {}

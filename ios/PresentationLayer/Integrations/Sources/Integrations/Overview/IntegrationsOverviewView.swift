@@ -30,27 +30,31 @@ struct IntegrationsOverviewView: View {
         Group {
             switch viewModel.state.integrations {
             case let .data(integrations), let .loading(integrations):
-                List {
-                    ForEach(integrations.indices, id: \.self) { idx in
-                        let integration = integrations[idx]
-                        
-                        Button {
-                            viewModel.onIntent(.showIntegrationDetail(id: integration.id))
-                        } label: {
-                            HStack {
-                                integration.image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize, height: imageSize)
-                                
-                                Text(integration.label)
-                                
-                                Spacer()
-                                
-                                Image(systemSymbol: .chevronRight)
+                if viewModel.state.showPaywall {
+                    Text("paywall, lol")
+                } else {
+                    List {
+                        ForEach(integrations.indices, id: \.self) { idx in
+                            let integration = integrations[idx]
+                            
+                            Button {
+                                viewModel.onIntent(.showIntegrationDetail(id: integration.id))
+                            } label: {
+                                HStack {
+                                    integration.image
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: imageSize, height: imageSize)
+                                    
+                                    Text(integration.label)
+                                    
+                                    Spacer()
+                                    
+                                    Image(systemSymbol: .chevronRight)
+                                }
                             }
+                            .skeleton(viewModel.state.integrations.isLoading)
                         }
-                        .skeleton(viewModel.state.integrations.isLoading)
                     }
                 }
             case let .error(error):
@@ -79,11 +83,13 @@ struct IntegrationsOverviewView: View {
         .navigationTitle(L10n.integrations_view_title)
         .toolbar(.visible)
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    viewModel.onIntent(.addIntegration)
-                } label: {
-                    Image(systemSymbol: .plus)
+            if !viewModel.state.showPaywall {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        viewModel.onIntent(.addIntegration)
+                    } label: {
+                        Image(systemSymbol: .plus)
+                    }
                 }
             }
         }

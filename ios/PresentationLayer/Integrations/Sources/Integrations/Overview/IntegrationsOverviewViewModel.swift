@@ -21,6 +21,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     // MARK: - Dependencies
     
     @Injected(\.getIntegrationsUseCase) private var getIntegrationsUseCase
+    @Injected(\.getHasFullAccessUseCase) private var getHasFullAccessUseCase
     
     private weak var flowController: FlowController?
     
@@ -49,6 +50,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     struct State {
         var integrations: ViewData<[Integration]> = .loading(mock: .stub)
         var isShowingTypes = false
+        var showPaywall = false
     }
     
     // MARK: - Intent
@@ -81,6 +83,13 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
         }
         
         await execute {
+            let hasFullAccess: KotlinBoolean = try await getHasFullAccessUseCase.execute()
+            
+            guard hasFullAccess.boolValue else {
+                state.showPaywall = true
+                return
+            }
+            
             let integrations: [Integration] = try await getIntegrationsUseCase.execute()
             
             if integrations.isEmpty {

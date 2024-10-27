@@ -11,6 +11,16 @@ public class RevenueCatPurchaseProvider {
     
     private let revenueCatApiKey = "appl_LqBbtMRhjeASbELUpRKDisMQSeX"
     
+    private enum Entitlement {
+        case fullAccess
+        
+        var identifier: String {
+            switch self {
+            case .fullAccess: "Full Access"
+            }
+        }
+    }
+    
     private var didInit = false
     
     public init() {
@@ -34,5 +44,13 @@ extension RevenueCatPurchaseProvider: InAppPurchaseProvider {
         _ = try await Purchases.shared.logOut()
         
         return ResultSuccess(data: KotlinUnit())
+    }
+    
+    public func __hasFullAccess() async throws -> Result<KotlinBoolean> {
+        let info = try await Purchases.shared.customerInfo()
+        
+        return ResultSuccess(data: KotlinBoolean(
+            bool: info.entitlements[Entitlement.fullAccess.identifier]?.isActive ?? false
+        ))
     }
 }

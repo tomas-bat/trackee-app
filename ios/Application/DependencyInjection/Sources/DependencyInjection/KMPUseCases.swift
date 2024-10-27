@@ -53,4 +53,7 @@ public extension Container {
     var deleteIntegrationUseCase: Factory<DeleteIntegrationUseCase> { self { self.kmp().get(DeleteIntegrationUseCase.self) } }
     var exportToCsvUseCase: Factory<ExportToCsvUseCase> { self { self.kmp().get(ExportToCsvUseCase.self) } }
     var exportToClockifyUseCase: Factory<ExportToClockifyUseCase> { self { self.kmp().get(ExportToClockifyUseCase.self) } }
+    
+    // MARK: - Purchases
+    var getHasFullAccessUseCase: Factory<GetHasFullAccessUseCase> { self { self.kmp().get(GetHasFullAccessUseCase.self) } }
 }

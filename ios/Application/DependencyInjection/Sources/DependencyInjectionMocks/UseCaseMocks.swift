@@ -151,6 +151,11 @@ public extension Container {
         exportToClockifyUseCase.register {
             ExportToClockifyUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        
+        // MARK: - Purchases
+        getHasFullAccessUseCase.register {
+            GetHasFullAccessUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: false)))
+        }
     }
 }
 #endif
