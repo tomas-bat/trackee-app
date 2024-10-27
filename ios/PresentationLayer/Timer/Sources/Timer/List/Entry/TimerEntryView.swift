@@ -32,6 +32,7 @@ struct TimerEntryView: View {
     private let entryMenuSize: CGFloat = 24
     private let entryMenuOffset: CGFloat = -16
     private let markImageSize: CGFloat = 16
+    private let minimumGestureDistance: CGFloat = 32
     
     // MARK: - Stored properties
     
@@ -156,8 +157,8 @@ struct TimerEntryView: View {
         .multilineTextAlignment(.leading)
         .foregroundStyle(AppTheme.Colors.foreground)
         .sensoryFeedback(.impact, trigger: isAfterThreshold)
-        .gesture(
-            DragGesture()
+        .simultaneousGesture(
+            DragGesture(minimumDistance: minimumGestureDistance)
                 .onChanged(onGestureChange)
                 .onEnded(onGestureEnd)
         )
