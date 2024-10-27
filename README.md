@@ -8,7 +8,7 @@ Trackee allows creating and managing users, clients and projects, supports track
 > This project contains projects for a Kotlin Multiplatform shared library, an iOS app and a ktor server.
 
 > [!NOTE]
-> The backend app is currently deployed on [Railway](https://railway.app) on [https://trackee-app-production.up.railway.app](https://trackee-app-production.up.railway.app)
+> The backend app is currently deployed on [Railway](https://railway.app) on [https://api.trackee.app](https://api.trackee.app)
 
 - Frontend apps template: https://github.com/MateeDevs/devstack-native-app
 - Backend app template: https://start.ktor.io
@@ -39,10 +39,10 @@ The iOS app is available via public testing on the following link: https://testf
 > Firebase credentials are needed for a sucessful build & deployment of the backend app.
 
 > [!IMPORTANT]
-> The Testflight iOS app is connected to the [Railway backend app](https://trackee-app-production.up.railway.app). The backend app and the Firestore database are deployed in Oregon, USA. If you're furhter away from that location and you run the backend server locally, you may encounter longer request times due to a long distance between the backend server and the database server.
+> The Testflight iOS app is connected to the [Railway backend app](https://api.trackee.app). The backend app and the Firestore database are deployed in Oregon, USA. If you're furhter away from that location and you run the backend server locally, you may encounter longer request times due to a long distance between the backend server and the database server.
 
 > [!IMPORTANT]
-> The [Railway backend app](https://trackee-app-production.up.railway.app) has sleeping enabled. If the server isn't used for a while, you may encounter delays and temporary errors due to the service being unavailable.
+> The [Railway backend app](https://api.trackee.app) has sleeping enabled. If the server isn't used for a while, you may encounter delays and temporary errors due to the service being unavailable.
 
 - In order to build and run the backend application locally, you can run `./gradlew backend:run`
 - In order to build and run the iOS appliaction locally, navigate to the `ios` directory via `cd ios`, run the setup script via `scripts/setup.sh` and then you should be able to build the project via Xcode. Updates to signing & certificates setting may be needed.
