@@ -56,4 +56,5 @@ public extension Container {
     
     // MARK: - Purchases
     var getHasFullAccessUseCase: Factory<GetHasFullAccessUseCase> { self { self.kmp().get(GetHasFullAccessUseCase.self) } }
+    var getPurchasePackagesUseCase: Factory<GetPurchasePackagesUseCase> { self { self.kmp().get(GetPurchasePackagesUseCase.self) } }
 }

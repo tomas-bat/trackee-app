@@ -156,6 +156,9 @@ public extension Container {
         getHasFullAccessUseCase.register {
             GetHasFullAccessUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: false)))
         }
+        getPurchasePackagesUseCase.register {
+            GetPurchasePackagesUseCaseMock(executeReturnValue: ResultSuccess(data: [PurchasePackage].stub as NSArray))
+        }
     }
 }
 #endif

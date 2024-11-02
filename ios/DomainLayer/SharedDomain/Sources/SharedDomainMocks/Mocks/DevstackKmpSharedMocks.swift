@@ -54,3 +54,4 @@ public final class ExportToClockifyUseCaseMock: UseCaseResultMock, ExportToClock
 
 // MARK: - Purchases
 public final class GetHasFullAccessUseCaseMock: UseCaseResultNoParamsMock, GetHasFullAccessUseCase {}
+public final class GetPurchasePackagesUseCaseMock: UseCaseResultNoParamsMock, GetPurchasePackagesUseCase {}

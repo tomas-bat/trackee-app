@@ -1335,5 +1335,63 @@
 		en = Black
 		sk = Čierna
 
+[[Paywall]]
+	[paywall_title]
+		cs = Integrace jsou dostupné jen pro předplatitele plného přístupu.
+		en = Integrations are available under the Full Access subscription plan only.
+		sk = Integrácie sú dostupné len pre predplatiteľov s plným prístupom.
+	[paywall_pro_1]
+		cs = Neomezený počet klientů
+		en = Create as many clients as you wish
+		sk = Neobmedzený počet klientov
+	[paywall_pro_2]
+		cs = Neomezený počet projektů
+		en = Create as many projects as you wish
+		sk = Neobmedzený počet projektov
+	[paywall_pro_3]
+		cs = Exportujte svá data do CSV tabulek
+		en = Export your data to CSV tables
+		sk = Exportujte svoje dáta do CSV tabuliek
+	[paywall_pro_4]
+		cs = Integrujte svá workflows s Clockify a dalšími**
+		en = Integrate your workflows with Clockify and more**
+		sk = Integrujte svoje workflows s Clockify a ďalšími**
+	[paywall_best_offer]
+		cs = Nejlepší nabídka
+		en = Best offer
+		sk = Najlepšia ponuka
+	[paywall_every_two_weeks]
+		cs = každé dva týdny
+		en = every two weeks
+		sk = každé dva týždne
+	[paywall_annually]
+		cs = ročně
+		en = annualy
+		sk = ročne
+	[paywall_monthly]
+		cs = měsíčně
+		en = monthly
+		sk = mesačne
+	[paywall_trial_info]
+		cs = * Zahrnuje 2-týdenní zkušební dobu. Zrušit můžete kdykoli.
+		en = * 2-week trial included. Cancel anytime.
+		sk = * Zahŕňa 2-týždňovú skúšobnú dobu. Zrušiť môžete kedykoľvek.
+	[paywall_integration_disclaimer]
+		cs = ** Integrace s dalšími aplikacemi je ve vývoji.
+		en = ** Integration with other apps is under development.
+		sk = ** Integrácia s ďalšími aplikáciami je vo vývoji.
+	[paywall_privacy_policy]
+		cs = Ochrana osobních údajů
+		en = Privacy policy
+		sk = Ochrana osobných údajov
+	[paywall_restore_purchases]
+		cs = Obnovit nákupy
+		en = Restore purchases
+		sk = Obnoviť nákupy
+	[paywall_start_free_trial]
+		cs = Začít bezplatnou zkušební verzi
+		en = Start free trial
+		sk = Začať bezplatnú skúšobnú verziu
+
 
 

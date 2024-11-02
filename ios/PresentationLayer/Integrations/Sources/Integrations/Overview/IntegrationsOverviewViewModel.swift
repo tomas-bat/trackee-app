@@ -22,6 +22,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     
     @Injected(\.getIntegrationsUseCase) private var getIntegrationsUseCase
     @Injected(\.getHasFullAccessUseCase) private var getHasFullAccessUseCase
+    @Injected(\.getPurchasePackagesUseCase) private var getPurchasePackagesUseCase
     
     private weak var flowController: FlowController?
     
@@ -50,7 +51,8 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     struct State {
         var integrations: ViewData<[Integration]> = .loading(mock: .stub)
         var isShowingTypes = false
-        var showPaywall = false
+        var showPaywall: ViewData<Bool> = .loading(mock: false)
+        var purchasePackages: ViewData<[PurchasePackage]> = .loading(mock: .stub)
     }
     
     // MARK: - Intent
@@ -79,17 +81,30 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     
     private func fetchData(showLoading: Bool) async {
         if showLoading {
+            state.showPaywall = .loading(mock: false)
             state.integrations = .loading(mock: .stub)
         }
         
         await execute {
             let hasFullAccess: KotlinBoolean = try await getHasFullAccessUseCase.execute()
+            state.showPaywall = .data(!hasFullAccess.boolValue)
             
-            guard hasFullAccess.boolValue else {
-                state.showPaywall = true
-                return
+            if hasFullAccess.boolValue {
+                await fetchIntegrations(showLoading: showLoading)
+            } else {
+                await fetchPaywall(showLoading: showLoading)
             }
-            
+        } onError: { error in
+            state.integrations = .error(error)
+        }
+    }
+    
+    private func fetchIntegrations(showLoading: Bool) async {
+        if showLoading {
+            state.integrations = .loading(mock: .stub)
+        }
+        
+        await execute {
             let integrations: [Integration] = try await getIntegrationsUseCase.execute()
             
             if integrations.isEmpty {
@@ -118,6 +133,24 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
             integrationType: type,
             delegate: self
         )))
+    }
+    
+    private func fetchPaywall(showLoading: Bool) async {
+        if showLoading {
+            state.purchasePackages = .loading(mock: .stub)
+        }
+        
+        await execute {
+            let packages: [PurchasePackage] = try await getPurchasePackagesUseCase.execute()
+            
+            if packages.isEmpty {
+                state.purchasePackages = .empty(.noData)
+            } else {
+                state.purchasePackages = .data(packages)
+            }
+        } onError: { error in
+            state.purchasePackages = .error(error)
+        }
     }
 }
 

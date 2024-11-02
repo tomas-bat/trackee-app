@@ -3,6 +3,7 @@
 //  Copyright © 2024 Matee. All rights reserved.
 //
 
+import Foundation
 import RevenueCat
 import Utilities
 import KMPSharedDomain
@@ -52,5 +53,15 @@ extension RevenueCatPurchaseProvider: InAppPurchaseProvider {
         return ResultSuccess(data: KotlinBoolean(
             bool: info.entitlements[Entitlement.fullAccess.identifier]?.isActive ?? false
         ))
+    }
+    
+    public func __readPackages() async throws -> Result<NSArray> {
+        guard let packages = try await Purchases.shared.offerings().current?.availablePackages else {
+            return ResultError(error: PurchaseError.NoProducts())
+        }
+        
+        return ResultSuccess(
+            data: try packages.map { try $0.toDomain() } as NSArray
+        )
     }
 }
