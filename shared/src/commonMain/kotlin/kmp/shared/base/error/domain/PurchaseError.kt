@@ -9,4 +9,10 @@ sealed class PurchaseError(
 
     data object NoProducts : PurchaseError()
     data object InvalidSubscriptionPeriod : PurchaseError()
+
+    data class PackageNotFound(
+        val packageId: String
+    ): PurchaseError(
+        message = "Package with id=$packageId could not be found"
+    )
 }

@@ -8,4 +8,9 @@ interface InAppPurchaseProvider {
     suspend fun logOut(): Result<Unit>
     suspend fun hasFullAccess(): Result<Boolean>
     suspend fun readPackages(): Result<List<PurchasePackage>>
+    suspend fun purchasePackage(packageId: String): Result<Unit>
+
+    suspend fun readIsPackageEligibleForIntroductoryDiscount(
+        packageId: String
+    ): Result<Boolean>
 }

@@ -2,10 +2,7 @@ package kmp.shared.feature.purchase
 
 import kmp.shared.feature.purchase.data.repository.PurchaseRepositoryImpl
 import kmp.shared.feature.purchase.domain.repository.PurchaseRepository
-import kmp.shared.feature.purchase.domain.usecase.GetHasFullAccessUseCase
-import kmp.shared.feature.purchase.domain.usecase.GetHasFullAccessUseCaseImpl
-import kmp.shared.feature.purchase.domain.usecase.GetPurchasePackagesUseCase
-import kmp.shared.feature.purchase.domain.usecase.GetPurchasePackagesUseCaseImpl
+import kmp.shared.feature.purchase.domain.usecase.*
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.bind
 import org.koin.dsl.module
@@ -19,4 +16,6 @@ internal val purchaseModule = module {
 
     factoryOf(::GetHasFullAccessUseCaseImpl) bind GetHasFullAccessUseCase::class
     factoryOf(::GetPurchasePackagesUseCaseImpl) bind GetPurchasePackagesUseCase::class
+    factoryOf(::PurchasePackageUseCaseImpl) bind PurchasePackageUseCase::class
+    factoryOf(::GetIsPackageEligibleForIntroductoryDiscountUseCaseImpl) bind GetIsPackageEligibleForIntroductoryDiscountUseCase::class
 }

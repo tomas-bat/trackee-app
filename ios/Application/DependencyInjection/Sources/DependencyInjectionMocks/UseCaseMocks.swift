@@ -159,6 +159,14 @@ public extension Container {
         getPurchasePackagesUseCase.register {
             GetPurchasePackagesUseCaseMock(executeReturnValue: ResultSuccess(data: [PurchasePackage].stub as NSArray))
         }
+        purchasePackageUseCase.register {
+            PurchasePackageUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        getIsPackageEligibleForIntroductoryDiscountUseCase.register {
+            GetIsPackageEligibleForIntroductoryDiscountUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: true))
+            )
+        }
     }
 }
 #endif

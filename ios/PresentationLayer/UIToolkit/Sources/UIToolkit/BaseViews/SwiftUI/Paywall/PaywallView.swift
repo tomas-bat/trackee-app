@@ -28,19 +28,19 @@ public struct PaywallView: View {
     
     // MARK: - Stored properties
     
-    private let packages: [PurchasePackage]
+    private let packages: [PaywallPackageViewObject]
     private let paymentLoading: Bool
     private let onPrivacyPolicyClick: () -> Void
     private let onRestorePurchasesClick: () -> Void
     private let onContinue: (PurchasePackage) -> Void
     
-    @State private var selectedPackage: PurchasePackage?
+    @State private var selectedPackage: PaywallPackageViewObject?
     @State private var badgeHeight: CGFloat = 0
     
     // MARK: - Init
     
     public init(
-        packages: [PurchasePackage],
+        packages: [PaywallPackageViewObject],
         paymentLoading: Bool,
         onPrivacyPolicyClick: @escaping () -> Void,
         onRestorePurchasesClick: @escaping () -> Void,
@@ -51,8 +51,6 @@ public struct PaywallView: View {
         self.onPrivacyPolicyClick = onPrivacyPolicyClick
         self.onRestorePurchasesClick = onRestorePurchasesClick
         self.onContinue = onContinue
-        
-        selectedPackage = packages.first
     }
     
     // MARK: - Body
@@ -91,7 +89,7 @@ public struct PaywallView: View {
                             Button {
                                 selectedPackage = package
                             } label: {
-                                packageLabel(for: package)
+                                packageLabel(for: package.package)
                             }
                             .buttonStyle(
                                 SelectableButtonStyle(
@@ -137,16 +135,20 @@ public struct PaywallView: View {
         .overlay(alignment: .bottom) {
             Button(continueTitle) {
                 if let selectedPackage {
-                    onContinue(selectedPackage)
+                    onContinue(selectedPackage.package)
                 }
             }
             .buttonStyle(.primary(backgroundColor: AppTheme.Colors.success))
             .padding(padding)
             .disabled(selectedPackage == nil)
             .opacity(selectedPackage == nil ? 0.5 : 1)
+            .environment(\.isLoading, paymentLoading)
         }
         .foregroundStyle(AppTheme.Colors.foreground)
         .background(AppTheme.Colors.background)
+        .onAppear {
+            selectedPackage = packages.first
+        }
     }
     
     @ViewBuilder
@@ -161,7 +163,7 @@ public struct PaywallView: View {
     }
     
     private var continueTitle: String {
-        if selectedPackage?.product.introductoryDiscount?.price == 0 {
+        if selectedPackage?.isEligibleForIntroductoryDiscount == true {
             L10n.paywall_start_free_trial
         } else {
             L10n.continue_label
@@ -172,7 +174,7 @@ public struct PaywallView: View {
 #if DEBUG
 #Preview {
     PaywallView(
-        packages: [PurchasePackage].stub,
+        packages: [PaywallPackageViewObject].stub,
         paymentLoading: false,
         onPrivacyPolicyClick: {},
         onRestorePurchasesClick: {},

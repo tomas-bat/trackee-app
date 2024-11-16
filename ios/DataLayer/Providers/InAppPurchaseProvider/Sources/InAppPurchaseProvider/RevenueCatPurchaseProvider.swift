@@ -64,4 +64,42 @@ extension RevenueCatPurchaseProvider: InAppPurchaseProvider {
             data: try packages.map { try $0.toDomain() } as NSArray
         )
     }
+    
+    public func __purchasePackage(packageId: String) async throws -> Result<KotlinUnit> {
+        guard let package = try await Purchases
+            .shared
+            .offerings()
+            .current?
+            .availablePackages
+            .first(where: { $0.identifier == packageId })
+        else {
+            return ResultError(error: PurchaseError.PackageNotFound(packageId: packageId))
+        }
+        
+        _ = try await Purchases.shared.purchase(package: package)
+        return ResultSuccess(data: KotlinUnit())
+    }
+    
+    public func __readIsPackageEligibleForIntroductoryDiscount(
+        packageId: String
+    ) async throws -> Result<KotlinBoolean> {
+        guard let package = try await Purchases
+            .shared
+            .offerings()
+            .current?
+            .availablePackages
+            .first(where: { $0.identifier == packageId })
+        else {
+            return ResultError(error: PurchaseError.PackageNotFound(packageId: packageId))
+        }
+        
+        let eligible = await Purchases
+            .shared
+            .checkTrialOrIntroDiscountEligibility(packages: [package])
+            .first?
+            .value
+            .status == .eligible
+        
+        return ResultSuccess(data: KotlinBoolean(bool: eligible))
+    }
 }

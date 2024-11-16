@@ -13,4 +13,12 @@ internal class PurchaseRepositoryImpl(
 
     override suspend fun readPackages(): Result<List<PurchasePackage>> =
         provider.readPackages()
+
+    override suspend fun purchasePackage(packageId: String) =
+        provider.purchasePackage(packageId)
+
+    override suspend fun readIsPackageEligibleForIntroductoryDiscount(
+        packageId: String
+    ): Result<Boolean> =
+        provider.readIsPackageEligibleForIntroductoryDiscount(packageId)
 }

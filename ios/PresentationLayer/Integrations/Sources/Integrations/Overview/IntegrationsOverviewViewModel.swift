@@ -23,6 +23,8 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     @Injected(\.getIntegrationsUseCase) private var getIntegrationsUseCase
     @Injected(\.getHasFullAccessUseCase) private var getHasFullAccessUseCase
     @Injected(\.getPurchasePackagesUseCase) private var getPurchasePackagesUseCase
+    @Injected(\.purchasePackageUseCase) private var purchasePackageUseCase
+    @Injected(\.getIsPackageEligibleForIntroductoryDiscountUseCase) private var getIsPackageEligibleForIntroductoryDiscountUseCase
     
     private weak var flowController: FlowController?
     
@@ -52,7 +54,8 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
         var integrations: ViewData<[Integration]> = .loading(mock: .stub)
         var isShowingTypes = false
         var showPaywall: ViewData<Bool> = .loading(mock: false)
-        var purchasePackages: ViewData<[PurchasePackage]> = .loading(mock: .stub)
+        var purchasePackages: ViewData<[PaywallPackageViewObject]> = .loading(mock: .stub)
+        var purchaseLoading = false
     }
     
     // MARK: - Intent
@@ -63,6 +66,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
         case selectNewIntegrationType(IntegrationType)
         case showIntegrationDetail(id: String)
         case changeShowingTypes(to: Bool)
+        case purchasePackage(packageId: String)
     }
     
     func onIntent(_ intent: Intent) {
@@ -73,6 +77,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
             case let .showIntegrationDetail(id): showIntegrationDetail(integrationId: id)
             case let .changeShowingTypes(isShowing): state.isShowingTypes = isShowing
             case let .selectNewIntegrationType(type): selectNewIntegrationType(type)
+            case let .purchasePackage(packageId): await purchasePackage(packageId: packageId)
             }
         })
     }
@@ -142,14 +147,38 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
         
         await execute {
             let packages: [PurchasePackage] = try await getPurchasePackagesUseCase.execute()
+            let viewObjects = try await packages.asyncMap { package in
+                let params = GetIsPackageEligibleForIntroductoryDiscountUseCaseParams(
+                    packageId: package.id
+                )
+                
+                return PaywallPackageViewObject(
+                    package: package,
+                    isEligibleForIntroductoryDiscount: try await getIsPackageEligibleForIntroductoryDiscountUseCase.execute(
+                        params: params
+                    )
+                )
+            }
             
             if packages.isEmpty {
                 state.purchasePackages = .empty(.noData)
             } else {
-                state.purchasePackages = .data(packages)
+                state.purchasePackages = .data(viewObjects)
             }
         } onError: { error in
             state.purchasePackages = .error(error)
+        }
+    }
+    
+    private func purchasePackage(packageId: String) async {
+        state.purchaseLoading = true
+        defer { state.purchaseLoading = false }
+        
+        await execute {
+            let params = PurchasePackageUseCaseParams(packageId: packageId)
+            try await purchasePackageUseCase.execute(params: params)
+        } onError: { error in
+            state.showPaywall = .error(error)
         }
     }
 }

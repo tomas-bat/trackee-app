@@ -87,10 +87,12 @@ struct IntegrationsOverviewView: View {
         case let .data(packages), let .loading(packages):
             PaywallView(
                 packages: packages,
-                paymentLoading: false,
+                paymentLoading: viewModel.state.purchaseLoading,
                 onPrivacyPolicyClick: {},
                 onRestorePurchasesClick: {},
-                onContinue: { _ in }
+                onContinue: { package in
+                    viewModel.onIntent(.purchasePackage(packageId: package.id))
+                }
             )
             .skeleton(viewModel.state.purchasePackages.isLoading)
         case let .error(error):
