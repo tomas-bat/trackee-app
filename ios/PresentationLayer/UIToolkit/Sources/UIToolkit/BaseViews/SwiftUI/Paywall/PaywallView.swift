@@ -1,185 +1,62 @@
 //
-//  Created by Tomáš Batěk on 01.11.2024
+//  Created by Tomáš Batěk on 20.11.2024
 //  Copyright © 2024 Matee. All rights reserved.
 //
 
 import SwiftUI
-import KMPSharedDomain
 
 public struct PaywallView: View {
     
     // MARK: - Constants
     
-    private let spacing: CGFloat = 32
-    private let innerSpacing: CGFloat = 16
-    private let lineSpacing: CGFloat = 8
-    private let proSpacing: CGFloat = 4
-    private let imageWidth: CGFloat = 86
-    private let bestOfferIndex = 0
     private let padding: CGFloat = 16
-    private let extraBottomContentPadding: CGFloat = 48
-    
-    private let pros = [
-        L10n.paywall_pro_1,
-        L10n.paywall_pro_2,
-        L10n.paywall_pro_3,
-        L10n.paywall_pro_4
-    ]
     
     // MARK: - Stored properties
     
-    private let packages: [PaywallPackageViewObject]
-    private let paymentLoading: Bool
-    private let onPrivacyPolicyClick: () -> Void
-    private let onRestorePurchasesClick: () -> Void
-    private let onContinue: (PurchasePackage) -> Void
-    
-    @State private var selectedPackage: PaywallPackageViewObject?
-    @State private var badgeHeight: CGFloat = 0
+    @ObservedObject private var viewModel: PaywallViewModel
     
     // MARK: - Init
     
-    public init(
-        packages: [PaywallPackageViewObject],
-        paymentLoading: Bool,
-        onPrivacyPolicyClick: @escaping () -> Void,
-        onRestorePurchasesClick: @escaping () -> Void,
-        onContinue: @escaping (PurchasePackage) -> Void
-    ) {
-        self.packages = packages
-        self.paymentLoading = paymentLoading
-        self.onPrivacyPolicyClick = onPrivacyPolicyClick
-        self.onRestorePurchasesClick = onRestorePurchasesClick
-        self.onContinue = onContinue
+    public init(viewModel: PaywallViewModel) {
+        self.viewModel = viewModel
     }
     
     // MARK: - Body
     
     public var body: some View {
-        CenteredScrollView {
-            VStack(alignment: .center, spacing: spacing) {
-                Image(systemSymbol: .point3FilledConnectedTrianglepathDotted)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: imageWidth)
-                
-                VStack(alignment: .center, spacing: innerSpacing) {
-                    Text(L10n.paywall_title)
-                        .font(AppTheme.Fonts.headline)
-                    
-                    VStack(alignment: .leading, spacing: lineSpacing) {
-                        ForEach(pros, id: \.self) { pro in
-                            HStack(alignment: .firstTextBaseline, spacing: proSpacing) {
-                                Image(systemSymbol: .checkmark)
-                                    .renderingMode(.template)
-                                    .foregroundStyle(AppTheme.Colors.success)
-                                
-                                Text(pro)
-                                    .font(AppTheme.Fonts.body)
-                            }
-                        }
+        Group {
+            switch viewModel.state.purchasePackages {
+            case let .data(packages), let .loading(packages):
+                PaywallContentView(
+                    origin: .integrations,
+                    packages: packages,
+                    paymentLoading: viewModel.state.purchaseLoading,
+                    onPrivacyPolicyClick: {},
+                    onRestorePurchasesClick: {},
+                    onContinue: { package in
+                        viewModel.onIntent(.purchasePackage(packageId: package.id))
                     }
-                }
-                
-                VStack(alignment: .center, spacing: innerSpacing) {
-                    VStack(alignment: .center, spacing: lineSpacing) {
-                        ForEach(0..<packages.count, id: \.self) { idx in
-                            let package = packages[idx]
-                            
-                            Button {
-                                selectedPackage = package
-                            } label: {
-                                packageLabel(for: package.package)
-                            }
-                            .buttonStyle(
-                                SelectableButtonStyle(
-                                    selected: selectedPackage == package,
-                                    badge: {
-                                        if idx == bestOfferIndex {
-                                            Badge(
-                                                text: L10n.paywall_best_offer,
-                                                image: Image(systemSymbol: .starFill)
-                                            )
-                                            .readSize { size in
-                                                badgeHeight = size.height
-                                            }
-                                            .offset(y: -badgeHeight / 2)
-                                        }
-                                    }
-                                )
-                            )
-                            .font(AppTheme.Fonts.headline)
-                        }
-                    }
-                    
-                    VStack(alignment: .center, spacing: .zero) {
-                        Text(L10n.paywall_trial_info)
-                        
-                        Text(L10n.paywall_integration_disclaimer)
-                    }
-                    .multilineTextAlignment(.center)
-                    .font(AppTheme.Fonts.index)
-                    
-                    HStack(alignment: .center, spacing: spacing) {
-                        Button(L10n.paywall_privacy_policy, action: onPrivacyPolicyClick)
-                        
-                        Button(L10n.paywall_restore_purchases, action: onRestorePurchasesClick)
-                    }
-                    .buttonStyle(.additional)
-                }
+                )
+                .skeleton(viewModel.state.purchasePackages.isLoading)
+            case let .error(error):
+                errorView(error)
+            case .empty:
+                EmptyContentView(
+                    text: L10n.integrations_view_empty_title
+                )
+                .padding(padding)
             }
-            .padding(padding)
-            .padding(.bottom, extraBottomContentPadding)
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .overlay(alignment: .bottom) {
-            Button(continueTitle) {
-                if let selectedPackage {
-                    onContinue(selectedPackage.package)
-                }
-            }
-            .buttonStyle(.primary(backgroundColor: AppTheme.Colors.success))
-            .padding(padding)
-            .disabled(selectedPackage == nil)
-            .opacity(selectedPackage == nil ? 0.5 : 1)
-            .environment(\.isLoading, paymentLoading)
-        }
-        .foregroundStyle(AppTheme.Colors.foreground)
-        .background(AppTheme.Colors.background)
-        .onAppear {
-            selectedPackage = packages.first
-        }
+        .disabled(viewModel.state.purchaseLoading)
     }
     
-    @ViewBuilder
-    private func packageLabel(
-        for package: PurchasePackage
-    ) -> some View {
-        if let period = package.product.subscriptionPeriod {
-            Text("\(period.localized(for: package.localizedPrice))*")
-        } else {
-            Text("\(package.localizedPrice)*")
-        }
-    }
+    // MARK: - Private
     
-    private var continueTitle: String {
-        if selectedPackage?.isEligibleForIntroductoryDiscount == true {
-            L10n.paywall_start_free_trial
-        } else {
-            L10n.continue_label
-        }
+    private func errorView(_ error: Error) -> some View {
+        ErrorView(
+            error: error,
+            onRetryTap: { viewModel.onIntent(.retry) }
+        )
+        .padding(padding)
     }
 }
-
-#if DEBUG
-#Preview {
-    PaywallView(
-        packages: [PaywallPackageViewObject].stub,
-        paymentLoading: false,
-        onPrivacyPolicyClick: {},
-        onRestorePurchasesClick: {},
-        onContinue: { _ in }
-    )
-    .background(AppTheme.Colors.background)
-}
-#endif

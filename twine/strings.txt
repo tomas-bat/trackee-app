@@ -1337,6 +1337,10 @@
 
 [[Paywall]]
 	[paywall_title]
+		cs = Pro přístup k prémiovým funkcím je potřeba přeplatné.
+		en = You need the Full Access subscription plan to get access to premium features.
+		sk = Pre prístup k prémiovým funkciám je potrebné predplatné.
+	[paywall_title_integrations]
 		cs = Integrace jsou dostupné jen pro předplatitele plného přístupu.
 		en = Integrations are available under the Full Access subscription plan only.
 		sk = Integrácie sú dostupné len pre predplatiteľov s plným prístupom.

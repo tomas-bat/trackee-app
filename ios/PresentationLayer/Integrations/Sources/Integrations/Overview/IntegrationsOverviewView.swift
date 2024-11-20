@@ -31,7 +31,7 @@ struct IntegrationsOverviewView: View {
             switch viewModel.state.showPaywall {
             case let .data(showPaywall), let .loading(showPaywall):
                 if showPaywall {
-                    paywallView
+                    PaywallView(viewModel: viewModel.paywallViewModel)
                 } else {
                     integrationsView
                 }
@@ -69,6 +69,7 @@ struct IntegrationsOverviewView: View {
         }
         .snack(viewModel.snackState)
         .background(AppTheme.Colors.background)
+        .lifecycle(viewModel.paywallViewModel)
         .lifecycle(viewModel)
     }
     
@@ -79,30 +80,6 @@ struct IntegrationsOverviewView: View {
             get: { viewModel.state.isShowingTypes },
             set: { isShowing in viewModel.onIntent(.changeShowingTypes(to: isShowing)) }
         )
-    }
-    
-    @ViewBuilder
-    private var paywallView: some View {
-        switch viewModel.state.purchasePackages {
-        case let .data(packages), let .loading(packages):
-            PaywallView(
-                packages: packages,
-                paymentLoading: viewModel.state.purchaseLoading,
-                onPrivacyPolicyClick: {},
-                onRestorePurchasesClick: {},
-                onContinue: { package in
-                    viewModel.onIntent(.purchasePackage(packageId: package.id))
-                }
-            )
-            .skeleton(viewModel.state.purchasePackages.isLoading)
-        case let .error(error):
-            errorView(error)
-        case .empty:
-            EmptyContentView(
-                text: L10n.integrations_view_empty_title
-            )
-            .padding(padding)
-        }
     }
     
     @ViewBuilder
@@ -170,7 +147,10 @@ import Utilities
     Container.shared.registerUseCaseMocks()
     Environment.locale = .init(identifier: "cs")
     
-    let vm = IntegrationsOverviewViewModel(flowController: nil)
+    let vm = IntegrationsOverviewViewModel(
+        paywallViewModel: PaywallViewModel(flowController: nil),
+        flowController: nil
+    )
     return NavigationStack {
         IntegrationsOverviewView(
             viewModel: vm
