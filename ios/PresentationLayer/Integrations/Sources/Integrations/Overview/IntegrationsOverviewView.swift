@@ -31,7 +31,11 @@ struct IntegrationsOverviewView: View {
             switch viewModel.state.showPaywall {
             case let .data(showPaywall), let .loading(showPaywall):
                 if showPaywall {
-                    PaywallView(viewModel: viewModel.paywallViewModel)
+                    PaywallView(
+                        paywallViewOrigin: .integrations,
+                        viewModel: viewModel.paywallViewModel,
+                        isNested: true
+                    )
                 } else {
                     integrationsView
                 }

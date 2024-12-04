@@ -10,6 +10,13 @@ import DependencyInjection
 
 public protocol PaywallViewModelDelegate: AnyObject {
     func didPurchasePackage(_ package: PurchasePackage)
+    func didDismiss()
+}
+
+public extension PaywallViewModelDelegate {
+    func didDismiss() {
+        // Not required
+    }
 }
 
 public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject {
@@ -57,6 +64,7 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
     public enum Intent {
         case purchasePackage(packageId: String)
         case retry
+        case cancel
     }
     
     public func onIntent(_ intent: Intent) {
@@ -64,6 +72,7 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
             switch intent {
             case let .purchasePackage(packageId): await purchasePackage(packageId: packageId)
             case .retry: await fetchPaywall(showLoading: true)
+            case .cancel: delegate?.didDismiss()
             }
         })
     }

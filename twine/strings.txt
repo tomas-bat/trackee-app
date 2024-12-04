@@ -1344,6 +1344,30 @@
 		cs = Integrace jsou dostupné jen pro předplatitele plného přístupu.
 		en = Integrations are available under the Full Access subscription plan only.
 		sk = Integrácie sú dostupné len pre predplatiteľov s plným prístupom.
+	[paywall_title_clients_one]
+		cs = Abyste mohli vytvořit více než 1 klienta, musíte mít předplatné plného přístupu.
+		en = In order to create more than 1 client, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako 1 klienta, musíte mať predplatné plného prístupu.
+	[paywall_title_clients_few]
+		cs = Abyste mohli vytvořit více než %d klienty, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d clients, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d klientov, musíte mať predplatné plného prístupu.
+	[paywall_title_clients_many]
+		cs = Abyste mohli vytvořit více než %d klientů, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d clients, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d klientov, musíte mať predplatné plného prístupu.
+	[paywall_title_projects_one]
+		cs = Abyste mohli vytvořit více než 1 projekt, musíte mít předplatné plného přístupu.
+		en = In order to create more than 1 project, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako 1 projekt, musíte mať predplatné plného prístupu.
+	[paywall_title_projects_few]
+		cs = Abyste mohli vytvořit více než %d projekty, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d projects, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d projekty, musíte mať predplatné plného prístupu.
+	[paywall_title_projects_many]
+		cs = Abyste mohli vytvořit více než %d projektů, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d projects, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d projektov, musíte mať predplatné plného prístupu.
 	[paywall_pro_1]
 		cs = Neomezený počet klientů
 		en = Create as many clients as you wish

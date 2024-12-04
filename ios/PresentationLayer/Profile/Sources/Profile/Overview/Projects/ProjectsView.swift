@@ -71,6 +71,8 @@ struct ProjectsView: View {
                 } label: {
                     Image(systemSymbol: .plus)
                 }
+                .buttonStyle(.loading)
+                .environment(\.isLoading, viewModel.state.addProjectLoading)
             }
         }
         .searchable(

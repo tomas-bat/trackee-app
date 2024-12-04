@@ -69,6 +69,7 @@ public struct PaywallContentView: View {
                 VStack(alignment: .center, spacing: innerSpacing) {
                     Text(title)
                         .font(AppTheme.Fonts.headline)
+                        .multilineTextAlignment(.center)
                     
                     VStack(alignment: .leading, spacing: lineSpacing) {
                         ForEach(pros, id: \.self) { pro in
@@ -158,6 +159,18 @@ public struct PaywallContentView: View {
         switch origin {
         case .generic: L10n.paywall_title
         case .integrations: L10n.paywall_title_integrations
+        case let .clients(count):
+            switch count {
+            case 1: L10n.paywall_title_clients_one
+            case 2,3,4: L10n.paywall_title_clients_few(count)
+            default: L10n.paywall_title_clients_many(count)
+            }
+        case let .projects(count):
+            switch count {
+            case 1: L10n.paywall_title_projects_one
+            case 2,3,4: L10n.paywall_title_projects_few(count)
+            default: L10n.paywall_title_projects_many(count)
+            }
         }
     }
     

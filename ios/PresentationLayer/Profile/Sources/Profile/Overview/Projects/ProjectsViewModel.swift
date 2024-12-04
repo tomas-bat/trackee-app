@@ -17,12 +17,14 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Constants
     
     private let messageDelay: TimeInterval = 0.5
+    private let maxFreeProjectsCount: Int = 5
     
     // MARK: - Dependencies
     
     private weak var flowController: FlowController?
     
     @Injected(\.getProjectsUseCase) private var getProjectsUseCase
+    @Injected(\.getHasFullAccessUseCase) private var getHasFullAccessUseCase
     
     // MARK: - Stored properties
     
@@ -50,6 +52,7 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
     struct State {
         var projects: ViewData<[ProjectPreview]> = .loading(mock: .stub)
         var searchText = ""
+        var addProjectLoading = false
     }
     
     @Published private(set) var state = State()
@@ -70,7 +73,7 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .updateSearchText(text): updateSearchText(to: text)
             case .retry: await fetchData(showLoading: true)
             case let .showProjectDetail(clientId, projectId): showProjectDetail(clientId: clientId, projectId: projectId)
-            case .addProject: addProject()
+            case .addProject: await addProject()
             }
         })
     }
@@ -139,8 +142,27 @@ final class ProjectsViewModel: BaseViewModel, ViewModel, ObservableObject {
         )
     }
     
-    private func addProject() {
-        flowController?.handleFlow(ProfileFlow.projects(.showNewProject(delegate: self)))
+    private func addProject() async {
+        state.addProjectLoading = true
+        defer { state.addProjectLoading = false }
+        
+        await execute {
+            let hasFullAccess: Bool = try await getHasFullAccessUseCase.execute()
+            
+            if (state.projects.data?.count ?? 0) >= maxFreeProjectsCount && !hasFullAccess {
+                flowController?.handleFlow(
+                    ProfileFlow.showPaywall(
+                        paywallViewOrigin: .projects(maxFreeCount: maxFreeProjectsCount),
+                        delegate: self
+                    )
+                )
+            } else {
+                flowController?.handleFlow(ProfileFlow.projects(.showNewProject(delegate: self)))
+            }
+        } onError: { error in
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
     }
 }
 
@@ -158,5 +180,17 @@ extension ProjectsViewModel: ProjectDetailViewModelDelegate {
                 message: "\(L10n.project_removed_snack_title_part_one) \(projectName) \(L10n.project_removed_snack_title_part_two)"
             ))
         }
+    }
+}
+
+// MARK: - PaywallViewModelDelegate
+
+extension ProjectsViewModel: PaywallViewModelDelegate {
+    func didPurchasePackage(_ package: PurchasePackage) {
+        flowController?.handleFlow(ProfileFlow.projects(.dismissModal))
+    }
+    
+    func didDismiss() {
+        flowController?.handleFlow(ProfileFlow.projects(.dismissModal))
     }
 }

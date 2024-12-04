@@ -6,4 +6,6 @@
 public enum PaywallViewOrigin {
     case generic
     case integrations
+    case clients(maxFreeCount: Int)
+    case projects(maxFreeCount: Int)
 }
