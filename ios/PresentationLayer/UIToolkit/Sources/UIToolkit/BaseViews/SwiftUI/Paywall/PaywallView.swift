@@ -62,8 +62,11 @@ public struct PaywallView: View {
                     origin: paywallViewOrigin,
                     packages: packages,
                     paymentLoading: viewModel.state.purchaseLoading,
+                    restorePurchasesLoading: viewModel.state.restorePurchasesLoading,
                     onPrivacyPolicyClick: {},
-                    onRestorePurchasesClick: {},
+                    onRestorePurchasesClick: {
+                        viewModel.onIntent(.restorePurchases)
+                    },
                     onContinue: { package in
                         viewModel.onIntent(.purchasePackage(packageId: package.id))
                     }
@@ -78,7 +81,8 @@ public struct PaywallView: View {
                 .padding(padding)
             }
         }
-        .disabled(viewModel.state.purchaseLoading)
+        .snack(viewModel.snackState)
+        .disabled(viewModel.state.purchaseLoading || viewModel.state.restorePurchasesLoading)
     }
     
     private func errorView(_ error: Error) -> some View {

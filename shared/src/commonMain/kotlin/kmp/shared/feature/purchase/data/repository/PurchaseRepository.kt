@@ -17,6 +17,9 @@ internal class PurchaseRepositoryImpl(
     override suspend fun purchasePackage(packageId: String) =
         provider.purchasePackage(packageId)
 
+    override suspend fun restorePurchases(): Result<Unit> =
+        provider.restorePurchases()
+
     override suspend fun readIsPackageEligibleForIntroductoryDiscount(
         packageId: String
     ): Result<Boolean> =

@@ -31,6 +31,7 @@ public struct PaywallContentView: View {
     private let origin: PaywallViewOrigin
     private let packages: [PaywallPackageViewObject]
     private let paymentLoading: Bool
+    private let restorePurchasesLoading: Bool
     private let onPrivacyPolicyClick: () -> Void
     private let onRestorePurchasesClick: () -> Void
     private let onContinue: (PurchasePackage) -> Void
@@ -44,6 +45,7 @@ public struct PaywallContentView: View {
         origin: PaywallViewOrigin,
         packages: [PaywallPackageViewObject],
         paymentLoading: Bool,
+        restorePurchasesLoading: Bool,
         onPrivacyPolicyClick: @escaping () -> Void,
         onRestorePurchasesClick: @escaping () -> Void,
         onContinue: @escaping (PurchasePackage) -> Void
@@ -51,6 +53,7 @@ public struct PaywallContentView: View {
         self.origin = origin
         self.packages = packages
         self.paymentLoading = paymentLoading
+        self.restorePurchasesLoading = restorePurchasesLoading
         self.onPrivacyPolicyClick = onPrivacyPolicyClick
         self.onRestorePurchasesClick = onRestorePurchasesClick
         self.onContinue = onContinue
@@ -128,6 +131,7 @@ public struct PaywallContentView: View {
                         Button(L10n.paywall_privacy_policy, action: onPrivacyPolicyClick)
                         
                         Button(L10n.paywall_restore_purchases, action: onRestorePurchasesClick)
+                            .environment(\.isLoading, restorePurchasesLoading)
                     }
                     .buttonStyle(.additional)
                 }
@@ -200,6 +204,7 @@ public struct PaywallContentView: View {
         origin: .generic,
         packages: [PaywallPackageViewObject].stub,
         paymentLoading: false,
+        restorePurchasesLoading: false,
         onPrivacyPolicyClick: {},
         onRestorePurchasesClick: {},
         onContinue: { _ in }

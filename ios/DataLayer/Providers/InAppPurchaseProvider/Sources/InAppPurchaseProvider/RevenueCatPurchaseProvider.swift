@@ -102,4 +102,9 @@ extension RevenueCatPurchaseProvider: InAppPurchaseProvider {
         
         return ResultSuccess(data: KotlinBoolean(bool: eligible))
     }
+    
+    public func __restorePurchases() async throws -> Result<KotlinUnit> {
+        _ = try await Purchases.shared.restorePurchases()
+        return ResultSuccess(data: KotlinUnit())
+    }
 }

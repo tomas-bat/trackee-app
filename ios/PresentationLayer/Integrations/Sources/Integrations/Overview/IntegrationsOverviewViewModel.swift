@@ -165,4 +165,13 @@ extension IntegrationsOverviewViewModel: PaywallViewModelDelegate {
             await fetchData(showLoading: true)
         })
     }
+    
+    func didRestorePurchases() async {
+        let hasFullAccess: Bool? = try? await getHasFullAccessUseCase.execute()
+        
+        guard hasFullAccess == true else { return }
+        executeTask(Task {
+            await fetchData(showLoading: true)
+        })
+    }
 }

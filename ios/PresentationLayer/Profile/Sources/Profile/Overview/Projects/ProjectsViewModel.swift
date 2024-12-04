@@ -193,4 +193,11 @@ extension ProjectsViewModel: PaywallViewModelDelegate {
     func didDismiss() {
         flowController?.handleFlow(ProfileFlow.projects(.dismissModal))
     }
+    
+    func didRestorePurchases() async {
+        let hasFullAccess: Bool? = try? await getHasFullAccessUseCase.execute()
+        
+        guard hasFullAccess == true else { return }
+        flowController?.handleFlow(ProfileFlow.projects(.dismissModal))
+    }
 }

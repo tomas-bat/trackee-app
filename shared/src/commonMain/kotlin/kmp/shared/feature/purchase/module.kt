@@ -18,4 +18,5 @@ internal val purchaseModule = module {
     factoryOf(::GetPurchasePackagesUseCaseImpl) bind GetPurchasePackagesUseCase::class
     factoryOf(::PurchasePackageUseCaseImpl) bind PurchasePackageUseCase::class
     factoryOf(::GetIsPackageEligibleForIntroductoryDiscountUseCaseImpl) bind GetIsPackageEligibleForIntroductoryDiscountUseCase::class
+    factoryOf(::RestorePurchasesUseCaseImpl) bind RestorePurchasesUseCase::class
 }

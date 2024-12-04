@@ -1420,6 +1420,10 @@
 		cs = Začít bezplatnou zkušební verzi
 		en = Start free trial
 		sk = Začať bezplatnú skúšobnú verziu
+	[paywall_purchases_restored_title]
+		cs = Nákupy byly obnoveny.
+		en = Purchases have been restored.
+		sk = Nákupy boli obnovené.
 
 
 

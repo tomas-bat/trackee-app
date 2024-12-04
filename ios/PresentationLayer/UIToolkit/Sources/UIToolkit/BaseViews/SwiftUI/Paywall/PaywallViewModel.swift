@@ -11,6 +11,7 @@ import DependencyInjection
 public protocol PaywallViewModelDelegate: AnyObject {
     func didPurchasePackage(_ package: PurchasePackage)
     func didDismiss()
+    func didRestorePurchases() async
 }
 
 public extension PaywallViewModelDelegate {
@@ -28,6 +29,7 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
     @Injected(\.getPurchasePackagesUseCase) private var getPurchasePackagesUseCase
     @Injected(\.purchasePackageUseCase) private var purchasePackageUseCase
     @Injected(\.getIsPackageEligibleForIntroductoryDiscountUseCase) private var getIsPackageEligibleForIntroductoryDiscountUseCase
+    @Injected(\.restorePurchasesUseCase) private var restorePurchasesUseCase
     
     // MARK: - Stored properties
     
@@ -44,6 +46,7 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
     public struct State {
         var purchasePackages: ViewData<[PaywallPackageViewObject]> = .loading(mock: .stub)
         var purchaseLoading = false
+        var restorePurchasesLoading = false
     }
     
     @Published public private(set) var state = State()
@@ -65,6 +68,7 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
         case purchasePackage(packageId: String)
         case retry
         case cancel
+        case restorePurchases
     }
     
     public func onIntent(_ intent: Intent) {
@@ -73,6 +77,7 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
             case let .purchasePackage(packageId): await purchasePackage(packageId: packageId)
             case .retry: await fetchPaywall(showLoading: true)
             case .cancel: delegate?.didDismiss()
+            case .restorePurchases: await restorePurchases()
             }
         })
     }
@@ -123,6 +128,21 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
             }
         } onError: { error in
             state.purchasePackages = .error(error)
+        }
+    }
+    
+    private func restorePurchases() async {
+        state.restorePurchasesLoading = true
+        defer { state.restorePurchasesLoading = false }
+        
+        await execute {
+            try await restorePurchasesUseCase.execute()
+            snackState.currentData?.dismiss()
+            await snackState.showSnack(.info(message: L10n.paywall_purchases_restored_title))
+            await delegate?.didRestorePurchases()
+        } onError: { error in
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
         }
     }
 }

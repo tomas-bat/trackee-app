@@ -167,6 +167,11 @@ public extension Container {
                 executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: true))
             )
         }
+        restorePurchasesUseCase.register {
+            RestorePurchasesUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinUnit())
+            )
+        }
     }
 }
 #endif

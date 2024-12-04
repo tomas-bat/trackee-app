@@ -12,6 +12,10 @@ public struct AdditionalButtonStyle: ButtonStyle {
     
     private let pressedOpacity: CGFloat = 0.5
     
+    // MARK: - Stored properties
+    
+    @Environment(\.isLoading) private var isLoading
+    
     // MARK: - Init
     
     public init() {}
@@ -19,10 +23,23 @@ public struct AdditionalButtonStyle: ButtonStyle {
     // MARK: - Body
     
     public func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(AppTheme.Fonts.index)
-            .foregroundStyle(AppTheme.Colors.foregroundSecondary)
-            .opacity(configuration.isPressed ? pressedOpacity : 1)
+        Group {
+            if isLoading {
+                ProgressView()
+                    .progressViewStyle(
+                        CircularProgressViewStyle(
+                            tint: AppTheme.Colors.foreground
+                        )
+                    )
+            } else {
+                configuration.label
+                    .font(AppTheme.Fonts.index)
+                    .foregroundStyle(AppTheme.Colors.foregroundSecondary)
+                    .opacity(configuration.isPressed ? pressedOpacity : 1)
+            }
+        }
+        .allowsHitTesting(!isLoading)
+        .animateContent(isLoading)
     }
 }
 

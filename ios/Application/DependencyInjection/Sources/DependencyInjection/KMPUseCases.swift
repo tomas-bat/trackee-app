@@ -59,4 +59,5 @@ public extension Container {
     var getPurchasePackagesUseCase: Factory<GetPurchasePackagesUseCase> { self { self.kmp().get(GetPurchasePackagesUseCase.self) } }
     var purchasePackageUseCase: Factory<PurchasePackageUseCase> { self { self.kmp().get(PurchasePackageUseCase.self) } }
     var getIsPackageEligibleForIntroductoryDiscountUseCase: Factory<GetIsPackageEligibleForIntroductoryDiscountUseCase> { self { self.kmp().get(GetIsPackageEligibleForIntroductoryDiscountUseCase.self) } }
+    var restorePurchasesUseCase: Factory<RestorePurchasesUseCase> { self { self.kmp().get(RestorePurchasesUseCase.self) } }
 }
