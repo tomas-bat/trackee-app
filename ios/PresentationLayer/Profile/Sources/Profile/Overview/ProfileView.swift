@@ -58,6 +58,15 @@ struct ProfileView: View {
             }
             
             Section {
+                Button(L10n.profile_view_restore_purchases) {
+                    viewModel.onIntent(.restorePurchases)
+                }
+                .frame(maxWidth: .infinity, alignment: .center)
+                .buttonStyle(.loading)
+                .environment(\.isLoading, viewModel.state.restorePurchasesLoading)
+            }
+            
+            Section {
                 Button(L10n.profile_view_delete_user_button_title) {
                     viewModel.onIntent(.deleteAccount)
                 }
@@ -73,6 +82,7 @@ struct ProfileView: View {
             Button(L10n.profile_view_logout_button_title) {
                 viewModel.onIntent(.logout)
             }
+            .environment(\.isLoading, viewModel.state.logoutLoading)
             .buttonStyle(.primary)
             .padding(padding)
         }
@@ -83,6 +93,7 @@ struct ProfileView: View {
             get: { viewModel.state.alertData },
             set: { data in viewModel.onIntent(.changeAlertData(to: data)) }
         )) { data in .init(data) }
+        .disabled(viewModel.state.disabled)
         .lifecycle(viewModel)
     }
     

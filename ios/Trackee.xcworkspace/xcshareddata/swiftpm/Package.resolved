@@ -172,6 +172,15 @@
       }
     },
     {
+      "identity" : "purchases-ios-spm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/RevenueCat/purchases-ios-spm.git",
+      "state" : {
+        "revision" : "959237a13c5cbeb8fb7f4219a3f130eb7b829bfb",
+        "version" : "5.7.0"
+      }
+    },
+    {
       "identity" : "sfsafesymbols",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/SFSafeSymbols/SFSafeSymbols.git",

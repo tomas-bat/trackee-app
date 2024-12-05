@@ -944,6 +944,14 @@
 		cs = Určitě chcete smazat svůj účet? Všechny vaše záznamy budou smazány.
 		en = Are you sure you want to delete your account? All your timer entries will be deleted.
 		sk = Určite chcete zmazať svoj účet? Všetky vaše záznamy budú zmazané.
+	[profile_view_restore_purchases]
+		cs = Obnovit nákupy
+		en = Restore purchases
+		sk = Obnoviť nákupy
+	[profile_view_purchases_restored_title]
+		cs = Nákupy byly obnoveny.
+		en = Purchases have been restored.
+		sk = Nákupy boli obnovené.
 
 [[Clients View]]
 	[clients_view_title]
@@ -1335,5 +1343,97 @@
 		en = Black
 		sk = Čierna
 
-
+[[Paywall]]
+	[paywall_title]
+		cs = Pro přístup k prémiovým funkcím je potřeba přeplatné.
+		en = You need the Full Access subscription plan to get access to premium features.
+		sk = Pre prístup k prémiovým funkciám je potrebné predplatné.
+	[paywall_title_integrations]
+		cs = Integrace jsou dostupné jen pro předplatitele plného přístupu.
+		en = Integrations are available under the Full Access subscription plan only.
+		sk = Integrácie sú dostupné len pre predplatiteľov s plným prístupom.
+	[paywall_title_clients_one]
+		cs = Abyste mohli vytvořit více než 1 klienta, musíte mít předplatné plného přístupu.
+		en = In order to create more than 1 client, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako 1 klienta, musíte mať predplatné plného prístupu.
+	[paywall_title_clients_few]
+		cs = Abyste mohli vytvořit více než %d klienty, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d clients, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d klientov, musíte mať predplatné plného prístupu.
+	[paywall_title_clients_many]
+		cs = Abyste mohli vytvořit více než %d klientů, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d clients, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d klientov, musíte mať predplatné plného prístupu.
+	[paywall_title_projects_one]
+		cs = Abyste mohli vytvořit více než 1 projekt, musíte mít předplatné plného přístupu.
+		en = In order to create more than 1 project, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako 1 projekt, musíte mať predplatné plného prístupu.
+	[paywall_title_projects_few]
+		cs = Abyste mohli vytvořit více než %d projekty, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d projects, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d projekty, musíte mať predplatné plného prístupu.
+	[paywall_title_projects_many]
+		cs = Abyste mohli vytvořit více než %d projektů, musíte mít předplatné plného přístupu.
+		en = In order to create more than %d projects, you need the Full Access subscription plan.
+		sk = Aby ste mohli vytvoriť viac ako %d projektov, musíte mať predplatné plného prístupu.
+	[paywall_pro_1]
+		cs = Neomezený počet klientů
+		en = Create as many clients as you wish
+		sk = Neobmedzený počet klientov
+	[paywall_pro_2]
+		cs = Neomezený počet projektů
+		en = Create as many projects as you wish
+		sk = Neobmedzený počet projektov
+	[paywall_pro_3]
+		cs = Exportujte svá data do CSV tabulek
+		en = Export your data to CSV tables
+		sk = Exportujte svoje dáta do CSV tabuliek
+	[paywall_pro_4]
+		cs = Integrujte svá workflows s Clockify a dalšími**
+		en = Integrate your workflows with Clockify and more**
+		sk = Integrujte svoje workflows s Clockify a ďalšími**
+	[paywall_best_offer]
+		cs = Nejlepší nabídka
+		en = Best offer
+		sk = Najlepšia ponuka
+	[paywall_every_two_weeks]
+		cs = každé dva týdny
+		en = every two weeks
+		sk = každé dva týždne
+	[paywall_annually]
+		cs = ročně
+		en = annualy
+		sk = ročne
+	[paywall_monthly]
+		cs = měsíčně
+		en = monthly
+		sk = mesačne
+	[paywall_trial_info]
+		cs = * Zahrnuje 2-týdenní zkušební dobu. Zrušit můžete kdykoli.
+		en = * 2-week trial included. Cancel anytime.
+		sk = * Zahŕňa 2-týždňovú skúšobnú dobu. Zrušiť môžete kedykoľvek.
+	[paywall_integration_disclaimer]
+		cs = ** Integrace s dalšími aplikacemi je ve vývoji.
+		en = ** Integration with other apps is under development.
+		sk = ** Integrácia s ďalšími aplikáciami je vo vývoji.
+	[paywall_privacy_policy]
+		cs = Ochrana osobních údajů
+		en = Privacy policy
+		sk = Ochrana osobných údajov
+	[paywall_terms_and_conditions]
+		cs = Podmínky užití
+		en = Terms and Conditions
+		sk = Podmienky použitia
+	[paywall_restore_purchases]
+		cs = Obnovit nákupy
+		en = Restore purchases
+		sk = Obnoviť nákupy
+	[paywall_start_free_trial]
+		cs = Začít bezplatnou zkušební verzi
+		en = Start free trial
+		sk = Začať bezplatnú skúšobnú verziu
+	[paywall_purchases_restored_title]
+		cs = Nákupy byly obnoveny.
+		en = Purchases have been restored.
+		sk = Nákupy boli obnovené.
 

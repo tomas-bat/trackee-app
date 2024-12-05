@@ -17,12 +17,14 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
     // MARK: - Constants
     
     private let messageDelay: TimeInterval = 0.5
+    private let maxFreeCliensCount: Int = 3
     
     // MARK: - Dependencies
     
     private weak var flowController: FlowController?
     
     @Injected(\.getClientsUseCase) private var getClientsUseCase
+    @Injected(\.getHasFullAccessUseCase) private var getHasFullAccessUseCase
     
     // MARK: - Stored properties
     
@@ -50,6 +52,7 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
     struct State {
         var clients: ViewData<[Client]> = .loading(mock: .stub)
         var searchText = ""
+        var addClientLoading = false
     }
     
     @Published private(set) var state = State()
@@ -70,7 +73,7 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
             case let .updateSearchText(text): updateSearchText(to: text)
             case .retry: await fetchData(showLoading: true)
             case let .showClientDetail(clientId): showClientDetail(clientId: clientId)
-            case .addClient: addClient()
+            case .addClient: await addClient()
             }
         })
     }
@@ -127,8 +130,27 @@ final class ClientsViewModel: BaseViewModel, ViewModel, ObservableObject {
         flowController?.handleFlow(ProfileFlow.clients(.showDetail(clientId: clientId, delegate: self)))
     }
     
-    private func addClient() {
-        flowController?.handleFlow(ProfileFlow.clients(.showNewClient(delegate: self)))
+    private func addClient() async {
+        state.addClientLoading = true
+        defer { state.addClientLoading = false }
+        
+        await execute {
+            let hasFullAccess: Bool = try await getHasFullAccessUseCase.execute()
+            
+            if (state.clients.data?.count ?? 0) >= maxFreeCliensCount && !hasFullAccess {
+                flowController?.handleFlow(
+                    ProfileFlow.showPaywall(
+                        paywallViewOrigin: .clients(maxFreeCount: maxFreeCliensCount),
+                        delegate: self
+                    )
+                )
+            } else {
+                flowController?.handleFlow(ProfileFlow.clients(.showNewClient(delegate: self)))
+            }
+        } onError: { error in
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
     }
 }
 
@@ -146,5 +168,24 @@ extension ClientsViewModel: ClientDetailViewModelDelegate {
                 message: "\(L10n.client_removed_snack_title_part_one) \(clientName) \(L10n.client_removed_snack_title_part_two)"
             ))
         }
+    }
+}
+
+// MARK: - PaywallViewModelDelegate
+
+extension ClientsViewModel: PaywallViewModelDelegate {
+    func didPurchasePackage(_ package: PurchasePackage) {
+        flowController?.handleFlow(ProfileFlow.clients(.dismissModal))
+    }
+    
+    func didDismiss() {
+        flowController?.handleFlow(ProfileFlow.clients(.dismissModal))
+    }
+    
+    func didRestorePurchases() async {
+        let hasFullAccess: Bool? = try? await getHasFullAccessUseCase.execute()
+        
+        guard hasFullAccess == true else { return }
+        flowController?.handleFlow(ProfileFlow.clients(.dismissModal))
     }
 }

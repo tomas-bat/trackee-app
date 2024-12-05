@@ -28,37 +28,19 @@ struct IntegrationsOverviewView: View {
     
     var body: some View {
         Group {
-            switch viewModel.state.integrations {
-            case let .data(integrations), let .loading(integrations):
-                List {
-                    ForEach(integrations.indices, id: \.self) { idx in
-                        let integration = integrations[idx]
-                        
-                        Button {
-                            viewModel.onIntent(.showIntegrationDetail(id: integration.id))
-                        } label: {
-                            HStack {
-                                integration.image
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: imageSize, height: imageSize)
-                                
-                                Text(integration.label)
-                                
-                                Spacer()
-                                
-                                Image(systemSymbol: .chevronRight)
-                            }
-                        }
-                        .skeleton(viewModel.state.integrations.isLoading)
-                    }
+            switch viewModel.state.showPaywall {
+            case let .data(showPaywall), let .loading(showPaywall):
+                if showPaywall {
+                    PaywallView(
+                        paywallViewOrigin: .integrations,
+                        viewModel: viewModel.paywallViewModel,
+                        isNested: true
+                    )
+                } else {
+                    integrationsView
                 }
             case let .error(error):
-                ErrorView(
-                    error: error,
-                    onRetryTap: { viewModel.onIntent(.retry) }
-                )
-                .padding(padding)
+                errorView(error)
             case .empty:
                 EmptyContentView(
                     text: L10n.integrations_view_empty_title
@@ -79,16 +61,19 @@ struct IntegrationsOverviewView: View {
         .navigationTitle(L10n.integrations_view_title)
         .toolbar(.visible)
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    viewModel.onIntent(.addIntegration)
-                } label: {
-                    Image(systemSymbol: .plus)
+            if viewModel.state.showPaywall.data == false {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        viewModel.onIntent(.addIntegration)
+                    } label: {
+                        Image(systemSymbol: .plus)
+                    }
                 }
             }
         }
         .snack(viewModel.snackState)
         .background(AppTheme.Colors.background)
+        .lifecycle(viewModel.paywallViewModel)
         .lifecycle(viewModel)
     }
     
@@ -99,6 +84,51 @@ struct IntegrationsOverviewView: View {
             get: { viewModel.state.isShowingTypes },
             set: { isShowing in viewModel.onIntent(.changeShowingTypes(to: isShowing)) }
         )
+    }
+    
+    @ViewBuilder
+    private var integrationsView: some View {
+        switch viewModel.state.integrations {
+        case let .data(integrations), let .loading(integrations):
+            List {
+                ForEach(integrations.indices, id: \.self) { idx in
+                    let integration = integrations[idx]
+                    
+                    Button {
+                        viewModel.onIntent(.showIntegrationDetail(id: integration.id))
+                    } label: {
+                        HStack {
+                            integration.image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: imageSize, height: imageSize)
+                            
+                            Text(integration.label)
+                            
+                            Spacer()
+                            
+                            Image(systemSymbol: .chevronRight)
+                        }
+                    }
+                    .skeleton(viewModel.state.integrations.isLoading)
+                }
+            }
+        case let .error(error):
+            errorView(error)
+        case .empty:
+            EmptyContentView(
+                text: L10n.integrations_view_empty_title
+            )
+            .padding(padding)
+        }
+    }
+    
+    private func errorView(_ error: Error) -> some View {
+        ErrorView(
+            error: error,
+            onRetryTap: { viewModel.onIntent(.retry) }
+        )
+        .padding(padding)
     }
     
     private func dialogActions() -> some View {
@@ -121,7 +151,10 @@ import Utilities
     Container.shared.registerUseCaseMocks()
     Environment.locale = .init(identifier: "cs")
     
-    let vm = IntegrationsOverviewViewModel(flowController: nil)
+    let vm = IntegrationsOverviewViewModel(
+        paywallViewModel: PaywallViewModel(flowController: nil),
+        flowController: nil
+    )
     return NavigationStack {
         IntegrationsOverviewView(
             viewModel: vm

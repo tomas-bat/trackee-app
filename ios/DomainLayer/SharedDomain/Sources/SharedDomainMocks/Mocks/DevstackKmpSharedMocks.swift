@@ -51,3 +51,12 @@ public final class UpdateIntegrationUseCaseMock: UseCaseResultMock, UpdateIntegr
 public final class DeleteIntegrationUseCaseMock: UseCaseResultMock, DeleteIntegrationUseCase {}
 public final class ExportToCsvUseCaseMock: UseCaseResultMock, ExportToCsvUseCase {}
 public final class ExportToClockifyUseCaseMock: UseCaseResultMock, ExportToClockifyUseCase {}
+
+// MARK: - Purchases
+public final class GetHasFullAccessUseCaseMock: UseCaseResultNoParamsMock, GetHasFullAccessUseCase {}
+public final class GetPurchasePackagesUseCaseMock: UseCaseResultNoParamsMock, GetPurchasePackagesUseCase {}
+public final class PurchasePackageUseCaseMock: UseCaseResultMock, PurchasePackageUseCase {}
+public final class GetIsPackageEligibleForIntroductoryDiscountUseCaseMock: UseCaseResultMock, GetIsPackageEligibleForIntroductoryDiscountUseCase {}
+public final class RestorePurchasesUseCaseMock: UseCaseResultNoParamsMock, RestorePurchasesUseCase {}
+public final class GetTermsAndConditionsUrlUseCaseMock: UseCaseResultNoParamsMock, GetTermsAndConditionsUrlUseCase {}
+public final class GetPrivacyPolicyUrlUseCaseMock: UseCaseResultNoParamsMock, GetPrivacyPolicyUrlUseCase {}

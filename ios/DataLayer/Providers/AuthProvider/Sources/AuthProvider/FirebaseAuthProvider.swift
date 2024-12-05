@@ -17,7 +17,7 @@ public final class FirebaseAuthProvider {
     }
 }
 
-extension FirebaseAuthProvider: AuthProvider, KMPSharedDomain.AuthProvider {
+extension FirebaseAuthProvider: AuthProvider {
     
     public func __signIn(
         providerType: ExternalLoginType,

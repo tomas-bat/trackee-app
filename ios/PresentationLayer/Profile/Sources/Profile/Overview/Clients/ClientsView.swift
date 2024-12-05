@@ -66,6 +66,8 @@ struct ClientsView: View {
                 } label: {
                     Image(systemSymbol: .plus)
                 }
+                .buttonStyle(.loading)
+                .environment(\.isLoading, viewModel.state.addClientLoading)
             }
         }
         .searchable(

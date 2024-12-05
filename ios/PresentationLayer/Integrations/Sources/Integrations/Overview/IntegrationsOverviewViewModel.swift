@@ -21,12 +21,21 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     // MARK: - Dependencies
     
     @Injected(\.getIntegrationsUseCase) private var getIntegrationsUseCase
+    @Injected(\.getHasFullAccessUseCase) private var getHasFullAccessUseCase
     
     private weak var flowController: FlowController?
     
+    // MARK: - Stored properties
+    
+    let paywallViewModel: PaywallViewModel
+    
     // MARK: - Init
     
-    init(flowController: FlowController? = nil) {
+    init(
+        paywallViewModel: PaywallViewModel,
+        flowController: FlowController? = nil
+    ) {
+        self.paywallViewModel = paywallViewModel
         self.flowController = flowController
         super.init()
     }
@@ -49,6 +58,7 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     struct State {
         var integrations: ViewData<[Integration]> = .loading(mock: .stub)
         var isShowingTypes = false
+        var showPaywall: ViewData<Bool> = .loading(mock: false)
     }
     
     // MARK: - Intent
@@ -76,6 +86,24 @@ final class IntegrationsOverviewViewModel: BaseViewModel, ViewModel, ObservableO
     // MARK: - Private
     
     private func fetchData(showLoading: Bool) async {
+        if showLoading {
+            state.showPaywall = .loading(mock: false)
+            state.integrations = .loading(mock: .stub)
+        }
+        
+        await execute {
+            let hasFullAccess: KotlinBoolean = try await getHasFullAccessUseCase.execute()
+            state.showPaywall = .data(!hasFullAccess.boolValue)
+            
+            if hasFullAccess.boolValue {
+                await fetchIntegrations(showLoading: showLoading)
+            }
+        } onError: { error in
+            state.integrations = .error(error)
+        }
+    }
+    
+    private func fetchIntegrations(showLoading: Bool) async {
         if showLoading {
             state.integrations = .loading(mock: .stub)
         }
@@ -126,5 +154,24 @@ extension IntegrationsOverviewViewModel: IntegrationDetailViewModelDelegate {
                 message: "\(L10n.integration_view_removed_snack_title_part_one) \(integrationName) \(L10n.integration_view_removed_snack_title_part_two)"
             ))
         }
+    }
+}
+
+// MARK: PaywallViewModelDelegate
+
+extension IntegrationsOverviewViewModel: PaywallViewModelDelegate {
+    func didPurchasePackage(_ package: PurchasePackage) {
+        executeTask(Task{
+            await fetchData(showLoading: true)
+        })
+    }
+    
+    func didRestorePurchases() async {
+        let hasFullAccess: Bool? = try? await getHasFullAccessUseCase.execute()
+        
+        guard hasFullAccess == true else { return }
+        executeTask(Task {
+            await fetchData(showLoading: true)
+        })
     }
 }

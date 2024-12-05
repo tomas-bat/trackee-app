@@ -63,13 +63,21 @@ struct TimerControlButton: View {
             }
             .frame(width: imageSize, height: imageSize)
             .frame(width: buttonSize, height: buttonSize)
-            .background(AppTheme.Colors.field)
+            .background(backgroundColor)
             .clipShape(Circle())
         }
         .foregroundStyle(AppTheme.Colors.foreground)
     }
     
     // MARK: - Private
+    
+    private var backgroundColor: Color {
+        switch type {
+        case .start: AppTheme.Colors.success
+        case .stop: AppTheme.Colors.destructive
+        default: AppTheme.Colors.field
+        }
+    }
     
     private var image: Image {
         switch type {

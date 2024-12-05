@@ -16,6 +16,10 @@ import Utilities
 import AppleSignInProvider
 import AuthProvider
 import AppInfoProvider
+import InAppPurchaseProvider
+import protocol KMPSharedDomain.InAppPurchaseProvider
+import protocol KMPSharedDomain.AppleSignInProvider
+import protocol KMPSharedDomain.AuthProvider
 
 public extension Container {
     var appleSignInProvider: Factory<AppleSignInProvider> { self { DefaultAppleSignInProvider(presentationAnchor: UIApplication.shared.delegate?.window) } }
@@ -42,4 +46,5 @@ public extension Container {
         debugMode: Environment.type != .production
     )}}
     var userDefaultsProvider: Factory<UserDefaultsProvider> { self { SystemUserDefaultsProvider() } }
+    var inAppPurchaseProvider: Factory<InAppPurchaseProvider> { self { RevenueCatPurchaseProvider() }.scope(.singleton) }
 }

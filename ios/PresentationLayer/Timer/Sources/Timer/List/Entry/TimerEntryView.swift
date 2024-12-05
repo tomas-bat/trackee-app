@@ -282,7 +282,13 @@ struct TimerEntryView: View {
     @MainActor 
     private func onGestureChange(_ gesture: DragGesture.Value) {
         guard canDelete, !deleteLoading else { return }
-        dragOffset = min(0, gesture.translation.width)
+        if abs(gesture.translation.height) < 100 {
+            dragOffset = min(0, gesture.translation.width)
+        } else {
+            withAnimation {
+                dragOffset = 0
+            }
+        }
         isAfterThreshold = dragOffset < deleteTreshold
         
         fixTask?.cancel()

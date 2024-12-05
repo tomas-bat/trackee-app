@@ -23,6 +23,8 @@ public enum AppTheme {
         public static let destructive = Asset.Colors.destructive.color
         public static let onDestructive = Asset.Colors.onDestructive.color
         
+        public static let success = Asset.Colors.success.color
+        
         public static let appleButtonBackground = Asset.Colors.appleButtonBackground.color
         public static let appleButtonForeground = Asset.Colors.appleButtonForeground.color
     }

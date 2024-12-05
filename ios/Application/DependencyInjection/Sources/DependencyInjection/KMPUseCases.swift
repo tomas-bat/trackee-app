@@ -9,9 +9,6 @@ import SharedDomain
 
 public extension Container {
     
-    // MARK: - Koin
-    private var kmp: Factory<KMPDependency> { self { KMPKoinDependency() }.singleton }
-    
     // MARK: - Auth
     var loginWithCredentialsUseCase: Factory<LoginWithCredentialsUseCase> { self { self.kmp().get(LoginWithCredentialsUseCase.self) } }
     var registerUseCase: Factory<RegisterUseCase> { self { self.kmp().get(RegisterUseCase.self) } }
@@ -56,4 +53,13 @@ public extension Container {
     var deleteIntegrationUseCase: Factory<DeleteIntegrationUseCase> { self { self.kmp().get(DeleteIntegrationUseCase.self) } }
     var exportToCsvUseCase: Factory<ExportToCsvUseCase> { self { self.kmp().get(ExportToCsvUseCase.self) } }
     var exportToClockifyUseCase: Factory<ExportToClockifyUseCase> { self { self.kmp().get(ExportToClockifyUseCase.self) } }
+    
+    // MARK: - Purchases
+    var getHasFullAccessUseCase: Factory<GetHasFullAccessUseCase> { self { self.kmp().get(GetHasFullAccessUseCase.self) } }
+    var getPurchasePackagesUseCase: Factory<GetPurchasePackagesUseCase> { self { self.kmp().get(GetPurchasePackagesUseCase.self) } }
+    var purchasePackageUseCase: Factory<PurchasePackageUseCase> { self { self.kmp().get(PurchasePackageUseCase.self) } }
+    var getIsPackageEligibleForIntroductoryDiscountUseCase: Factory<GetIsPackageEligibleForIntroductoryDiscountUseCase> { self { self.kmp().get(GetIsPackageEligibleForIntroductoryDiscountUseCase.self) } }
+    var restorePurchasesUseCase: Factory<RestorePurchasesUseCase> { self { self.kmp().get(RestorePurchasesUseCase.self) } }
+    var getTermsAndConditionsUrlUseCase: Factory<GetTermsAndConditionsUrlUseCase> { self { self.kmp().get(GetTermsAndConditionsUrlUseCase.self) } }
+    var getPrivacyPolicyUrlUseCase: Factory<GetPrivacyPolicyUrlUseCase> { self { self.kmp().get(GetPrivacyPolicyUrlUseCase.self) } }
 }
