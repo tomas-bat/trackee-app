@@ -944,6 +944,14 @@
 		cs = Určitě chcete smazat svůj účet? Všechny vaše záznamy budou smazány.
 		en = Are you sure you want to delete your account? All your timer entries will be deleted.
 		sk = Určite chcete zmazať svoj účet? Všetky vaše záznamy budú zmazané.
+	[profile_view_restore_purchases]
+		cs = Obnovit nákupy
+		en = Restore purchases
+		sk = Obnoviť nákupy
+	[profile_view_purchases_restored_title]
+		cs = Nákupy byly obnoveny.
+		en = Purchases have been restored.
+		sk = Nákupy boli obnovené.
 
 [[Clients View]]
 	[clients_view_title]
@@ -1412,6 +1420,10 @@
 		cs = Ochrana osobních údajů
 		en = Privacy policy
 		sk = Ochrana osobných údajov
+	[paywall_terms_and_conditions]
+		cs = Podmínky užití
+		en = Terms and Conditions
+		sk = Podmienky použitia
 	[paywall_restore_purchases]
 		cs = Obnovit nákupy
 		en = Restore purchases
@@ -1424,6 +1436,4 @@
 		cs = Nákupy byly obnoveny.
 		en = Purchases have been restored.
 		sk = Nákupy boli obnovené.
-
-
 

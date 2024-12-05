@@ -31,8 +31,11 @@ public struct PaywallContentView: View {
     private let origin: PaywallViewOrigin
     private let packages: [PaywallPackageViewObject]
     private let paymentLoading: Bool
+    private let privacyPolidyLoading: Bool
+    private let termsAndConditionsLoading: Bool
     private let restorePurchasesLoading: Bool
     private let onPrivacyPolicyClick: () -> Void
+    private let onTermsAndConditionsClick: () -> Void
     private let onRestorePurchasesClick: () -> Void
     private let onContinue: (PurchasePackage) -> Void
     
@@ -46,15 +49,21 @@ public struct PaywallContentView: View {
         packages: [PaywallPackageViewObject],
         paymentLoading: Bool,
         restorePurchasesLoading: Bool,
+        privacyPolidyLoading: Bool,
+        termsAndConditionsLoading: Bool,
         onPrivacyPolicyClick: @escaping () -> Void,
+        onTermsAndConditionsClick: @escaping () -> Void,
         onRestorePurchasesClick: @escaping () -> Void,
         onContinue: @escaping (PurchasePackage) -> Void
     ) {
         self.origin = origin
         self.packages = packages
         self.paymentLoading = paymentLoading
+        self.privacyPolidyLoading = privacyPolidyLoading
+        self.termsAndConditionsLoading = termsAndConditionsLoading
         self.restorePurchasesLoading = restorePurchasesLoading
         self.onPrivacyPolicyClick = onPrivacyPolicyClick
+        self.onTermsAndConditionsClick = onTermsAndConditionsClick
         self.onRestorePurchasesClick = onRestorePurchasesClick
         self.onContinue = onContinue
     }
@@ -127,8 +136,14 @@ public struct PaywallContentView: View {
                     .multilineTextAlignment(.center)
                     .font(AppTheme.Fonts.index)
                     
-                    HStack(alignment: .center, spacing: spacing) {
-                        Button(L10n.paywall_privacy_policy, action: onPrivacyPolicyClick)
+                    VStack(alignment: .center, spacing: lineSpacing) {
+                        HStack(alignment: .center, spacing: spacing) {
+                            Button(L10n.paywall_privacy_policy, action: onPrivacyPolicyClick)
+                                .environment(\.isLoading, privacyPolidyLoading)
+                            
+                            Button(L10n.paywall_terms_and_conditions, action: onTermsAndConditionsClick)
+                                .environment(\.isLoading, termsAndConditionsLoading)
+                        }
                         
                         Button(L10n.paywall_restore_purchases, action: onRestorePurchasesClick)
                             .environment(\.isLoading, restorePurchasesLoading)
@@ -205,7 +220,10 @@ public struct PaywallContentView: View {
         packages: [PaywallPackageViewObject].stub,
         paymentLoading: false,
         restorePurchasesLoading: false,
+        privacyPolidyLoading: false,
+        termsAndConditionsLoading: false,
         onPrivacyPolicyClick: {},
+        onTermsAndConditionsClick: {},
         onRestorePurchasesClick: {},
         onContinue: { _ in }
     )

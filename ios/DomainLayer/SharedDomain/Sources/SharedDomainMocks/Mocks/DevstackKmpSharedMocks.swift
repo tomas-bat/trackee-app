@@ -58,3 +58,5 @@ public final class GetPurchasePackagesUseCaseMock: UseCaseResultNoParamsMock, Ge
 public final class PurchasePackageUseCaseMock: UseCaseResultMock, PurchasePackageUseCase {}
 public final class GetIsPackageEligibleForIntroductoryDiscountUseCaseMock: UseCaseResultMock, GetIsPackageEligibleForIntroductoryDiscountUseCase {}
 public final class RestorePurchasesUseCaseMock: UseCaseResultNoParamsMock, RestorePurchasesUseCase {}
+public final class GetTermsAndConditionsUrlUseCaseMock: UseCaseResultNoParamsMock, GetTermsAndConditionsUrlUseCase {}
+public final class GetPrivacyPolicyUrlUseCaseMock: UseCaseResultNoParamsMock, GetPrivacyPolicyUrlUseCase {}

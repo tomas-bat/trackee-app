@@ -63,7 +63,10 @@ public struct PaywallView: View {
                     packages: packages,
                     paymentLoading: viewModel.state.purchaseLoading,
                     restorePurchasesLoading: viewModel.state.restorePurchasesLoading,
-                    onPrivacyPolicyClick: {},
+                    privacyPolidyLoading: viewModel.state.privacyPolicyLoading,
+                    termsAndConditionsLoading: viewModel.state.termsAndConditionsLoading,
+                    onPrivacyPolicyClick: { viewModel.onIntent(.showPrivacyPolicy) },
+                    onTermsAndConditionsClick: { viewModel.onIntent(.showTermsAndConditions) },
                     onRestorePurchasesClick: {
                         viewModel.onIntent(.restorePurchases)
                     },

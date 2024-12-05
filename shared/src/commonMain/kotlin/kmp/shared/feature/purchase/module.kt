@@ -10,7 +10,8 @@ import org.koin.dsl.module
 internal val purchaseModule = module {
     single {
         PurchaseRepositoryImpl(
-            provider = get()
+            provider = get(),
+            appInfoProvider = get()
         )
     } bind PurchaseRepository::class
 
@@ -19,4 +20,6 @@ internal val purchaseModule = module {
     factoryOf(::PurchasePackageUseCaseImpl) bind PurchasePackageUseCase::class
     factoryOf(::GetIsPackageEligibleForIntroductoryDiscountUseCaseImpl) bind GetIsPackageEligibleForIntroductoryDiscountUseCase::class
     factoryOf(::RestorePurchasesUseCaseImpl) bind RestorePurchasesUseCase::class
+    factoryOf(::GetPrivacyPolicyUrlUseCaseImpl) bind GetPrivacyPolicyUrlUseCase::class
+    factoryOf(::GetTermsAndConditionsUrlUseCaseImpl) bind GetTermsAndConditionsUrlUseCase::class
 }

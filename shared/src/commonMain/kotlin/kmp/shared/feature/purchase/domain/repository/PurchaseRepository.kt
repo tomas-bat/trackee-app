@@ -8,6 +8,8 @@ internal interface PurchaseRepository {
     suspend fun readPackages(): Result<List<PurchasePackage>>
     suspend fun purchasePackage(packageId: String): Result<Unit>
     suspend fun restorePurchases(): Result<Unit>
+    fun getTermsAndConditionsUrl(): Result<String>
+    fun getPrivacyPolicyUrl(): Result<String>
 
     suspend fun readIsPackageEligibleForIntroductoryDiscount(
         packageId: String

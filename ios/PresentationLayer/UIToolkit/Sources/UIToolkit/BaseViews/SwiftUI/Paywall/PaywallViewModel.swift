@@ -30,6 +30,8 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
     @Injected(\.purchasePackageUseCase) private var purchasePackageUseCase
     @Injected(\.getIsPackageEligibleForIntroductoryDiscountUseCase) private var getIsPackageEligibleForIntroductoryDiscountUseCase
     @Injected(\.restorePurchasesUseCase) private var restorePurchasesUseCase
+    @Injected(\.getPrivacyPolicyUrlUseCase) private var getPrivacyPolicyUrlUseCase
+    @Injected(\.getTermsAndConditionsUrlUseCase) private var getTermsAndConditionsUrlUseCase
     
     // MARK: - Stored properties
     
@@ -47,6 +49,8 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
         var purchasePackages: ViewData<[PaywallPackageViewObject]> = .loading(mock: .stub)
         var purchaseLoading = false
         var restorePurchasesLoading = false
+        var termsAndConditionsLoading = false
+        var privacyPolicyLoading = false
     }
     
     @Published public private(set) var state = State()
@@ -69,6 +73,8 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
         case retry
         case cancel
         case restorePurchases
+        case showTermsAndConditions
+        case showPrivacyPolicy
     }
     
     public func onIntent(_ intent: Intent) {
@@ -78,6 +84,8 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
             case .retry: await fetchPaywall(showLoading: true)
             case .cancel: delegate?.didDismiss()
             case .restorePurchases: await restorePurchases()
+            case .showTermsAndConditions: await showTermsAndConditions()
+            case .showPrivacyPolicy: await showPrivacyPolicy()
             }
         })
     }
@@ -140,6 +148,34 @@ public final class PaywallViewModel: BaseViewModel, ViewModel, ObservableObject 
             snackState.currentData?.dismiss()
             await snackState.showSnack(.info(message: L10n.paywall_purchases_restored_title))
             await delegate?.didRestorePurchases()
+        } onError: { error in
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
+    private func showTermsAndConditions() async {
+        state.termsAndConditionsLoading = true
+        defer { state.termsAndConditionsLoading = false }
+        
+        await execute {
+            let string: String = try await getTermsAndConditionsUrlUseCase.execute()
+            guard let url = URL(string: string) else { return }
+            await UIApplication.shared.open(url)
+        } onError: { error in
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
+    private func showPrivacyPolicy() async {
+        state.privacyPolicyLoading = true
+        defer { state.privacyPolicyLoading = false }
+        
+        await execute {
+            let string: String = try await getPrivacyPolicyUrlUseCase.execute()
+            guard let url = URL(string: string) else { return }
+            await UIApplication.shared.open(url)
         } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
