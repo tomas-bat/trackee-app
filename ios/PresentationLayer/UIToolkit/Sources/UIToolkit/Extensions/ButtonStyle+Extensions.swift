@@ -9,10 +9,12 @@ import SwiftUI
 public extension ButtonStyle where Self == PrimaryButtonStyle {
     static func primary(
         image: Image? = nil,
+        backgroundColor: Color = AppTheme.Colors.field,
         expanded: Bool = true
     ) -> Self {
         return .init(
             image: image,
+            backgroundColor: backgroundColor,
             expanded: expanded
         )
     }
@@ -46,6 +48,12 @@ public extension ButtonStyle where Self == SignInWithAppleButtonStyle {
     }
     
     static var signInWithApple: Self {
+        .init()
+    }
+}
+
+public extension ButtonStyle where Self == AdditionalButtonStyle {
+    static var additional: Self {
         .init()
     }
 }

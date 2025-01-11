@@ -37,6 +37,7 @@
 		45DEBE2527A153A20075C7E2 /* Trackee Widget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 45DEBE1827A153A10075C7E2 /* Trackee Widget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E22AECD62BAC3B00001007C9 /* Timer in Frameworks */ = {isa = PBXBuildFile; productRef = E22AECD52BAC3B00001007C9 /* Timer */; };
 		E276573D2BCD183C001D6700 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E276573C2BCD183C001D6700 /* PrivacyInfo.xcprivacy */; };
+		E27D96262CCE78AF00C90B72 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E27D96252CCE78AF00C90B72 /* StoreKit.framework */; };
 		E280C4932BD2CFF5001BB21D /* Integrations in Frameworks */ = {isa = PBXBuildFile; productRef = E280C4922BD2CFF5001BB21D /* Integrations */; };
 		E29FF7342B9B87540065B401 /* DataUtilities in Resources */ = {isa = PBXBuildFile; fileRef = E29FF7332B9B87540065B401 /* DataUtilities */; };
 		E2AAF9322BC978DF00F37ACB /* StartTimerIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2AAF9312BC978DF00F37ACB /* StartTimerIntent.swift */; };
@@ -130,6 +131,8 @@
 		E204DBFC2BAC2E1F005B181A /* Timer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Timer; sourceTree = "<group>"; };
 		E25A97742B9B6CFF006F2489 /* AppleSignInProvider */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AppleSignInProvider; sourceTree = "<group>"; };
 		E276573C2BCD183C001D6700 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		E27D96252CCE78AF00C90B72 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		E27D96272CCE796900C90B72 /* InAppPurchaseProvider */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InAppPurchaseProvider; sourceTree = "<group>"; };
 		E280C4912BD2CC95001BB21D /* Integrations */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Integrations; sourceTree = "<group>"; };
 		E28D842C2B9B663A000E4778 /* AuthProvider */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AuthProvider; sourceTree = "<group>"; };
 		E29FF7332B9B87540065B401 /* DataUtilities */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataUtilities; sourceTree = "<group>"; };
@@ -167,6 +170,7 @@
 				4508331828435E7800BC9460 /* KeychainProvider in Frameworks */,
 				45BCC8802AD057F000672401 /* Factory in Frameworks */,
 				4508332C28435E7900BC9460 /* UserDefaultsProvider in Frameworks */,
+				E27D96262CCE78AF00C90B72 /* StoreKit.framework in Frameworks */,
 				E280C4932BD2CFF5001BB21D /* Integrations in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,6 +289,7 @@
 		45702E5928421D7F008D5487 /* Providers */ = {
 			isa = PBXGroup;
 			children = (
+				E27D96272CCE796900C90B72 /* InAppPurchaseProvider */,
 				E2B0415B2BD1468200922B06 /* AppInfoProvider */,
 				E25A97742B9B6CFF006F2489 /* AppleSignInProvider */,
 				E28D842C2B9B663A000E4778 /* AuthProvider */,
@@ -322,6 +327,7 @@
 		4576CEDF25ACF54F00218229 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E27D96252CCE78AF00C90B72 /* StoreKit.framework */,
 				4534C1C42603D6AD0022ACF4 /* XCTest.framework */,
 				459B777827737AFB00EAA694 /* DevstackKmpShared.xcframework */,
 				45DEBE1927A153A10075C7E2 /* WidgetKit.framework */,

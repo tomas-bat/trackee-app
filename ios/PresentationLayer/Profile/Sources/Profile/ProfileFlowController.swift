@@ -11,6 +11,10 @@ enum ProfileFlow: Flow, Equatable {
     case overview(Overview)
     case clients(Clients)
     case projects(Projects)
+    case showPaywall(
+        paywallViewOrigin: PaywallViewOrigin,
+        delegate: PaywallViewModelDelegate?
+    )
     
     enum Overview: Equatable {
         case presentOnboarding(message: String?)
@@ -46,6 +50,16 @@ enum ProfileFlow: Flow, Equatable {
             }
         }
     }
+    
+    static func == (lhs: ProfileFlow, rhs: ProfileFlow) -> Bool {
+        switch (lhs, rhs) {
+        case let (.overview(lhsType), .overview(rhsType)): lhsType == rhsType
+        case let (.projects(lhsType), .projects(rhsType)): lhsType == rhsType
+        case let (.clients(lhsType), .clients(rhsType)): lhsType == rhsType
+        case (.showPaywall, .showPaywall): true
+        default: false
+        }
+    }
 }
 
 public protocol ProfileFlowControllerDelegate: AnyObject {
@@ -67,7 +81,26 @@ public final class ProfileFlowController: FlowController {
         case let .overview(flow): handleOverviewFlow(flow)
         case let .clients(flow): handleClientsFlow(flow)
         case let .projects(flow): handleProjectsFlow(flow)
+        case let .showPaywall(origin, delegate):
+            showPaywall(
+                paywallViewOrigin: origin,
+                delegate: delegate
+            )
         }
+    }
+    
+    private func showPaywall(
+        paywallViewOrigin: PaywallViewOrigin,
+        delegate: PaywallViewModelDelegate?
+    ) {
+        let vm = PaywallViewModel(flowController: self)
+        vm.delegate = delegate
+        let view = PaywallView(
+            paywallViewOrigin: paywallViewOrigin,
+            viewModel: vm
+        )
+        let vc = BaseHostingController(rootView: view)
+        navigationController.present(vc, animated: true)
     }
 }
 

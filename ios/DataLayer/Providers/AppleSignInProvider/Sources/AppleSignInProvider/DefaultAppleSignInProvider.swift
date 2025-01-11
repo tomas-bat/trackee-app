@@ -21,7 +21,7 @@ public final class DefaultAppleSignInProvider: NSObject {
     }
 }
 
-extension DefaultAppleSignInProvider: AppleSignInProvider, KMPSharedDomain.AppleSignInProvider {
+extension DefaultAppleSignInProvider: AppleSignInProvider {
     public func __readAppleCredential() async throws -> Result<ExternalProviderCredential> {
         let rawNonce = CryptoUtility.randomNonceString()
         let hashedNonce = CryptoUtility.sha256(rawNonce)

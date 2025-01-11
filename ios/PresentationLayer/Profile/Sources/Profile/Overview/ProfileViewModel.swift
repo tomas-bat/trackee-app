@@ -20,9 +20,10 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Injected(\.logoutUseCase) private var logoutUseCase
     @Injected(\.deleteUserUseCase) private var deleteUserUseCase
     @Injected(\.getUserEmailUseCase) private var getUserEmailUseCase
+    @Injected(\.restorePurchasesUseCase) private var restorePurchasesUseCase
     
     // MARK: - Init
-
+    
     init(flowController: FlowController?) {
         self.flowController = flowController
         super.init()
@@ -42,11 +43,17 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     @Published private(set) var state: State = State()
     @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
-
+    
     struct State {
         var email: ViewData<String> = .loading(mock: .randomString(length: 16))
         var deleteLoading = false
+        var logoutLoading = false
+        var restorePurchasesLoading = false
         var alertData: AlertData?
+        
+        var disabled: Bool {
+            deleteLoading || logoutLoading || restorePurchasesLoading
+        }
     }
     
     // MARK: - Intent
@@ -56,8 +63,9 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
         case showProjects
         case deleteAccount
         case changeAlertData(to: AlertData?)
+        case restorePurchases
     }
-
+    
     func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
@@ -66,6 +74,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .showProjects: flowController?.handleFlow(ProfileFlow.overview(.showProjects))
             case .deleteAccount: showDeleteAccountAlert()
             case let .changeAlertData(data): state.alertData = data
+            case .restorePurchases: await restorePurchases()
             }
         })
     }
@@ -86,6 +95,9 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     }
     
     private func logout() async {
+        state.logoutLoading = true
+        defer { state.logoutLoading = false }
+        
         await execute {
             try await logoutUseCase.execute()
             flowController?.handleFlow(ProfileFlow.overview(
@@ -137,4 +149,17 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
         }
     }
     
+    private func restorePurchases() async {
+        state.restorePurchasesLoading = true
+        defer { state.restorePurchasesLoading = false }
+        
+        await execute {
+            try await restorePurchasesUseCase.execute()
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.info(message: L10n.profile_view_purchases_restored_title))
+        } onError: { error in
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
 }

@@ -65,7 +65,12 @@ enum IntegrationsFlow: Flow, Equatable {
 public final class IntegrationsFlowController: FlowController {
     
     public override func setup() -> UIViewController {
-        let vm = IntegrationsOverviewViewModel(flowController: self)
+        let paywallVM = PaywallViewModel(flowController: self)
+        let vm = IntegrationsOverviewViewModel(
+            paywallViewModel: paywallVM,
+            flowController: self
+        )
+        paywallVM.delegate = vm
         let view = IntegrationsOverviewView(viewModel: vm)
         let vc = BaseHostingController(rootView: view)
         return vc

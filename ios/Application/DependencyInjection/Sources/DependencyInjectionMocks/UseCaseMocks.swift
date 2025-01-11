@@ -151,6 +151,27 @@ public extension Container {
         exportToClockifyUseCase.register {
             ExportToClockifyUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }
+        
+        // MARK: - Purchases
+        getHasFullAccessUseCase.register {
+            GetHasFullAccessUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: false)))
+        }
+        getPurchasePackagesUseCase.register {
+            GetPurchasePackagesUseCaseMock(executeReturnValue: ResultSuccess(data: [PurchasePackage].stub as NSArray))
+        }
+        purchasePackageUseCase.register {
+            PurchasePackageUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
+        }
+        getIsPackageEligibleForIntroductoryDiscountUseCase.register {
+            GetIsPackageEligibleForIntroductoryDiscountUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinBoolean(bool: true))
+            )
+        }
+        restorePurchasesUseCase.register {
+            RestorePurchasesUseCaseMock(
+                executeReturnValue: ResultSuccess(data: KotlinUnit())
+            )
+        }
     }
 }
 #endif

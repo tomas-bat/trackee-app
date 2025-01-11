@@ -8,9 +8,14 @@ import Foundation
 import OSLog
 import Utilities
 import Factory
-import protocol AuthProvider.AuthProvider
-import protocol AppleSignInProvider.AppleSignInProvider
+import AuthProvider
+import AppleSignInProvider
 import protocol AppInfoProvider.AppInfoProvider
+import InAppPurchaseProvider
+
+extension Container {
+    var kmp: Factory<KMPDependency> { self { KMPKoinDependency() }.singleton }
+}
 
 protocol KMPDependency {
     func get<T: AnyObject>(_ proto: Protocol) -> T
@@ -27,16 +32,14 @@ final class KMPKoinDependency: KMPDependency {
     private func startKoin(
         appleSignInProvider: AppleSignInProvider = Container.shared.appleSignInProvider.resolve(),
         authProvider: AuthProvider = Container.shared.authProvider.resolve(),
-        appInfoProvider: AppInfoProvider = Container.shared.appInfoProvider.resolve()
+        appInfoProvider: AppInfoProvider = Container.shared.appInfoProvider.resolve(),
+        inAppPurchaseProvider: InAppPurchaseProvider = Container.shared.inAppPurchaseProvider.resolve()
     ) {
         let onStartup = {
             Logger.app.info("Koin Started")
         }
         
-        guard let appleSignInProvider = appleSignInProvider as? KMPSharedDomain.AppleSignInProvider,
-              let authProvider = authProvider as? KMPSharedDomain.AuthProvider,
-              let appInfoProvider = appInfoProvider as? KMPSharedDomain.AppInfoProvider
-        else {
+        guard let appInfoProvider = appInfoProvider as? KMPSharedDomain.AppInfoProvider else {
             fatalError("Failed to cast Swift provider interface to Kotlin provider interface")
             return
         }
@@ -45,7 +48,8 @@ final class KMPKoinDependency: KMPDependency {
             doOnStartup: onStartup,
             appleSignInProvider: appleSignInProvider,
             authProvider: authProvider,
-            appInfoProvider: appInfoProvider
+            appInfoProvider: appInfoProvider,
+            inAppPurchaseProvider: inAppPurchaseProvider
         )
         _koin = koinApplication.koin
     }

@@ -20,6 +20,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
     
     private let image: Image?
     private let expanded: Bool
+    private let backgroundColor: Color
     
     @SwiftUI.Environment(\.isLoading) private var isLoading
     
@@ -27,9 +28,11 @@ public struct PrimaryButtonStyle: ButtonStyle {
     
     public init(
         image: Image? = nil,
+        backgroundColor: Color = AppTheme.Colors.field,
         expanded: Bool = true
     ) {
         self.image = image
+        self.backgroundColor = backgroundColor
         self.expanded = expanded
     }
     
@@ -74,9 +77,7 @@ public struct PrimaryButtonStyle: ButtonStyle {
         }
         .padding(padding)
         .frame(height: height)
-        .background(
-            AppTheme.Colors.field
-        )
+        .background(backgroundColor)
         .clipShape(
             RoundedRectangle(
                 cornerSize: .init(
