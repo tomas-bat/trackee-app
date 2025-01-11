@@ -180,6 +180,15 @@ final class TimerEntryDetailViewModel: BaseViewModel, ViewModel, ObservableObjec
               let project = state.project.data
         else { return }
         
+        guard state.startDate < state.endDate else {
+            snackState.currentData?.dismiss()
+            snackState.showSnackSync(.error(
+                message: L10n.time_selection_view_wrong_range,
+                actionLabel: nil
+            ))
+            return
+        }
+        
         state.saveLoading = true
         defer { state.saveLoading = false }
         
