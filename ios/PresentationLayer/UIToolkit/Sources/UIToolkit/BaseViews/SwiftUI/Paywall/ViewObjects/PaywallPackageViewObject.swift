@@ -4,6 +4,7 @@
 //
 
 import KMPSharedDomain
+import SharedDomainMocks
 
 public struct PaywallPackageViewObject: Equatable {
     public let package: PurchasePackage
