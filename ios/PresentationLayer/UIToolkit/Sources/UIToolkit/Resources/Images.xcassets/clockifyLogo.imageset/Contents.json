@@ -3,6 +3,16 @@
     {
       "filename" : "clockify.svg",
       "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "clockify 1.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {
