@@ -46,5 +46,7 @@ public extension Container {
         debugMode: Environment.type != .production
     )}}
     var userDefaultsProvider: Factory<UserDefaultsProvider> { self { SystemUserDefaultsProvider() } }
-    var inAppPurchaseProvider: Factory<InAppPurchaseProvider> { self { RevenueCatPurchaseProvider() }.scope(.singleton) }
+    var inAppPurchaseProvider: Factory<InAppPurchaseProvider> { self { RevenueCatPurchaseProvider(
+        userDefaults: self.userDefaultsProvider()
+    ) }.scope(.singleton) }
 }

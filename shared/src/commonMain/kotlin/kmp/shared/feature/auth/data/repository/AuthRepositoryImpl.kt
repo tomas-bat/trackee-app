@@ -1,5 +1,6 @@
 package kmp.shared.feature.auth.data.repository
 
+import co.touchlab.kermit.Logger
 import kmp.shared.base.Result
 import kmp.shared.base.util.extension.alsoOnSuccess
 import kmp.shared.base.util.extension.data
@@ -65,6 +66,11 @@ internal class AuthRepositoryImpl(
     override suspend fun logout(): Result<Unit> =
         authProvider.logout()
             .alsoOnSuccess {
-                inAppPurchaseProvider.logOut()
+                // RevenueCat logout error should not block the logout flow
+                try {
+                    inAppPurchaseProvider.logOut()
+                } catch (t: Throwable) {
+                    Logger.e("RevenueCat logout error", t)
+                }
             }
 }

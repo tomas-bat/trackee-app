@@ -22,4 +22,6 @@ internal val purchaseModule = module {
     factoryOf(::RestorePurchasesUseCaseImpl) bind RestorePurchasesUseCase::class
     factoryOf(::GetPrivacyPolicyUrlUseCaseImpl) bind GetPrivacyPolicyUrlUseCase::class
     factoryOf(::GetTermsAndConditionsUrlUseCaseImpl) bind GetTermsAndConditionsUrlUseCase::class
+    factoryOf(::GetAlphaHasFullAccessUseCaseImpl) bind GetAlphaHasFullAccessUseCase::class
+    factoryOf(::SetAlphaHasFullAccessUseCaseImpl) bind SetAlphaHasFullAccessUseCase::class
 }

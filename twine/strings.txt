@@ -952,6 +952,10 @@
 		cs = Nákupy byly obnoveny.
 		en = Purchases have been restored.
 		sk = Nákupy boli obnovené.
+	[profile_view_alpha_full_access_toggle_title]
+		cs = [Alpha] Plný přístup
+		en = [Alpha] Full access
+		sk = [Alpha] Plný prístup
 
 [[Clients View]]
 	[clients_view_title]

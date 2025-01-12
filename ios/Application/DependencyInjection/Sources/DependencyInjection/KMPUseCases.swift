@@ -62,4 +62,6 @@ public extension Container {
     var restorePurchasesUseCase: Factory<RestorePurchasesUseCase> { self { self.kmp().get(RestorePurchasesUseCase.self) } }
     var getTermsAndConditionsUrlUseCase: Factory<GetTermsAndConditionsUrlUseCase> { self { self.kmp().get(GetTermsAndConditionsUrlUseCase.self) } }
     var getPrivacyPolicyUrlUseCase: Factory<GetPrivacyPolicyUrlUseCase> { self { self.kmp().get(GetPrivacyPolicyUrlUseCase.self) } }
+    var setAlphaHasFullAccessUseCase: Factory<SetAlphaHasFullAccessUseCase> { self { self.kmp().get(SetAlphaHasFullAccessUseCase.self) } }
+    var getAlphaHasFullAccessUseCase: Factory<GetAlphaHasFullAccessUseCase> { self { self.kmp().get(GetAlphaHasFullAccessUseCase.self) } }
 }

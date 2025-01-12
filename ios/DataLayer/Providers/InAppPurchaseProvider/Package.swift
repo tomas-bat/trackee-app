@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(path: "../../../DomainLayer/SharedDomain"),
         .package(path: "../../../DomainLayer/Utilities"),
+        .package(path: "../UserDefaultsProvider"),
         .package(url: "https://github.com/RevenueCat/purchases-ios-spm.git", exact: "5.7.0")
     ],
     targets: [
@@ -23,6 +24,7 @@ let package = Package(
             dependencies: [
                 .product(name: "SharedDomain", package: "SharedDomain"),
                 .product(name: "Utilities", package: "Utilities"),
+                .product(name: "UserDefaultsProvider", package: "UserDefaultsProvider"),
                 .product(name: "RevenueCat", package: "purchases-ios-spm")
             ]
         ),

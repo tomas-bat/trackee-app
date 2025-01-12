@@ -64,6 +64,17 @@ struct ProfileView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .buttonStyle(.loading)
                 .environment(\.isLoading, viewModel.state.restorePurchasesLoading)
+                
+                if viewModel.state.showAlphaFullAccessSwitch {
+                    Toggle(
+                        isOn: Binding<Bool>(
+                            get: { viewModel.state.alphaHasFullAccess },
+                            set: { _ in viewModel.onIntent(.toggleAlphaFullAccess) }
+                        )
+                    ) {
+                        Text(L10n.profile_view_alpha_full_access_toggle_title)
+                    }
+                }
             }
             
             Section {

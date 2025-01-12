@@ -6,6 +6,7 @@
 import Foundation
 import RevenueCat
 import Utilities
+import UserDefaultsProvider
 import KMPSharedDomain
 
 public class RevenueCatPurchaseProvider {
@@ -22,9 +23,15 @@ public class RevenueCatPurchaseProvider {
         }
     }
     
+    private let userDefaults: UserDefaultsProvider
+    
     private var didInit = false
     
-    public init() {
+    public init(
+        userDefaults: UserDefaultsProvider
+    ) {
+        self.userDefaults = userDefaults
+        
         Purchases.logLevel = if Environment.flavor == .debug { .verbose } else { .warn }
         Purchases.configure(
             withAPIKey: revenueCatApiKey
@@ -107,4 +114,18 @@ extension RevenueCatPurchaseProvider: InAppPurchaseProvider {
         _ = try await Purchases.shared.restorePurchases()
         return ResultSuccess(data: KotlinUnit())
     }
+    
+    public func __readAlphaHasFullAccess() async throws -> Result<KotlinBoolean> {
+        guard let value = try? userDefaults.read(.alphaHasFullAccess) as Bool? else {
+            return ResultSuccess(data: KotlinBoolean(bool: false))
+        }
+        
+        return ResultSuccess(data: KotlinBoolean(bool: value))
+    }
+    
+    public func __setAlphaHasFullAccess(hasFullAccess: Bool) async throws -> Result<KotlinUnit> {
+        try userDefaults.update(.alphaHasFullAccess, value: hasFullAccess)
+        return ResultSuccess(data: KotlinUnit())
+    }
+    
 }

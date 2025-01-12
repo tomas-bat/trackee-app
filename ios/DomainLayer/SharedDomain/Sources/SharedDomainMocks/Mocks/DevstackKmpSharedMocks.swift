@@ -60,3 +60,5 @@ public final class GetIsPackageEligibleForIntroductoryDiscountUseCaseMock: UseCa
 public final class RestorePurchasesUseCaseMock: UseCaseResultNoParamsMock, RestorePurchasesUseCase {}
 public final class GetTermsAndConditionsUrlUseCaseMock: UseCaseResultNoParamsMock, GetTermsAndConditionsUrlUseCase {}
 public final class GetPrivacyPolicyUrlUseCaseMock: UseCaseResultNoParamsMock, GetPrivacyPolicyUrlUseCase {}
+public final class GetAlphaHasFullAccessMock: UseCaseResultNoParamsMock, GetAlphaHasFullAccessUseCase {}
+public final class SetAlphaHasFullAccessMock: UseCaseResultMock, SetAlphaHasFullAccessUseCase {}
