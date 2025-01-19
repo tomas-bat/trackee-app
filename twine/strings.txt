@@ -853,9 +853,21 @@
 		en = Project selection
 		sk = Výber projektu
 	[project_selection_view_no_projects]
-		cs = Nemáte žádné projekty. Vytvořte si je v profilu.
-		en = You don't have any projects. Create them in the profile tab.
-		sk = Nemáte žiadne projekty. Vytvorte si ich v profile.
+		cs = Nemáte žádné projekty.
+		en = You don't have any projects.
+		sk = Nemáte žiadne projekty.
+	[project_selection_create_project]
+		cs = Vytvořit projekt
+		en = Create a project
+		sk = Vytvoriť projekt
+	[project_selection_view_no_clients]
+		cs = Nemáte žádné klienty ani projekty.
+		en = You don't have any clients or projects.
+		sk = Nemáte žiadnych klientov ani projekty.
+	[project_selection_create_client]
+		cs = Vytvořit klienta
+		en = Create a client
+		sk = Vytvoriť klienta
 
 [[Time Selection View]]
 	[time_selection_view_title]

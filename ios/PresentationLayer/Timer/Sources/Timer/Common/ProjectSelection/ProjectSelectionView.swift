@@ -78,8 +78,11 @@ struct ProjectSelectionView: View {
                 }
                 .padding(padding)
             case let .empty(reason):
-                EmptyContentView(text: localizedEmptyReason(for: reason))
-                    .padding(padding)
+                EmptyContentView(
+                    text: localizedEmptyReason(for: reason),
+                    action: emptyAction(for: reason)
+                )
+                .padding(padding)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -104,10 +107,35 @@ struct ProjectSelectionView: View {
         }
     }
     
-    private func localizedEmptyReason(for reason: ViewData<[ProjectPreview]>.EmptyReason) -> String {
+    private func localizedEmptyReason<T>(for reason: ViewData<T>.EmptyReason) -> String {
         switch reason {
-        case .noData: L10n.project_selection_view_no_projects
-        case .search: L10n.empty_results
+        case .noData:
+            if viewModel.state.clientCount == 0 {
+                return L10n.project_selection_view_no_clients
+            } else {
+                return L10n.project_selection_view_no_projects
+            }
+        case .search: return L10n.empty_results
+        }
+    }
+    
+    private func emptyAction<T>(for reason: ViewData<T>.EmptyReason) -> EmptyContentView.Action? {
+        switch reason {
+        case .noData:
+            if viewModel.state.clientCount == 0 {
+                return .init(
+                    label: L10n.project_selection_create_client,
+                    image: Image(systemSymbol: .plus),
+                    action: { viewModel.onIntent(.createClient) }
+                )
+            } else {
+                return .init(
+                    label: L10n.project_selection_create_project,
+                    image: Image(systemSymbol: .plus),
+                    action: { viewModel.onIntent(.createProject) }
+                )
+            }
+        case .search: return nil
         }
     }
 }

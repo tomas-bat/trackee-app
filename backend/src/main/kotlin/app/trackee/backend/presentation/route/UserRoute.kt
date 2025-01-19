@@ -257,6 +257,14 @@ fun Routing.userRoute() {
 
                     call.respond(HttpStatusCode.OK)
                 }
+
+                get("/count") {
+                    val user = call.requireUserPrincipal().user
+
+                    val count = userRepository.readClientCount(user.uid)
+
+                    call.respond(HttpStatusCode.OK, count)
+                }
             }
 
             route("/summaries") {

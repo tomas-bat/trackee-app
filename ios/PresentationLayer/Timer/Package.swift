@@ -15,6 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../UIToolKit"),
+        .package(path: "../Profile"),
         .package(path: "../../DomainLayer/Utilities"),
         .package(path: "../../DomainLayer/SharedDomain"),
         .package(path: "../../Application/DependencyInjection"),
@@ -27,6 +28,7 @@ let package = Package(
             name: "Timer",
             dependencies: [
                 .product(name: "UIToolkit", package: "UIToolkit"),
+                .product(name: "Profile", package: "Profile"),
                 .product(name: "Utilities", package: "Utilities"),
                 .product(name: "SharedDomain", package: "SharedDomain"),
                 .product(name: "DependencyInjection", package: "DependencyInjection"),

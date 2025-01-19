@@ -57,3 +57,13 @@ public extension ButtonStyle where Self == AdditionalButtonStyle {
         .init()
     }
 }
+
+public extension ButtonStyle where Self == ActionButtonStyle {
+    static func action(image: Image? = nil, expanded: Bool = false) -> Self {
+        .init(image: image, expanded: expanded)
+    }
+    
+    static var action: Self {
+        .init()
+    }
+}

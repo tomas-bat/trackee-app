@@ -7,7 +7,7 @@ import SwiftUI
 import UIKit
 import UIToolkit
 
-enum ProfileFlow: Flow, Equatable {
+public enum ProfileFlow: Flow, Equatable {
     case overview(Overview)
     case clients(Clients)
     case projects(Projects)
@@ -16,18 +16,18 @@ enum ProfileFlow: Flow, Equatable {
         delegate: PaywallViewModelDelegate?
     )
     
-    enum Overview: Equatable {
+    public enum Overview: Equatable {
         case presentOnboarding(message: String?)
         case showClients
         case showProjects
     }
     
-    enum Clients: Equatable {
+    public enum Clients: Equatable {
         case showDetail(clientId: String, delegate: ClientDetailViewModelDelegate?)
         case showNewClient(delegate: ClientDetailViewModelDelegate?)
         case dismissModal
         
-        static func == (lhs: ProfileFlow.Clients, rhs: ProfileFlow.Clients) -> Bool {
+        public static func == (lhs: ProfileFlow.Clients, rhs: ProfileFlow.Clients) -> Bool {
             switch (lhs, rhs) {
             case (.showDetail, .showDetail), (.showNewClient, .showNewClient), 
                 (.dismissModal, .dismissModal): true
@@ -36,13 +36,13 @@ enum ProfileFlow: Flow, Equatable {
         }
     }
     
-    enum Projects: Equatable {
+    public enum Projects: Equatable {
         case showDetail(clientId: String, projectId: String, delegate: ProjectDetailViewModelDelegate?)
         case showNewProject(delegate: ProjectDetailViewModelDelegate?)
         case dismissModal
         case pop
         
-        static func == (lhs: ProfileFlow.Projects, rhs: ProfileFlow.Projects) -> Bool {
+        public static func == (lhs: ProfileFlow.Projects, rhs: ProfileFlow.Projects) -> Bool {
             switch (lhs, rhs) {
             case (.showDetail, .showDetail), (.showNewProject, .showNewProject),
                 (.dismissModal, .dismissModal), (.pop, .pop): true
@@ -51,7 +51,7 @@ enum ProfileFlow: Flow, Equatable {
         }
     }
     
-    static func == (lhs: ProfileFlow, rhs: ProfileFlow) -> Bool {
+    public static func == (lhs: ProfileFlow, rhs: ProfileFlow) -> Bool {
         switch (lhs, rhs) {
         case let (.overview(lhsType), .overview(rhsType)): lhsType == rhsType
         case let (.projects(lhsType), .projects(rhsType)): lhsType == rhsType
@@ -182,7 +182,7 @@ extension ProfileFlowController {
     ) {
         startProjectDetailFlow(
             editingClientId: clientId,
-            editingProejctId: projectId,
+            editingProjectId: projectId,
             delegate: delegate
         )
     }
@@ -190,20 +190,20 @@ extension ProfileFlowController {
     private func showNewProject(delegate: ProjectDetailViewModelDelegate?) {
         startProjectDetailFlow(
             editingClientId: nil,
-            editingProejctId: nil,
+            editingProjectId: nil,
             delegate: delegate
         )
     }
     
     private func startProjectDetailFlow(
         editingClientId: String?,
-        editingProejctId: String?,
+        editingProjectId: String?,
         delegate: ProjectDetailViewModelDelegate?
     ) {
         let nc = BaseNavigationController()
         let fc = ProjectDetailFlowController(
             editingClientId: editingClientId,
-            editingProejctId: editingProejctId,
+            editingProjectId: editingProjectId,
             delegate: delegate,
             navigationController: nc
         )

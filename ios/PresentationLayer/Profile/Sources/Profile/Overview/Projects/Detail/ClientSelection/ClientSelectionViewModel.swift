@@ -12,7 +12,7 @@ import Utilities
 import KMPSharedDomain
 import SharedDomainMocks
 
-protocol ClientSelectionViewModelDelegate: AnyObject {
+public protocol ClientSelectionViewModelDelegate: AnyObject {
     func didSelectClient(_: Client)
 }
 

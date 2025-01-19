@@ -7,6 +7,7 @@ import SwiftUI
 import UIToolkit
 import UIKit
 import KMPSharedDomain
+import Profile
 
 enum TimerEntryDetailFlow: Flow, Equatable {
     case showProjectSelection(
@@ -62,6 +63,8 @@ final class TimerEntryDetailFlowController: FlowController {
                 switch flow {
                 case .pop: pop()
                 case .dismiss: dismiss()
+                case let .showNewProject(delegate): showNewProject(delegate: delegate)
+                case let .showNewClient(delegate): showNewClient(delegate: delegate)
                 }
             default: ()
             }
@@ -94,6 +97,30 @@ final class TimerEntryDetailFlowController: FlowController {
         let vc = BaseHostingController(rootView: view)
         
         navigationController.pushViewController(vc, animated: true)
+    }
+    
+    private func showNewProject(delegate: ProjectDetailViewModelDelegate?) {
+        let nc = BaseNavigationController()
+        let fc = ProjectDetailFlowController(
+            editingClientId: nil,
+            editingProjectId: nil,
+            delegate: delegate,
+            navigationController: nc
+        )
+        let rootVC = startChildFlow(fc)
+        nc.viewControllers = [rootVC]
+        navigationController.present(nc, animated: true)
+    }
+    
+    private func showNewClient(delegate: ClientDetailViewModelDelegate?) {
+        let vm = ClientDetailViewModel(
+            flowController: self
+        )
+        vm.delegate = delegate
+        let view = ClientDetailView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        
+        navigationController.present(vc, animated: true)
     }
 }
 

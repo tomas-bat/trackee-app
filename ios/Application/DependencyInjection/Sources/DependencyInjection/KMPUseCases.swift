@@ -29,6 +29,7 @@ public extension Container {
     
     // MARK: - Profile
     var getClientsUseCase: Factory<GetClientsUseCase> { self { self.kmp().get(GetClientsUseCase.self) } }
+    var getClientCountUseCase: Factory<GetClientCountUseCase> { self { self.kmp().get(GetClientCountUseCase.self) } }
     var addAndAssignClientUseCase: Factory<AddAndAssignClientUseCase> { self { self.kmp().get(AddAndAssignClientUseCase.self) } }
     var getClientUseCase: Factory<GetClientUseCase> { self { self.kmp().get(GetClientUseCase.self) } }
     var updateClientUseCase: Factory<UpdateClientUseCase> { self { self.kmp().get(UpdateClientUseCase.self) } }

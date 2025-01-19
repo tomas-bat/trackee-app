@@ -7,7 +7,7 @@ import Foundation
 import UIToolkit
 import UIKit
 
-enum ProjectDetailFlow: Flow, Equatable {
+public enum ProjectDetailFlow: Flow, Equatable {
     case showClientSelection(
         selectedClientId: String?,
         delegate: ClientSelectionViewModelDelegate?
@@ -15,7 +15,7 @@ enum ProjectDetailFlow: Flow, Equatable {
     case dismiss
     case pop
     
-    static func == (lhs: ProjectDetailFlow, rhs: ProjectDetailFlow) -> Bool {
+    public static func == (lhs: ProjectDetailFlow, rhs: ProjectDetailFlow) -> Bool {
         switch (lhs, rhs) {
         case (.showClientSelection, .showClientSelection), (.dismiss, .dismiss), (.pop, .pop): true
         default: false
@@ -23,28 +23,28 @@ enum ProjectDetailFlow: Flow, Equatable {
     }
 }
 
-final class ProjectDetailFlowController: FlowController {
+public final class ProjectDetailFlowController: FlowController {
     
     private let editingClientId: String?
-    private let editingProejctId: String?
+    private let editingProjectId: String?
     private let delegate: ProjectDetailViewModelDelegate?
     
-    init(
+    public init(
         editingClientId: String?,
-        editingProejctId: String?,
+        editingProjectId: String?,
         delegate: ProjectDetailViewModelDelegate?,
         navigationController: UINavigationController
     ) {
         self.editingClientId = editingClientId
-        self.editingProejctId = editingProejctId
+        self.editingProjectId = editingProjectId
         self.delegate = delegate
         super.init(navigationController: navigationController)
     }
  
-    override func setup() -> UIViewController {
+    public override func setup() -> UIViewController {
         let vm = ProjectDetailViewModel(
             editingClientId: editingClientId,
-            editingProjectId: editingProejctId,
+            editingProjectId: editingProjectId,
             flowController: self
         )
         vm.delegate = delegate
@@ -56,7 +56,7 @@ final class ProjectDetailFlowController: FlowController {
         return vc
     }
     
-    override func handleFlow(_ flow: Flow) {
+    public override func handleFlow(_ flow: Flow) {
         guard let flow = flow as? ProjectDetailFlow else { return }
         switch flow {
         case let .showClientSelection(selectedClientId, delegate):

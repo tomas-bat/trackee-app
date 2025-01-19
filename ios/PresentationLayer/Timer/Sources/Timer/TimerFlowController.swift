@@ -6,6 +6,7 @@
 import SwiftUI
 import UIToolkit
 import UIKit
+import Profile
 
 enum TimerFlow: Flow, Equatable {
     case list(List)
@@ -49,6 +50,16 @@ enum TimerFlow: Flow, Equatable {
     enum ProjectSelection: Equatable {
         case pop
         case dismiss
+        case showNewProject(delegate: ProjectDetailViewModelDelegate?)
+        case showNewClient(delegate: ClientDetailViewModelDelegate?)
+        
+        static func == (lhs: TimerFlow.ProjectSelection, rhs: TimerFlow.ProjectSelection) -> Bool {
+            switch (lhs, rhs) {
+            case (.pop, .pop), (.dismiss, .dismiss), (.showNewProject, .showNewProject),
+                (.showNewClient, .showNewClient): true
+            default: false
+            }
+        }
     }
     
     enum TimeSelection: Equatable {
@@ -77,12 +88,24 @@ public final class TimerFlowController: FlowController {
     }
     
     public override func handleFlow(_ flow: Flow) {
-        guard let flow = flow as? TimerFlow else { return }
         switch flow {
-        case let .list(flow): handleListFlow(flow)
-        case let .projectSelection(flow): handleProjectSelectionFlow(flow)
-        case let .timeSelection(flow): handleTimeSelectionFlow(flow)
-        case let .startTimeSelection(flow): handleStartTimeSelectionFlow(flow)
+        case let flow as TimerFlow:
+            switch flow {
+            case let .list(flow): handleListFlow(flow)
+            case let .projectSelection(flow): handleProjectSelectionFlow(flow)
+            case let .timeSelection(flow): handleTimeSelectionFlow(flow)
+            case let .startTimeSelection(flow): handleStartTimeSelectionFlow(flow)
+            }
+        case let flow as ProfileFlow:
+            switch flow {
+            case let .clients(flow):
+                switch flow {
+                case .dismissModal: navigationController.dismiss(animated: true)
+                default: return
+                }
+            default: return
+            }
+        default: return
         }
     }
 }
@@ -187,7 +210,33 @@ extension TimerFlowController {
         switch flow {
         case .pop: pop()
         case .dismiss: navigationController.dismiss(animated: true)
+        case let .showNewProject(delegate): showNewProject(delegate: delegate)
+        case let .showNewClient(delegate): showNewClient(delegate: delegate)
         }
+    }
+    
+    private func showNewProject(delegate: ProjectDetailViewModelDelegate?) {
+        let nc = BaseNavigationController()
+        let fc = ProjectDetailFlowController(
+            editingClientId: nil,
+            editingProjectId: nil,
+            delegate: delegate,
+            navigationController: nc
+        )
+        let rootVC = startChildFlow(fc)
+        nc.viewControllers = [rootVC]
+        navigationController.presentedViewController?.present(nc, animated: true)
+    }
+    
+    private func showNewClient(delegate: ClientDetailViewModelDelegate?) {
+        let vm = ClientDetailViewModel(
+            flowController: self
+        )
+        vm.delegate = delegate
+        let view = ClientDetailView(viewModel: vm)
+        let vc = BaseHostingController(rootView: view)
+        
+        navigationController.presentedViewController?.present(vc, animated: true)
     }
 }
 

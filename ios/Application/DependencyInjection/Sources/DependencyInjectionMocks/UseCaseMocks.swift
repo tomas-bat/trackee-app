@@ -87,6 +87,9 @@ public extension Container {
         getClientsUseCase.register {
             GetClientsUseCaseMock(executeReturnValue: ResultSuccess(data: [Client].stub as NSArray))
         }
+        getClientCountUseCase.register {
+            GetClientCountUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinLong(value: [Client].stub.count.int64)))
+        }
         addAndAssignClientUseCase.register {
             AddAndAssignClientUseCaseMock(executeReturnValue: ResultSuccess(data: KotlinUnit()))
         }

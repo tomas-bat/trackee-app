@@ -27,6 +27,7 @@ public final class DeleteTimerEntryUseCaseMock: UseCaseResultMock, DeleteTimerEn
 
 // MARK: - Profile
 public final class GetClientsUseCaseMock: UseCaseResultNoParamsMock, GetClientsUseCase {}
+public final class GetClientCountUseCaseMock: UseCaseResultNoParamsMock, GetClientCountUseCase {}
 public final class AddAndAssignClientUseCaseMock: UseCaseResultMock, AddAndAssignClientUseCase {}
 public final class GetClientUseCaseMock: UseCaseResultMock, GetClientUseCase {}
 public final class UpdateClientUseCaseMock: UseCaseResultMock, UpdateClientUseCase {}

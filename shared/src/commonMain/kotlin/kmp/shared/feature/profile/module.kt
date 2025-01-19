@@ -21,6 +21,7 @@ internal val profileModule = module {
     } bind ProfileRepository::class
 
     factoryOf(::GetClientsUseCaseImpl) bind GetClientsUseCase::class
+    factoryOf(::GetClientCountUseCaseImpl) bind GetClientCountUseCase::class
     factoryOf(::AddAndAssignClientUseCaseImpl) bind AddAndAssignClientUseCase::class
     factoryOf(::GetClientUseCaseImpl) bind GetClientUseCase::class
     factoryOf(::UpdateClientUseCaseImpl) bind UpdateClientUseCase::class

@@ -8,7 +8,7 @@ import SwiftUI
 import KMPSharedDomain
 import UIToolkit
 
-struct ClientDetailView: View {
+public struct ClientDetailView: View {
     
     // MARK: - Constants
     
@@ -22,13 +22,13 @@ struct ClientDetailView: View {
     
     // MARK: - Init
     
-    init(viewModel: ClientDetailViewModel) {
+    public init(viewModel: ClientDetailViewModel) {
         self.viewModel = viewModel
     }
     
     // MARK: - Body
     
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             List {
                 Section {
