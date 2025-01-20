@@ -12,6 +12,8 @@ import kmp.shared.feature.timer.domain.model.ProjectPreview
 internal interface ProfileRepository {
     suspend fun readClients(): Result<List<Client>>
 
+    suspend fun readClientCount(): Result<Long>
+
     suspend fun createClient(client: NewClient): Result<NewClientResponse>
 
     suspend fun readClient(clientId: String): Result<Client>

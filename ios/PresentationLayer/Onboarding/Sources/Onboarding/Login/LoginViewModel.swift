@@ -40,7 +40,7 @@ final class LoginViewModel: BaseViewModel, ViewModel, ObservableObject {
         
         if Utilities.Environment.type == .alpha, Utilities.Environment.flavor == .debug {
             state.email = "testaccount@domain.com"
-            state.password = "wajfak-gyzgi8-tyzHix"
+            state.password = "sexhah-2noNje-baxpuc"
         }
     }
     

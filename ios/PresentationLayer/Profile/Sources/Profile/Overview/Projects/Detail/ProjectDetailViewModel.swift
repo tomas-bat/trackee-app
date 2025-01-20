@@ -10,7 +10,7 @@ import SwiftUI
 import UIToolkit
 import KMPSharedDomain
 
-protocol ProjectDetailViewModelDelegate: AnyObject {
+public protocol ProjectDetailViewModelDelegate: AnyObject {
     func refreshProjects() async
     func didRemoveProject(named: String)
 }

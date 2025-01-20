@@ -21,6 +21,9 @@ internal class ProfileRepositoryImpl(
     override suspend fun readClients(): Result<List<Client>> =
         source.readClients().map { list -> list.map { it.toDomain() } }
 
+    override suspend fun readClientCount(): Result<Long> =
+        source.readClientCount()
+
     override suspend fun createClient(client: NewClient): Result<NewClientResponse> =
         source.createClient(client)
 

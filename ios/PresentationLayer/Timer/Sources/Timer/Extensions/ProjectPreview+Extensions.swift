@@ -6,7 +6,7 @@
 import Foundation
 import KMPSharedDomain
 
-extension ProjectPreview: Identifiable {
+extension ProjectPreview {
     var rawProject: Project {
         Project(
             id: id,

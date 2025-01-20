@@ -67,6 +67,8 @@ interface UserRepository {
 
     suspend fun readClients(uid: String): List<Client>
 
+    suspend fun readClientCount(uid: String): Long
+
     suspend fun assignClientToUser(uid: String, clientId: String)
 
     suspend fun assignProjectToUser(uid: String, clientId: String, projectId: String)

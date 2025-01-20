@@ -10,12 +10,12 @@ import SwiftUI
 import UIToolkit
 import KMPSharedDomain
 
-protocol ClientDetailViewModelDelegate: AnyObject {
+public protocol ClientDetailViewModelDelegate: AnyObject {
     func refreshClients() async
     func didRemoveClient(named: String)
 }
 
-final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
+public final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Dependencies
     
@@ -28,7 +28,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Stored properties
     
-    weak var delegate: ClientDetailViewModelDelegate?
+    public weak var delegate: ClientDetailViewModelDelegate?
     
     private let editingClientId: String?
     
@@ -36,7 +36,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Init
     
-    init(
+    public init(
         editingClientId: String? = nil,
         flowController: FlowController? = nil
     ) {
@@ -49,7 +49,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - Lifecycle
     
-    override func onAppear() {
+    public override func onAppear() {
         super.onAppear()
         
         executeTask(Task {
@@ -59,7 +59,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     // MARK: - State
     
-    struct State {
+    public struct State {
         var isCreating = false
         var name = ""
         var isLoading = true
@@ -68,12 +68,12 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         var alertData: AlertData?
     }
     
-    @Published private(set) var state = State()
-    @Published private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
+    @Published public private(set) var state = State()
+    @Published public private(set) var snackState = SnackState<InfoErrorSnackVisuals>()
     
     // MARK: - Intent
     
-    enum Intent {
+    public enum Intent {
         case changeName(to: String)
         case remove
         case cancel
@@ -81,7 +81,7 @@ final class ClientDetailViewModel: BaseViewModel, ViewModel, ObservableObject {
         case changeAlertData(to: AlertData?)
     }
     
-    func onIntent(_ intent: Intent) {
+    public func onIntent(_ intent: Intent) {
         executeTask(Task {
             switch intent {
             case let .changeName(name): state.name = name

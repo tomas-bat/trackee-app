@@ -264,6 +264,15 @@ internal class UserSourceImpl : UserSource {
             .await()
             .map { it.id }
 
+    override suspend fun readClientCount(uid: String): Long = db
+        .collection(SourceConstants.Firestore.Collection.USERS)
+        .document(uid)
+        .collection(SourceConstants.Firestore.Collection.CLIENTS)
+        .count()
+        .get()
+        .await()
+        .count
+
     override suspend fun assignClientToUser(uid: String, clientId: String) {
         val exists = db
             .collection(SourceConstants.Firestore.Collection.CLIENTS)

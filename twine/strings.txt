@@ -853,9 +853,21 @@
 		en = Project selection
 		sk = Výber projektu
 	[project_selection_view_no_projects]
-		cs = Nemáte žádné projekty. Vytvořte si je v profilu.
-		en = You don't have any projects. Create them in the profile tab.
-		sk = Nemáte žiadne projekty. Vytvorte si ich v profile.
+		cs = Nemáte žádné projekty.
+		en = You don't have any projects.
+		sk = Nemáte žiadne projekty.
+	[project_selection_create_project]
+		cs = Vytvořit projekt
+		en = Create a project
+		sk = Vytvoriť projekt
+	[project_selection_view_no_clients]
+		cs = Nemáte žádné klienty ani projekty.
+		en = You don't have any clients or projects.
+		sk = Nemáte žiadnych klientov ani projekty.
+	[project_selection_create_client]
+		cs = Vytvořit klienta
+		en = Create a client
+		sk = Vytvoriť klienta
 
 [[Time Selection View]]
 	[time_selection_view_title]
@@ -952,6 +964,10 @@
 		cs = Nákupy byly obnoveny.
 		en = Purchases have been restored.
 		sk = Nákupy boli obnovené.
+	[profile_view_alpha_full_access_toggle_title]
+		cs = [Alpha] Plný přístup
+		en = [Alpha] Full access
+		sk = [Alpha] Plný prístup
 
 [[Clients View]]
 	[clients_view_title]
@@ -966,6 +982,14 @@
 		cs = byl smazán
 		en = has been removed
 		sk = bol zmazaný
+	[clients_view_empty_title]
+		cs = Nemáte žádné klienty.
+		en = You have no clients.
+		sk = Nemáte žiadnych klientov.
+	[clients_view_add_client_title]
+		cs = Vytvořit klienta
+		en = Create a client
+		sk = Vytvoriť klienta
 
 [[Client Detail View]]
 	[client_detail_new_client_title]
@@ -1014,6 +1038,14 @@
 		cs = byl smazán
 		en = has been removed
 		sk = bol zmazaný
+	[projects_view_empty_title]
+		cs = Nemáte žádné projekty.
+		en = You have no projects.
+		sk = Nemáte žiadne projekty.
+	[projects_view_add_project_title]
+		cs = Vytvořit projekt
+		en = Create a projetc
+		sk = Vytvoriť projekt
 
 [[Project Detail View]]
 	[project_detail_new_project_title]
@@ -1172,6 +1204,10 @@
 		cs = Nemáte nastavené žádné integrace.
 		en = You haven't created any integrations.
 		sk = Nemáte nastavené žiadne integrácie.
+	[integrations_view_add_integration]
+		cs = Přidat integraci
+		en = Add an integration
+		sk = Pridať integráciu
 	[integrations_view_select_type_dialog_title]
 		cs = Vyberte typ integrace
 		en = Choose an integration type

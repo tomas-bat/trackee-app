@@ -27,6 +27,9 @@ public enum AppTheme {
         
         public static let appleButtonBackground = Asset.Colors.appleButtonBackground.color
         public static let appleButtonForeground = Asset.Colors.appleButtonForeground.color
+        
+        public static let action = Asset.Colors.action.color
+        public static let onAction = Asset.Colors.onAction.color
     }
     
     /// Defines all the fonts used in the app in a semantic way

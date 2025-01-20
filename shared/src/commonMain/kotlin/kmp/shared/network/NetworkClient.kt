@@ -53,10 +53,10 @@ object NetworkClient {
 //                    host = "0.0.0.0",
 //                    port = 8080,
 //                )
-
+//
 //                url(
 //                    scheme = URLProtocol.HTTP.name,
-//                    host = "192.168.0.177",
+//                    host = "192.168.0.147",
 //                    port = 8080,
 //                )
             }

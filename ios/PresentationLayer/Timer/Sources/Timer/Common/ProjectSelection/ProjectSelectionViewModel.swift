@@ -11,6 +11,7 @@ import UIToolkit
 import Utilities
 import KMPSharedDomain
 import SharedDomainMocks
+import Profile
 
 protocol ProjectSelectionViewModelDelegate: AnyObject {
     func didSelectProject(_: ProjectPreview)
@@ -23,6 +24,7 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
     private weak var flowController: FlowController?
     
     @Injected(\.getProjectsUseCase) private var getProjectsUseCase
+    @Injected(\.getClientCountUseCase) private var getClientCountUseCase
     
     // MARK: - Stored properties
     
@@ -59,6 +61,7 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         var viewData: ViewData<[ProjectPreview]> = .loading(mock: .stub)
         var selectedProjectId: String?
         var isEmbedded = false
+        var clientCount: Int?
     }
     
     @Published private(set) var state = State()
@@ -72,6 +75,8 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         case selectProject(id: String)
         case save
         case dismiss
+        case createClient
+        case createProject
     }
     
     func onIntent(_ intent: Intent) {
@@ -82,6 +87,8 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
             case let .selectProject(id): state.selectedProjectId = id
             case .save: save()
             case .dismiss: dismiss()
+            case .createClient: flowController?.handleFlow(TimerFlow.projectSelection(.showNewClient(delegate: self)))
+            case .createProject: flowController?.handleFlow(TimerFlow.projectSelection(.showNewProject(delegate: self)))
             }
         })
     }
@@ -95,6 +102,8 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
                 
         await execute {
             projects = try await getProjectsUseCase.execute()
+            let clientCount: KotlinLong = try await getClientCountUseCase.execute()
+            state.clientCount = clientCount.int
             filterProjects()
         } onError: { error in
             state.viewData = .error(error)
@@ -151,5 +160,23 @@ final class ProjectSelectionViewModel: BaseViewModel, ViewModel, ObservableObjec
         } else {
             state.viewData = .data(filtered)
         }
+    }
+}
+
+extension ProjectSelectionViewModel: ClientDetailViewModelDelegate, ProjectDetailViewModelDelegate {
+    func refreshClients() async {
+        await fetchData(force: true)
+    }
+    
+    func didRemoveClient(named: String) {
+        // does not require explicit info snack here
+    }
+    
+    func refreshProjects() async {
+        await fetchData(force: true)
+    }
+    
+    func didRemoveProject(named: String) {
+        // does not require explicit info snack here
     }
 }

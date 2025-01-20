@@ -13,6 +13,8 @@ import kmp.shared.feature.timer.infrastructure.model.ClientDto
 internal interface RemoteProfileSource {
     suspend fun readClients(): Result<List<ClientDto>>
 
+    suspend fun readClientCount(): Result<Long>
+
     suspend fun createClient(client: NewClient): Result<NewClientResponse>
 
     suspend fun readClient(clientId: String): Result<Client>

@@ -29,6 +29,7 @@ public extension Container {
     
     // MARK: - Profile
     var getClientsUseCase: Factory<GetClientsUseCase> { self { self.kmp().get(GetClientsUseCase.self) } }
+    var getClientCountUseCase: Factory<GetClientCountUseCase> { self { self.kmp().get(GetClientCountUseCase.self) } }
     var addAndAssignClientUseCase: Factory<AddAndAssignClientUseCase> { self { self.kmp().get(AddAndAssignClientUseCase.self) } }
     var getClientUseCase: Factory<GetClientUseCase> { self { self.kmp().get(GetClientUseCase.self) } }
     var updateClientUseCase: Factory<UpdateClientUseCase> { self { self.kmp().get(UpdateClientUseCase.self) } }
@@ -62,4 +63,6 @@ public extension Container {
     var restorePurchasesUseCase: Factory<RestorePurchasesUseCase> { self { self.kmp().get(RestorePurchasesUseCase.self) } }
     var getTermsAndConditionsUrlUseCase: Factory<GetTermsAndConditionsUrlUseCase> { self { self.kmp().get(GetTermsAndConditionsUrlUseCase.self) } }
     var getPrivacyPolicyUrlUseCase: Factory<GetPrivacyPolicyUrlUseCase> { self { self.kmp().get(GetPrivacyPolicyUrlUseCase.self) } }
+    var setAlphaHasFullAccessUseCase: Factory<SetAlphaHasFullAccessUseCase> { self { self.kmp().get(SetAlphaHasFullAccessUseCase.self) } }
+    var getAlphaHasFullAccessUseCase: Factory<GetAlphaHasFullAccessUseCase> { self { self.kmp().get(GetAlphaHasFullAccessUseCase.self) } }
 }

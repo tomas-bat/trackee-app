@@ -10,6 +10,8 @@ interface InAppPurchaseProvider {
     suspend fun readPackages(): Result<List<PurchasePackage>>
     suspend fun purchasePackage(packageId: String): Result<Unit>
     suspend fun restorePurchases(): Result<Unit>
+    suspend fun setAlphaHasFullAccess(hasFullAccess: Boolean): Result<Unit>
+    suspend fun readAlphaHasFullAccess(): Result<Boolean>
 
     suspend fun readIsPackageEligibleForIntroductoryDiscount(
         packageId: String

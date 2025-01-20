@@ -32,6 +32,12 @@ internal class RemoteProfileSourceImpl(
             res.body<List<ClientDto>>()
         }
 
+    override suspend fun readClientCount(): Result<Long> =
+        runCatchingCommonNetworkExceptions {
+            val res = client.get("/user/clients/count")
+            res.body<Long>()
+        }
+
     override suspend fun createClient(client: NewClient): Result<NewClientResponse> =
         runCatchingCommonNetworkExceptions {
             val res = this.client.post("/clients") {

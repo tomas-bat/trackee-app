@@ -21,12 +21,16 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     @Injected(\.deleteUserUseCase) private var deleteUserUseCase
     @Injected(\.getUserEmailUseCase) private var getUserEmailUseCase
     @Injected(\.restorePurchasesUseCase) private var restorePurchasesUseCase
+    @Injected(\.getAlphaHasFullAccessUseCase) private var getAlphaHasFullAccessUseCase
+    @Injected(\.setAlphaHasFullAccessUseCase) private var setAlphaHasFullAccessUseCase
     
     // MARK: - Init
     
     init(flowController: FlowController?) {
         self.flowController = flowController
         super.init()
+        
+        state.showAlphaFullAccessSwitch = Environment.type == .alpha
     }
     
     // MARK: - Lifecycle
@@ -46,6 +50,8 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
     
     struct State {
         var email: ViewData<String> = .loading(mock: .randomString(length: 16))
+        var showAlphaFullAccessSwitch = false
+        var alphaHasFullAccess = false
         var deleteLoading = false
         var logoutLoading = false
         var restorePurchasesLoading = false
@@ -64,6 +70,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
         case deleteAccount
         case changeAlertData(to: AlertData?)
         case restorePurchases
+        case toggleAlphaFullAccess
     }
     
     func onIntent(_ intent: Intent) {
@@ -75,6 +82,7 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
             case .deleteAccount: showDeleteAccountAlert()
             case let .changeAlertData(data): state.alertData = data
             case .restorePurchases: await restorePurchases()
+            case .toggleAlphaFullAccess: await toggleAlphaFullAccess()
             }
         })
     }
@@ -88,7 +96,10 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
         
         await execute {
             let email: String = try await getUserEmailUseCase.execute()
+            let alphaHasFullAccess: Bool = try await getAlphaHasFullAccessUseCase.execute()
+            
             state.email = .data(email)
+            state.alphaHasFullAccess = alphaHasFullAccess
         } onError: { error in
             state.email = .error(error)
         }
@@ -160,6 +171,18 @@ final class ProfileViewModel: BaseViewModel, ViewModel, ObservableObject {
         } onError: { error in
             snackState.currentData?.dismiss()
             snackState.showSnackSync(.error(message: error.localizedDescription, actionLabel: nil))
+        }
+    }
+    
+    private func toggleAlphaFullAccess() async {
+        let hadFullAccess = state.alphaHasFullAccess
+        state.alphaHasFullAccess.toggle()
+        
+        await execute {
+            let params = SetAlphaHasFullAccessUseCaseParams(alphaHasFullAccess: !hadFullAccess)
+            try await setAlphaHasFullAccessUseCase.execute(params: params)
+        } onError: { error in
+            print("SetAlphaHasFullAccessUseCase error: \(error)")
         }
     }
 }

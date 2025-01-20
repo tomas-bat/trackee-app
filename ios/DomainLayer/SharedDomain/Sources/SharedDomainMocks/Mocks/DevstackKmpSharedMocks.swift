@@ -27,6 +27,7 @@ public final class DeleteTimerEntryUseCaseMock: UseCaseResultMock, DeleteTimerEn
 
 // MARK: - Profile
 public final class GetClientsUseCaseMock: UseCaseResultNoParamsMock, GetClientsUseCase {}
+public final class GetClientCountUseCaseMock: UseCaseResultNoParamsMock, GetClientCountUseCase {}
 public final class AddAndAssignClientUseCaseMock: UseCaseResultMock, AddAndAssignClientUseCase {}
 public final class GetClientUseCaseMock: UseCaseResultMock, GetClientUseCase {}
 public final class UpdateClientUseCaseMock: UseCaseResultMock, UpdateClientUseCase {}
@@ -60,3 +61,5 @@ public final class GetIsPackageEligibleForIntroductoryDiscountUseCaseMock: UseCa
 public final class RestorePurchasesUseCaseMock: UseCaseResultNoParamsMock, RestorePurchasesUseCase {}
 public final class GetTermsAndConditionsUrlUseCaseMock: UseCaseResultNoParamsMock, GetTermsAndConditionsUrlUseCase {}
 public final class GetPrivacyPolicyUrlUseCaseMock: UseCaseResultNoParamsMock, GetPrivacyPolicyUrlUseCase {}
+public final class GetAlphaHasFullAccessMock: UseCaseResultNoParamsMock, GetAlphaHasFullAccessUseCase {}
+public final class SetAlphaHasFullAccessMock: UseCaseResultMock, SetAlphaHasFullAccessUseCase {}
