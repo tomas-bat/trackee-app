@@ -70,7 +70,6 @@ struct ProjectSelectionView: View {
                         }
                     }
                     .padding(padding)
-                    .animateContent(viewModel.state.viewData.isLoading)
                 }
             case let .error(error):
                 ErrorView(error: error) {
@@ -85,6 +84,7 @@ struct ProjectSelectionView: View {
                 .padding(padding)
             }
         }
+        .animateContent(viewModel.state.viewData.isLoading)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AppTheme.Colors.background)
         .navigationTitle(L10n.project_selection_view_title)

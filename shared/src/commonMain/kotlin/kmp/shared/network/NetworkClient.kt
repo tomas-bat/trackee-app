@@ -10,6 +10,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kmp.shared.base.util.extension.getOrNull
 import kmp.shared.common.provider.AppInfoProvider
 import kmp.shared.common.provider.AuthProvider
+import kmp.shared.configuration.domain.configuration
 import kotlinx.serialization.json.Json
 import kotlin.native.concurrent.ThreadLocal
 import co.touchlab.kermit.Logger.Companion as KermitLogger
@@ -42,20 +43,20 @@ object NetworkClient {
             defaultRequest {
                 contentType(ContentType.Application.Json)
 
-//                url(
-//                    scheme = URLProtocol.HTTPS.name,
-//                    host = appInfoProvider.environment.configuration.host
-//                )
-
                 url(
-                    scheme = URLProtocol.HTTP.name,
-                    host = "0.0.0.0",
-                    port = 8080,
+                    scheme = URLProtocol.HTTPS.name,
+                    host = appInfoProvider.environment.configuration.host
                 )
 
 //                url(
 //                    scheme = URLProtocol.HTTP.name,
-//                    host = "192.168.0.177",
+//                    host = "0.0.0.0",
+//                    port = 8080,
+//                )
+//
+//                url(
+//                    scheme = URLProtocol.HTTP.name,
+//                    host = "192.168.0.147",
 //                    port = 8080,
 //                )
             }

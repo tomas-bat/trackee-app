@@ -56,9 +56,12 @@ struct ProjectsView: View {
                     viewModel.onIntent(.retry)
                 }
                 .padding(padding)
-            case .empty:
-                EmptyContentView()
-                    .padding(padding)
+            case let .empty(reason):
+                EmptyContentView(
+                    text: emptyTitle(for: reason),
+                    action: emptyAction(for: reason)
+                )
+                .padding(padding)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -83,6 +86,25 @@ struct ProjectsView: View {
         )
         .snack(viewModel.snackState)
         .lifecycle(viewModel)
+    }
+    
+    private func emptyTitle<T>(for reason: ViewData<T>.EmptyReason) -> String {
+        switch reason {
+        case .noData: L10n.projects_view_empty_title
+        case .search: L10n.empty_list
+        }
+    }
+    
+    private func emptyAction<T>(for reason: ViewData<T>.EmptyReason) -> EmptyContentView.Action? {
+        switch reason {
+        case .noData:
+            .init(
+                label: L10n.projects_view_add_project_title,
+                image: Image(systemSymbol: .plus),
+                action: { viewModel.onIntent(.addProject) }
+            )
+        default: nil
+        }
     }
 }
 

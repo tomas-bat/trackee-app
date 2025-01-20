@@ -100,7 +100,7 @@ public final class TimerFlowController: FlowController {
             switch flow {
             case let .clients(flow):
                 switch flow {
-                case .dismissModal: navigationController.dismiss(animated: true)
+                case .dismissModal: navigationController.presentedViewController?.dismiss(animated: true)
                 default: return
                 }
             default: return

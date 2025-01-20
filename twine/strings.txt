@@ -982,6 +982,14 @@
 		cs = byl smazán
 		en = has been removed
 		sk = bol zmazaný
+	[clients_view_empty_title]
+		cs = Nemáte žádné klienty.
+		en = You have no clients.
+		sk = Nemáte žiadnych klientov.
+	[clients_view_add_client_title]
+		cs = Vytvořit klienta
+		en = Create a client
+		sk = Vytvoriť klienta
 
 [[Client Detail View]]
 	[client_detail_new_client_title]
@@ -1030,6 +1038,14 @@
 		cs = byl smazán
 		en = has been removed
 		sk = bol zmazaný
+	[projects_view_empty_title]
+		cs = Nemáte žádné projekty.
+		en = You have no projects.
+		sk = Nemáte žiadne projekty.
+	[projects_view_add_project_title]
+		cs = Vytvořit projekt
+		en = Create a projetc
+		sk = Vytvoriť projekt
 
 [[Project Detail View]]
 	[project_detail_new_project_title]
@@ -1188,6 +1204,10 @@
 		cs = Nemáte nastavené žádné integrace.
 		en = You haven't created any integrations.
 		sk = Nemáte nastavené žiadne integrácie.
+	[integrations_view_add_integration]
+		cs = Přidat integraci
+		en = Add an integration
+		sk = Pridať integráciu
 	[integrations_view_select_type_dialog_title]
 		cs = Vyberte typ integrace
 		en = Choose an integration type

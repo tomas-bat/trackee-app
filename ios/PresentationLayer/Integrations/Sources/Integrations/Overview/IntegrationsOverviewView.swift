@@ -41,11 +41,7 @@ struct IntegrationsOverviewView: View {
                 }
             case let .error(error):
                 errorView(error)
-            case .empty:
-                EmptyContentView(
-                    text: L10n.integrations_view_empty_title
-                )
-                .padding(padding)
+            case .empty: EmptyView()
             }
         }
         .confirmationDialog(
@@ -117,7 +113,12 @@ struct IntegrationsOverviewView: View {
             errorView(error)
         case .empty:
             EmptyContentView(
-                text: L10n.integrations_view_empty_title
+                text: L10n.integrations_view_empty_title,
+                action: .init(
+                    label: L10n.integrations_view_add_integration,
+                    image: Image(systemSymbol: .plus),
+                    action: { viewModel.onIntent(.addIntegration) }
+                )
             )
             .padding(padding)
         }
