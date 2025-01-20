@@ -264,7 +264,7 @@ internal class UserSourceImpl : UserSource {
             .await()
             .map { it.id }
 
-    override suspend fun readClientCount(uid: String): Long  = db
+    override suspend fun readClientCount(uid: String): Long = db
         .collection(SourceConstants.Firestore.Collection.USERS)
         .document(uid)
         .collection(SourceConstants.Firestore.Collection.CLIENTS)
