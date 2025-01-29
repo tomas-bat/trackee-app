@@ -38,7 +38,7 @@ public class BaseHostingController<Content>: UIHostingController<Content> where 
     
     private func setupUI() {
         // Setup background color and back button title
-        view.backgroundColor = UIColor(AppTheme.Colors.background)
+        view.backgroundColor = Asset.Colors.background.uiColor
         navigationItem.backBarButtonItem = UIBarButtonItem(title: L10n.back, style: .plain, target: nil, action: nil)
     }
 }
