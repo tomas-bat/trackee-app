@@ -1,3 +1,6 @@
+> [!WARNING]
+> This project is no longer maintained and the backend service is no longer running. In order for the app to work, a local backend instance must be running and the app needs to connect to that instance.
+
 # Trackee App
 
 This project manages frontend & backend applications for the Trackee time tracking & integration app.
