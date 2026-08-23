@@ -3,11 +3,11 @@ package kmp.shared.configuration.domain
 import kmp.shared.common.provider.AppEnvironment
 
 sealed class Configuration(val host: String) {
-    object Alpha : Configuration("api.trackee.app")
+    object Alpha : Configuration("trackee.tombatek.eu")
 
-    object Beta : Configuration("api.trackee.app")
+    object Beta : Configuration("trackee.tombatek.eu")
 
-    object Production : Configuration("api.trackee.app")
+    object Production : Configuration("trackee.tombatek.eu")
 }
 
 val AppEnvironment.configuration

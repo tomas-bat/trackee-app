@@ -1,0 +1,17 @@
+.git
+.github
+.gradle
+.idea
+
+**/.DS_Store
+**/.gradle
+**/build
+**/out
+
+ios
+other
+twine
+
+*.cer
+*.p12
+*.xcframework
