@@ -37,6 +37,12 @@ fun Application.configureRouting(isDebug: Boolean) {
         get("/") {
             call.respondRedirect("openapi")
         }
+        get("/health") {
+            call.respondText(
+                text = "OK",
+                status = HttpStatusCode.OK,
+            )
+        }
         staticResources("/static", "static")
         staticResources(".well-known/apple-app-site-association", "apple-app-site-association")
         userRoute()
